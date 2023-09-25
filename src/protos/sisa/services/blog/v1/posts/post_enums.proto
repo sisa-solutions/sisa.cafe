@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Requests";
+
+package sisa.blog.api;
+
+import "google/protobuf/wrappers.proto";
+
+enum PostStatus {
+    POST_STATUS_DRAFT = 0;
+    POST_STATUS_PUBLISHED = 1;
+    POST_STATUS_ARCHIVED = 2;
+}

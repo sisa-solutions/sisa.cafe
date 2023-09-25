@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Grpc.Queries";
+
+package sisa.common;
+
+message PagingQuery {
+  int32 page = 1;
+  int32 pageSize = 2;
+}

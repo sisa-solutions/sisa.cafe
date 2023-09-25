@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Categories.Responses";
+
+package sisa.blog.api;
+
+// import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "sisa/libs/common/responses/paging_response.proto";
+
+message CategoryResponse {
+  string id = 1;
+  google.protobuf.StringValue parentId = 2;
+  string name = 3;
+  string slug = 4;
+  google.protobuf.StringValue description = 5;
+}
+
+message SingleCategoryResponse {
+  CategoryResponse value = 1;
+}
+
+message ListCategoriesResponse {
+  repeated CategoryResponse value = 1;
+  sisa.common.PagingResponse paging = 2;
+}

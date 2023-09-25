@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Grpc.Responses";
+
+package sisa.common;
+
+message PagingResponse {
+  int64 count = 1;
+  int32 page = 2;
+  int32 pageSize = 3;
+  int32 pageCount = 4;
+}

@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <AssemblyName>Sisa.Blog.Api</AssemblyName>
+    <RootNamespace>Sisa.Blog.Api</RootNamespace>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <!-- <PublishAot>true</PublishAot> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- Libs -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\Grpc\Grpc.csproj" />
+    <ProjectReference
+      Include="..\..\..\libs\Generator\Generator.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!-- Dependencies -->
+  <ItemGroup>
+    <ProjectReference Include="..\Blog.Data\Blog.Data.csproj" />
+    <ProjectReference Include="..\Blog.Infrastructure\Blog.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <!-- Protos -->
+  <ItemGroup>
+    <Protobuf
+      ProtoRoot="../../../../protos"
+      Include="../../../../protos/sisa/libs/**/*.proto"
+      GrpcServices="None" />
+    <Protobuf
+      ProtoRoot="../../../../protos"
+      Include="../../../../protos/sisa/services/blog/**/*.proto"
+      GrpcServices="None" />
+    <Protobuf
+      ProtoRoot="../../../../protos"
+      Include="../../../../protos/sisa/services/blog/**/*_grpc_service.proto"
+      GrpcServices="Server" />
+  </ItemGroup>
+
+</Project>

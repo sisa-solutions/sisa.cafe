@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Sisa.Blog.Data</AssemblyName>
+    <RootNamespace>Sisa.Blog.Data</RootNamespace>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+  <!-- Libs -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\Data\Data.csproj" />
+    <ProjectReference Include="..\..\..\libs\Data.PostgreSQL\Data.PostgreSQL.csproj" />
+    <ProjectReference
+      Include="..\..\..\libs\Generator\Generator.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!-- Dependencies -->
+  <ItemGroup>
+    <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

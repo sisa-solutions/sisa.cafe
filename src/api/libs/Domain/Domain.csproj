@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Sisa.Domain</AssemblyName>
+    <RootNamespace>Sisa.Domain</RootNamespace>
+  </PropertyGroup>
+
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

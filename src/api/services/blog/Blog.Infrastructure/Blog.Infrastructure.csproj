@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Sisa.Blog.Infrastructure</AssemblyName>
+    <RootNamespace>Sisa.Blog.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Libs -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+  <!-- Dependencies -->
+  <ItemGroup>
+    <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

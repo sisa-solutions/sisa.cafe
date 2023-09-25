@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Sisa.Blog.Domain</AssemblyName>
+    <RootNamespace>Sisa.Blog.Domain</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\..\libs\Common\Common.csproj" />
+  </ItemGroup>
+
+</Project>

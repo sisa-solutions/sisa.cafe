@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Grpc.Responses";
+
+package sisa.common;
+
+message UserResponse {
+  string id = 1;
+  string userName = 2;
+  string displayName = 3;
+  string picture = 4;
+  string status = 6;
+}
+
+message CreatorResponse {
+  string id = 1;
+  string userName = 2;
+  string displayName = 3;
+  string picture = 4;
+  string status = 6;
+}

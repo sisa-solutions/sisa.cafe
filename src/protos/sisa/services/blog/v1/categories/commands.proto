@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Categories.Commands";
+
+package sisa.blog.api;
+
+import "google/protobuf/wrappers.proto";
+
+message CreateCategoryCommand {
+  google.protobuf.StringValue parentId = 1;
+  string name = 2;
+  string slug = 3;
+  google.protobuf.StringValue description = 4;
+}
+
+message UpdateCategoryCommand {
+  string id = 1;
+  google.protobuf.StringValue parentId = 2;
+  string name = 3;
+  string slug = 4;
+  google.protobuf.StringValue description = 5;
+}
+
+message DeleteCategoryCommand {
+  string id = 1;
+}

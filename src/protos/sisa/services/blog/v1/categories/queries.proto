@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Categories.Queries";
+
+package sisa.blog.api;
+
+import "google/protobuf/wrappers.proto";
+import "sisa/libs/common/queries/paging_query.proto";
+
+message FilterCategoriesQuery {
+  string keyword = 1;
+}
+
+message GetCategoriesQuery {
+  FilterCategoriesQuery filter = 1;
+  sisa.common.PagingQuery paging = 2;
+}
+
+message FindCategoryByIdQuery {
+  string id = 1;
+}
+
