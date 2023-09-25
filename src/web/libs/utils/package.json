@@ -1,0 +1,19 @@
+{
+  "name": "@sisa/utils",
+  "description": "React Starter Kit",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint \"**/*.ts*\""
+  },
+  "devDependencies": {
+    "@sisa/eslint-config": "workspace:*",
+    "@sisa/tsconfig": "workspace:*",
+    "@types/react": "^18.2.22",
+    "@types/react-dom": "^18.2.7",
+    "eslint": "^8.50.0",
+    "react": "^18.2.0",
+    "react-i18next": "^13.2.2",
+    "typescript": "^5.2.2"
+  }
+}
