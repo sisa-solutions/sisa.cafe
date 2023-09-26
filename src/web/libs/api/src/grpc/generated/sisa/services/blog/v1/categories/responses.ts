@@ -5,12 +5,18 @@ import { PagingResponse } from "../../../../libs/common/responses/paging_respons
 
 export const protobufPackage = "sisa.blog.api";
 
+export interface ParentCategoryResponse {
+  id: string;
+  name: string;
+}
+
 export interface CategoryResponse {
   id: string;
   parentId: string | undefined;
   name: string;
   slug: string;
   description: string | undefined;
+  parent: ParentCategoryResponse | undefined;
 }
 
 export interface SingleCategoryResponse {
@@ -22,8 +28,79 @@ export interface ListCategoriesResponse {
   paging: PagingResponse | undefined;
 }
 
+function createBaseParentCategoryResponse(): ParentCategoryResponse {
+  return { id: "", name: "" };
+}
+
+export const ParentCategoryResponse = {
+  encode(message: ParentCategoryResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ParentCategoryResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseParentCategoryResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ParentCategoryResponse {
+    return { id: isSet(object.id) ? String(object.id) : "", name: isSet(object.name) ? String(object.name) : "" };
+  },
+
+  toJSON(message: ParentCategoryResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ParentCategoryResponse>, I>>(base?: I): ParentCategoryResponse {
+    return ParentCategoryResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ParentCategoryResponse>, I>>(object: I): ParentCategoryResponse {
+    const message = createBaseParentCategoryResponse();
+    message.id = object.id ?? "";
+    message.name = object.name ?? "";
+    return message;
+  },
+};
+
 function createBaseCategoryResponse(): CategoryResponse {
-  return { id: "", parentId: undefined, name: "", slug: "", description: undefined };
+  return { id: "", parentId: undefined, name: "", slug: "", description: undefined, parent: undefined };
 }
 
 export const CategoryResponse = {
@@ -42,6 +119,9 @@ export const CategoryResponse = {
     }
     if (message.description !== undefined) {
       StringValue.encode({ value: message.description! }, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.parent !== undefined) {
+      ParentCategoryResponse.encode(message.parent, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -88,6 +168,13 @@ export const CategoryResponse = {
 
           message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.parent = ParentCategoryResponse.decode(reader, reader.uint32());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -104,6 +191,7 @@ export const CategoryResponse = {
       name: isSet(object.name) ? String(object.name) : "",
       slug: isSet(object.slug) ? String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
+      parent: isSet(object.parent) ? ParentCategoryResponse.fromJSON(object.parent) : undefined,
     };
   },
 
@@ -124,6 +212,9 @@ export const CategoryResponse = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
+    if (message.parent !== undefined) {
+      obj.parent = ParentCategoryResponse.toJSON(message.parent);
+    }
     return obj;
   },
 
@@ -137,6 +228,9 @@ export const CategoryResponse = {
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
+    message.parent = (object.parent !== undefined && object.parent !== null)
+      ? ParentCategoryResponse.fromPartial(object.parent)
+      : undefined;
     return message;
   },
 };

@@ -5,7 +5,7 @@ import { PagingQuery } from "../../../../libs/common/queries/paging_query";
 export const protobufPackage = "sisa.blog.api";
 
 export interface FilterCategoriesQuery {
-  keyword: string;
+  name: string;
 }
 
 export interface GetCategoriesQuery {
@@ -18,13 +18,13 @@ export interface FindCategoryByIdQuery {
 }
 
 function createBaseFilterCategoriesQuery(): FilterCategoriesQuery {
-  return { keyword: "" };
+  return { name: "" };
 }
 
 export const FilterCategoriesQuery = {
   encode(message: FilterCategoriesQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.keyword !== "") {
-      writer.uint32(10).string(message.keyword);
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
     }
     return writer;
   },
@@ -41,7 +41,7 @@ export const FilterCategoriesQuery = {
             break;
           }
 
-          message.keyword = reader.string();
+          message.name = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -53,13 +53,13 @@ export const FilterCategoriesQuery = {
   },
 
   fromJSON(object: any): FilterCategoriesQuery {
-    return { keyword: isSet(object.keyword) ? String(object.keyword) : "" };
+    return { name: isSet(object.name) ? String(object.name) : "" };
   },
 
   toJSON(message: FilterCategoriesQuery): unknown {
     const obj: any = {};
-    if (message.keyword !== "") {
-      obj.keyword = message.keyword;
+    if (message.name !== "") {
+      obj.name = message.name;
     }
     return obj;
   },
@@ -69,7 +69,7 @@ export const FilterCategoriesQuery = {
   },
   fromPartial<I extends Exact<DeepPartial<FilterCategoriesQuery>, I>>(object: I): FilterCategoriesQuery {
     const message = createBaseFilterCategoriesQuery();
-    message.keyword = object.keyword ?? "";
+    message.name = object.name ?? "";
     return message;
   },
 };
