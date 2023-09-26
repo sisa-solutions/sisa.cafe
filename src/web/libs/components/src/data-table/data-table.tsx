@@ -140,7 +140,8 @@ const DataGrid = <T extends {}>(props: Props<T>) => {
           borderAxis="xBetween"
           hoverRow
           sx={{
-            '--TableCell-selectedBackground': (theme) => theme.vars.palette.background.level3,
+            '--TableCell-headBackground': 'var(--joy-palette-background-level1)',
+            '--TableRow-hoverBackground': 'var(--joy-palette-background-level1)',
             '& thead > tr > th.data-table-pinned-left': {
               zIndex: 'calc(var(--joy-zIndex-table) + 2)',
             },
@@ -151,14 +152,14 @@ const DataGrid = <T extends {}>(props: Props<T>) => {
               position: 'sticky',
               left: 0,
               zIndex: 'calc(var(--joy-zIndex-table) + 1)',
-              backgroundColor: 'var(--TableCell-headBackground)',
+              // backgroundColor: 'var(--TableCell-headBackground)',
               borderRight: '1px solid var(--TableCell-borderColor)',
             },
             '& .data-table-pinned-right': {
               position: 'sticky',
               right: 0,
               zIndex: 'calc(var(--joy-zIndex-table) + 1)',
-              backgroundColor: 'var(--TableCell-headBackground)',
+              // backgroundColor: 'var(--TableCell-headBackground)',
               borderLeft: '1px solid var(--TableCell-borderColor)',
             },
           }}
