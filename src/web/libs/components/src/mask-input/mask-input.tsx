@@ -38,13 +38,16 @@ const MaskInput = forwardRef<HTMLDivElement, MaskInputProps>(
       mask,
       format,
       unmask,
-      
+
+      size,
+      sx,
+
       ...inputProps
     },
     ref
   ) => {
     return (
-      <FormControl required={required} error={error} disabled={disabled}>
+      <FormControl required={required} error={error} disabled={disabled} sx={sx} size={size}>
         <Box>
           {label && <FormLabel>{label}</FormLabel>}
           {helperMessage && <Typography level="body-sm">{helperMessage}</Typography>}
@@ -68,7 +71,7 @@ const MaskInput = forwardRef<HTMLDivElement, MaskInputProps>(
                 ...{
                   mask,
                   unmask,
-                  format
+                  format,
                 },
               },
             }}

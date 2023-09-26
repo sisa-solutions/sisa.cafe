@@ -10,6 +10,8 @@ import FormHelperText from '@mui/joy/FormHelperText';
 import Autocomplete, { type AutocompleteProps } from '@mui/joy/Autocomplete';
 import { ChevronDownIcon, XIcon } from 'lucide-react';
 
+import LoadingIcon from '../loading-icon';
+
 export type AutocompleteInputProps<
   T,
   Multiple extends boolean | undefined,
@@ -35,12 +37,15 @@ const AutocompleteInput = forwardRef(
       required,
       error,
       disabled,
+      loading,
+      size,
+      sx,
       ...inputProps
     }: AutocompleteInputProps<T, Multiple, DisableClearable, FreeSolo>,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     return (
-      <FormControl required={required} error={error} disabled={disabled}>
+      <FormControl required={required} error={error} disabled={disabled} sx={sx} size={size}>
         <Box>
           {label && <FormLabel>{label}</FormLabel>}
           {helperMessage && <Typography level="body-sm">{helperMessage}</Typography>}
@@ -55,6 +60,8 @@ const AutocompleteInput = forwardRef(
                 ref,
               },
             }}
+            loading={loading}
+            endDecorator={loading ? <LoadingIcon /> : null}
             {...inputProps}
           />
           {errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}

@@ -50,12 +50,15 @@ const NumericFormatInput = forwardRef<HTMLDivElement, NumericFormatInputProps>(
       suffix,
       prefix,
 
+      size,
+      sx,
+
       ...inputProps
     },
     ref
   ) => {
     return (
-      <FormControl required={required} error={error} disabled={disabled}>
+      <FormControl required={required} error={error} disabled={disabled} sx={sx} size={size}>
         <Box>
           {label && <FormLabel>{label}</FormLabel>}
           {helperMessage && <Typography level="body-sm">{helperMessage}</Typography>}

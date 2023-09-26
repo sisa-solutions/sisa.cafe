@@ -15,9 +15,12 @@ export type TextareaInputProps = TextareaProps & {
 };
 
 const TextareaInput = forwardRef<HTMLDivElement, TextareaInputProps>(
-  ({ label, helperMessage, errorMessage, required, error, disabled, ...inputProps }, ref) => {
+  (
+    { label, helperMessage, errorMessage, required, error, disabled, size, sx, ...inputProps },
+    ref
+  ) => {
     return (
-      <FormControl required={required} error={error} disabled={disabled}>
+      <FormControl required={required} error={error} disabled={disabled} sx={sx} size={size}>
         <Box>
           {label && <FormLabel>{label}</FormLabel>}
           {helperMessage && <Typography level="body-sm">{helperMessage}</Typography>}

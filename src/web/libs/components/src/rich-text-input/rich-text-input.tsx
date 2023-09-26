@@ -16,9 +16,9 @@ export type RichTextInputProps = RichTextProps & {
 };
 
 const RichTextInput = forwardRef<HTMLDivElement, RichTextInputProps>(
-  ({ label, helperMessage, errorMessage, required, error, disabled, ...inputProps }, ref) => {
+  ({ label, helperMessage, errorMessage, required, error, disabled, size, sx, ...inputProps }, ref) => {
     return (
-      <FormControl required={required} error={error} disabled={disabled}>
+      <FormControl required={required} error={error} disabled={disabled} sx={sx} size={size}>
         <Box>
           {label && <FormLabel>{label}</FormLabel>}
           {helperMessage && <Typography level="body-sm">{helperMessage}</Typography>}
