@@ -12,7 +12,6 @@ const Link = (props: LinkProps) => {
     <BaseLink
       component={NextLink}
       {...rest}
-      underline="none"
       textColor="inherit"
       fontSize="inherit"
       fontWeight="inherit"

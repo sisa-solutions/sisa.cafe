@@ -23,6 +23,7 @@ const LinkIconButton = ({
         locale={locale}
         scroll={scroll}
         shallow={shallow}
+        overlay={true}
       >
         {children}
       </Link>
