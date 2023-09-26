@@ -3,7 +3,7 @@ import { PageContent, PageHeader, PageLayout, PageTitle } from '@sisa/components
 import Breadcrumbs from 'components/common/breadcrumbs';
 
 import { findCategoryById, updateCategory } from 'api/category-api';
-import MutationForm from '../../_components/mutation-form';
+import MutationForm from '../../components/mutation-form';
 
 type Props = {
   params: {

@@ -1,7 +1,7 @@
 import { PageContent, PageHeader, PageTitle } from '@sisa/components';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
-import MutationForm from '../_components/mutation-form';
+import MutationForm from '../components/mutation-form';
 
 import { createCategory } from 'api/category-api';
 

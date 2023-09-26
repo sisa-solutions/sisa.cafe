@@ -8,7 +8,11 @@ const DetailsLink: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({
   row,
   getValue,
 }) => {
-  return <Link href={`/categories/${row.original.id}/details`}>{getValue()}</Link>;
+  return (
+    <Link underline="always" href={`/categories/${row.original.id}/details`}>
+      {getValue()}
+    </Link>
+  );
 };
 
 export default DetailsLink;

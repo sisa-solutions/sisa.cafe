@@ -1,9 +1,6 @@
 'use client';
 
 import Box from '@mui/joy/Box';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 
 import { EraserIcon, SearchIcon } from 'lucide-react';
@@ -13,7 +10,7 @@ import { TextField } from '@sisa/components';
 import { useCallback } from 'react';
 
 type FilterFormValues = {
-  keyword?: string;
+  name?: string;
 };
 
 type FilterToolbarProps = {
@@ -44,7 +41,7 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
   const onSubmit = handleSubmit((data) => {
     try {
       // @ts-ignore
-      router.push(pathname + '?' + createQueryString('keyword', data.keyword));
+      router.push(pathname + '?' + createQueryString('name', data.name));
     } catch (error) {
       console.log(error);
       alert(error);
@@ -53,7 +50,7 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
 
   const onReset = () => {
     reset({
-      keyword: '',
+      name: '',
     });
 
     // @ts-ignore
@@ -92,7 +89,7 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
         gap: 1.5,
       }}
     >
-      <TextField sx={{ flexGrow: 1 }} fullWidth control={control} name="keyword" label="Name" />
+      <TextField sx={{ flexGrow: 1 }} control={control} name="name" label="Name" />
       <Box
         sx={{
           gap: 1.5,

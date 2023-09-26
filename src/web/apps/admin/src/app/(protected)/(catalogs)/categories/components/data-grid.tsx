@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   DataTable,
@@ -17,20 +17,40 @@ import { type CategoryResponse } from '@sisa/api';
 import DetailsLink from './details-link';
 import ItemActions from './item-actions';
 import FilterToolbar from './filter-toolbar';
+import { useQueryString } from '@sisa/utils';
 
 const columnHelper = createColumnHelper<CategoryResponse>();
 
 type Props = {
   data: Array<CategoryResponse>;
+  filter: {
+    name: string;
+  };
+  paging: {
+    count: number;
+    page: number;
+    pageSize: number;
+    pageCount: number;
+  };
 };
 
-const DataGrid = ({ data }: Props) => {
+const DataGrid = ({
+  data,
+  filter: { name },
+  paging: { count, page, pageSize, pageCount },
+}: Props) => {
   const [columns] = useState<Array<ColumnDef<CategoryResponse>>>(() => [
     columnHelper.selection('id'),
+
     columnHelper.accessor('name', {
       id: 'name',
       header: () => 'Name',
       cell: DetailsLink,
+    }),
+    columnHelper.accessor('parent.name', {
+      id: 'parent.name',
+      header: () => 'Parent',
+      cell: ({ row }) => row.original.parent?.name ?? '',
     }),
     columnHelper.accessor('slug', {
       id: 'slug',
@@ -41,11 +61,6 @@ const DataGrid = ({ data }: Props) => {
       header: () => 'Description',
       enableSorting: true,
     }),
-    // columnHelper.accessor('parent', {
-    //   id: 'parent.id',
-    //   header: () => 'Parent',
-    //   cell: ({ getValue }) => getValue<CategoryResponse>()?.name,
-    // }),
     // columnHelper.accessor('creator', {
     //   id: 'creator.id',
     //   header: () => 'Creator',
@@ -75,9 +90,11 @@ const DataGrid = ({ data }: Props) => {
     }),
   ]);
 
+  const [setQueryString] = useQueryString();
+
   const [pagination, setPagination] = useState<PaginationState>(() => ({
-    pageIndex: 0,
-    pageSize: 10,
+    pageIndex: page - 1,
+    pageSize: pageSize,
   }));
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -87,12 +104,19 @@ const DataGrid = ({ data }: Props) => {
     right: ['__ACTIONS__'],
   });
 
+  useEffect(() => {
+    setQueryString({
+      page: pagination.pageIndex === 0 ? undefined : pagination.pageIndex + 1,
+      pageSize: pagination.pageSize === 10 ? undefined : pagination.pageSize,
+    });
+  }, [pagination.pageIndex, pagination.pageSize]);
+
   return (
     <DataTable
       columns={columns}
       data={data}
-      itemCount={100}
-      pageCount={10}
+      itemCount={count}
+      pageCount={pageCount}
       enableRowSelection
       state={{
         pagination,
@@ -105,7 +129,13 @@ const DataGrid = ({ data }: Props) => {
       onSortingChange={setSorting}
       onColumnPinningChange={setColumnPinning}
       slots={{
-        toolbar: <FilterToolbar />,
+        toolbar: (
+          <FilterToolbar
+            defaultValues={{
+              name,
+            }}
+          />
+        ),
       }}
     />
   );
