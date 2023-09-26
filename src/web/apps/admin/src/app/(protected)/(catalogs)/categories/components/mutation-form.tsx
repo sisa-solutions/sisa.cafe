@@ -74,7 +74,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     try {
       const { parent, ...rest } = data;
 
-      await trigger(rest);
+      await trigger({
+        ...rest,
+        parentId: parent?.id ?? '',
+      });
 
       router.push('/categories');
     } catch (error) {

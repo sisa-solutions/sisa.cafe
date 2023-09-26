@@ -67,12 +67,13 @@ public class UpdateCategoryCommandHandler(
         category.Describe(command.Description);
 
         if (!string.IsNullOrEmpty(command.ParentId)
-            && Guid.TryParse(command.ParentId, out Guid parentId))
+            && Guid.TryParse(command.ParentId, out Guid parentId)
+            && parentId != category.ParentId)
         {
             var alreadyExisting = await categoryRepository
                  .ExistAsync(parentId, cancellationToken);
 
-            if (alreadyExisting)
+            if (!alreadyExisting)
             {
                 logger.LogWarning("Parent category with id {id} not found", parentId);
 
