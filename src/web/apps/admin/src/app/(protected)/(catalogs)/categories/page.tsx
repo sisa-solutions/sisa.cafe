@@ -16,17 +16,35 @@ import {
 import Breadcrumbs from 'components/common/breadcrumbs';
 
 import { getCategories } from 'api/category-api';
-import DataGrid from './_components/data-grid';
+import DataGrid from './components/data-grid';
 import Loading from 'components/common/loading';
 
-const CategoriesPage = async ({ searchParams: { keyword } }) => {
-  const { value } = await getCategories({
+type CategoriesPageProps = {
+  searchParams: {
+    name?: string;
+    page?: number;
+    pageSize?: number;
+  };
+};
+
+const CategoriesPage = async ({
+  searchParams: { name = '', page = 1, pageSize = 10 },
+}: CategoriesPageProps) => {
+  const {
+    value,
+    paging = {
+      count: 0,
+      page,
+      pageSize,
+      pageCount: 0,
+    },
+  } = await getCategories({
     filter: {
-      keyword: keyword ?? '',
+      name: name,
     },
     paging: {
-      page: 1,
-      pageSize: 10,
+      page,
+      pageSize,
     },
   });
 
@@ -40,7 +58,7 @@ const CategoriesPage = async ({ searchParams: { keyword } }) => {
         ]}
       />
       <PageHeader>
-        <PageToolbar defaultValue={keyword ?? ''}>
+        <PageToolbar>
           <PageTitle>Categories</PageTitle>
           <Box sx={{ flexGrow: 1 }} />
           <PageActions>
@@ -57,7 +75,18 @@ const CategoriesPage = async ({ searchParams: { keyword } }) => {
       </PageHeader>
       <PageContent>
         <Suspense fallback={<Loading />}>
-          <DataGrid data={value} />
+          <DataGrid
+            data={value}
+            filter={{
+              name: name,
+            }}
+            paging={{
+              count: paging.count,
+              page: paging.page,
+              pageSize: paging.pageSize,
+              pageCount: paging.pageCount,
+            }}
+          />
         </Suspense>
       </PageContent>
     </>

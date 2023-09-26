@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "peerDependencies": {
-    "next": "^13.5.2"
+    "next": "^13.5.3"
   },
   "publishConfig": {
     "access": "public"
