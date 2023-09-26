@@ -4,25 +4,19 @@ import {
   CreateCategoryCommand,
   CategoryGrpcServiceClient,
   CategoryResponse,
-  Channel,
   ChannelCredentials,
   DeleteCategoryCommand,
   UpdateCategoryCommand,
   FindCategoryByIdQuery,
   ListCategoriesResponse,
   GetCategoriesQuery,
-
 } from '@sisa/api';
 
-const channel = new Channel('127.0.0.1:5000', ChannelCredentials.createInsecure(), {});
+import { API_DNS, channel } from './common';
 
-const client = new CategoryGrpcServiceClient(
-  '127.0.0.1:5000',
-  ChannelCredentials.createInsecure(),
-  {
-    channelOverride: channel,
-  }
-);
+const client = new CategoryGrpcServiceClient(API_DNS, ChannelCredentials.createInsecure(), {
+  channelOverride: channel,
+});
 
 export const getCategories = (request: GetCategoriesQuery) => {
   return new Promise<ListCategoriesResponse>((resolve, reject) => {
@@ -48,7 +42,7 @@ export const findCategoryById = (request: FindCategoryByIdQuery) => {
       {
         ...request,
       },
-      (err, {value}) => {
+      (err, { value }) => {
         if (err) {
           reject(err);
         }
@@ -62,7 +56,7 @@ export const findCategoryById = (request: FindCategoryByIdQuery) => {
 
 export const createCategory = (request: CreateCategoryCommand) => {
   return new Promise<CategoryResponse>((resolve, reject) => {
-    client.createCategory(request, (err, {value}) => {
+    client.createCategory(request, (err, { value }) => {
       if (err) {
         reject(err);
       }
@@ -75,7 +69,7 @@ export const createCategory = (request: CreateCategoryCommand) => {
 
 export const updateCategory = (request: UpdateCategoryCommand) => {
   return new Promise<CategoryResponse>((resolve, reject) => {
-    client.updateCategory(request, (err, {value}) => {
+    client.updateCategory(request, (err, { value }) => {
       if (err) {
         reject(err);
       }

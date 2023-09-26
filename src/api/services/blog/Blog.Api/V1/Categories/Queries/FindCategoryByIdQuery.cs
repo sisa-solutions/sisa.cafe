@@ -12,7 +12,7 @@ public sealed partial class FindCategoryByIdQuery : IQuery<SingleCategoryRespons
 }
 
 public class FindCategoryByIdQueryHandler(
-    ICategoryRepository categoryRepository,
+    ICategoryRepository repository,
     ILogger<FindCategoryByIdQueryHandler> logger
 ) : IQueryHandler<FindCategoryByIdQuery, SingleCategoryResponse>
 {
@@ -20,7 +20,7 @@ public class FindCategoryByIdQueryHandler(
     {
         logger.LogInformation("Finding category by id {Id}", query.Id);
 
-        var category = await categoryRepository
+        var category = await repository
             .Query
             .ProjectToResponse()
             .SingleOrDefaultAsync(x => x.Id == query.Id, cancellationToken);

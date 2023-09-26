@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Tags";
+
+package sisa.blog.api;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+import "sisa/services/blog/v1/tags/commands.proto";
+import "sisa/services/blog/v1/tags/queries.proto";
+import "sisa/services/blog/v1/tags/responses.proto";
+
+service TagGrpcService {
+  rpc GetTags(GetTagsQuery) returns (ListTagsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/tags"
+    };
+  }
+
+  rpc FindTagById(FindTagByIdQuery) returns (SingleTagResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/tags/{id}"
+    };
+  }
+
+  rpc CreateTag(CreateTagCommand) returns (SingleTagResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/tags"
+    };
+  }
+
+  rpc UpdateTag(UpdateTagCommand) returns (SingleTagResponse) {
+    option (google.api.http) = {
+        put: "/api/v1/tags/{id}"
+    };
+  }
+
+  rpc DeleteTag(DeleteTagCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/tags/{id}"
+    };
+  }
+}

@@ -33,13 +33,13 @@ public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCat
 }
 
 public class UpdateCategoryCommandHandler(
-    ICategoryRepository categoryRepository,
+    ICategoryRepository repository,
     ILogger<UpdateCategoryCommandHandler> logger
 ) : ICommandHandler<UpdateCategoryCommand, SingleCategoryResponse>
 {
     public async ValueTask<SingleCategoryResponse> HandleAsync(UpdateCategoryCommand command, CancellationToken cancellationToken = default)
     {
-        Category? category = await categoryRepository
+        Category? category = await repository
             .FindAsync(Guid.Parse(command.Id), cancellationToken);
 
         if (category is null)
@@ -49,7 +49,7 @@ public class UpdateCategoryCommandHandler(
             throw new Exception($"Category with id {command.Id} not found");
         }
 
-        bool categoryExists = await categoryRepository
+        bool categoryExists = await repository
             .ExistAsync(category.Id, command.Slug, cancellationToken);
 
         if (categoryExists)
@@ -70,7 +70,7 @@ public class UpdateCategoryCommandHandler(
             && Guid.TryParse(command.ParentId, out Guid parentId)
             && parentId != category.ParentId)
         {
-            var alreadyExisting = await categoryRepository
+            var alreadyExisting = await repository
                  .ExistAsync(parentId, cancellationToken);
 
             if (!alreadyExisting)
@@ -83,8 +83,8 @@ public class UpdateCategoryCommandHandler(
             category.SetParent(parentId);
         }
 
-        categoryRepository.Update(category);
-        await categoryRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        repository.Update(category);
+        await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
 
         return category.MapToResponse();

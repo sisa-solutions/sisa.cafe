@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Tags.Commands";
+
+package sisa.blog.api;
+
+import "google/protobuf/wrappers.proto";
+
+message CreateTagCommand {
+  string name = 1;
+  string slug = 2;
+  google.protobuf.StringValue description = 3;
+}
+
+message UpdateTagCommand {
+  string id = 1;
+  string name = 2;
+  string slug = 3;
+  google.protobuf.StringValue description = 4;
+}
+
+message DeleteTagCommand {
+  string id = 1;
+}

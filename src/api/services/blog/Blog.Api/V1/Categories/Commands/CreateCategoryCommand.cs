@@ -33,7 +33,7 @@ public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCat
 }
 
 public class CreateCategoryCommandHandler(
-    ICategoryRepository categoryRepository,
+    ICategoryRepository repository,
     ILogger<CreateCategoryCommandHandler> logger
 ) : ICommandHandler<CreateCategoryCommand, SingleCategoryResponse>
 {
@@ -41,7 +41,7 @@ public class CreateCategoryCommandHandler(
     {
         logger.LogInformation("Creating category with name {slug}", command.Slug);
 
-        bool categoryExists = await categoryRepository
+        bool categoryExists = await repository
             .ExistAsync(command.Slug, cancellationToken);
 
         if (categoryExists)
@@ -62,7 +62,7 @@ public class CreateCategoryCommandHandler(
         if (!string.IsNullOrEmpty(command.ParentId)
             && Guid.TryParse(command.ParentId, out Guid parentId))
         {
-            var alreadyExisting = await categoryRepository
+            var alreadyExisting = await repository
                 .ExistAsync(parentId, cancellationToken);
 
             if (!alreadyExisting)
@@ -75,9 +75,9 @@ public class CreateCategoryCommandHandler(
             category.SetParent(parentId);
         }
 
-        categoryRepository.Add(category);
+        repository.Add(category);
 
-        await categoryRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return category.MapToResponse();
     }

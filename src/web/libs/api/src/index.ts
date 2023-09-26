@@ -15,3 +15,4 @@ export type { PagingQuery } from './grpc/generated/sisa/libs/common/queries/pagi
 export type { PagingResponse } from './grpc/generated/sisa/libs/common/responses/paging_response';
 
 export * from './grpc/category-api';
+export * from './grpc/tag-api';

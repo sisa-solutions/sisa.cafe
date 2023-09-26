@@ -11,13 +11,13 @@ public sealed partial class DeleteCategoryCommand : ICommand<Empty>
 }
 
 public class DeleteCategoryCommandHandler(
-    ICategoryRepository categoryRepository,
+    ICategoryRepository repository,
     ILogger<DeleteCategoryCommandHandler> logger
 ) : ICommandHandler<DeleteCategoryCommand, Empty>
 {
     public async ValueTask<Empty> HandleAsync(DeleteCategoryCommand command, CancellationToken cancellationToken = default)
     {
-        Category? category = await categoryRepository
+        Category? category = await repository
             .FindAsync(Guid.Parse(command.Id), cancellationToken);
 
         if (category is null)
@@ -27,9 +27,9 @@ public class DeleteCategoryCommandHandler(
             throw new Exception($"Category with id {command.Id} not found");
         }
 
-        categoryRepository.Remove(category);
+        repository.Remove(category);
 
-        await categoryRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return new Empty();
     }

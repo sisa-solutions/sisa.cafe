@@ -12,7 +12,7 @@ public sealed partial class GetCategoriesQuery : IQuery<ListCategoriesResponse>
 }
 
 public class GetCategoriesQueryHandler(
-    ICategoryRepository categoryRepository,
+    ICategoryRepository repository,
     ILogger<GetCategoriesQueryHandler> logger
 ) : IQueryHandler<GetCategoriesQuery, ListCategoriesResponse>
 {
@@ -20,7 +20,7 @@ public class GetCategoriesQueryHandler(
     {
         logger.LogInformation("Getting categories");
 
-        var queryBuilder = categoryRepository
+        var queryBuilder = repository
             .Query
             .ProjectToResponse()
             .OrderBy(x => x.Name)
