@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 
 import { useRouter } from 'next/navigation';
@@ -21,11 +22,14 @@ import {
   CancelButton,
 } from '@sisa/components';
 
-import type { CategoryResponse, CreateCategoryCommand, UpdateCategoryCommand } from '@sisa/api';
+import type {
+  CategoryResponse,
+  ParentCategoryResponse,
+  CreateCategoryCommand,
+  UpdateCategoryCommand,
+} from '@sisa/api';
 
 import { getCategories } from 'api/category-api';
-import { useState } from 'react';
-import { ParentCategoryResponse } from '@sisa/api/src/grpc/generated/sisa/services/blog/v1/categories/responses';
 
 type MutationValues = (CreateCategoryCommand | UpdateCategoryCommand) & {
   parent?: ParentCategoryResponse;

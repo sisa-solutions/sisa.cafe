@@ -61,6 +61,10 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
             <Box>{data.name}</Box>
           </Box>
           <Box>
+            <Box>Parent</Box>
+            <Box>{data.parent?.name}</Box>
+          </Box>
+          <Box>
             <Box>Slug</Box>
             <Box>{data.slug}</Box>
           </Box>

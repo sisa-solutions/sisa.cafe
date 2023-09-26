@@ -1,13 +1,14 @@
 'use client';
 
+import { useForm } from 'react-hook-form';
+
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 
 import { EraserIcon, SearchIcon } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+
 import { TextField } from '@sisa/components';
-import { useCallback } from 'react';
+import { useQueryString } from '@sisa/utils';
 
 type FilterFormValues = {
   name?: string;
@@ -18,21 +19,7 @@ type FilterToolbarProps = {
 };
 
 const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  // Get a new searchParams string by merging the current
-  // searchParams with a provided key/value pair
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams);
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
+  const [setQueryString] = useQueryString();
 
   const { control, handleSubmit, reset } = useForm<FilterFormValues>({
     defaultValues: defaultValues,
@@ -41,7 +28,9 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
   const onSubmit = handleSubmit((data) => {
     try {
       // @ts-ignore
-      router.push(pathname + '?' + createQueryString('name', data.name));
+      setQueryString({
+        name: data.name,
+      })
     } catch (error) {
       console.log(error);
       alert(error);
@@ -53,8 +42,9 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
       name: '',
     });
 
-    // @ts-ignore
-    router.push(pathname);
+    setQueryString({
+      name: '',
+    })
   };
 
   const renderActions = () => (

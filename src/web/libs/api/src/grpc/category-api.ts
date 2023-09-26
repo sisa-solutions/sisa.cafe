@@ -16,5 +16,6 @@ export type {
   CategoryResponse,
   SingleCategoryResponse,
   ListCategoriesResponse,
+  ParentCategoryResponse,
 } from './generated/sisa/services/blog/v1/categories/responses';
 
