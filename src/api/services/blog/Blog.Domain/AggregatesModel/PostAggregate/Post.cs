@@ -16,18 +16,18 @@ public class Post : FullAuditableAggregateRoot
 
     public PostStatus Status { get; private set; } = PostStatus.DRAFT;
 
-    private readonly List<PostStatusHistory> _statusHistories = new();
+    private readonly List<PostStatusHistory> _statusHistories = [];
     public IReadOnlyCollection<PostStatusHistory> StatusHistories => _statusHistories;
 
-    private readonly List<string> _tags = new();
+    private readonly List<string> _tags = [];
     public virtual IReadOnlyCollection<string> Tags => _tags;
 
     public virtual Category Category { get; private set; } = null!;
 
-    private readonly List<Comment> _comments = new();
+    private readonly List<Comment> _comments = [];
     public virtual IReadOnlyCollection<Comment> Comments => _comments;
 
-    private readonly List<PostReaction> _reactions = new();
+    private readonly List<PostReaction> _reactions = [];
     public virtual IReadOnlyCollection<PostReaction> Reactions => _reactions;
 
     public Post(Guid categoryId, string title, string slug, string excerpt, string content)
@@ -80,9 +80,9 @@ public class Post : FullAuditableAggregateRoot
     {
         return Status switch
         {
-            PostStatus.DRAFT => new[] { PostStatus.PUBLISHED },
-            PostStatus.PUBLISHED => new[] { PostStatus.ARCHIVED, PostStatus.DRAFT },
-            PostStatus.ARCHIVED => new[] { PostStatus.PUBLISHED },
+            PostStatus.DRAFT => [PostStatus.PUBLISHED],
+            PostStatus.PUBLISHED => [PostStatus.ARCHIVED, PostStatus.DRAFT],
+            PostStatus.ARCHIVED => [PostStatus.PUBLISHED],
             _ => throw new ArgumentOutOfRangeException()
         };
     }

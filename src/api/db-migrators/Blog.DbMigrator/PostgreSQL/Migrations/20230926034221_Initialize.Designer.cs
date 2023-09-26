@@ -15,7 +15,7 @@ using Sisa.Blog.Domain.AggregatesModel.ReactionAggregate;
 namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20230921071526_Initialize")]
+    [Migration("20230926034221_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -83,12 +83,6 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("description")
                         .HasDefaultValueSql("''");
-
-                    b.Property<int>("Level")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("level");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -161,12 +155,6 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uuid")
                         .HasColumnName("deleted_by");
-
-                    b.Property<int>("Level")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("level");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid")

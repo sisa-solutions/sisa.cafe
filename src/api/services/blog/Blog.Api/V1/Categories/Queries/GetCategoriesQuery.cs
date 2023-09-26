@@ -26,11 +26,11 @@ public class GetCategoriesQueryHandler(
             .OrderBy(x => x.Name)
             .AsNoTracking();
 
-        if (!string.IsNullOrWhiteSpace(query.Filter.Keyword))
+        if (!string.IsNullOrWhiteSpace(query.Filter.Name))
         {
-            logger.LogInformation("Filtering by name: {Name}", query.Filter.Keyword);
+            logger.LogInformation("Filtering by name: {Name}", query.Filter.Name);
 
-            queryBuilder = queryBuilder.Where(x => EF.Functions.Like(x.Name, $"%{query.Filter.Keyword}%"));
+            queryBuilder = queryBuilder.Where(x => EF.Functions.ILike(x.Name, $"%{query.Filter.Name}%"));
         }
 
         IPaginatedList<CategoryResponse> categories = await queryBuilder

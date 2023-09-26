@@ -81,12 +81,6 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                         .HasColumnName("description")
                         .HasDefaultValueSql("''");
 
-                    b.Property<int>("Level")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("level");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -158,12 +152,6 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uuid")
                         .HasColumnName("deleted_by");
-
-                    b.Property<int>("Level")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("level");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid")

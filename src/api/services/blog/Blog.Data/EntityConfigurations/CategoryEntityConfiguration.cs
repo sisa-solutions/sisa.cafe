@@ -14,7 +14,7 @@ public class CategoryEntityConfiguration : EntityConfiguration<Category>
         base.Configure(builder);
 
         builder.MapId();
-        
+
         builder
             .HasIndex(p => p.Slug);
             // .IncludeProperties(p => p.Name);
@@ -36,11 +36,6 @@ public class CategoryEntityConfiguration : EntityConfiguration<Category>
             .HasMaxLength(200)
             .IsRequired()
             .HasDefaultValueSql("''");
-
-        builder
-            .Property(p => p.Level)
-            .IsRequired()
-            .HasDefaultValue(1);
 
         builder
             .HasOne(p => p.Parent)

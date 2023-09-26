@@ -60,6 +60,11 @@ public static class CategoryProjectionExtensions
                 Slug = x.Slug,
                 Name = x.Name,
                 Description = x.Description,
+                Parent = x.Parent != null ? new ParentCategoryResponse
+                {
+                    Id = x.Parent.Id.ToString(),
+                    Name = x.Parent.Name,
+                } : null
             };
         }
     }

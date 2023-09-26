@@ -11,14 +11,12 @@ public class Category : FullAuditableAggregateRoot
     public string Slug { get; private set; }
     public string? Description { get; private set; }
 
-    public int Level { get; private set; } = 1;
-
     public virtual Category? Parent { get; private set; }
 
-    private readonly List<Category> _children = new();
+    private readonly List<Category> _children = [];
     public virtual IReadOnlyCollection<Category> Children => _children;
 
-    private readonly List<Post> _posts = new();
+    private readonly List<Post> _posts = [];
     public virtual IReadOnlyCollection<Post> Posts => _posts;
 
     public Category(string name, string slug)
@@ -38,15 +36,23 @@ public class Category : FullAuditableAggregateRoot
         Description = description;
     }
 
-    public void SetLevel(int level)
+    public void SetParent(Category parent)
     {
-        Level = level;
+        ParentId = parent.Id;
+    }
+
+    public void SetParent(Guid parentId)
+    {
+        ParentId = parentId;
+    }
+
+    public void RemoveParent()
+    {
+        ParentId = null;
     }
 
     public void AddChildren(Category children)
     {
-        children.SetLevel(Level + 1);
-
         _children.Add(children);
     }
 }

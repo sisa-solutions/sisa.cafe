@@ -66,9 +66,25 @@ public class UpdateCategoryCommandHandler(
 
         category.Describe(command.Description);
 
-        categoryRepository.Update(category);
+        if (!string.IsNullOrEmpty(command.ParentId)
+            && Guid.TryParse(command.ParentId, out Guid parentId))
+        {
+            var alreadyExisting = await categoryRepository
+                 .ExistAsync(parentId, cancellationToken);
 
+            if (alreadyExisting)
+            {
+                logger.LogWarning("Parent category with id {id} not found", parentId);
+
+                throw new Exception($"Parent category with id {parentId} not found");
+            }
+
+            category.SetParent(parentId);
+        }
+
+        categoryRepository.Update(category);
         await categoryRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
 
         return category.MapToResponse();
     }

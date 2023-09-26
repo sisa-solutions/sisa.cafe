@@ -8,7 +8,7 @@ public class CommentReaction : AggregateRoot
     public Guid CommentId { get; private set; }
     public Guid UserId { get; private set; }
 
-    private readonly List<Reaction> _reactions = new();
+    private readonly List<Reaction> _reactions = [];
     public IReadOnlyCollection<Reaction> Reactions => _reactions;
 
     public virtual Comment Comment { get; private set; } = null!;

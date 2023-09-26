@@ -8,12 +8,18 @@ package sisa.blog.api;
 import "google/protobuf/wrappers.proto";
 import "sisa/libs/common/responses/paging_response.proto";
 
+message ParentCategoryResponse {
+  string id = 1;
+  string name = 2;
+}
+
 message CategoryResponse {
   string id = 1;
   google.protobuf.StringValue parentId = 2;
   string name = 3;
   string slug = 4;
   google.protobuf.StringValue description = 5;
+  ParentCategoryResponse parent  = 6;
 }
 
 message SingleCategoryResponse {

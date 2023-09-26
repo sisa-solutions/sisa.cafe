@@ -11,16 +11,14 @@ public class Comment : FullAuditableAggregateRoot
 
     public string Content { get; private set; }
 
-    public int Level { get; private set; } = 1;
-
     public virtual Comment? Parent { get; private set; }
 
-    private readonly List<Comment> _children = new();
+    private readonly List<Comment> _children = [];
     public virtual IReadOnlyCollection<Comment> Children => _children;
 
     public virtual Post Post { get; private set; } = null!;
 
-    private readonly List<CommentReaction> _reactions = new();
+    private readonly List<CommentReaction> _reactions = [];
     public virtual IReadOnlyCollection<CommentReaction> Reactions => _reactions;
 
     public Comment(string content)
@@ -28,10 +26,9 @@ public class Comment : FullAuditableAggregateRoot
         Content = content;
     }
 
-    public Comment(Guid postId, int level, string content)
+    public Comment(Guid postId, string content)
     {
         PostId = postId;
-        Level = level;
         Content = content;
     }
 
@@ -42,7 +39,7 @@ public class Comment : FullAuditableAggregateRoot
 
     public void AddComment(string content)
     {
-        var comment = new Comment(PostId, Level + 1, content);
+        var comment = new Comment(PostId, content);
 
         _children.Add(comment);
     }

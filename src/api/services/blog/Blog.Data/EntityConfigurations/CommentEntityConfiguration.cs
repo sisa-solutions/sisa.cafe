@@ -14,17 +14,12 @@ public class CommentEntityConfiguration : EntityConfiguration<Comment>
         base.Configure(builder);
 
         builder.MapId();
-        
+
         builder
             .Property(p => p.Content)
             .HasMaxLength(500)
             .IsRequired()
             .HasDefaultValueSql("''");
-
-        builder
-            .Property(p => p.Level)
-            .IsRequired()
-            .HasDefaultValue(1);
 
         builder
             .HasOne(p => p.Parent)

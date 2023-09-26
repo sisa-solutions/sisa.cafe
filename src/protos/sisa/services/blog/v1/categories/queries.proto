@@ -8,7 +8,7 @@ import "google/protobuf/wrappers.proto";
 import "sisa/libs/common/queries/paging_query.proto";
 
 message FilterCategoriesQuery {
-  string keyword = 1;
+  string name = 1;
 }
 
 message GetCategoriesQuery {
