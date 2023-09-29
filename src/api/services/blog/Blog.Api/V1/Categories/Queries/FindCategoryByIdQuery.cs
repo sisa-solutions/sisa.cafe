@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Categories.Responses;
@@ -7,6 +9,8 @@ namespace Sisa.Blog.Api.V1.Categories.Queries;
 
 public sealed partial class FindCategoryByIdQuery : IQuery<SingleCategoryResponse>
 {
+    public Guid CategoryId
+        => Guid.TryParse(Id, out var id) ? id : throw new Exception("Invalid id");
 }
 
 public class FindCategoryByIdQueryHandler(
@@ -19,7 +23,11 @@ public class FindCategoryByIdQueryHandler(
         logger.LogInformation("Finding category by id {Id}", query.Id);
 
         var category = await repository
-            .FindAsync(query.Id, cancellationToken);
+            .FindAsync(
+                x => x.Id == query.CategoryId,
+                CategoryProjections.Projection,
+                cancellationToken
+            );
 
         if (category is null)
         {
@@ -28,6 +36,6 @@ public class FindCategoryByIdQueryHandler(
             throw new Exception("Category not found");
         }
 
-        return category.MapToResponse();
+        return category.ToSingleResponse();
     }
 }

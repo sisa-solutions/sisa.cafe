@@ -19,7 +19,7 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
         _dbSet = dbContext.Set<TEntity>();
     }
 
-    public IQueryable<TEntity> Query => _dbSet.AsNoTracking();
+    public IQueryable<TEntity> Query => _dbSet;
 
     public IUnitOfWork UnitOfWork => _dbContext;
 
@@ -27,13 +27,21 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
         // Work around solution
         // see https://github.com/aspnet/EntityFrameworkCore/issues/12012
         // see https://github.com/dotnet/efcore/issues/22667
-        => await _dbSet.FindAsync(new[] { keyValue }, cancellationToken); 
+        => await _dbSet.FindAsync(new[] { keyValue }, cancellationToken);
 
     public async ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken = default)
         => await _dbSet.FindAsync(keyValues, cancellationToken);
 
-    public async ValueTask<TEntity?> FindAsync(params object[] keyValues)
-        => await _dbSet.FindAsync(keyValues);
+    public async ValueTask<TResult?> FindAsync<TResult>(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, TResult>> selector
+        , CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(predicate)
+            .Select(selector)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 
     public TEntity Add(TEntity entity)
         => _dbSet.Add(entity).Entity;
@@ -43,6 +51,80 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
         var entityEntry = await _dbSet.AddAsync(entity, cancellationToken);
 
         return entityEntry.Entity;
+    }
+
+    public async ValueTask<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(predicate)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, TResult>> selector
+        , CancellationToken cancellationToken = default)
+    {
+        return await  _dbSet
+            .Where(predicate)
+            .Select(selector)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, int pageIndex, int pageSize, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(predicate)
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
+        Expression<Func<TEntity, bool>> predicate
+        , int pageIndex
+        , int pageSize
+        , Expression<Func<TEntity, TResult>> selector
+        , CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(predicate)
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .Select(selector)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async ValueTask<IPaginatedList<TEntity>> PaginateAsync(Expression<Func<TEntity, bool>> predicate, int pageIndex, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var count = await _dbSet.CountAsync(predicate, cancellationToken);
+
+        var items = await _dbSet
+            .Where(predicate)
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PaginatedList<TEntity>(items, count, pageIndex, pageSize);
+    }
+
+    public async ValueTask<IPaginatedList<TResult>> PaginateAsync<TResult>(
+        Expression<Func<TEntity, bool>> predicate
+        , int pageIndex
+        , int pageSize
+        , Expression<Func<TEntity, TResult>> selector
+        , CancellationToken cancellationToken = default)
+    {
+        var count = await _dbSet.CountAsync(predicate, cancellationToken);
+
+        var items = await _dbSet
+            .Where(predicate)
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
+            .Select(selector)
+            .ToListAsync(cancellationToken);
+
+        return new PaginatedList<TResult>(items, count, pageIndex, pageSize);
     }
 
     public void AddRange(IEnumerable<TEntity> entities)

@@ -1,9 +1,8 @@
 using Sisa.Abstractions;
-using Sisa.Extensions;
 
 using Sisa.Blog.Api.V1.Categories.Responses;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Microsoft.EntityFrameworkCore;
+using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Categories.Queries;
 
@@ -20,22 +19,19 @@ public class GetCategoriesQueryHandler(
     {
         logger.LogInformation("Getting categories");
 
-        var queryBuilder = repository
-            .Query
-            .ProjectToResponse()
-            .OrderBy(x => x.Name)
-            .AsNoTracking();
+        var pageIndex = query.Paging.Page - 1;
+        var pageSize = query.Paging.PageSize;
 
-        if (!string.IsNullOrWhiteSpace(query.Filter.Name))
-        {
-            logger.LogInformation("Filtering by name: {Name}", query.Filter.Name);
+        var expression = CategorySpecifications.FilterByName(query.Filter.Name);
 
-            queryBuilder = queryBuilder.Where(x => EF.Functions.ILike(x.Name, $"%{query.Filter.Name}%"));
-        }
+        var categories = await repository
+            .PaginateAsync(
+                expression,
+                pageIndex, pageSize,
+                CategoryProjections.Projection,
+                cancellationToken
+            );
 
-        IPaginatedList<CategoryResponse> categories = await queryBuilder
-            .ToPaginatedListAsync(query.Paging.Page - 1, query.Paging.PageSize, cancellationToken);
-
-        return categories.MapToResponse();
+        return categories.ToListResponse();
     }
 }

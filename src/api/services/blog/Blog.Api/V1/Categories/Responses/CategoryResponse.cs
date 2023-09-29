@@ -6,24 +6,8 @@ using Sisa.Grpc.Responses;
 
 namespace Sisa.Blog.Api.V1.Categories.Responses;
 
-public static class CategoryProjectionExtensions
+public static partial class CategoryProjections
 {
-    public static SingleCategoryResponse MapToResponse(this Category category)
-    {
-        return new SingleCategoryResponse()
-        {
-            Value = Projection.Compile().Invoke(category)
-        };
-    }
-
-    public static SingleCategoryResponse MapToResponse(this CategoryResponse category)
-    {
-        return new SingleCategoryResponse()
-        {
-            Value = category
-        };
-    }
-
     public static CategoryInfoResponse MapToInfoResponse(this Category category)
     {
         return new CategoryInfoResponse
@@ -35,7 +19,23 @@ public static class CategoryProjectionExtensions
         };
     }
 
-    public static ListCategoriesResponse MapToResponse(this IPaginatedList<CategoryResponse> categories)
+    public static SingleCategoryResponse ToSingleResponse(this Category category)
+    {
+        return new SingleCategoryResponse()
+        {
+            Value = category.ToResponse()
+        };
+    }
+
+    public static SingleCategoryResponse ToSingleResponse(this CategoryResponse category)
+    {
+        return new SingleCategoryResponse()
+        {
+            Value = category
+        };
+    }
+
+    public static ListCategoriesResponse ToListResponse(this IPaginatedList<CategoryResponse> categories)
     {
         var paging = new PagingResponse
         {
@@ -55,9 +55,9 @@ public static class CategoryProjectionExtensions
         return response;
     }
 
-    public static IQueryable<CategoryResponse> ProjectToResponse(this IQueryable<Category> categories)
+    public static CategoryResponse ToResponse(this Category category)
     {
-        return categories.Select(Projection);
+        return Projection.Compile().Invoke(category);
     }
 
     public static Expression<Func<Category, CategoryResponse>> Projection
@@ -71,7 +71,13 @@ public static class CategoryProjectionExtensions
                 Slug = x.Slug,
                 Name = x.Name,
                 Description = x.Description,
-                Parent = x.Parent != null ? x.Parent.MapToInfoResponse() : null,
+                Parent = x.Parent == null ? null : new CategoryInfoResponse
+                {
+                    Id = x.Parent.Id.ToString(),
+                    Name = x.Parent.Name,
+                    Slug = x.Parent.Slug,
+                    Description = x.Parent.Description
+                }
             };
         }
     }

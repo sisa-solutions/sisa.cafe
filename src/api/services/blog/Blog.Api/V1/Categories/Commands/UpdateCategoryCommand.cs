@@ -84,10 +84,10 @@ public class UpdateCategoryCommandHandler(
         }
 
         repository.Update(category);
+
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-
-        return category.MapToResponse();
+        return category.ToSingleResponse();
     }
 }
 

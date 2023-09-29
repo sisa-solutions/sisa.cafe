@@ -79,6 +79,6 @@ public class CreateCategoryCommandHandler(
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        return category.MapToResponse();
+        return category.ToSingleResponse();
     }
 }
