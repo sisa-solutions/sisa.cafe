@@ -1,6 +1,7 @@
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
 using Sisa.Blog.Domain.AggregatesModel.CommentAggregate;
 using Sisa.Blog.Domain.AggregatesModel.ReactionAggregate;
+using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
 using Sisa.Domain.AggregatesModel.AuditableAggregate;
 
 namespace Sisa.Blog.Domain.AggregatesModel.PostAggregate;
@@ -12,27 +13,32 @@ public class Post : FullAuditableAggregateRoot
     public string Title { get; private set; }
     public string Slug { get; private set; }
     public string Excerpt { get; private set; }
-    public string Content { get; set; }
+    public string Content { get; private set; }
 
     public PostStatus Status { get; private set; } = PostStatus.DRAFT;
 
     private readonly List<PostStatusHistory> _statusHistories = [];
     public IReadOnlyCollection<PostStatusHistory> StatusHistories => _statusHistories;
 
-    private readonly List<string> _tags = [];
-    public virtual IReadOnlyCollection<string> Tags => _tags;
+    private readonly List<Tag> _tags = [];
+    public IReadOnlyCollection<Tag> Tags => _tags;
 
-    public virtual Category Category { get; private set; } = null!;
+    private readonly List<PostTag> _postTags = [];
+    public IReadOnlyCollection<PostTag> PostTags => _postTags;
+
+    public readonly List<string> _tagSlugs = [];
+    public IReadOnlyCollection<string> TagSlugs => _tagSlugs;
+
+    public Category Category { get; private set; } = null!;
 
     private readonly List<Comment> _comments = [];
-    public virtual IReadOnlyCollection<Comment> Comments => _comments;
+    public IReadOnlyCollection<Comment> Comments => _comments;
 
     private readonly List<PostReaction> _reactions = [];
-    public virtual IReadOnlyCollection<PostReaction> Reactions => _reactions;
+    public IReadOnlyCollection<PostReaction> Reactions => _reactions;
 
-    public Post(Guid categoryId, string title, string slug, string excerpt, string content)
+    public Post(string title, string slug, string excerpt, string content)
     {
-        CategoryId = categoryId;
         Title = title;
         Slug = slug;
         Excerpt = excerpt;
@@ -64,17 +70,30 @@ public class Post : FullAuditableAggregateRoot
         CategoryId = categoryId;
     }
 
-    public void AddTag(string tag)
-    {
-        _tags.Add(tag);
-    }
-
-    public void RemoveTag(string tag)
-    {
-        _tags.Remove(tag);
-    }
-
     #region Status
+
+    public void AddTags(IEnumerable<Tag> tags)
+    {
+        _tags.AddRange(tags);
+
+        // _postTags.AddRange(tags.Select(x => new PostTag(Id, x.Id)));
+        SyncTagSlugs();
+    }
+
+    public void RemoveTags(IEnumerable<Tag> tags)
+    {
+        _tags.RemoveAll(x => tags.Contains(x));
+
+        // _postTags.RemoveAll(x => tags.Select(y => y.Id).Contains(x.TagId));
+
+        SyncTagSlugs();
+    }
+
+    private void SyncTagSlugs()
+    {
+        _tagSlugs.Clear();
+        _tagSlugs.AddRange(_tags.Select(x => x.Slug));
+    }
 
     public PostStatus[] NextAllowedStatuses()
     {
@@ -87,37 +106,31 @@ public class Post : FullAuditableAggregateRoot
         };
     }
 
-    private void ChangeStatus(PostStatus status, string? remarks)
+    private bool TryChangeStatus(PostStatus status, string? remarks)
     {
         if (!NextAllowedStatuses().Contains(status))
         {
-            throw new InvalidOperationException($"Cannot change status from {Status} to {status}");
+            return false;
         }
 
         Status = status;
 
         _statusHistories.Add(new PostStatusHistory(status, DateTimeOffset.UtcNow, remarks));
+
+        return true;
     }
 
-    public void Publish(string? remarks)
-    {
-        ChangeStatus(PostStatus.PUBLISHED, remarks);
-    }
+    public bool TryPublish(string? remarks)
+        => TryChangeStatus(PostStatus.PUBLISHED, remarks);
 
-    public void Archive(string? remarks)
-    {
-        ChangeStatus(PostStatus.ARCHIVED, remarks);
-    }
+    public void TryArchive(string? remarks)
+        => TryChangeStatus(PostStatus.ARCHIVED, remarks);
 
-    public void Unarchive(string? remarks)
-    {
-        ChangeStatus(PostStatus.PUBLISHED, remarks);
-    }
+    public void TryUnarchive(string? remarks)
+        => TryChangeStatus(PostStatus.PUBLISHED, remarks);
 
-    public void Draft(string? remarks)
-    {
-        ChangeStatus(PostStatus.DRAFT, remarks);
-    }
+    public void TryDraft(string? remarks)
+        => TryChangeStatus(PostStatus.DRAFT, remarks);
 
     #endregion
 
@@ -144,5 +157,10 @@ public class Post : FullAuditableAggregateRoot
         var userReaction = _reactions.FirstOrDefault(x => x.UserId == userId);
 
         userReaction?.RemoveReaction(reactionType);
+    }
+
+    public void AssociateCategory(Category category)
+    {
+        Category = category;
     }
 }

@@ -91,7 +91,7 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     content = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false, defaultValueSql: "''"),
                     status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false, defaultValueSql: "'DRAFT'"),
                     status_histories = table.Column<IReadOnlyCollection<PostStatusHistory>>(type: "jsonb", nullable: false, defaultValueSql: "'[]'"),
-                    tags = table.Column<IReadOnlyCollection<string>>(type: "jsonb", nullable: false, defaultValueSql: "'[]'"),
+                    tag_slugs = table.Column<IReadOnlyCollection<string>>(type: "jsonb", nullable: false, defaultValueSql: "'[]'"),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_by = table.Column<Guid>(type: "uuid", nullable: true),
@@ -163,6 +163,30 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "post_tags",
+                columns: table => new
+                {
+                    post_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    tag_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_post_tags", x => new { x.post_id, x.tag_id });
+                    table.ForeignKey(
+                        name: "fk_post_tags_posts_post_id",
+                        column: x => x.post_id,
+                        principalTable: "posts",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_post_tags_tags_tag_id",
+                        column: x => x.tag_id,
+                        principalTable: "tags",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "comment_reactions",
                 columns: table => new
                 {
@@ -213,6 +237,16 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                 column: "post_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_post_tags_post_id",
+                table: "post_tags",
+                column: "post_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_post_tags_tag_id",
+                table: "post_tags",
+                column: "tag_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_posts_category_id",
                 table: "posts",
                 column: "category_id");
@@ -241,10 +275,13 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                 name: "post_reactions");
 
             migrationBuilder.DropTable(
-                name: "tags");
+                name: "post_tags");
 
             migrationBuilder.DropTable(
                 name: "comments");
+
+            migrationBuilder.DropTable(
+                name: "tags");
 
             migrationBuilder.DropTable(
                 name: "posts");

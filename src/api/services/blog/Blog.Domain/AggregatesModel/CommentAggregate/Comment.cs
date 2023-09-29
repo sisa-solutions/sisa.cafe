@@ -11,15 +11,15 @@ public class Comment : FullAuditableAggregateRoot
 
     public string Content { get; private set; }
 
-    public virtual Comment? Parent { get; private set; }
+    public Comment? Parent { get; private set; }
 
     private readonly List<Comment> _children = [];
-    public virtual IReadOnlyCollection<Comment> Children => _children;
+    public IReadOnlyCollection<Comment> Children => _children;
 
-    public virtual Post Post { get; private set; } = null!;
+    public Post Post { get; private set; } = null!;
 
     private readonly List<CommentReaction> _reactions = [];
-    public virtual IReadOnlyCollection<CommentReaction> Reactions => _reactions;
+    public IReadOnlyCollection<CommentReaction> Reactions => _reactions;
 
     public Comment(string content)
     {

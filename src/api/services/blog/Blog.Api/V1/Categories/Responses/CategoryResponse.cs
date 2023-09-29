@@ -24,12 +24,23 @@ public static class CategoryProjectionExtensions
         };
     }
 
+    public static CategoryInfoResponse MapToInfoResponse(this Category category)
+    {
+        return new CategoryInfoResponse
+        {
+            Id = category.Id.ToString(),
+            Name = category.Name,
+            Slug = category.Slug,
+            Description = category.Description
+        };
+    }
+
     public static ListCategoriesResponse MapToResponse(this IPaginatedList<CategoryResponse> categories)
     {
         var paging = new PagingResponse
         {
-            Count = categories.Count,
-            Page = categories.Page,
+            Count = categories.ItemCount,
+            Page = categories.PageIndex,
             PageSize = categories.PageSize,
             PageCount = categories.PageCount
         };
@@ -49,7 +60,7 @@ public static class CategoryProjectionExtensions
         return categories.Select(Projection);
     }
 
-    private static Expression<Func<Category, CategoryResponse>> Projection
+    public static Expression<Func<Category, CategoryResponse>> Projection
     {
         get
         {
@@ -60,11 +71,7 @@ public static class CategoryProjectionExtensions
                 Slug = x.Slug,
                 Name = x.Name,
                 Description = x.Description,
-                Parent = x.Parent != null ? new ParentCategoryResponse
-                {
-                    Id = x.Parent.Id.ToString(),
-                    Name = x.Parent.Name,
-                } : null
+                Parent = x.Parent != null ? x.Parent.MapToInfoResponse() : null,
             };
         }
     }

@@ -10,3 +10,15 @@ public interface IDomainEventEntity
 
     void ClearDomainEvents();
 }
+
+public interface IDomainEvent : IEvent
+{
+}
+
+public interface IExecuteBeforeSave
+{
+}
+
+public interface IExecuteAfterSave
+{
+}

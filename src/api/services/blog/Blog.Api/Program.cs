@@ -17,15 +17,17 @@ builder.Services.AddDataDependencies();
 // builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(AppSettings)));
 // var appSettings = builder.Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>()!;
 
-var connectionString = builder.Configuration.GetConnectionString(SchemaConstants.DEFAULT_CONNECTION)!;
-var distributedCachingConnectionString = builder.Configuration.GetConnectionString(SchemaConstants.DISTRIBUTED_CACHING_CONNECTION)!;
+var connectionString = builder.Configuration
+    .GetConnectionString(SchemaConstants.DEFAULT_CONNECTION)!;
+
+var distributedCachingConnectionString = builder.Configuration
+    .GetConnectionString(SchemaConstants.DISTRIBUTED_CACHING_CONNECTION)!;
 
 #region DbContext
 
-builder.Services.AddDbContextFactory<BlogDbContext>((serviceProvider, options) =>
-{
-    options.UseDatabase(serviceProvider, connectionString);
-});
+builder.Services
+    .AddDbContextFactory<BlogDbContext>((serviceProvider, options)
+        => options.UseDatabase(serviceProvider, connectionString));
 
 #endregion
 

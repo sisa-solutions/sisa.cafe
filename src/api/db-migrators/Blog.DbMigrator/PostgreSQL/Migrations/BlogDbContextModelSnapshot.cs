@@ -20,7 +20,7 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "8.0.0-rc.1.23419.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "unaccent");
@@ -46,7 +46,7 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.HasKey("Id")
                         .HasName("pk_data_protection_keys");
 
-                    b.ToTable("data_protection_keys", (string)null);
+                    b.ToTable("data_protection_keys");
                 });
 
             modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.CategoryAggregate.Category", b =>
@@ -118,7 +118,7 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.HasIndex("Slug")
                         .HasDatabaseName("ix_categories_slug");
 
-                    b.ToTable("categories", (string)null);
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.CommentAggregate.Comment", b =>
@@ -178,7 +178,7 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.HasIndex("PostId")
                         .HasDatabaseName("ix_comments_post_id");
 
-                    b.ToTable("comments", (string)null);
+                    b.ToTable("comments");
                 });
 
             modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.PostAggregate.Post", b =>
@@ -248,11 +248,11 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                         .HasColumnName("status_histories")
                         .HasDefaultValueSql("'[]'");
 
-                    b.Property<IReadOnlyCollection<string>>("Tags")
+                    b.Property<IReadOnlyCollection<string>>("TagSlugs")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("jsonb")
-                        .HasColumnName("tags")
+                        .HasColumnName("tag_slugs")
                         .HasDefaultValueSql("'[]'");
 
                     b.Property<string>("Title")
@@ -280,7 +280,29 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.HasIndex("Slug")
                         .HasDatabaseName("ix_posts_slug");
 
-                    b.ToTable("posts", (string)null);
+                    b.ToTable("posts");
+                });
+
+            modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.PostAggregate.PostTag", b =>
+                {
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("post_id");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("tag_id");
+
+                    b.HasKey("PostId", "TagId")
+                        .HasName("pk_post_tags");
+
+                    b.HasIndex("PostId")
+                        .HasDatabaseName("ix_post_tags_post_id");
+
+                    b.HasIndex("TagId")
+                        .HasDatabaseName("ix_post_tags_tag_id");
+
+                    b.ToTable("post_tags");
                 });
 
             modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.ReactionAggregate.CommentReaction", b =>
@@ -312,7 +334,7 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.HasIndex("CommentId")
                         .HasDatabaseName("ix_comment_reactions_comment_id");
 
-                    b.ToTable("comment_reactions", (string)null);
+                    b.ToTable("comment_reactions");
                 });
 
             modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.ReactionAggregate.PostReaction", b =>
@@ -344,7 +366,7 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.HasIndex("PostId")
                         .HasDatabaseName("ix_post_reactions_post_id");
 
-                    b.ToTable("post_reactions", (string)null);
+                    b.ToTable("post_reactions");
                 });
 
             modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.TagAggregate.Tag", b =>
@@ -409,7 +431,7 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.HasIndex("Slug")
                         .HasDatabaseName("ix_tags_slug");
 
-                    b.ToTable("tags", (string)null);
+                    b.ToTable("tags");
                 });
 
             modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.CategoryAggregate.Category", b =>
@@ -455,6 +477,27 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.PostAggregate.PostTag", b =>
+                {
+                    b.HasOne("Sisa.Blog.Domain.AggregatesModel.PostAggregate.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_post_tags_posts_post_id");
+
+                    b.HasOne("Sisa.Blog.Domain.AggregatesModel.TagAggregate.Tag", "Tag")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_post_tags_tags_tag_id");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.ReactionAggregate.CommentReaction", b =>
                 {
                     b.HasOne("Sisa.Blog.Domain.AggregatesModel.CommentAggregate.Comment", "Comment")
@@ -497,7 +540,14 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("PostTags");
+
                     b.Navigation("Reactions");
+                });
+
+            modelBuilder.Entity("Sisa.Blog.Domain.AggregatesModel.TagAggregate.Tag", b =>
+                {
+                    b.Navigation("PostTags");
                 });
 #pragma warning restore 612, 618
         }

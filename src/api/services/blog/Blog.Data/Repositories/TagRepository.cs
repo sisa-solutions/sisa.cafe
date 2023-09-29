@@ -1,4 +1,6 @@
-﻿using Sisa.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Sisa.Abstractions;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
 using Sisa.Data.Repositories;
 
@@ -15,5 +17,12 @@ public class TagRepository(BlogDbContext dbContext) : Repository<Tag>(dbContext)
     public async Task<bool> ExistAsync(Guid id, string slug, CancellationToken cancellationToken = default)
     {
         return await ExistAsync(x => x.Id != id && x.Slug == slug, cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<Tag>> GetExistingTagsBySlugsAsync(IEnumerable<string> slugs, CancellationToken cancellationToken = default)
+    {
+        return await Query
+            .Where(x => slugs.Contains(x.Slug))
+            .ToListAsync(cancellationToken);
     }
 }

@@ -96,4 +96,110 @@ public static class StringExtensions
 
         return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
     }
+
+    public static bool Like(this string value, string pattern)
+    {
+        int patternIndex = 0;
+        int valueIndex = 0;
+        int patternLength = pattern.Length;
+        int valueLength = value.Length;
+
+        while (valueIndex < valueLength && patternIndex < patternLength)
+        {
+            if (pattern[patternIndex] == '%')
+            {
+                // Handle '%' as a wildcard (matches any sequence of characters).
+                patternIndex++;
+                if (patternIndex == patternLength)
+                {
+                    // If '%' is at the end of the pattern, it matches anything remaining in the value.
+                    return true;
+                }
+
+                char nextChar = pattern[patternIndex];
+
+                while (valueIndex < valueLength && value[valueIndex] != nextChar)
+                {
+                    valueIndex++;
+                }
+            }
+            else if (pattern[patternIndex] == '_')
+            {
+                // Handle '_' as a wildcard (matches any single character).
+                patternIndex++;
+                valueIndex++;
+            }
+            else if (pattern[patternIndex] == value[valueIndex])
+            {
+                patternIndex++;
+                valueIndex++;
+            }
+            else
+            {
+                return false; // Characters don't match.
+            }
+        }
+
+        // If we reached the end of both the value and the pattern, it's a match.
+        if (valueIndex == valueLength && patternIndex == patternLength)
+        {
+            return true;
+        }
+
+        // If we didn't reach the end of the pattern, it's not a match.
+        return false;
+    }
+
+    public static bool ILike(this string value, string pattern)
+    {
+        int patternIndex = 0;
+        int valueIndex = 0;
+        int patternLength = pattern.Length;
+        int valueLength = value.Length;
+
+        while (valueIndex < valueLength && patternIndex < patternLength)
+        {
+            if (pattern[patternIndex] == '%')
+            {
+                // Handle '%' as a wildcard (matches any sequence of characters).
+                patternIndex++;
+                if (patternIndex == patternLength)
+                {
+                    // If '%' is at the end of the pattern, it matches anything remaining in the value.
+                    return true;
+                }
+
+                char nextChar = pattern[patternIndex];
+
+                while (valueIndex < valueLength && char.ToLower(value[valueIndex]) != char.ToLower(nextChar))
+                {
+                    valueIndex++;
+                }
+            }
+            else if (pattern[patternIndex] == '_')
+            {
+                // Handle '_' as a wildcard (matches any single character).
+                patternIndex++;
+                valueIndex++;
+            }
+            else if (char.ToLower(pattern[patternIndex]) == char.ToLower(value[valueIndex]))
+            {
+                patternIndex++;
+                valueIndex++;
+            }
+            else
+            {
+                return false; // Characters don't match.
+            }
+        }
+
+        // If we reached the end of both the value and the pattern, it's a match.
+        if (valueIndex == valueLength && patternIndex == patternLength)
+        {
+            return true;
+        }
+
+        // If we didn't reach the end of the pattern, it's not a match.
+        return false;
+    }
 }

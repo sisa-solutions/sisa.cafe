@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Posts";
+
+package sisa.blog.api;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+import "sisa/services/blog/v1/posts/commands.proto";
+import "sisa/services/blog/v1/posts/queries.proto";
+import "sisa/services/blog/v1/posts/responses.proto";
+
+service PostGrpcService {
+  rpc GetPosts(GetPostsQuery) returns (ListPostsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts"
+    };
+  }
+
+  rpc FindPostById(FindPostByIdQuery) returns (SinglePostResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts/{id}"
+    };
+  }
+
+  rpc CreatePost(CreatePostCommand) returns (SinglePostResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/posts"
+    };
+  }
+
+  rpc UpdatePost(UpdatePostCommand) returns (SinglePostResponse) {
+    option (google.api.http) = {
+        put: "/api/v1/posts/{id}"
+    };
+  }
+
+  rpc PublishPost(PublishPostCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+        put: "/api/v1/posts/{id}/publish"
+    };
+  }
+
+  rpc DeletePost(DeletePostCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/posts/{id}"
+    };
+  }
+}

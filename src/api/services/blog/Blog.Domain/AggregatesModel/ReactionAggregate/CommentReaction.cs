@@ -11,7 +11,7 @@ public class CommentReaction : AggregateRoot
     private readonly List<Reaction> _reactions = [];
     public IReadOnlyCollection<Reaction> Reactions => _reactions;
 
-    public virtual Comment Comment { get; private set; } = null!;
+    public Comment Comment { get; private set; } = null!;
 
     public CommentReaction(Guid userId)
     {

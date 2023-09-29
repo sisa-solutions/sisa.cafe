@@ -1,6 +1,25 @@
 ﻿namespace Sisa.Abstractions;
 
-public abstract class Entity : IEntity<Guid>, IDomainEventEntity
+public abstract class BaseEntity : IEntity, IDomainEventEntity
+{
+
+    private readonly HashSet<IEvent> _domainEvents;
+    public IReadOnlyCollection<IEvent> DomainEvents => _domainEvents;
+
+    protected BaseEntity()
+        => _domainEvents ??= [];
+
+    public void AddDomainEvent(IEvent @event)
+        => _domainEvents.Add(@event);
+
+    public void RemoveDomainEvent(IEvent @event)
+        => _domainEvents.Remove(@event);
+
+    public void ClearDomainEvents()
+        => _domainEvents.Clear();
+}
+
+public abstract class Entity : BaseEntity, IEntity<Guid>
 {
     int? _requestedHashCode;
 
@@ -18,25 +37,12 @@ public abstract class Entity : IEntity<Guid>, IDomainEventEntity
         }
     }
 
-    private readonly HashSet<IEvent> _domainEvents;
-    public IReadOnlyCollection<IEvent> DomainEvents => _domainEvents;
-
-    protected Entity() : base()
-        => _domainEvents ??= new HashSet<IEvent>();
+    protected Entity() : base() { }
 
     protected Entity(Guid id) : this()
         => Id = id;
 
     public void SetId(Guid id) => Id = id;
-
-    public void AddDomainEvent(IEvent @event)
-        => _domainEvents.Add(@event);
-
-    public void RemoveDomainEvent(IEvent @event)
-        => _domainEvents.Remove(@event);
-
-    public void ClearDomainEvents()
-        => _domainEvents.Clear();
 
     public bool IsTransient() => Id == Guid.Empty;
 

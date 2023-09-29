@@ -25,9 +25,12 @@ public class SaveChangesInterceptor(IIdentityService identityService, IEventPubl
         return result;
     }
 
-    public ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
+    public async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
     {
-        return ValueTask.FromResult(result);
+        if (eventData.Context != null)
+            await publisher.DispatchDomainEventsAfterSaveAsync(eventData.Context);
+
+        return await ValueTask.FromResult(result);
     }
 
     public InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -39,6 +42,8 @@ public class SaveChangesInterceptor(IIdentityService identityService, IEventPubl
     {
         if (eventData.Context != null)
         {
+            publisher.ValidateInvalidDomainEvents(eventData.Context);
+
             // Dispatch Domain Events collection.
             // Choices:
             // A) Right BEFORE committing data (EF SaveChanges) into the DB. This makes
@@ -47,7 +52,7 @@ public class SaveChangesInterceptor(IIdentityService identityService, IEventPubl
             // B) Right AFTER committing data (EF SaveChanges) into the DB. This makes
             // multiple transactions. You will need to handle eventual consistency and
             // compensatory actions in case of failures.
-            await publisher.DispatchDomainEventsAsync(eventData.Context);
+            await publisher.DispatchDomainEventsBeforeSaveAsync(eventData.Context);
 
             await ProcessingData(eventData.Context, cancellationToken);
         }

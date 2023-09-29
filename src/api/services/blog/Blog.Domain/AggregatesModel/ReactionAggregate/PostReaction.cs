@@ -11,7 +11,7 @@ public class PostReaction : AggregateRoot
     private readonly List<Reaction> _reactions = [];
     public IReadOnlyCollection<Reaction> Reactions => _reactions;
 
-    public virtual Post Post { get; private set; } = null!;
+    public Post Post { get; private set; } = null!;
 
     public PostReaction(Guid userId)
     {

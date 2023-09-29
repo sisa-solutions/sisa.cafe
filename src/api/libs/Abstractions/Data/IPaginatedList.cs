@@ -2,14 +2,13 @@
 
 public interface IPaginatedList
 {
-    long Count { get; }
-    int Page { get; }
+    long ItemCount { get; }
+    int PageIndex { get; }
     int PageSize { get; }
     int PageCount { get; }
 }
 
 public interface IPaginatedList<out TSource> : IPaginatedList, IReadOnlyList<TSource>
 {
-    new long Count { get; }
     string ToJsonInfo();
 }

@@ -1,3 +1,6 @@
+using System.Linq.Expressions;
+
+using Sisa.Extensions;
 using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
 using Sisa.Domain.AggregatesModel.AuditableAggregate;
 
@@ -11,18 +14,28 @@ public class Category : FullAuditableAggregateRoot
     public string Slug { get; private set; }
     public string? Description { get; private set; }
 
-    public virtual Category? Parent { get; private set; }
+    public Category? Parent { get; private set; }
 
     private readonly List<Category> _children = [];
-    public virtual IReadOnlyCollection<Category> Children => _children;
+    public IReadOnlyCollection<Category> Children => _children;
 
     private readonly List<Post> _posts = [];
-    public virtual IReadOnlyCollection<Post> Posts => _posts;
+    public IReadOnlyCollection<Post> Posts => _posts;
 
     public Category(string name, string slug)
     {
         Name = name;
         Slug = slug;
+    }
+
+    public bool NameLike(string pattern)
+    {
+        return Name.ILike(pattern);
+    }
+
+    public static Expression<Func<Category, bool>> NameLikeExpression(string pattern)
+    {
+        return x => x.Name.ILike(pattern);
     }
 
     public void Update(string name, string slug)

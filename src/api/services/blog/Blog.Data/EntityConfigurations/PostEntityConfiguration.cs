@@ -14,10 +14,10 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
         base.Configure(builder);
 
         builder.MapId();
-        
+
         builder
             .HasIndex(p => p.Slug);
-            // .IncludeProperties(p => p.Title);
+        // .IncludeProperties(p => p.Title);
 
         builder
             .Property(p => p.Title)
@@ -49,10 +49,6 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
             .HasMaxLength(50)
             .IsRequired()
             .HasDefaultValueSql($"'{PostStatus.DRAFT}'");
-        
-        builder.Property(p => p.Tags)
-            .HasColumnType("jsonb")
-            .HasDefaultValueSql("'[]'");
 
         builder.Property(p => p.StatusHistories)
             .HasColumnType("jsonb")
@@ -63,5 +59,34 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
             .WithMany(p => p.Posts)
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .Property(x => x.TagSlugs)
+            .HasColumnType("jsonb")
+            .HasDefaultValueSql("'[]'");
+
+        builder
+            .HasMany(e => e.Tags)
+            .WithMany(e => e.Posts)
+            .UsingEntity<PostTag>(
+
+                l => l.HasOne(e => e.Tag)
+                    .WithMany(e => e.PostTags)
+                    .HasForeignKey(e => e.TagId)
+                    .OnDelete(DeleteBehavior.Restrict),
+
+                r => r.HasOne(e => e.Post)
+                    .WithMany(e => e.PostTags)
+                    .HasForeignKey(e => e.PostId)
+                    .OnDelete(DeleteBehavior.Restrict),
+
+                j =>
+                {
+                    j.HasKey(e => new { e.PostId, e.TagId });
+
+                    j.HasIndex(e => e.PostId);
+                    j.HasIndex(e => e.TagId);
+                }
+            );
     }
 }

@@ -17,6 +17,7 @@ public class BlogDbContext(DbContextOptions<BlogDbContext> options) : BaseDbCont
     public DbSet<Tag> Tags => Set<Tag>();
 
     public DbSet<Post> Posts => Set<Post>();
+    public DbSet<PostTag> PostTags => Set<PostTag>();
     public DbSet<PostReaction> PostReactions => Set<PostReaction>();
 
     public DbSet<Comment> Comments => Set<Comment>();
@@ -25,16 +26,19 @@ public class BlogDbContext(DbContextOptions<BlogDbContext> options) : BaseDbCont
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ConfigureExtensions();
+        modelBuilder.UseCustomDbFunctions();
+        modelBuilder.UseCustomPostgreSQLDbFunctions();
 
         modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration());
         modelBuilder.ApplyConfiguration(new TagEntityConfiguration());
-        
+
         modelBuilder.ApplyConfiguration(new PostEntityConfiguration());
+
         modelBuilder.ApplyConfiguration(new PostReactionEntityConfiguration());
 
         modelBuilder.ApplyConfiguration(new CommentEntityConfiguration());
         modelBuilder.ApplyConfiguration(new CommentReactionEntityConfiguration());
 
-        // modelBuilder.ApplySnakeCaseConventions();
+        modelBuilder.ApplySnakeCaseConventions();
     }
 }

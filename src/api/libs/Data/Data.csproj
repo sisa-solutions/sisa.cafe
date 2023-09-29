@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EFCore.NamingConventions" />
+    <!-- <PackageReference Include="EFCore.NamingConventions" /> -->
+    <!-- <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" /> -->
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
   </ItemGroup>

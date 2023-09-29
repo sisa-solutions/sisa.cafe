@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Commands";
+
+package sisa.blog.api;
+
+import "google/protobuf/wrappers.proto";
+import "sisa/services/blog/v1/posts/enums.proto";
+
+message CreatePostCommand {
+  string categoryId = 1;
+
+  string title = 2;
+  string slug = 3;
+  string excerpt = 4;
+  string content = 5;
+
+  repeated string tags = 6;
+}
+
+message UpdatePostCommand {
+  string id = 1;
+  string categoryId = 2;
+
+  string title = 3;
+  string slug = 4;
+  string excerpt = 5;
+  string content = 6;
+
+  repeated string tags = 7;
+}
+
+message PublishPostCommand {
+  string id = 1;
+  string remark = 3;
+}
+
+message DeletePostCommand {
+  string id = 1;
+}

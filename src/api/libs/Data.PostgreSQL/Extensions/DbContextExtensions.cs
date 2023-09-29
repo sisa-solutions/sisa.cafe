@@ -85,7 +85,7 @@ public static class DbContextExtensions
 
     private static DbContextOptionsBuilder ConfigureCommonSettings(this DbContextOptionsBuilder options)
     {
-        options.UseSnakeCaseNamingConvention();
+        // options.UseSnakeCaseNamingConvention();
 
 #if DEBUG
         options.EnableSensitiveDataLogging();

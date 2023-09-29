@@ -34,7 +34,7 @@ public class GetCategoriesQueryHandler(
         }
 
         IPaginatedList<CategoryResponse> categories = await queryBuilder
-            .ToPaginatedListAsync(query.Paging.Page, query.Paging.PageSize, cancellationToken);
+            .ToPaginatedListAsync(query.Paging.Page - 1, query.Paging.PageSize, cancellationToken);
 
         return categories.MapToResponse();
     }

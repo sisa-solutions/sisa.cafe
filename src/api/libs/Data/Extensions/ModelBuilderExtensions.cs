@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Sisa.Extensions;
 
-public static class ModelBuilderExtensions
+public static partial class ModelBuilderExtensions
 {
     public static void ApplySnakeCaseConventions(this ModelBuilder builder)
     {
@@ -30,5 +31,17 @@ public static class ModelBuilderExtensions
                 index.SetDatabaseName(index.GetDatabaseName()?.ToSnakeCase());
             }
         }
+    }
+
+    public static void UseCustomDbFunctions(this ModelBuilder builder)
+    {
+        builder
+            .HasDbFunction(() => StringExtensions.Like(default!, default!))
+            .HasTranslation(args => new LikeExpression(
+                args[0],
+                args[1],
+                null,
+                null
+            ));
     }
 }

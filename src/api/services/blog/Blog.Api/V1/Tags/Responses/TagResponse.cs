@@ -16,6 +16,17 @@ public static class TagProjectionExtensions
         };
     }
 
+    public static TagResponse MapToInfoResponse(this Tag tag)
+    {
+        return new TagResponse()
+        {
+            Id = tag.Id.ToString(),
+            Slug = tag.Slug,
+            Name = tag.Name,
+            Description = tag.Description,
+        };
+    }
+
     public static SingleTagResponse MapToResponse(this TagResponse tag)
     {
         return new SingleTagResponse()
@@ -28,8 +39,8 @@ public static class TagProjectionExtensions
     {
         var paging = new PagingResponse
         {
-            Count = tags.Count,
-            Page = tags.Page,
+            Count = tags.ItemCount,
+            Page = tags.PageIndex,
             PageSize = tags.PageSize,
             PageCount = tags.PageCount
         };
@@ -49,7 +60,7 @@ public static class TagProjectionExtensions
         return tags.Select(Projection);
     }
 
-    private static Expression<Func<Tag, TagResponse>> Projection
+    public static Expression<Func<Tag, TagResponse>> Projection
     {
         get
         {
