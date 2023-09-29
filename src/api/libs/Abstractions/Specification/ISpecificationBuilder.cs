@@ -10,13 +10,11 @@ public interface ISpecificationBuilder<TEntity>
 
     SpecificationBuilder<TEntity> Where(Expression<Func<TEntity, bool>> criteria);
 
-    SpecificationBuilder<TEntity> Like(Expression<Func<TEntity, string>> likeExpression, string value);
-    SpecificationBuilder<TEntity> StartWith(Expression<Func<TEntity, string>> likeExpression, string value);
-    SpecificationBuilder<TEntity> EndWith(Expression<Func<TEntity, string>> likeExpression, string value);
-
     SpecificationBuilder<TEntity> OrderBy(Expression<Func<TEntity, object>> orderByExpression);
     SpecificationBuilder<TEntity> OrderByDescending(Expression<Func<TEntity, object>> orderByDescendingExpression);
     SpecificationBuilder<TEntity> GroupBy(Expression<Func<TEntity, object>> groupByExpression);
+
+    SpecificationBuilder<TEntity> Paginate(IPagingParams pagingParams);
 
     SpecificationBuilder<TEntity> And(ISpecification<TEntity> specification);
     SpecificationBuilder<TEntity> Or(ISpecification<TEntity> specification);

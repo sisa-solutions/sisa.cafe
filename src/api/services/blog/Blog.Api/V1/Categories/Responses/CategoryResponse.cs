@@ -39,8 +39,8 @@ public static partial class CategoryProjections
     {
         var paging = new PagingResponse
         {
-            Count = categories.ItemCount,
-            Page = categories.PageIndex,
+            ItemCount = categories.ItemCount,
+            PageIndex = categories.PageIndex,
             PageSize = categories.PageSize,
             PageCount = categories.PageCount
         };

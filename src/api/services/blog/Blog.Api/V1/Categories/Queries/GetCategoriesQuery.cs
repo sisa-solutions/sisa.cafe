@@ -19,18 +19,13 @@ public class GetCategoriesQueryHandler(
     {
         logger.LogInformation("Getting categories");
 
-        var pageIndex = query.Paging.Page - 1;
-        var pageSize = query.Paging.PageSize;
-
-        var expression = CategorySpecifications.FilterByName(query.Filter.Name);
+        var specification = new CategorySpecification<CategoryResponse>(
+            query.Filter.Name,
+            query.Paging,
+            CategoryProjections.Projection);
 
         var categories = await repository
-            .PaginateAsync(
-                expression,
-                pageIndex, pageSize,
-                CategoryProjections.Projection,
-                cancellationToken
-            );
+            .PaginateAsync(specification, cancellationToken);
 
         return categories.ToListResponse();
     }

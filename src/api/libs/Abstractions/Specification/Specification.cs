@@ -7,10 +7,19 @@ public class Specification<TEntity> : ISpecification<TEntity>
 {
     public virtual ISpecificationBuilder<TEntity> Builder { get; }
 
-
     public Specification()
     {
         Builder = new SpecificationBuilder<TEntity>(this);
+    }
+
+    public Specification(Expression<Func<TEntity, bool>> criteria) : this()
+    {
+        Criteria = criteria;
+    }
+
+    public Specification(Expression<Func<TEntity, bool>> criteria, IPagingParams pagingParams) : this(criteria)
+    {
+        PagingParams = pagingParams;
     }
 
     /// <summary>
@@ -43,7 +52,7 @@ public class Specification<TEntity> : ISpecification<TEntity>
     /// </summary>
     public Expression<Func<TEntity, object>>? GroupBy { get; private set; }
 
-    public SearchGroup<TEntity> SearchGroup { get; private set; } = new();
+    public IPagingParams? PagingParams { get; private set; }
 
     /// <summary>
     /// EnableTracking is a boolean value that indicates if tracking is enabled
@@ -82,43 +91,6 @@ public class Specification<TEntity> : ISpecification<TEntity>
         => Criteria = criteria;
 
     /// <summary>
-    /// Search is the expression that will be used to search the data
-    /// </summary>
-    /// <param name="likeExpression"></param>
-    /// <param name="value"></param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public virtual void Like(Expression<Func<TEntity, string>> likeExpression, string value)
-    {
-        if (likeExpression is null)
-        {
-            throw new ArgumentNullException(nameof(likeExpression));
-        }
-
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
-        var searchTermLowercase = value.ToLowerInvariant();
-
-        Expression<Func<TEntity, bool>> searchCriteria = x => likeExpression
-            .Compile()(x)
-            .ToLowerInvariant()
-            .Contains(searchTermLowercase);
-
-        if (Criteria is null)
-        {
-            Criteria = searchCriteria;
-        }
-        else
-        {
-            var newCriteria = Expression.AndAlso(Criteria.Body, searchCriteria.Body);
-
-            Criteria = Expression.Lambda<Func<TEntity, bool>>(newCriteria, Criteria.Parameters);
-        }
-    }
-
-    /// <summary>
     /// OrderBy is the expression that will be used to order the data
     /// </summary>
     /// <param name="orderByExpression"></param>
@@ -139,20 +111,8 @@ public class Specification<TEntity> : ISpecification<TEntity>
     public virtual void ApplyGroupBy(Expression<Func<TEntity, object>> groupByExpression)
         => GroupBy = groupByExpression;
 
-    public virtual void Search(Expression<Func<TEntity, string>> searchExpression, string searchTerm)
-        => SearchGroup.Add(searchExpression, searchTerm);
-
-    public virtual void Search(Expression<Func<TEntity, string>> searchExpression, string searchTerm, SearchType searchType)
-        => SearchGroup.Add(searchExpression, searchTerm, searchType);
-
-    public virtual void Search(Expression<Func<TEntity, string>> searchExpression, string searchTerm, SearchType searchType, bool isCaseSensitive)
-        => SearchGroup.Add(searchExpression, searchTerm, searchType, isCaseSensitive);
-
-    public virtual void Search(SearchExpression<TEntity> searchExpression)
-        => SearchGroup.Add(searchExpression);
-
-    public virtual void Search(SearchGroup<TEntity> searchGroup)
-        => SearchGroup.Add(searchGroup);
+    public virtual void ApplyPaging(IPagingParams pagingParams)
+        => PagingParams = pagingParams;
 
     public virtual ISpecification<TEntity> And(ISpecification<TEntity> specification)
     {
@@ -213,5 +173,20 @@ public class Specification<TEntity> : ISpecification<TEntity>
 public class Specification<TEntity, TResult>(Expression<Func<TEntity, TResult>> selector) : Specification<TEntity>, ISpecification<TEntity, TResult>
     where TEntity : class
 {
-    public Expression<Func<TEntity, TResult>>? Selector { get; private set; } = selector;
+    public Expression<Func<TEntity, TResult>> Selector { get; private set; } = selector;
+
+    public Specification(Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, bool>> criteria) : this(selector)
+    {
+        ApplyCriteria(criteria);
+    }
+
+    public Specification(Expression<Func<TEntity, TResult>> selector, IPagingParams pagingParams) : this(selector)
+    {
+        ApplyPaging(pagingParams);
+    }
+
+    public Specification(Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, bool>> criteria, IPagingParams pagingParams) : this(selector, criteria)
+    {
+        ApplyPaging(pagingParams);
+    }
 }

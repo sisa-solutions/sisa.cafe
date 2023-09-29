@@ -1,19 +1,26 @@
 using System.Linq.Expressions;
 
+using Sisa.Abstractions;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
 using Sisa.Extensions;
 
 namespace Sisa.Blog.Domain.Specifications;
 
-public static partial class CategorySpecifications
+public sealed class CategorySpecification<TResult>(Expression<Func<Category, TResult>> selector)
+    : Specification<Category, TResult>(selector) where TResult : class
 {
-    public static Expression<Func<Category, bool>> FilterByName(string? term)
+    public CategorySpecification(
+        string keyword
+        , IPagingParams pagingParams,
+        Expression<Func<Category, TResult>> selector) : this(selector)
     {
-        if (string.IsNullOrWhiteSpace(term))
+        if (!string.IsNullOrWhiteSpace(keyword))
         {
-            return x => true;
+            Builder.Where(x => x.Name.Like($"%{keyword}%"));
         }
 
-        return x => x.Name.ILike($"%{term}%");
+
+        Builder.OrderBy(x => x.Name)
+            .Paginate(pagingParams);
     }
 }

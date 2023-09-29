@@ -39,8 +39,8 @@ public static class TagProjectionExtensions
     {
         var paging = new PagingResponse
         {
-            Count = tags.ItemCount,
-            Page = tags.PageIndex,
+            ItemCount = tags.ItemCount,
+            PageIndex = tags.PageIndex,
             PageSize = tags.PageSize,
             PageCount = tags.PageCount
         };

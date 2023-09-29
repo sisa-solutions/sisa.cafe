@@ -5,15 +5,15 @@ option csharp_namespace = "Sisa.Blog.Api.V1.Categories.Queries";
 package sisa.blog.api;
 
 import "google/protobuf/wrappers.proto";
-import "sisa/libs/common/queries/paging_query.proto";
+import "sisa/libs/common/params/paging_params.proto";
 
-message FilterCategoriesQuery {
+message FilterCategoriesParams {
   string name = 1;
 }
 
 message GetCategoriesQuery {
-  FilterCategoriesQuery filter = 1;
-  sisa.common.PagingQuery paging = 2;
+  FilterCategoriesParams filter = 1;
+  sisa.common.PagingParams paging = 2;
 }
 
 message FindCategoryByIdQuery {

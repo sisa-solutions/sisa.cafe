@@ -52,7 +52,7 @@ public class GetTagsQueryHandler(
         }
 
         IPaginatedList<PostResponse> posts = await queryBuilder
-            .ToPaginatedListAsync(query.Paging.Page, query.Paging.PageSize, cancellationToken);
+            .ToPaginatedListAsync(query.Paging.PageIndex, query.Paging.PageSize, cancellationToken);
 
         return posts.MapToResponse();
     }

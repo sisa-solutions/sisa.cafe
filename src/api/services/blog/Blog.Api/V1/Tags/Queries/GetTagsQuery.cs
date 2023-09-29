@@ -34,7 +34,7 @@ public class GetTagsQueryHandler(
         }
 
         IPaginatedList<TagResponse> tags = await queryBuilder
-            .ToPaginatedListAsync(query.Paging.Page, query.Paging.PageSize, cancellationToken);
+            .ToPaginatedListAsync(query.Paging.PageIndex, query.Paging.PageSize, cancellationToken);
 
         return tags.MapToResponse();
     }

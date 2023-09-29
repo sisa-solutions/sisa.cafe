@@ -5,17 +5,17 @@ option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Queries";
 package sisa.blog.api;
 
 import "google/protobuf/wrappers.proto";
-import "sisa/libs/common/queries/paging_query.proto";
+import "sisa/libs/common/params/paging_params.proto";
 
-message FilterPostsQuery {
+message FilterPostsParams {
   string keyword = 1;
   repeated string categories = 2;
   repeated string tags = 3;
 }
 
 message GetPostsQuery {
-  FilterPostsQuery filter = 1;
-  sisa.common.PagingQuery paging = 2;
+  FilterPostsParams filter = 1;
+  sisa.common.PagingParams paging = 2;
 }
 
 message FindPostByIdQuery {

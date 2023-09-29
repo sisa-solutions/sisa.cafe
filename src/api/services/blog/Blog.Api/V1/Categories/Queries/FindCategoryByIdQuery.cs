@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Categories.Responses;
@@ -24,8 +22,7 @@ public class FindCategoryByIdQueryHandler(
 
         var category = await repository
             .FindAsync(
-                x => x.Id == query.CategoryId,
-                CategoryProjections.Projection,
+                query.CategoryId,
                 cancellationToken
             );
 

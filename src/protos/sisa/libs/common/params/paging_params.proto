@@ -4,7 +4,7 @@ option csharp_namespace = "Sisa.Grpc.Queries";
 
 package sisa.common;
 
-message PagingQuery {
-  int32 page = 1;
+message PagingParams {
+  int32 pageIndex = 1;
   int32 pageSize = 2;
 }

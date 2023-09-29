@@ -44,6 +44,9 @@ public class PaginatedList<TSource> : List<TSource>, IPaginatedList<TSource>
         return new PaginatedList<TSource>(items, itemCount, pageIndex, pageSize);
     }
 
+    public static IPaginatedList<TSource> Create(IEnumerable<TSource> source, IPagingParams pagingParams)
+        => Create(source, pagingParams.PageIndex, pagingParams.PageSize);
+
     public static async ValueTask<IPaginatedList<TSource>> CreateAsync(IQueryable<TSource> source, int pageIndex, int pageSize, CancellationToken cancellationToken = default)
     {
         var itemCount = await source.LongCountAsync(cancellationToken);
@@ -57,6 +60,9 @@ public class PaginatedList<TSource> : List<TSource>, IPaginatedList<TSource>
 
         return new PaginatedList<TSource>(items, itemCount, pageIndex, pageSize);
     }
+
+    public static async ValueTask<IPaginatedList<TSource>> CreateAsync(IQueryable<TSource> source, IPagingParams pagingParams, CancellationToken cancellationToken = default)
+        => await CreateAsync(source, pagingParams.PageIndex, pagingParams.PageSize, cancellationToken);
 
     private IPaginatedList GetPaginatedList() => this;
 

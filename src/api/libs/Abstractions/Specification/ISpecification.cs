@@ -44,17 +44,20 @@ public interface ISpecification<TEntity> : ISpecification
     /// </summary>
     Expression<Func<TEntity, object>>? GroupBy { get; }
 
-    SearchGroup<TEntity> SearchGroup { get; }
+    /// <summary>
+    /// Select is the expression that will be used to select the data
+    /// </summary>
+    IPagingParams? PagingParams { get; }
 
     /// <summary>
-    /// Search is the expression that will be used to search the data
+    /// And is the expression that will be used to join the data
     /// </summary>
     /// <param name="specification"></param>
     /// <returns></returns>
     ISpecification<TEntity> And(ISpecification<TEntity> specification);
 
     /// <summary>
-    /// Search is the expression that will be used to search the data
+    /// Or is the expression that will be used to join the data
     /// </summary>
     /// <param name="specification"></param>
     /// <returns></returns>
@@ -81,5 +84,5 @@ public interface ISpecification<TEntity> : ISpecification
 public interface ISpecification<TEntity, TResult> : ISpecification<TEntity>
     where TEntity : class
 {
-    Expression<Func<TEntity, TResult>>? Selector { get; }
+    Expression<Func<TEntity, TResult>> Selector { get; }
 }

@@ -10,31 +10,25 @@ public interface IRepository<TEntity>
 
     ValueTask<TEntity?> FindAsync(object keyValue, CancellationToken cancellationToken = default);
     ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken = default);
+
+    ValueTask<TEntity?> FindAsync(
+       Specification<TEntity> specification
+       , CancellationToken cancellationToken = default);
+
     ValueTask<TResult?> FindAsync<TResult>(
-        Expression<Func<TEntity, bool>> predicate
-        , Expression<Func<TEntity, TResult>> selector
+        Specification<TEntity, TResult> specification
         , CancellationToken cancellationToken = default);
 
-    ValueTask<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
-        Expression<Func<TEntity, bool>> predicate
-        , Expression<Func<TEntity, TResult>> selector
+        Specification<TEntity, TResult> specification
         , CancellationToken cancellationToken = default);
 
-    ValueTask<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, int pageIndex, int pageSize, CancellationToken cancellationToken = default);
-    ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
-        Expression<Func<TEntity, bool>> predicate
-        , int pageIndex
-        , int pageSize
-        , Expression<Func<TEntity, TResult>> selector
+    ValueTask<IPaginatedList<TEntity>> PaginateAsync(
+        Specification<TEntity> specification
         , CancellationToken cancellationToken = default);
 
-    ValueTask<IPaginatedList<TEntity>> PaginateAsync(Expression<Func<TEntity, bool>> predicate, int pageIndex, int pageSize, CancellationToken cancellationToken = default);
     ValueTask<IPaginatedList<TResult>> PaginateAsync<TResult>(
-        Expression<Func<TEntity, bool>> predicate
-        , int pageIndex
-        , int pageSize
-        , Expression<Func<TEntity, TResult>> selector
+        Specification<TEntity, TResult> specification
         , CancellationToken cancellationToken = default);
 
     TEntity Add(TEntity entity);

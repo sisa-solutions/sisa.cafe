@@ -30,8 +30,8 @@ public static class PostProjectionExtensions
     {
         var paging = new PagingResponse
         {
-            Count = posts.ItemCount,
-            Page = posts.PageIndex,
+            ItemCount = posts.ItemCount,
+            PageIndex = posts.PageIndex,
             PageSize = posts.PageSize,
             PageCount = posts.PageCount
         };

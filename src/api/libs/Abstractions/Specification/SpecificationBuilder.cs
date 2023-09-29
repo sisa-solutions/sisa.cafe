@@ -28,27 +28,6 @@ public class SpecificationBuilder<TEntity>(Specification<TEntity> specification)
         return this;
     }
 
-    public SpecificationBuilder<TEntity> Like(Expression<Func<TEntity, string>> likeExpression, string value)
-    {
-        _specification.Like(likeExpression, $"%{value}%");
-
-        return this;
-    }
-
-    public SpecificationBuilder<TEntity> StartWith(Expression<Func<TEntity, string>> likeExpression, string value)
-    {
-        _specification.Like(likeExpression, $"{value}%");
-
-        return this;
-    }
-
-    public SpecificationBuilder<TEntity> EndWith(Expression<Func<TEntity, string>> likeExpression, string value)
-    {
-        _specification.Like(likeExpression, $"%{value}");
-
-        return this;
-    }
-
     public SpecificationBuilder<TEntity> OrderBy(Expression<Func<TEntity, object>> orderByExpression)
     {
         _specification.ApplyOrderBy(orderByExpression);
@@ -70,37 +49,9 @@ public class SpecificationBuilder<TEntity>(Specification<TEntity> specification)
         return this;
     }
 
-    public SpecificationBuilder<TEntity> Search(Expression<Func<TEntity, string>> searchExpression, string searchTerm)
+    public SpecificationBuilder<TEntity> Paginate(IPagingParams pagingParams)
     {
-        _specification.Search(searchExpression, searchTerm);
-
-        return this;
-    }
-
-    public SpecificationBuilder<TEntity> Search(Expression<Func<TEntity, string>> searchExpression, string searchTerm, SearchType searchType)
-    {
-        _specification.Search(searchExpression, searchTerm, searchType);
-
-        return this;
-    }
-
-    public SpecificationBuilder<TEntity> Search(Expression<Func<TEntity, string>> searchExpression, string searchTerm, SearchType searchType, bool isCaseSensitive)
-    {
-        _specification.Search(searchExpression, searchTerm, searchType, isCaseSensitive);
-
-        return this;
-    }
-
-    public SpecificationBuilder<TEntity> Search(SearchExpression<TEntity> searchExpression)
-    {
-        _specification.Search(searchExpression);
-
-        return this;
-    }
-
-    public SpecificationBuilder<TEntity> Search(SearchGroup<TEntity> searchGroup)
-    {
-        _specification.Search(searchGroup);
+        _specification.ApplyPaging(pagingParams);
 
         return this;
     }

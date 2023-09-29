@@ -3,6 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using Sisa.Abstractions;
+using Sisa.Extensions;
 
 namespace Sisa.Data.Repositories;
 
@@ -32,15 +33,49 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
     public async ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken = default)
         => await _dbSet.FindAsync(keyValues, cancellationToken);
 
+    public async ValueTask<TEntity?> FindAsync(
+       Specification<TEntity> specification
+       , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Specify(specification);
+
+        return await query.FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async ValueTask<TResult?> FindAsync<TResult>(
-        Expression<Func<TEntity, bool>> predicate
-        , Expression<Func<TEntity, TResult>> selector
+        Specification<TEntity, TResult> specification
         , CancellationToken cancellationToken = default)
     {
-        return await _dbSet
-            .Where(predicate)
-            .Select(selector)
-            .FirstOrDefaultAsync(cancellationToken);
+        var query = _dbSet.Specify(specification);
+
+        return await query.FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
+        Specification<TEntity, TResult> specification
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Specify(specification);
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    public async ValueTask<IPaginatedList<TEntity>> PaginateAsync(
+         Specification<TEntity> specification
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Specify(specification);
+
+        return await query.ToPaginatedListAsync(specification.PagingParams!, cancellationToken);
+    }
+
+    public async ValueTask<IPaginatedList<TResult>> PaginateAsync<TResult>(
+        Specification<TEntity, TResult> specification
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Specify(specification);
+
+        return await query.ToPaginatedListAsync(specification.PagingParams!, cancellationToken);
     }
 
     public TEntity Add(TEntity entity)
@@ -51,80 +86,6 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
         var entityEntry = await _dbSet.AddAsync(entity, cancellationToken);
 
         return entityEntry.Entity;
-    }
-
-    public async ValueTask<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
-    {
-        return await _dbSet
-            .Where(predicate)
-            .ToListAsync(cancellationToken);
-    }
-
-    public async ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
-        Expression<Func<TEntity, bool>> predicate
-        , Expression<Func<TEntity, TResult>> selector
-        , CancellationToken cancellationToken = default)
-    {
-        return await  _dbSet
-            .Where(predicate)
-            .Select(selector)
-            .ToListAsync(cancellationToken);
-    }
-
-    public async ValueTask<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, int pageIndex, int pageSize, CancellationToken cancellationToken = default)
-    {
-        return await _dbSet
-            .Where(predicate)
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-    }
-
-    public async ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
-        Expression<Func<TEntity, bool>> predicate
-        , int pageIndex
-        , int pageSize
-        , Expression<Func<TEntity, TResult>> selector
-        , CancellationToken cancellationToken = default)
-    {
-        return await _dbSet
-            .Where(predicate)
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .Select(selector)
-            .ToListAsync(cancellationToken);
-    }
-
-    public async ValueTask<IPaginatedList<TEntity>> PaginateAsync(Expression<Func<TEntity, bool>> predicate, int pageIndex, int pageSize, CancellationToken cancellationToken = default)
-    {
-        var count = await _dbSet.CountAsync(predicate, cancellationToken);
-
-        var items = await _dbSet
-            .Where(predicate)
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        return new PaginatedList<TEntity>(items, count, pageIndex, pageSize);
-    }
-
-    public async ValueTask<IPaginatedList<TResult>> PaginateAsync<TResult>(
-        Expression<Func<TEntity, bool>> predicate
-        , int pageIndex
-        , int pageSize
-        , Expression<Func<TEntity, TResult>> selector
-        , CancellationToken cancellationToken = default)
-    {
-        var count = await _dbSet.CountAsync(predicate, cancellationToken);
-
-        var items = await _dbSet
-            .Where(predicate)
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .Select(selector)
-            .ToListAsync(cancellationToken);
-
-        return new PaginatedList<TResult>(items, count, pageIndex, pageSize);
     }
 
     public void AddRange(IEnumerable<TEntity> entities)
