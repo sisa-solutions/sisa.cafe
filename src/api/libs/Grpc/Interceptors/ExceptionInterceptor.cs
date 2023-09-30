@@ -8,42 +8,37 @@ using GrpcStatusCode = Grpc.Core.StatusCode;
 using Microsoft.Extensions.Logging;
 
 using Sisa.Grpc.Helpers;
-using System.Text.Json;
+using Sisa.Extensions;
 
 namespace Sisa.Grpc.Interceptors;
 
-public class ExceptionInterceptor : Interceptor
+public class ExceptionInterceptor(
+    IServiceProvider serviceProvider,
+    ILogger<ExceptionInterceptor> logger) : Interceptor
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<ExceptionInterceptor> _logger;
-
-    public ExceptionInterceptor(
-        IServiceProvider serviceProvider,
-        ILogger<ExceptionInterceptor> logger)
-    {
-        _serviceProvider = serviceProvider;
-        _logger = logger;
-    }
-
     public override TResponse BlockingUnaryCall<TRequest, TResponse>(
         TRequest request,
         ClientInterceptorContext<TRequest, TResponse> context,
         BlockingUnaryCallContinuation<TRequest, TResponse> continuation)
     {
-        _logger.LogInformation("Request: ({@request})", request);
+        string requestName = request.GetGenericTypeName();
 
         try
         {
+            logger.LogInformation("Handling BlockingUnary request {requestName} ({@request})", requestName, request);
+
             Validate(request);
 
             TResponse response = base.BlockingUnaryCall(request, context, continuation);
 
-            // _logger.LogInformation("Response: ({@response})", response);
+            logger.LogInformation("BlockingUnary request {request} handled - response: ({@response})", requestName, response);
 
             return response;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling BlockingUnary request {requestName} ({@request})", requestName, request);
+
             throw HandleException(ex);
         }
     }
@@ -53,21 +48,24 @@ public class ExceptionInterceptor : Interceptor
         ServerCallContext context,
         UnaryServerMethod<TRequest, TResponse> continuation)
     {
-        _logger.LogInformation("Request: ({@request})", request);
-
+        string requestName = request.GetGenericTypeName();
 
         try
         {
+            logger.LogInformation("Handling UnaryServer request {requestName} ({@request})", requestName, request);
+
             await ValidateAsync(request, context.CancellationToken);
 
-            TResponse response = await continuation(request, context);
+            TResponse response = await base.UnaryServerHandler(request, context, continuation);
 
-            // _logger.LogInformation("Response: ({@response})", response);
+            logger.LogInformation("UnaryServer request {requestName} handled - response: ({@response})", requestName, response);
 
             return response;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling UnaryServer request {requestName} ({@request})", requestName, request);
+
             throw HandleException(ex);
         }
     }
@@ -77,16 +75,24 @@ public class ExceptionInterceptor : Interceptor
         ClientInterceptorContext<TRequest, TResponse> context,
         AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
     {
-        _logger.LogInformation("Request: ({@request})", request);
+        string requestName = request.GetGenericTypeName();
 
         try
         {
+            logger.LogInformation("Handling AsyncUnary request {requestName} ({@request})", requestName, request);
+
             Validate(request);
 
-            return base.AsyncUnaryCall(request, context, continuation);
+            var response = base.AsyncUnaryCall(request, context, continuation);
+
+            logger.LogInformation("AsyncUnary request {request} handled", requestName);
+
+            return response;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling AsyncUnary request {requestName} ({@request})", requestName, request);
+
             throw HandleException(ex);
         }
     }
@@ -96,16 +102,22 @@ public class ExceptionInterceptor : Interceptor
         ServerCallContext context,
         ClientStreamingServerMethod<TRequest, TResponse> continuation)
     {
+        string requestName = typeof(TRequest).GetGenericTypeName();
+
         try
         {
+            logger.LogInformation("Handling ClientStreamingServer request {requestName}", requestName);
+
             TResponse response = await base.ClientStreamingServerHandler(requestStream, context, continuation);
 
-            // _logger.LogInformation("Response: ({@response})", response);
+            logger.LogInformation("ClientStreamingServer request {requestName} handled", requestName);
 
             return response;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling ClientStreamingServer request {requestName}", requestName);
+
             throw HandleException(ex);
         }
     }
@@ -114,12 +126,22 @@ public class ExceptionInterceptor : Interceptor
         ClientInterceptorContext<TRequest, TResponse> context,
         AsyncClientStreamingCallContinuation<TRequest, TResponse> continuation)
     {
+        string requestName = typeof(TRequest).GetGenericTypeName();
+
         try
         {
-            return base.AsyncClientStreamingCall(context, continuation);
+            logger.LogInformation("Handling AsyncClientStreaming request {requestName}", requestName);
+
+            var response = base.AsyncClientStreamingCall(context, continuation);
+
+            logger.LogInformation("AsyncClientStreaming request {requestName} handled", requestName);
+
+            return response;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling AsyncClientStreaming request {requestName}", requestName);
+
             throw HandleException(ex);
         }
     }
@@ -130,17 +152,22 @@ public class ExceptionInterceptor : Interceptor
         ServerCallContext context,
         ServerStreamingServerMethod<TRequest, TResponse> continuation)
     {
-        _logger.LogInformation("Request: ({@request})", request);
-
+        string requestName = request.GetGenericTypeName();
 
         try
         {
+            logger.LogInformation("Handling ServerStreamingServer request {requestName} ({@request})", requestName, request);
+
             await ValidateAsync(request);
 
             await base.ServerStreamingServerHandler(request, responseStream, context, continuation);
+
+            logger.LogInformation("ServerStreamingServer request {requestName} handled", requestName);
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling ServerStreamingServer request {requestName} ({@request})", requestName, request);
+
             throw HandleException(ex);
         }
     }
@@ -150,32 +177,48 @@ public class ExceptionInterceptor : Interceptor
         ClientInterceptorContext<TRequest, TResponse> context,
         AsyncServerStreamingCallContinuation<TRequest, TResponse> continuation)
     {
-        _logger.LogInformation("Request: ({@request})", request);
+        string requestName = request.GetGenericTypeName();
 
         try
         {
+            logger.LogInformation("Handling AsyncServerStreaming request {requestName} ({@request})", requestName, request);
+
             Validate(request);
 
-            return base.AsyncServerStreamingCall(request, context, continuation);
+            var response = base.AsyncServerStreamingCall(request, context, continuation);
+
+            logger.LogInformation("AsyncServerStreaming request {requestName} handled", requestName);
+
+            return response;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling AsyncServerStreaming request {requestName} ({@request})", requestName, request);
+
             throw HandleException(ex);
         }
     }
 
-    public override Task DuplexStreamingServerHandler<TRequest, TResponse>(
+    public override async Task DuplexStreamingServerHandler<TRequest, TResponse>(
         IAsyncStreamReader<TRequest> requestStream,
         IServerStreamWriter<TResponse> responseStream,
         ServerCallContext context,
         DuplexStreamingServerMethod<TRequest, TResponse> continuation)
     {
+        string requestName = typeof(TResponse).GetGenericTypeName();
+
         try
         {
-            return base.DuplexStreamingServerHandler(requestStream, responseStream, context, continuation);
+            logger.LogInformation("Handling DuplexStreamingServer request {requestName}", requestName);
+
+            await base.DuplexStreamingServerHandler(requestStream, responseStream, context, continuation);
+
+            logger.LogInformation("DuplexStreamingServer request {requestName} handled", requestName);
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling DuplexStreaming request {requestName}", typeof(TRequest).GetGenericTypeName());
+
             throw HandleException(ex);
         }
     }
@@ -184,23 +227,39 @@ public class ExceptionInterceptor : Interceptor
         ClientInterceptorContext<TRequest, TResponse> context,
         AsyncDuplexStreamingCallContinuation<TRequest, TResponse> continuation)
     {
+        var requestName = typeof(TRequest).GetGenericTypeName();
+
         try
         {
-            return base.AsyncDuplexStreamingCall(context, continuation);
+            logger.LogInformation("Handling AsyncDuplexStreaming request {requestName}", requestName);
+
+            var response = base.AsyncDuplexStreamingCall(context, continuation);
+
+            logger.LogInformation("AsyncDuplexStreaming request {requestName} handled", requestName);
+
+            return response;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error handling AsyncDuplexStreaming request {requestName}", requestName);
+
             throw HandleException(ex);
         }
     }
 
     private void Validate<TRequest>(TRequest request)
     {
-        IValidator<TRequest>? validator = _serviceProvider.GetService(typeof(IValidator<TRequest>)) as IValidator<TRequest>;
+        IValidator<TRequest>? validator = serviceProvider.GetService(typeof(IValidator<TRequest>)) as IValidator<TRequest>;
 
         if (validator is not null)
         {
+            var requestName = request!.GetGenericTypeName();
+
+            logger.LogInformation("Validating request {requestName} ({@request})", requestName, request);
+
             var validationResult = validator!.Validate(request);
+
+            logger.LogInformation("Request {requestName} validated - result ({@validationResult})", requestName, validationResult);
 
             HandleValidationException(validationResult);
         }
@@ -208,33 +267,37 @@ public class ExceptionInterceptor : Interceptor
 
     private async Task ValidateAsync<TRequest>(TRequest request, CancellationToken cancellationToken = default)
     {
-        IValidator<TRequest>? validator = _serviceProvider.GetService(typeof(IValidator<TRequest>)) as IValidator<TRequest>;
+        IValidator<TRequest>? validator = serviceProvider.GetService(typeof(IValidator<TRequest>)) as IValidator<TRequest>;
 
         if (validator is not null)
         {
+            var requestName = request!.GetGenericTypeName();
+
+            logger.LogInformation("Validating request {requestName} ({@request})", requestName, request);
+
             var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            logger.LogInformation("Request {requestName} validated - result ({@validationResult})", requestName, validationResult);
 
             HandleValidationException(validationResult);
         }
     }
 
-    private void HandleValidationException(ValidationResult validationResult)
+    private static void HandleValidationException(ValidationResult validationResult)
     {
         if (validationResult.IsValid)
             return;
-
-        _logger.LogWarning("Validation error: ({@validationResult})", validationResult);
 
         throw new DomainException(System.StatusCode.BAD_REQUEST, "400", "One or more validation errors occurred", validationResult.ToDictionary());
     }
 
     private RpcException HandleException(Exception ex)
     {
-        _logger.LogError(ex, "Error processing request");
+        RpcException rpcException;
 
         if (ex is IDomainException domainException)
         {
-            return new RpcException(
+            rpcException = new RpcException(
                 new Status(domainException.ToGrpcStatusCode(), domainException.Message, ex),
                 new Metadata
                 {
@@ -244,14 +307,14 @@ public class ExceptionInterceptor : Interceptor
             );
         }
 
-        return new RpcException(
+        rpcException = new RpcException(
             new Status(GrpcStatusCode.Internal, "An error occurred while processing the request", ex),
             new Metadata
             {
                 { "x-error-code", "500" },
             }
         );
+
+        return rpcException;
     }
 }
-
-

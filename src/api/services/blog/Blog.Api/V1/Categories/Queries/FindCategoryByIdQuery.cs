@@ -20,11 +20,7 @@ public class FindCategoryByIdQueryHandler(
     {
         logger.LogInformation("Finding category by id {Id}", query.Id);
 
-        var category = await repository
-            .FindAsync(
-                query.CategoryId,
-                cancellationToken
-            );
+        var category = await repository.FindAsync(query.CategoryId, cancellationToken);
 
         if (category is null)
         {

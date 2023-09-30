@@ -19,7 +19,6 @@ public sealed class CategorySpecification<TResult>(Expression<Func<Category, TRe
             Builder.Where(x => x.Name.Like($"%{keyword}%"));
         }
 
-
         Builder.OrderBy(x => x.Name)
             .Paginate(pagingParams);
     }
