@@ -7,18 +7,33 @@ package sisa.blog.api;
 import "google/protobuf/wrappers.proto";
 
 message CreateCategoryCommand {
-  google.protobuf.StringValue parentId = 1;
+  // reversed field must be reflect to the database
+  reserved 1, 5 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
+
+  // data fields: from 1 to 50
   string name = 2;
   string slug = 3;
   google.protobuf.StringValue description = 4;
+
+  // relationship fields: from 51 to 60
+  google.protobuf.StringValue parentId = 51;
 }
 
 message UpdateCategoryCommand {
+  // reversed field must be reflect to the database
+  reserved 5 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
+  reserved 63 to 70; // audit fields
+
+  // data fields: from 1 to 50
   string id = 1;
-  google.protobuf.StringValue parentId = 2;
-  string name = 3;
-  string slug = 4;
-  google.protobuf.StringValue description = 5;
+  string name = 2;
+  string slug = 3;
+  google.protobuf.StringValue description = 4;
+
+  // relationship fields: from 51 to 60
+  google.protobuf.StringValue parentId = 51;
 }
 
 message DeleteCategoryCommand {

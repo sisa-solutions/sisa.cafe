@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Protobuf.Common";
+
+package sisa.protobuf.common;
+
+enum Sort {
+  SORT_ASC = 1; // ascending
+  SORT_DESC = 2; // descending
+}

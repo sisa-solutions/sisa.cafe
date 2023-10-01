@@ -13,17 +13,25 @@ import "sisa/services/blog/v1/tags/responses.proto";
 import "sisa/services/blog/v1/posts/enums.proto";
 
 message PostResponse {
+  // reversed field must be reflect to the database
+  reserved 6 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
+  reserved 63 to 70; // audit fields
+
+  // data fields: from 1 to 50
   string id = 1;
-  string categoryId = 2;
+  string title = 2;
+  string slug = 3;
+  string excerpt = 4;
+  string content = 5;
 
-  string title = 3;
-  string slug = 4;
-  string excerpt = 5;
-  string content = 6;
-  sisa.blog.api.PostStatus status = 7;
+  // relationship fields: from 51 to 60
+  sisa.blog.api.CategoryInfoResponse category = 51;
+  repeated sisa.blog.api.TagResponse tags = 52;
 
-  sisa.blog.api.CategoryInfoResponse category = 8;
-  repeated sisa.blog.api.TagResponse tags = 9;
+  // audit fields: from 63 to 70
+  sisa.common.AuditResponse creator = 61;
+  sisa.common.AuditResponse updater = 62;
 }
 
 message SinglePostResponse {

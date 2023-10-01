@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Protobuf.Common";
+
+package sisa.protobuf.common;
+
+import "sisa/libs/common/enums/operator.proto";
+import "sisa/libs/common/enums/combinator.proto";
+
+message FilterRule {
+  string field = 1;
+  string value = 2;
+  Operator operator = 3;
+}
+
+message FilteringParams {
+  Combinator combinator = 1;
+  bool not = 2;
+  repeated FilterRule rules = 3;
+}

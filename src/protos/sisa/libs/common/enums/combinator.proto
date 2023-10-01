@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Protobuf.Common";
+
+package sisa.protobuf.common;
+
+enum Combinator {
+  COMBINATOR_AND = 1;
+  COMBINATOR_OR = 2;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Protobuf.Common";
+
+package sisa.protobuf.common;
+
+import "google/protobuf/timestamp.proto";
+
+message AutitUserInfoResonse {
+  reserved 4 to 9; // other data fields
+
+  string id = 1;
+  string userName = 2;
+  string displayName = 3;
+
+  google.protobuf.Timestamp Timestamp = 10;
+}

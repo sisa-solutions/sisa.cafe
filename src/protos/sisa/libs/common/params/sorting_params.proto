@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Protobuf.Common";
+
+package sisa.protobuf.common;
+
+message SortingParams {
+  string name = 1;
+  sort sort = 2;
+}

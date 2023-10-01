@@ -9,10 +9,23 @@ import "google/protobuf/wrappers.proto";
 import "sisa/libs/common/responses/paging_response.proto";
 
 message TagResponse {
+  // reversed field must be reflect to the database
+  reserved 5 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
+  reserved 63 to 70; // audit fields
+
+  // data fields: from 1 to 50
   string id = 1;
   string name = 2;
   string slug = 3;
   google.protobuf.StringValue description = 4;
+
+  // relationship fields: from 51 to 60
+  CategoryInfoResponse parent = 51;
+
+  // audit fields: from 63 to 70
+  sisa.common.AuditResponse creator = 61;
+  sisa.common.AuditResponse updater = 62;
 }
 
 message SingleTagResponse {

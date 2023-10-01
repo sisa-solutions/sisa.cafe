@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-option csharp_namespace = "Sisa.Grpc.Responses";
+option csharp_namespace = "Sisa.Protobuf.Common";
 
-package sisa.common;
+package sisa.protobuf.common;
 
-message PagingResponse {
+message PagingInfo {
   int64 itemCount = 1;
   int32 pageIndex = 2;
   int32 pageSize = 3;

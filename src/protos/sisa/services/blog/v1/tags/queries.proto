@@ -5,18 +5,17 @@ option csharp_namespace = "Sisa.Blog.Api.V1.Tags.Queries";
 package sisa.blog.api;
 
 import "google/protobuf/wrappers.proto";
-import "sisa/libs/common/params/paging_params.proto";
 
-message FilterTagsParams {
-  string name = 1;
-}
+import "sisa/libs/common/params/filtering_params.proto";
+import "sisa/libs/common/params/sorting_params.proto";
 
 message GetTagsQuery {
-  FilterTagsParams filter = 1;
-  sisa.common.PagingParams paging = 2;
+  int pageIndex = 1;
+  int pageSize = 2;
+  sisa.protobuf.common.filtering_params filter = 3;
+  sisa.protobuf.common.sorting_params sortBy = 4;
 }
 
 message FindTagByIdQuery {
   string id = 1;
 }
-
