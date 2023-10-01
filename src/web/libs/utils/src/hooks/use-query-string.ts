@@ -45,7 +45,7 @@ const useQueryString = <QueryObject extends Record<string, string | number>>(
     [searchParams]
   );
 
-  return [setQueryString] as const;
+  return setQueryString;
 };
 
 export default useQueryString;

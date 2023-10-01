@@ -291,7 +291,7 @@ public class ExceptionInterceptor(
         throw new DomainException(System.StatusCode.BAD_REQUEST, "400", "One or more validation errors occurred", validationResult.ToDictionary());
     }
 
-    private RpcException HandleException(Exception ex)
+    private static RpcException HandleException(Exception ex)
     {
         RpcException rpcException;
 

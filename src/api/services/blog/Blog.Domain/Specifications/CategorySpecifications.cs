@@ -10,13 +10,23 @@ public sealed class CategorySpecification<TResult>(Expression<Func<Category, TRe
     : Specification<Category, TResult>(selector) where TResult : class
 {
     public CategorySpecification(
-        string keyword
-        , IPagingParams pagingParams,
+        Guid id,
         Expression<Func<Category, TResult>> selector) : this(selector)
     {
+        Builder.Include(x => x.Parent)
+            .Where(x => x.Id == id);
+    }
+
+    public CategorySpecification(
+        string keyword
+        , IPagingParams pagingParams
+        , Expression<Func<Category, TResult>> selector) : this(selector)
+    {
+        Builder.Include(x => x.Parent);
+
         if (!string.IsNullOrWhiteSpace(keyword))
         {
-            Builder.Where(x => x.Name.Like($"%{keyword}%"));
+            Builder.Where(x => x.Name.ILike($"%{keyword}%"));
         }
 
         Builder.OrderBy(x => x.Name)

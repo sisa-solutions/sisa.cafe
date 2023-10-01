@@ -19,7 +19,7 @@ type FilterToolbarProps = {
 };
 
 const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
-  const [setQueryString] = useQueryString();
+  const setQueryString = useQueryString();
 
   const { control, handleSubmit, reset } = useForm<FilterFormValues>({
     defaultValues: defaultValues,
@@ -46,6 +46,12 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
       name: '',
     })
   };
+
+  const onEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      onSubmit();
+    }
+  }
 
   const renderActions = () => (
     <Box
@@ -79,7 +85,7 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
         gap: 1.5,
       }}
     >
-      <TextField sx={{ flexGrow: 1 }} control={control} name="name" label="Name" />
+      <TextField sx={{ flexGrow: 1 }} control={control} name="name" label="Name" onKeyDown={onEnter} />
       <Box
         sx={{
           gap: 1.5,

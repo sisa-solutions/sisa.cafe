@@ -3,19 +3,19 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "sisa.common";
 
-export interface PagingQuery {
-  page: number;
+export interface PagingParams {
+  pageIndex: number;
   pageSize: number;
 }
 
-function createBasePagingQuery(): PagingQuery {
-  return { page: 0, pageSize: 0 };
+function createBasePagingParams(): PagingParams {
+  return { pageIndex: 0, pageSize: 0 };
 }
 
-export const PagingQuery = {
-  encode(message: PagingQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.page !== 0) {
-      writer.uint32(8).int32(message.page);
+export const PagingParams = {
+  encode(message: PagingParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pageIndex !== 0) {
+      writer.uint32(8).int32(message.pageIndex);
     }
     if (message.pageSize !== 0) {
       writer.uint32(16).int32(message.pageSize);
@@ -23,10 +23,10 @@ export const PagingQuery = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PagingQuery {
+  decode(input: _m0.Reader | Uint8Array, length?: number): PagingParams {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePagingQuery();
+    const message = createBasePagingParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -35,7 +35,7 @@ export const PagingQuery = {
             break;
           }
 
-          message.page = reader.int32();
+          message.pageIndex = reader.int32();
           continue;
         case 2:
           if (tag !== 16) {
@@ -53,17 +53,17 @@ export const PagingQuery = {
     return message;
   },
 
-  fromJSON(object: any): PagingQuery {
+  fromJSON(object: any): PagingParams {
     return {
-      page: isSet(object.page) ? Number(object.page) : 0,
+      pageIndex: isSet(object.pageIndex) ? Number(object.pageIndex) : 0,
       pageSize: isSet(object.pageSize) ? Number(object.pageSize) : 0,
     };
   },
 
-  toJSON(message: PagingQuery): unknown {
+  toJSON(message: PagingParams): unknown {
     const obj: any = {};
-    if (message.page !== 0) {
-      obj.page = Math.round(message.page);
+    if (message.pageIndex !== 0) {
+      obj.pageIndex = Math.round(message.pageIndex);
     }
     if (message.pageSize !== 0) {
       obj.pageSize = Math.round(message.pageSize);
@@ -71,12 +71,12 @@ export const PagingQuery = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PagingQuery>, I>>(base?: I): PagingQuery {
-    return PagingQuery.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<PagingParams>, I>>(base?: I): PagingParams {
+    return PagingParams.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PagingQuery>, I>>(object: I): PagingQuery {
-    const message = createBasePagingQuery();
-    message.page = object.page ?? 0;
+  fromPartial<I extends Exact<DeepPartial<PagingParams>, I>>(object: I): PagingParams {
+    const message = createBasePagingParams();
+    message.pageIndex = object.pageIndex ?? 0;
     message.pageSize = object.pageSize ?? 0;
     return message;
   },

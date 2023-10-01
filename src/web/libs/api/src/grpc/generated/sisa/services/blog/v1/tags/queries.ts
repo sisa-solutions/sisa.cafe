@@ -1,38 +1,38 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
-import { PagingQuery } from "../../../../libs/common/queries/paging_query";
+import { PagingParams } from "../../../../libs/common/params/paging_params";
 
 export const protobufPackage = "sisa.blog.api";
 
-export interface FilterTagsQuery {
+export interface FilterTagsParams {
   name: string;
 }
 
 export interface GetTagsQuery {
-  filter: FilterTagsQuery | undefined;
-  paging: PagingQuery | undefined;
+  filter: FilterTagsParams | undefined;
+  paging: PagingParams | undefined;
 }
 
 export interface FindTagByIdQuery {
   id: string;
 }
 
-function createBaseFilterTagsQuery(): FilterTagsQuery {
+function createBaseFilterTagsParams(): FilterTagsParams {
   return { name: "" };
 }
 
-export const FilterTagsQuery = {
-  encode(message: FilterTagsQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FilterTagsParams = {
+  encode(message: FilterTagsParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FilterTagsQuery {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FilterTagsParams {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFilterTagsQuery();
+    const message = createBaseFilterTagsParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -52,11 +52,11 @@ export const FilterTagsQuery = {
     return message;
   },
 
-  fromJSON(object: any): FilterTagsQuery {
+  fromJSON(object: any): FilterTagsParams {
     return { name: isSet(object.name) ? String(object.name) : "" };
   },
 
-  toJSON(message: FilterTagsQuery): unknown {
+  toJSON(message: FilterTagsParams): unknown {
     const obj: any = {};
     if (message.name !== "") {
       obj.name = message.name;
@@ -64,11 +64,11 @@ export const FilterTagsQuery = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<FilterTagsQuery>, I>>(base?: I): FilterTagsQuery {
-    return FilterTagsQuery.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<FilterTagsParams>, I>>(base?: I): FilterTagsParams {
+    return FilterTagsParams.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<FilterTagsQuery>, I>>(object: I): FilterTagsQuery {
-    const message = createBaseFilterTagsQuery();
+  fromPartial<I extends Exact<DeepPartial<FilterTagsParams>, I>>(object: I): FilterTagsParams {
+    const message = createBaseFilterTagsParams();
     message.name = object.name ?? "";
     return message;
   },
@@ -81,10 +81,10 @@ function createBaseGetTagsQuery(): GetTagsQuery {
 export const GetTagsQuery = {
   encode(message: GetTagsQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.filter !== undefined) {
-      FilterTagsQuery.encode(message.filter, writer.uint32(10).fork()).ldelim();
+      FilterTagsParams.encode(message.filter, writer.uint32(10).fork()).ldelim();
     }
     if (message.paging !== undefined) {
-      PagingQuery.encode(message.paging, writer.uint32(18).fork()).ldelim();
+      PagingParams.encode(message.paging, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -101,14 +101,14 @@ export const GetTagsQuery = {
             break;
           }
 
-          message.filter = FilterTagsQuery.decode(reader, reader.uint32());
+          message.filter = FilterTagsParams.decode(reader, reader.uint32());
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
 
-          message.paging = PagingQuery.decode(reader, reader.uint32());
+          message.paging = PagingParams.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -121,18 +121,18 @@ export const GetTagsQuery = {
 
   fromJSON(object: any): GetTagsQuery {
     return {
-      filter: isSet(object.filter) ? FilterTagsQuery.fromJSON(object.filter) : undefined,
-      paging: isSet(object.paging) ? PagingQuery.fromJSON(object.paging) : undefined,
+      filter: isSet(object.filter) ? FilterTagsParams.fromJSON(object.filter) : undefined,
+      paging: isSet(object.paging) ? PagingParams.fromJSON(object.paging) : undefined,
     };
   },
 
   toJSON(message: GetTagsQuery): unknown {
     const obj: any = {};
     if (message.filter !== undefined) {
-      obj.filter = FilterTagsQuery.toJSON(message.filter);
+      obj.filter = FilterTagsParams.toJSON(message.filter);
     }
     if (message.paging !== undefined) {
-      obj.paging = PagingQuery.toJSON(message.paging);
+      obj.paging = PagingParams.toJSON(message.paging);
     }
     return obj;
   },
@@ -143,10 +143,10 @@ export const GetTagsQuery = {
   fromPartial<I extends Exact<DeepPartial<GetTagsQuery>, I>>(object: I): GetTagsQuery {
     const message = createBaseGetTagsQuery();
     message.filter = (object.filter !== undefined && object.filter !== null)
-      ? FilterTagsQuery.fromPartial(object.filter)
+      ? FilterTagsParams.fromPartial(object.filter)
       : undefined;
     message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingQuery.fromPartial(object.paging)
+      ? PagingParams.fromPartial(object.paging)
       : undefined;
     return message;
   },

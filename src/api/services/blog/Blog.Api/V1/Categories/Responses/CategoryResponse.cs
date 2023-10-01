@@ -1,5 +1,7 @@
 using System.Linq.Expressions;
 
+using Google.Protobuf.WellKnownTypes;
+
 using Sisa.Abstractions;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
 using Sisa.Grpc.Responses;
@@ -71,6 +73,12 @@ public static partial class CategoryProjections
                 Slug = x.Slug,
                 Name = x.Name,
                 Description = x.Description,
+                Creator = new ActorInfoResponse()
+                {
+                    Id = x.CreatedBy.ToString(),
+                    DisplayName = "Administrator",
+                    Timestamp = x.CreatedAt.ToTimestamp()
+                },
                 Parent = x.Parent == null ? null : new CategoryInfoResponse
                 {
                     Id = x.Parent.Id.ToString(),

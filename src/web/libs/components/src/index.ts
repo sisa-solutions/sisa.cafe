@@ -185,3 +185,5 @@ export * from './date-input';
 export { default as MaskInput } from './mask-input';
 export * from './mask-input';
 export { default as MaskField } from './mask-field';
+
+export { default as ConfirmDialog } from './confirm-dialog';

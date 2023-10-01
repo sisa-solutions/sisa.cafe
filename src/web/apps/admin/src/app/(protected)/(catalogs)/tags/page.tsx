@@ -22,19 +22,19 @@ import Loading from 'components/common/loading';
 type TagsPageProps = {
   searchParams: {
     name?: string;
-    page?: number;
+    pageNumber?: number;
     pageSize?: number;
   };
 };
 
 const TagsPage = async ({
-  searchParams: { name = '', page = 1, pageSize = 10 },
+  searchParams: { name = '', pageNumber = 1, pageSize = 10 },
 }: TagsPageProps) => {
   const {
     value,
     paging = {
-      count: 0,
-      page,
+      itemCount: 0,
+      pageIndex: 0,
       pageSize,
       pageCount: 0,
     },
@@ -43,7 +43,7 @@ const TagsPage = async ({
       name: name,
     },
     paging: {
-      page,
+      pageIndex: pageNumber - 1,
       pageSize,
     },
   });
@@ -81,10 +81,7 @@ const TagsPage = async ({
               name: name,
             }}
             paging={{
-              count: paging.count,
-              page: paging.page,
-              pageSize: paging.pageSize,
-              pageCount: paging.pageCount,
+              ...paging
             }}
           />
         </Suspense>

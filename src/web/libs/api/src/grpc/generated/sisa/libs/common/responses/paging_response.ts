@@ -5,23 +5,23 @@ import _m0 from "protobufjs/minimal";
 export const protobufPackage = "sisa.common";
 
 export interface PagingResponse {
-  count: number;
-  page: number;
+  itemCount: number;
+  pageIndex: number;
   pageSize: number;
   pageCount: number;
 }
 
 function createBasePagingResponse(): PagingResponse {
-  return { count: 0, page: 0, pageSize: 0, pageCount: 0 };
+  return { itemCount: 0, pageIndex: 0, pageSize: 0, pageCount: 0 };
 }
 
 export const PagingResponse = {
   encode(message: PagingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.count !== 0) {
-      writer.uint32(8).int64(message.count);
+    if (message.itemCount !== 0) {
+      writer.uint32(8).int64(message.itemCount);
     }
-    if (message.page !== 0) {
-      writer.uint32(16).int32(message.page);
+    if (message.pageIndex !== 0) {
+      writer.uint32(16).int32(message.pageIndex);
     }
     if (message.pageSize !== 0) {
       writer.uint32(24).int32(message.pageSize);
@@ -44,14 +44,14 @@ export const PagingResponse = {
             break;
           }
 
-          message.count = longToNumber(reader.int64() as Long);
+          message.itemCount = longToNumber(reader.int64() as Long);
           continue;
         case 2:
           if (tag !== 16) {
             break;
           }
 
-          message.page = reader.int32();
+          message.pageIndex = reader.int32();
           continue;
         case 3:
           if (tag !== 24) {
@@ -78,8 +78,8 @@ export const PagingResponse = {
 
   fromJSON(object: any): PagingResponse {
     return {
-      count: isSet(object.count) ? Number(object.count) : 0,
-      page: isSet(object.page) ? Number(object.page) : 0,
+      itemCount: isSet(object.itemCount) ? Number(object.itemCount) : 0,
+      pageIndex: isSet(object.pageIndex) ? Number(object.pageIndex) : 0,
       pageSize: isSet(object.pageSize) ? Number(object.pageSize) : 0,
       pageCount: isSet(object.pageCount) ? Number(object.pageCount) : 0,
     };
@@ -87,11 +87,11 @@ export const PagingResponse = {
 
   toJSON(message: PagingResponse): unknown {
     const obj: any = {};
-    if (message.count !== 0) {
-      obj.count = Math.round(message.count);
+    if (message.itemCount !== 0) {
+      obj.itemCount = Math.round(message.itemCount);
     }
-    if (message.page !== 0) {
-      obj.page = Math.round(message.page);
+    if (message.pageIndex !== 0) {
+      obj.pageIndex = Math.round(message.pageIndex);
     }
     if (message.pageSize !== 0) {
       obj.pageSize = Math.round(message.pageSize);
@@ -107,8 +107,8 @@ export const PagingResponse = {
   },
   fromPartial<I extends Exact<DeepPartial<PagingResponse>, I>>(object: I): PagingResponse {
     const message = createBasePagingResponse();
-    message.count = object.count ?? 0;
-    message.page = object.page ?? 0;
+    message.itemCount = object.itemCount ?? 0;
+    message.pageIndex = object.pageIndex ?? 0;
     message.pageSize = object.pageSize ?? 0;
     message.pageCount = object.pageCount ?? 0;
     return message;

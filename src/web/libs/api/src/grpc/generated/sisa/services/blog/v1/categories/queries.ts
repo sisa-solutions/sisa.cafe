@@ -1,38 +1,38 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
-import { PagingQuery } from "../../../../libs/common/queries/paging_query";
+import { PagingParams } from "../../../../libs/common/params/paging_params";
 
 export const protobufPackage = "sisa.blog.api";
 
-export interface FilterCategoriesQuery {
+export interface FilterCategoriesParams {
   name: string;
 }
 
 export interface GetCategoriesQuery {
-  filter: FilterCategoriesQuery | undefined;
-  paging: PagingQuery | undefined;
+  filter: FilterCategoriesParams | undefined;
+  paging: PagingParams | undefined;
 }
 
 export interface FindCategoryByIdQuery {
   id: string;
 }
 
-function createBaseFilterCategoriesQuery(): FilterCategoriesQuery {
+function createBaseFilterCategoriesParams(): FilterCategoriesParams {
   return { name: "" };
 }
 
-export const FilterCategoriesQuery = {
-  encode(message: FilterCategoriesQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FilterCategoriesParams = {
+  encode(message: FilterCategoriesParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FilterCategoriesQuery {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FilterCategoriesParams {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFilterCategoriesQuery();
+    const message = createBaseFilterCategoriesParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -52,11 +52,11 @@ export const FilterCategoriesQuery = {
     return message;
   },
 
-  fromJSON(object: any): FilterCategoriesQuery {
+  fromJSON(object: any): FilterCategoriesParams {
     return { name: isSet(object.name) ? String(object.name) : "" };
   },
 
-  toJSON(message: FilterCategoriesQuery): unknown {
+  toJSON(message: FilterCategoriesParams): unknown {
     const obj: any = {};
     if (message.name !== "") {
       obj.name = message.name;
@@ -64,11 +64,11 @@ export const FilterCategoriesQuery = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<FilterCategoriesQuery>, I>>(base?: I): FilterCategoriesQuery {
-    return FilterCategoriesQuery.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<FilterCategoriesParams>, I>>(base?: I): FilterCategoriesParams {
+    return FilterCategoriesParams.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<FilterCategoriesQuery>, I>>(object: I): FilterCategoriesQuery {
-    const message = createBaseFilterCategoriesQuery();
+  fromPartial<I extends Exact<DeepPartial<FilterCategoriesParams>, I>>(object: I): FilterCategoriesParams {
+    const message = createBaseFilterCategoriesParams();
     message.name = object.name ?? "";
     return message;
   },
@@ -81,10 +81,10 @@ function createBaseGetCategoriesQuery(): GetCategoriesQuery {
 export const GetCategoriesQuery = {
   encode(message: GetCategoriesQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.filter !== undefined) {
-      FilterCategoriesQuery.encode(message.filter, writer.uint32(10).fork()).ldelim();
+      FilterCategoriesParams.encode(message.filter, writer.uint32(10).fork()).ldelim();
     }
     if (message.paging !== undefined) {
-      PagingQuery.encode(message.paging, writer.uint32(18).fork()).ldelim();
+      PagingParams.encode(message.paging, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -101,14 +101,14 @@ export const GetCategoriesQuery = {
             break;
           }
 
-          message.filter = FilterCategoriesQuery.decode(reader, reader.uint32());
+          message.filter = FilterCategoriesParams.decode(reader, reader.uint32());
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
 
-          message.paging = PagingQuery.decode(reader, reader.uint32());
+          message.paging = PagingParams.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -121,18 +121,18 @@ export const GetCategoriesQuery = {
 
   fromJSON(object: any): GetCategoriesQuery {
     return {
-      filter: isSet(object.filter) ? FilterCategoriesQuery.fromJSON(object.filter) : undefined,
-      paging: isSet(object.paging) ? PagingQuery.fromJSON(object.paging) : undefined,
+      filter: isSet(object.filter) ? FilterCategoriesParams.fromJSON(object.filter) : undefined,
+      paging: isSet(object.paging) ? PagingParams.fromJSON(object.paging) : undefined,
     };
   },
 
   toJSON(message: GetCategoriesQuery): unknown {
     const obj: any = {};
     if (message.filter !== undefined) {
-      obj.filter = FilterCategoriesQuery.toJSON(message.filter);
+      obj.filter = FilterCategoriesParams.toJSON(message.filter);
     }
     if (message.paging !== undefined) {
-      obj.paging = PagingQuery.toJSON(message.paging);
+      obj.paging = PagingParams.toJSON(message.paging);
     }
     return obj;
   },
@@ -143,10 +143,10 @@ export const GetCategoriesQuery = {
   fromPartial<I extends Exact<DeepPartial<GetCategoriesQuery>, I>>(object: I): GetCategoriesQuery {
     const message = createBaseGetCategoriesQuery();
     message.filter = (object.filter !== undefined && object.filter !== null)
-      ? FilterCategoriesQuery.fromPartial(object.filter)
+      ? FilterCategoriesParams.fromPartial(object.filter)
       : undefined;
     message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingQuery.fromPartial(object.paging)
+      ? PagingParams.fromPartial(object.paging)
       : undefined;
     return message;
   },

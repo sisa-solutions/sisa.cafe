@@ -7,7 +7,7 @@ export {
 } from './generated/sisa/services/blog/v1/categories/commands';
 
 export {
-  FilterCategoriesQuery,
+  FilterCategoriesParams,
   FindCategoryByIdQuery,
   GetCategoriesQuery
 } from './generated/sisa/services/blog/v1/categories/queries';
@@ -16,6 +16,6 @@ export type {
   CategoryResponse,
   SingleCategoryResponse,
   ListCategoriesResponse,
-  ParentCategoryResponse,
+  CategoryInfoResponse,
 } from './generated/sisa/services/blog/v1/categories/responses';
 

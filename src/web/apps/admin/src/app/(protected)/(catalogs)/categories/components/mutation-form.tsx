@@ -6,7 +6,7 @@ import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
-import useSWR from 'swr';
+import useQuery from 'swr';
 
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
@@ -24,7 +24,7 @@ import {
 
 import type {
   CategoryResponse,
-  ParentCategoryResponse,
+  CategoryInfoResponse,
   CreateCategoryCommand,
   UpdateCategoryCommand,
 } from '@sisa/api';
@@ -32,7 +32,7 @@ import type {
 import { getCategories } from 'api/category-api';
 
 type MutationValues = (CreateCategoryCommand | UpdateCategoryCommand) & {
-  parent?: ParentCategoryResponse;
+  parent?: CategoryInfoResponse;
 };
 
 export type MutationFormProps = {
@@ -49,13 +49,13 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       value: new Array<CategoryResponse>(),
     },
     isLoading,
-  } = useSWR(['/api/v1/categories', searchParentCategoryName], ([_, name]) =>
+  } = useQuery(['/api/v1/categories', searchParentCategoryName], ([_, name]) =>
     getCategories({
       filter: {
         name,
       },
       paging: {
-        page: 1,
+        pageIndex: 0,
         pageSize: 10,
       },
     })
@@ -64,7 +64,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const router = useRouter();
   const { pending } = useFormStatus();
 
-  const { control, handleSubmit, reset } = useForm<MutationValues>({
+  const { control, handleSubmit } = useForm<MutationValues>({
     defaultValues: {
       ...defaultValues,
       parent: defaultValues?.parent ?? {
@@ -74,7 +74,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     },
   });
 
-  const submit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
       const { parent, ...rest } = data;
 
@@ -89,6 +89,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       alert(error);
     }
   });
+
+  const onCancel = () => {
+    router.push('/categories');
+  }
 
   const onInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
     setSearchParentCategoryName(newValue);
@@ -121,10 +125,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       </FormControl>
       <RichTextField control={control} error name="description" label="Description" />
       <FormActions>
-        <SubmitButton submit={submit} disabled={pending} loading={pending}>
+        <SubmitButton submit={onSubmit} disabled={pending} loading={pending}>
           Save
         </SubmitButton>
-        <CancelButton cancel={() => reset(defaultValues)} disabled={pending}>
+        <CancelButton cancel={onCancel} disabled={pending}>
           Cancel
         </CancelButton>
       </FormActions>

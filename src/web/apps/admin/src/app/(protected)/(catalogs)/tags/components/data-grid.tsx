@@ -15,7 +15,7 @@ import {
 import { type TagResponse } from '@sisa/api';
 
 import DetailsLink from './details-link';
-import ItemActions from './item-actions';
+import RowActions from './row-actions';
 import FilterToolbar from './filter-toolbar';
 import { useQueryString } from '@sisa/utils';
 
@@ -27,8 +27,8 @@ type Props = {
     name: string;
   };
   paging: {
-    count: number;
-    page: number;
+    itemCount: number;
+    pageIndex: number;
     pageSize: number;
     pageCount: number;
   };
@@ -37,7 +37,7 @@ type Props = {
 const DataGrid = ({
   data,
   filter: { name },
-  paging: { count, page, pageSize, pageCount },
+  paging: { itemCount, pageIndex, pageSize, pageCount },
 }: Props) => {
   const [columns] = useState<Array<ColumnDef<TagResponse>>>(() => [
     columnHelper.selection('id'),
@@ -81,14 +81,14 @@ const DataGrid = ({
     columnHelper.flex(),
     columnHelper.actions('id', {
       header: () => 'Actions',
-      cell: ItemActions,
+      cell: RowActions,
     }),
   ]);
 
-  const [setQueryString] = useQueryString();
+  const setQueryString = useQueryString();
 
   const [pagination, setPagination] = useState<PaginationState>(() => ({
-    pageIndex: page - 1,
+    pageIndex: pageIndex,
     pageSize: pageSize,
   }));
 
@@ -101,7 +101,7 @@ const DataGrid = ({
 
   useEffect(() => {
     setQueryString({
-      page: pagination.pageIndex === 0 ? undefined : pagination.pageIndex + 1,
+      pageNumber: pagination.pageIndex === 0 ? undefined : pagination.pageIndex + 1,
       pageSize: pagination.pageSize === 10 ? undefined : pagination.pageSize,
     });
   }, [pagination.pageIndex, pagination.pageSize]);
@@ -110,7 +110,7 @@ const DataGrid = ({
     <DataTable
       columns={columns}
       data={data}
-      itemCount={count}
+      itemCount={itemCount}
       pageCount={pageCount}
       enableRowSelection
       state={{

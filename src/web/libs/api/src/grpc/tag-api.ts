@@ -7,7 +7,7 @@ export {
 } from './generated/sisa/services/blog/v1/tags/commands';
 
 export {
-  FilterTagsQuery,
+  FilterTagsParams,
   FindTagByIdQuery,
   GetTagsQuery,
 } from './generated/sisa/services/blog/v1/tags/queries';
