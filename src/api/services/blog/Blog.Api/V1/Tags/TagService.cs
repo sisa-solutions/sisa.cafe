@@ -19,6 +19,9 @@ public sealed class TagService(IMediator mediator) : TagGrpcService.TagGrpcServi
     public override async Task<SingleTagResponse> FindTagById(FindTagByIdQuery query, ServerCallContext context)
         => await mediator.SendAsync(query, context.CancellationToken);
 
+    public override async Task<SingleTagResponse> FindTagBySlug(FindTagBySlugQuery query, ServerCallContext context)
+        => await mediator.SendAsync(query, context.CancellationToken);
+
     public override async Task<SingleTagResponse> CreateTag(CreateTagCommand command, ServerCallContext context)
         => await mediator.SendAsync(command, context.CancellationToken);
 

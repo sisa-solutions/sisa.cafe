@@ -1,10 +1,11 @@
 syntax = "proto3";
 
-option csharp_namespace = "Sisa.Protobuf.Common";
+option csharp_namespace = "Sisa.Common.Enums";
 
-package sisa.protobuf.common;
+package sisa.common.enums;
 
 enum Combinator {
+  COMBINATOR_UNKNOWN = 0;
   COMBINATOR_AND = 1;
   COMBINATOR_OR = 2;
 }

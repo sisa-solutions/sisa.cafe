@@ -20,7 +20,7 @@ public class GetCategoriesQueryHandler(
         logger.LogInformation("Getting categories");
 
         var specification = new CategorySpecification<CategoryResponse>(
-            query.Filter.Name,
+            "",
             query.Paging,
             CategoryProjections.Projection);
 

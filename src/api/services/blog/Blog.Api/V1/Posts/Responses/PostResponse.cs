@@ -4,7 +4,7 @@ using Sisa.Abstractions;
 using Sisa.Blog.Api.V1.Categories.Responses;
 using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
-using Sisa.Grpc.Responses;
+using Sisa.Common.Responses;
 
 namespace Sisa.Blog.Api.V1.Posts.Responses;
 
@@ -28,7 +28,7 @@ public static class PostProjectionExtensions
 
     public static ListPostsResponse MapToResponse(this IPaginatedList<PostResponse> posts)
     {
-        var paging = new PagingResponse
+        var paging = new PagingInfoResponse
         {
             ItemCount = posts.ItemCount,
             PageIndex = posts.PageIndex,
@@ -58,7 +58,6 @@ public static class PostProjectionExtensions
             return x => new PostResponse
             {
                 Id = x.Id.ToString(),
-                CategoryId = x.CategoryId.ToString(),
                 Title = x.Title,
                 Slug = x.Slug,
                 Excerpt = x.Excerpt,
@@ -66,7 +65,7 @@ public static class PostProjectionExtensions
 
                 Category = x.Category.MapToInfoResponse(),
                 Tags = {
-                    x.PostTags.Select(x => x.Tag.MapToInfoResponse())
+                    x.TagSlugs
                 }
             };
         }

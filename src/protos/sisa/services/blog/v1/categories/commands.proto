@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "Sisa.Blog.Api.V1.Categories.Commands";
 
-package sisa.blog.api;
+package sisa.blog.api.v1.categories.commands;
 
 import "google/protobuf/wrappers.proto";
 

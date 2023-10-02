@@ -4,7 +4,7 @@ using Google.Protobuf.WellKnownTypes;
 
 using Sisa.Abstractions;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Sisa.Grpc.Responses;
+using Sisa.Common.Responses;
 
 namespace Sisa.Blog.Api.V1.Categories.Responses;
 
@@ -39,7 +39,7 @@ public static partial class CategoryProjections
 
     public static ListCategoriesResponse ToListResponse(this IPaginatedList<CategoryResponse> categories)
     {
-        var paging = new PagingResponse
+        var paging = new PagingInfoResponse
         {
             ItemCount = categories.ItemCount,
             PageIndex = categories.PageIndex,
@@ -69,7 +69,6 @@ public static partial class CategoryProjections
             return x => new CategoryResponse
             {
                 Id = x.Id.ToString(),
-                ParentId = x.ParentId.HasValue ? x.ParentId.Value.ToString() : null,
                 Slug = x.Slug,
                 Name = x.Name,
                 Description = x.Description,

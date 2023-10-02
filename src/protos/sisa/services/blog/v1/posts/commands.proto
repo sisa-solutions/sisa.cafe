@@ -2,32 +2,39 @@ syntax = "proto3";
 
 option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Commands";
 
-package sisa.blog.api;
+package sisa.blog.api.v1.posts.commands;
 
 import "google/protobuf/wrappers.proto";
+
 import "sisa/services/blog/v1/posts/enums.proto";
 
 message CreatePostCommand {
-  string categoryId = 1;
+  // reversed field must be reflect to the database
+  reserved 1, 7 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
 
   string title = 2;
   string slug = 3;
   string excerpt = 4;
   string content = 5;
+  repeated string tags = 6; // this is dedicated field in post, not a relationship, so it's not reversed
 
-  repeated string tags = 6;
+  google.protobuf.StringValue categoryId = 51;
 }
 
 message UpdatePostCommand {
+  // reversed field must be reflect to the database
+  reserved 7 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
+
   string id = 1;
-  string categoryId = 2;
+  string title = 2;
+  string slug = 3;
+  string excerpt = 4;
+  string content = 5;
+  repeated string tags = 6;
 
-  string title = 3;
-  string slug = 4;
-  string excerpt = 5;
-  string content = 6;
-
-  repeated string tags = 7;
+  google.protobuf.StringValue categoryId = 51;
 }
 
 message PublishPostCommand {

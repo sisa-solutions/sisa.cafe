@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Common.Params";
+
+package sisa.common.params;
+
+message PagingParams {
+  int32 pageIndex = 1;
+  int32 pageSize = 2;
+}

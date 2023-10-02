@@ -1,6 +1,6 @@
 using Sisa.Abstractions;
 
-namespace Sisa.Grpc.Queries;
+namespace Sisa.Common.Params;
 
 public partial class PagingParams : IPagingParams
 {

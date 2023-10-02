@@ -2,20 +2,18 @@ syntax = "proto3";
 
 option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Queries";
 
-package sisa.blog.api;
-
-import "google/protobuf/wrappers.proto";
+package sisa.blog.api.v1.posts.queries;
 
 import "sisa/libs/common/params/filtering_params.proto";
 import "sisa/libs/common/params/sorting_params.proto";
-
-message GetPostsQuery {
-  int pageIndex = 1;
-  int pageSize = 2;
-  sisa.protobuf.common.filtering_params filter = 3;
-  sisa.protobuf.common.sorting_params sortBy = 4;
-}
+import "sisa/libs/common/params/paging_params.proto";
 
 message FindPostByIdQuery {
   string id = 1;
+}
+
+message GetPostsQuery {
+  sisa.common.params.FilteringParams filter = 1;
+  sisa.common.params.SortingParams sortBy = 2;
+  sisa.common.params.PagingParams paging = 3;
 }

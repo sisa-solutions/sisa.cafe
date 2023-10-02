@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Common.Params";
+
+package sisa.common.params;
+
+import "google/protobuf/wrappers.proto";
+

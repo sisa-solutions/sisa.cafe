@@ -2,21 +2,38 @@ syntax = "proto3";
 
 option csharp_namespace = "Sisa.Blog.Api.V1.Tags.Commands";
 
-package sisa.blog.api;
+package sisa.blog.api.v1.tags.commands;
 
 import "google/protobuf/wrappers.proto";
 
 message CreateTagCommand {
-  string name = 1;
-  string slug = 2;
-  google.protobuf.StringValue description = 3;
+  // reversed field must be reflect to the database
+  reserved 1, 5 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
+
+  // data fields: from 1 to 50
+  string name = 2;
+  string slug = 3;
+  google.protobuf.StringValue description = 4;
+
+  // relationship fields: from 51 to 60
+  google.protobuf.StringValue parentId = 51;
 }
 
 message UpdateTagCommand {
+  // reversed field must be reflect to the database
+  reserved 5 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
+  reserved 63 to 70; // audit fields
+
+  // data fields: from 1 to 50
   string id = 1;
   string name = 2;
   string slug = 3;
   google.protobuf.StringValue description = 4;
+
+  // relationship fields: from 51 to 60
+  google.protobuf.StringValue parentId = 51;
 }
 
 message DeleteTagCommand {

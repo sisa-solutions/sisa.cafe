@@ -1,10 +1,12 @@
 syntax = "proto3";
 
-option csharp_namespace = "Sisa.Protobuf.Common";
+option csharp_namespace = "Sisa.Common.Params";
 
-package sisa.protobuf.common;
+package sisa.common.params;
+
+import "sisa/libs/common/enums/sort_direction.proto";
 
 message SortingParams {
-  string name = 1;
-  sort sort = 2;
+  string field = 1;
+  sisa.common.enums.SortDirection direction = 2;
 }

@@ -124,7 +124,7 @@ public class CreatePostCommandHandler(
 
         var response = post.MapToResponse();
 
-        response.Value.Tags.AddRange(post.Tags.Select(x=>x.MapToInfoResponse()));
+        response.Value.Tags.AddRange(post.TagSlugs);
 
         return  response;
     }

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Files";
+
+package sisa.blog.api.v1.files;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+import "sisa/services/blog/v1/files/commands.proto";
+import "sisa/services/blog/v1/files/queries.proto";
+import "sisa/services/blog/v1/files/responses.proto";
+
+service FileGrpcService {
+  rpc GetFiles(sisa.blog.api.v1.files.queries.GetFilesQuery) returns (sisa.blog.api.v1.files.responses.ListFilesResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/files"
+    };
+  }
+
+  rpc FindFileById(sisa.blog.api.v1.files.queries.FindFileByIdQuery) returns (sisa.blog.api.v1.files.responses.SingleFileResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/files/{id}"
+    };
+  }
+
+  rpc UploadFile(sisa.blog.api.v1.files.commands.UploadFileCommand) returns (sisa.blog.api.v1.files.responses.SingleFileResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/files"
+    };
+  }
+
+  rpc UpdateFileInfo(sisa.blog.api.v1.files.commands.UpdateFileInfoCommand) returns (sisa.blog.api.v1.files.responses.SingleFileResponse) {
+    option (google.api.http) = {
+        put: "/api/v1/files/{id}"
+    };
+  }
+
+  rpc DeleteFile(sisa.blog.api.v1.files.commands.DeleteFileCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/files/{id}"
+    };
+  }
+}

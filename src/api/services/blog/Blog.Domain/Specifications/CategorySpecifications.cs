@@ -18,6 +18,14 @@ public sealed class CategorySpecification<TResult>(Expression<Func<Category, TRe
     }
 
     public CategorySpecification(
+        string slug,
+        Expression<Func<Category, TResult>> selector) : this(selector)
+    {
+        Builder.Include(x => x.Parent)
+            .Where(x => x.Slug == slug);
+    }
+
+    public CategorySpecification(
         string keyword
         , IPagingParams pagingParams
         , Expression<Func<Category, TResult>> selector) : this(selector)

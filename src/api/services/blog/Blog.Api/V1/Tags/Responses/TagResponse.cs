@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 using Sisa.Abstractions;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
-using Sisa.Grpc.Responses;
+using Sisa.Common.Responses;
 
 namespace Sisa.Blog.Api.V1.Tags.Responses;
 
@@ -37,7 +37,7 @@ public static class TagProjectionExtensions
 
     public static ListTagsResponse MapToResponse(this IPaginatedList<TagResponse> tags)
     {
-        var paging = new PagingResponse
+        var paging = new PagingInfoResponse
         {
             ItemCount = tags.ItemCount,
             PageIndex = tags.PageIndex,

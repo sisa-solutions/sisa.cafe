@@ -26,12 +26,12 @@ public class GetTagsQueryHandler(
             .OrderBy(x => x.Name)
             .AsNoTracking();
 
-        if (!string.IsNullOrWhiteSpace(query.Filter.Name))
-        {
-            logger.LogInformation("Filtering by name: {Name}", query.Filter.Name);
+        // if (!string.IsNullOrWhiteSpace(query.Filter.Name))
+        // {
+        //     logger.LogInformation("Filtering by name: {Name}", query.Filter.Name);
 
-            queryBuilder = queryBuilder.Where(x => EF.Functions.ILike(x.Name, $"%{query.Filter.Name}%"));
-        }
+        //     queryBuilder = queryBuilder.Where(x => EF.Functions.ILike(x.Name, $"%{query.Filter.Name}%"));
+        // }
 
         IPaginatedList<TagResponse> tags = await queryBuilder
             .ToPaginatedListAsync(query.Paging.PageIndex, query.Paging.PageSize, cancellationToken);

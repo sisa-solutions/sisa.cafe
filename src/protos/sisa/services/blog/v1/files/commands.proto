@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Files.Commands";
+
+package sisa.blog.api.v1.files.commands;
+
+import "google/protobuf/wrappers.proto";
+
+import "sisa/libs/common/params/file_info_params.proto";
+
+message UploadFileCommand {
+  message FileInfoParams {
+    reserved 1;
+    reserved "id";
+  
+    string name = 2; // original file name
+    google.protobuf.StringValue title = 3;
+    google.protobuf.StringValue description = 4;
+    map<string, string> meta = 5;
+  }
+  
+  message FileContentParams {
+    bytes chunk = 1;
+  }
+
+  oneof file {
+    FileInfoParams info = 1;
+    FileContentParams content = 2;
+  }
+}
+
+message UpdateFileInfoCommand {
+  // data fields: from 1 to 50
+  string id = 1;
+  string name = 2; // original file name
+  google.protobuf.StringValue title = 3;
+  google.protobuf.StringValue description = 4;
+  map<string, string> meta = 5;
+}
+
+message DeleteFileCommand {
+  string id = 1;
+}

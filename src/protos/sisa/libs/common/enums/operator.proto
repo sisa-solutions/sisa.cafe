@@ -1,25 +1,26 @@
 syntax = "proto3";
 
-option csharp_namespace = "Sisa.Protobuf.Common";
+option csharp_namespace = "Sisa.Common.Enums";
 
-package sisa.protobuf.common;
+package sisa.common.enums;
 
 // shorthand for comparison operators 
 enum Operator {
-  OPERATOR_EQUAL = 0; // ==
-  OPERATOR_NOT_EQUAL = 1; // !=
-  OPERATOR_GREATER_THAN = 2; // >
-  OPERATOR_GREATER_THAN_OR_EQUAL = 3; // >=
-  OPERATOR_LESS_THAN = 4; // <
-  OPERATOR_LESS_THAN_OR_EQUAL = 5; // <=
-  OPERATOR_CONTAINS = 6; // contains
-  OPERATOR_NOT_CONTAINS = 7; // not contains
-  OPERATOR_STARTS_WITH = 8; // starts with
-  OPERATOR_NOT_STARTS_WITH = 9; // not starts with
-  OPERATOR_ENDS_WITH = 10; // ends with
-  OPERATOR_NOT_ENDS_WITH = 11; // not ends with
-  OPERATOR_IN = 12; // in
-  OPERATOR_NOT_IN = 13; // not in
-  OPERATOR_BETWEEN = 14; // between
-  OPERATOR_NOT_BETWEEN = 15; // not between 
+  OPERATOR_UNKNOWN = 0; // unknown
+  OPERATOR_EQUAL = 1; // ==
+  OPERATOR_NOT_EQUAL = 2; // !=
+  OPERATOR_GREATER_THAN = 3; // >
+  OPERATOR_GREATER_THAN_OR_EQUAL = 4; // >=
+  OPERATOR_LESS_THAN = 5; // <
+  OPERATOR_LESS_THAN_OR_EQUAL = 6; // <=
+  OPERATOR_CONTAINS = 7; // contains
+  OPERATOR_NOT_CONTAINS = 8; // not contains
+  OPERATOR_STARTS_WITH = 9; // starts with
+  OPERATOR_NOT_STARTS_WITH = 10; // not starts with
+  OPERATOR_ENDS_WITH = 11; // ends with
+  OPERATOR_NOT_ENDS_WITH = 12; // not ends with
+  OPERATOR_IN = 13; // in
+  OPERATOR_NOT_IN = 14; // not in
+  OPERATOR_BETWEEN = 15; // between
+  OPERATOR_NOT_BETWEEN = 16; // not between 
 }

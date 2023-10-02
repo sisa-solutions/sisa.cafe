@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "Sisa.Blog.Api.V1.Categories";
 
-package sisa.blog.api;
+package sisa.blog.api.v1.categories;
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -12,31 +12,37 @@ import "sisa/services/blog/v1/categories/queries.proto";
 import "sisa/services/blog/v1/categories/responses.proto";
 
 service CategoryGrpcService {
-  rpc GetCategories(GetCategoriesQuery) returns (ListCategoriesResponse) {
+  rpc GetCategories(sisa.blog.api.v1.categories.queries.GetCategoriesQuery) returns (sisa.blog.api.v1.categories.responses.ListCategoriesResponse) {
     option (google.api.http) = {
       get: "/api/v1/categories"
     };
   }
 
-  rpc FindCategoryById(FindCategoryByIdQuery) returns (SingleCategoryResponse) {
+  rpc FindCategoryById(sisa.blog.api.v1.categories.queries.FindCategoryByIdQuery) returns (sisa.blog.api.v1.categories.responses.SingleCategoryResponse) {
     option (google.api.http) = {
       get: "/api/v1/categories/{id}"
     };
   }
 
-  rpc CreateCategory(CreateCategoryCommand) returns (SingleCategoryResponse) {
+  rpc FindCategoryBySlug(sisa.blog.api.v1.categories.queries.FindCategoryBySlugQuery) returns (sisa.blog.api.v1.categories.responses.SingleCategoryResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/categories/{slug}/slug"
+    };
+  }
+
+  rpc CreateCategory(sisa.blog.api.v1.categories.commands.CreateCategoryCommand) returns (sisa.blog.api.v1.categories.responses.SingleCategoryResponse) {
     option (google.api.http) = {
       post: "/api/v1/categories"
     };
   }
 
-  rpc UpdateCategory(UpdateCategoryCommand) returns (SingleCategoryResponse) {
+  rpc UpdateCategory(sisa.blog.api.v1.categories.commands.UpdateCategoryCommand) returns (sisa.blog.api.v1.categories.responses.SingleCategoryResponse) {
     option (google.api.http) = {
         put: "/api/v1/categories/{id}"
     };
   }
 
-  rpc DeleteCategory(DeleteCategoryCommand) returns (google.protobuf.Empty) {
+  rpc DeleteCategory(sisa.blog.api.v1.categories.commands.DeleteCategoryCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/api/v1/categories/{id}"
     };

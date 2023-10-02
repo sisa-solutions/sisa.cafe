@@ -19,6 +19,9 @@ public sealed class CategoryService(IMediator mediator) : CategoryGrpcService.Ca
     public override async Task<SingleCategoryResponse> FindCategoryById(FindCategoryByIdQuery query, ServerCallContext context)
         => await mediator.SendAsync(query, context.CancellationToken);
 
+    public override async Task<SingleCategoryResponse> FindCategoryBySlug(FindCategoryBySlugQuery query, ServerCallContext context)
+        => await mediator.SendAsync(query, context.CancellationToken);
+
     public override async Task<SingleCategoryResponse> CreateCategory(CreateCategoryCommand command, ServerCallContext context)
         => await mediator.SendAsync(command, context.CancellationToken);
 
