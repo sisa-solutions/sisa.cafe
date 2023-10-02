@@ -26,15 +26,9 @@ public static partial class SpecificationExtensions
         }
 
         // Apply ordering if expressions are set
-        if (specification.SortingParams != null)
+        if (specification.SortingParams != null && specification.SortingParams.Any())
         {
-            var sortExpression = specification.SortingParams.GetOrderBy<TEntity>();
-
-            if (sortExpression != null)
-            {
-                query = query
-                    .OrderBy(sortExpression);
-            }
+            query = query.OrderBy(specification.SortingParams);
         }
         else
         {
@@ -103,15 +97,9 @@ public static partial class SpecificationExtensions
         }
 
         // Apply ordering if expressions are set
-        if (specification.SortingParams != null)
+        if (specification.SortingParams != null && specification.SortingParams.Any())
         {
-            var sortExpression = specification.SortingParams.GetOrderBy<TEntity>();
-
-            if (sortExpression != null)
-            {
-                query = query
-                    .OrderBy(sortExpression);
-            }
+            query = query.OrderBy(specification.SortingParams);
         }
         else
         {

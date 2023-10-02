@@ -14,6 +14,6 @@ message FindPostByIdQuery {
 
 message GetPostsQuery {
   sisa.common.params.FilteringParams filter = 1;
-  sisa.common.params.SortingParams sortBy = 2;
+  repeated sisa.common.params.SortingParams sortBy = 2;
   sisa.common.params.PagingParams paging = 3;
 }

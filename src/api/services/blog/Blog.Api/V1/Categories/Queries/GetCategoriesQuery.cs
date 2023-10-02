@@ -25,15 +25,7 @@ public class GetCategoriesQueryHandler(
     {
         logger.LogInformation("Getting categories");
 
-        Sisa.Common.Params.SortingParams[] sortingParams =
-        {
-            new() {
-                Field = "Name",
-                Direction = SortDirection.Asc
-            }
-        };
-
-        IEnumerable<Sisa.Data.SortingParams> orderBy = sortingParams.Select(x => new Sisa.Data.SortingParams
+        IEnumerable<Sisa.Data.SortingParams> orderBy = query.SortBy.Select(x => new Sisa.Data.SortingParams
         {
             Field = x.Field,
             Direction = x.Direction switch
