@@ -39,6 +39,10 @@ public interface ISpecification<TEntity> : ISpecification
     /// </summary>
     Expression<Func<TEntity, object>>? OrderByDescending { get; }
 
+    IEnumerable<ISortingParams>? SortingParams { get; }
+
+    IFilteringParams? FilteringParams { get; }
+
     /// <summary>
     /// GroupBy is the expression that will be used to group the data
     /// </summary>

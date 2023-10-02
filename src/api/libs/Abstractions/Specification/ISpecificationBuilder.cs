@@ -12,6 +12,10 @@ public interface ISpecificationBuilder<TEntity>
 
     SpecificationBuilder<TEntity> OrderBy(Expression<Func<TEntity, object>> orderByExpression);
     SpecificationBuilder<TEntity> OrderByDescending(Expression<Func<TEntity, object>> orderByDescendingExpression);
+
+    SpecificationBuilder<TEntity> Filter(IFilteringParams filteringParams);
+    SpecificationBuilder<TEntity> Sort(IEnumerable<ISortingParams> sortingParams);
+
     SpecificationBuilder<TEntity> GroupBy(Expression<Func<TEntity, object>> groupByExpression);
 
     SpecificationBuilder<TEntity> Paginate(IPagingParams pagingParams);

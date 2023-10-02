@@ -90,4 +90,17 @@ public class SpecificationBuilder<TEntity>(Specification<TEntity> specification)
 
         return this; ;
     }
+
+    public SpecificationBuilder<TEntity> Sort(IEnumerable<ISortingParams> sortingParams)
+    {
+        _specification.ApplySort(sortingParams);
+
+        return this;
+    }
+    public SpecificationBuilder<TEntity> Filter(IFilteringParams filteringParams)
+    {
+        _specification.ApplyFilter(filteringParams);
+
+        return this;
+    }
 }

@@ -27,6 +27,7 @@ public sealed class CategorySpecification<TResult>(Expression<Func<Category, TRe
 
     public CategorySpecification(
         string keyword
+        , IEnumerable<ISortingParams> sortingParams
         , IPagingParams pagingParams
         , Expression<Func<Category, TResult>> selector) : this(selector)
     {
@@ -37,7 +38,7 @@ public sealed class CategorySpecification<TResult>(Expression<Func<Category, TRe
             Builder.Where(x => x.Name.ILike($"%{keyword}%"));
         }
 
-        Builder.OrderBy(x => x.Name)
+        Builder.Sort(sortingParams)
             .Paginate(pagingParams);
     }
 }

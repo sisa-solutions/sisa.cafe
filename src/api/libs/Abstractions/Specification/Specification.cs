@@ -50,6 +50,16 @@ public class Specification<TEntity> : ISpecification<TEntity>
     /// <summary>
     /// OrderBy is the expression that will be used to order the data
     /// </summary>
+    public IEnumerable<ISortingParams>? SortingParams { get; private set; }
+
+    /// <summary>
+    /// OrderBy is the expression that will be used to order the data
+    /// </summary>
+    public IFilteringParams? FilteringParams { get; private set; }
+
+    /// <summary>
+    /// OrderBy is the expression that will be used to order the data
+    /// </summary>
     public Expression<Func<TEntity, object>>? GroupBy { get; private set; }
 
     public IPagingParams? PagingParams { get; private set; }
@@ -113,6 +123,13 @@ public class Specification<TEntity> : ISpecification<TEntity>
 
     public virtual void ApplyPaging(IPagingParams pagingParams)
         => PagingParams = pagingParams;
+
+
+    public virtual void ApplySort(IEnumerable<ISortingParams> sortingParams)
+        => SortingParams = sortingParams;
+
+    public virtual void ApplyFilter(IFilteringParams filteringParams)
+        => FilteringParams = filteringParams;
 
     public virtual ISpecification<TEntity> And(ISpecification<TEntity> specification)
     {

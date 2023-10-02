@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\libs\Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\..\libs\Abstractions\Abstractions.csproj" />
     <ProjectReference Include="..\..\..\libs\Common\Common.csproj" />
   </ItemGroup>
 

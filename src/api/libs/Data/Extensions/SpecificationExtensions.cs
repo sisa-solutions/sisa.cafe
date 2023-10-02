@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using Sisa.Abstractions;
+using Sisa.Extensions;
 
 namespace Sisa.Data;
 
@@ -25,15 +26,28 @@ public static partial class SpecificationExtensions
         }
 
         // Apply ordering if expressions are set
-        if (specification.OrderBy != null)
+        if (specification.SortingParams != null)
         {
-            query = query
-                .OrderBy(specification.OrderBy);
+            var sortExpression = specification.SortingParams.GetOrderBy<TEntity>();
+
+            if (sortExpression != null)
+            {
+                query = query
+                    .OrderBy(sortExpression);
+            }
         }
-        else if (specification.OrderByDescending != null)
+        else
         {
-            query = query
-                .OrderByDescending(specification.OrderByDescending);
+            if (specification.OrderBy != null)
+            {
+                query = query
+                    .OrderBy(specification.OrderBy);
+            }
+            else if (specification.OrderByDescending != null)
+            {
+                query = query
+                    .OrderByDescending(specification.OrderByDescending);
+            }
         }
 
         // Apply GroupBy
@@ -89,15 +103,28 @@ public static partial class SpecificationExtensions
         }
 
         // Apply ordering if expressions are set
-        if (specification.OrderBy != null)
+        if (specification.SortingParams != null)
         {
-            query = query
-                .OrderBy(specification.OrderBy);
+            var sortExpression = specification.SortingParams.GetOrderBy<TEntity>();
+
+            if (sortExpression != null)
+            {
+                query = query
+                    .OrderBy(sortExpression);
+            }
         }
-        else if (specification.OrderByDescending != null)
+        else
         {
-            query = query
-                .OrderByDescending(specification.OrderByDescending);
+            if (specification.OrderBy != null)
+            {
+                query = query
+                    .OrderBy(specification.OrderBy);
+            }
+            else if (specification.OrderByDescending != null)
+            {
+                query = query
+                    .OrderByDescending(specification.OrderByDescending);
+            }
         }
 
         // Apply GroupBy
