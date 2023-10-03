@@ -2,7 +2,7 @@ namespace Sisa.Enums;
 
 public enum SortDirection
 {
-    UNKNOWN = 0, // unknown
-    ASC = 1, // asc
-    DESC = 2, // desc
+    Unspecified = 0, // unknown
+    Asc = 1, // asc
+    Desc = 2, // desc
 }

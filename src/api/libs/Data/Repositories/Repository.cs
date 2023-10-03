@@ -61,7 +61,7 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
     }
 
     public async ValueTask<IPaginatedList<TEntity>> PaginateAsync(
-         Specification<TEntity> specification
+        Specification<TEntity> specification
         , CancellationToken cancellationToken = default)
     {
         var query = _dbSet.Specify(specification);

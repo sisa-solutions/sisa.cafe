@@ -1,14 +1,8 @@
-using System.Text.Json;
-
 using Sisa.Abstractions;
-using Sisa.Extensions;
 
 using Sisa.Blog.Api.V1.Categories.Responses;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
 using Sisa.Blog.Domain.Specifications;
-using Sisa.Common.Enums;
-using Sisa.Common.Params;
-using Sisa.Data;
 
 namespace Sisa.Blog.Api.V1.Categories.Queries;
 
@@ -24,21 +18,9 @@ public class GetCategoriesQueryHandler(
     public async ValueTask<ListCategoriesResponse> HandleAsync(GetCategoriesQuery query, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Getting categories");
-
-        IEnumerable<Sisa.Data.SortingParams> orderBy = query.SortBy.Select(x => new Sisa.Data.SortingParams
-        {
-            Field = x.Field,
-            Direction = x.Direction switch
-            {
-                Sisa.Common.Enums.SortDirection.Asc => Sisa.Enums.SortDirection.ASC,
-                Sisa.Common.Enums.SortDirection.Desc => Sisa.Enums.SortDirection.DESC,
-                _ => throw new ArgumentOutOfRangeException(nameof(x.Direction), x.Direction, null)
-            }
-        });
-
         var specification = new CategorySpecification<CategoryResponse>(
-            "",
-            orderBy,
+            query.Filter,
+            query.SortBy,
             query.Paging,
             CategoryProjections.Projection);
 

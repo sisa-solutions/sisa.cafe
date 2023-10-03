@@ -19,10 +19,7 @@
   <!-- BEGIN: Libs -->
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\Grpc\Grpc.csproj" />
-    <ProjectReference
-      Include="..\..\..\libs\Generator\Generator.csproj"
-      OutputItemType="Analyzer"
-      ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\..\libs\Generator\Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
   <!-- END: Libs -->
 
@@ -30,35 +27,27 @@
   <ItemGroup>
     <ProjectReference Include="..\Blog.Data\Blog.Data.csproj" />
     <ProjectReference Include="..\Blog.Infrastructure\Blog.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\shared\Shared.Grpc\Shared.Grpc.csproj" />
   </ItemGroup>
   <!-- END: Dependencies -->
 
   <!-- Begin: Protos -->
   <ItemGroup>
-    <!-- <Content Include="..\..\..\..\protos\google\**\*.proto">
-      <Link>protos\google\%(RecursiveDir)%(FileName)%(Extension)</Link>
-    </Content> -->
-    <Content Include="..\..\..\..\protos\sisa\libs\**\*.proto">
-      <Link>protos\sisa\libs\%(RecursiveDir)%(FileName)%(Extension)</Link>
-    </Content>
-    <Content Include="..\..\..\..\protos\sisa\services\blog\**\*.proto">
-      <Link>protos\sisa\services\blog\%(RecursiveDir)%(FileName)%(Extension)</Link>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Protobuf
       ProtoRoot="..\..\..\..\protos"
       Include="..\..\..\..\protos\sisa\libs\**\*.proto"
-      GrpcServices="None" />
+      GrpcServices="None"
+      ProtoCompile="false" />
     <Protobuf
       ProtoRoot="..\..\..\..\protos"
       Include="..\..\..\..\protos\sisa\services\blog\**\*.proto"
-      GrpcServices="None" />
+      GrpcServices="None"
+      Link="protos\sisa\services\blog\%(RecursiveDir)%(FileName)%(Extension)" />
     <Protobuf
       ProtoRoot="..\..\..\..\protos"
       Include="..\..\..\..\protos\sisa\services\blog\**\*_grpc_service.proto"
-      GrpcServices="Server" />
+      GrpcServices="Server"
+      Link="protos\sisa\services\blog\%(RecursiveDir)%(FileName)%(Extension)" />
   </ItemGroup>
   <!-- End: Protos -->
 

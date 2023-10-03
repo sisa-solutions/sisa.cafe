@@ -7,6 +7,13 @@ namespace Sisa.Data;
 
 public static partial class FilteringExtensions
 {
+    public static IQueryable<TEntity> Where<TEntity>(this IQueryable<TEntity> query, IFilteringParams filteringParams)
+    {
+        var filterExpression = filteringParams.ParseFiltering<TEntity>();
+
+        return query.Where(filterExpression);
+    }
+
     public static Expression<Func<TEntity, bool>> ParseFiltering<TEntity>(this IFilteringParams filteringParams)
     {
         if (filteringParams == null || filteringParams.Rules == null || !filteringParams.Rules.Any())
@@ -27,11 +34,11 @@ public static partial class FilteringExtensions
             }
             else
             {
-                if (filteringParams.Combinator == Combinator.AND)
+                if (filteringParams.Combinator == Combinator.And)
                 {
                     combinedExpression = Expression.AndAlso(combinedExpression, ruleExpression);
                 }
-                else if (filteringParams.Combinator == Combinator.OR)
+                else if (filteringParams.Combinator == Combinator.Or)
                 {
                     combinedExpression = Expression.OrElse(combinedExpression, ruleExpression);
                 }
@@ -41,6 +48,11 @@ public static partial class FilteringExtensions
         if (combinedExpression == null)
         {
             throw new InvalidOperationException("No filtering parameters specified.");
+        }
+
+        if (filteringParams.Not)
+        {
+            combinedExpression = Expression.Not(combinedExpression);
         }
 
         return Expression.Lambda<Func<TEntity, bool>>(combinedExpression, param);
@@ -63,12 +75,12 @@ public static partial class FilteringExtensions
     private static Expression BuildOperationExpression(Expression left, Expression right, Operator op)
         => op switch
         {
-            Operator.EQUAL => Expression.Equal(left, right),
-            Operator.NOT_EQUAL => Expression.NotEqual(left, right),
-            Operator.GREATER_THAN => Expression.GreaterThan(left, right),
-            Operator.GREATER_THAN_OR_EQUAL => Expression.GreaterThanOrEqual(left, right),
-            Operator.LESS_THAN => Expression.LessThan(left, right),
-            Operator.LESS_THAN_OR_EQUAL => Expression.LessThanOrEqual(left, right),
+            Operator.Equal => Expression.Equal(left, right),
+            Operator.NotEqual => Expression.NotEqual(left, right),
+            Operator.GreaterThan => Expression.GreaterThan(left, right),
+            Operator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(left, right),
+            Operator.LessThan => Expression.LessThan(left, right),
+            Operator.LessThanOrEqual => Expression.LessThanOrEqual(left, right),
             // Handle other operators as needed
             _ => throw new ArgumentException($"Unsupported operator: {op}"),
         };

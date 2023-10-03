@@ -2,7 +2,6 @@ using System.Linq.Expressions;
 
 using Sisa.Abstractions;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Sisa.Extensions;
 
 namespace Sisa.Blog.Domain.Specifications;
 
@@ -26,19 +25,15 @@ public sealed class CategorySpecification<TResult>(Expression<Func<Category, TRe
     }
 
     public CategorySpecification(
-        string keyword
+        IFilteringParams filteringParams
         , IEnumerable<ISortingParams> sortingParams
         , IPagingParams pagingParams
         , Expression<Func<Category, TResult>> selector) : this(selector)
     {
-        Builder.Include(x => x.Parent);
-
-        if (!string.IsNullOrWhiteSpace(keyword))
-        {
-            Builder.Where(x => x.Name.ILike($"%{keyword}%"));
-        }
-
-        Builder.Sort(sortingParams)
+        Builder
+            .Include(x => x.Parent)
+            .Filter(filteringParams)
+            .Sort(sortingParams)
             .Paginate(pagingParams);
     }
 }

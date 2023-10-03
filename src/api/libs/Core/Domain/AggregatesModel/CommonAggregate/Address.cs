@@ -67,7 +67,7 @@ public class Address : ValueObject
         District = string.Empty;
         Ward = string.Empty;
         PostalCode = string.Empty;
-        AddressType = AddressType.OTHER;
+        AddressType = AddressType.Unspecified;
 
         AddressLine1 = string.Empty;
         AddressLine2 = string.Empty;

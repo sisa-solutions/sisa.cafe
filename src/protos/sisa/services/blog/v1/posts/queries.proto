@@ -4,16 +4,16 @@ option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Queries";
 
 package sisa.blog.api.v1.posts.queries;
 
-import "sisa/libs/common/params/filtering_params.proto";
-import "sisa/libs/common/params/sorting_params.proto";
-import "sisa/libs/common/params/paging_params.proto";
+import "sisa/libs/data/params/filtering_params.proto";
+import "sisa/libs/data/params/sorting_params.proto";
+import "sisa/libs/data/params/paging_params.proto";
 
 message FindPostByIdQuery {
   string id = 1;
 }
 
 message GetPostsQuery {
-  sisa.common.params.FilteringParams filter = 1;
-  repeated sisa.common.params.SortingParams sortBy = 2;
-  sisa.common.params.PagingParams paging = 3;
+  sisa.data.params.FilteringParams filter = 1;
+  repeated sisa.data.params.SortingParams sortBy = 2;
+  sisa.data.params.PagingParams paging = 3;
 }

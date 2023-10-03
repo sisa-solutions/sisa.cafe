@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 
 using Sisa.Abstractions;
+using Sisa.Constants;
 using Sisa.Enums;
 
 namespace Sisa.Extensions;
@@ -18,9 +19,9 @@ public static partial class OrderExtensions
 
         foreach (var sortingParam in sortingParams)
         {
-            var orderByMethod = sortingParam.Direction == SortDirection.DESC ?
-                (first ? "OrderByDescending" : "ThenByDescending") :
-                (first ? "OrderBy" : "ThenBy");
+            var orderByMethod = sortingParam.Sort == SortDirection.Desc ?
+                (first ? OrderByMethods.OrderByDescending : OrderByMethods.ThenByDescending) :
+                (first ? OrderByMethods.OrderBy : OrderByMethods.ThenBy);
 
             first = false;
 

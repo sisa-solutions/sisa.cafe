@@ -2,7 +2,7 @@ namespace Sisa.Enums;
 
 public enum Combinator
 {
-    UNKNOWN = 0,
-    AND = 1,
-    OR = 2,
+    Unspecified = 0,
+    And = 1,
+    Or = 2,
 }

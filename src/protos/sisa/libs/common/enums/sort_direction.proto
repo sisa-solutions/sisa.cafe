@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option csharp_namespace = "Sisa.Common.Enums";
+option csharp_namespace = "Sisa.Grpc.Enums";
 
-package sisa.common.enums;
+package sisa.grpc.enums;
 
 enum SortDirection {
   SORT_DIRECTION_UNSPECIFIED = 0; // unspecified

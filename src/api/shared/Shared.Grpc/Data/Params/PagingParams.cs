@@ -1,6 +1,6 @@
 using Sisa.Abstractions;
 
-namespace Sisa.Common.Params;
+namespace Sisa.Data.Params;
 
 public partial class PagingParams : IPagingParams
 {
