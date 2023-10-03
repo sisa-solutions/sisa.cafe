@@ -9,18 +9,18 @@ public static partial class FilteringExtensions
 {
     public static IQueryable<TEntity> Where<TEntity>(this IQueryable<TEntity> query, IFilteringParams filteringParams)
     {
-        var filterExpression = filteringParams.ParseFiltering<TEntity>();
+        if (filteringParams == null || filteringParams.Rules == null || !filteringParams.Rules.Any())
+        {
+            return query;
+        }
+
+        var filterExpression = ParseFiltering<TEntity>(filteringParams);
 
         return query.Where(filterExpression);
     }
 
-    public static Expression<Func<TEntity, bool>> ParseFiltering<TEntity>(this IFilteringParams filteringParams)
+    private static Expression<Func<TEntity, bool>> ParseFiltering<TEntity>(IFilteringParams filteringParams)
     {
-        if (filteringParams == null || filteringParams.Rules == null || !filteringParams.Rules.Any())
-        {
-            throw new ArgumentException("No filtering parameters specified.");
-        }
-
         ParameterExpression param = Expression.Parameter(typeof(TEntity), "x");
         Expression? combinedExpression = null;
 

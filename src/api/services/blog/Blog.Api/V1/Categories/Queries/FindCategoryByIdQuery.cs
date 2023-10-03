@@ -2,7 +2,6 @@ using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Categories.Responses;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Categories.Queries;
 
@@ -21,12 +20,11 @@ public class FindCategoryByIdQueryHandler(
     {
         logger.LogInformation("Finding category by id {Id}", query.Id);
 
-        var spec = new CategorySpecification<CategoryResponse>(
-            query.CategoryId,
-            CategoryProjections.Projection
+        var category = await repository.FindAsync(
+            x => x.Id == query.CategoryId
+            , CategoryProjections.Projection
+            , cancellationToken
         );
-
-        var category = await repository.FindAsync(spec, cancellationToken);
 
         if (category is null)
         {

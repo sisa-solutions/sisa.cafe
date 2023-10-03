@@ -19,13 +19,10 @@ public class FindTagBySlugQueryHandler(
     {
         logger.LogInformation("Finding Tag by slug {Slug}", query.Slug);
 
-        var spec = new TagSpecification<TagResponse>(
-            query.Slug,
-            TagProjectionExtensions.Projection
-        );
-
-        TagResponse? tag = await repository
-            .FindAsync(spec, cancellationToken);
+        TagResponse? tag = await repository.FindAsync(
+            x => x.Slug == query.Slug
+            , TagProjections.Projection
+            , cancellationToken);
 
         if (tag is null)
         {

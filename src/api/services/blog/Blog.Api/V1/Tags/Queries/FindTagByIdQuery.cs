@@ -2,7 +2,6 @@ using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
-using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Tags.Queries;
 
@@ -20,13 +19,10 @@ public class FindTagByIdQueryHandler(
     {
         logger.LogInformation("Finding Tag by id {Id}", query.Id);
 
-        var spec = new TagSpecification<TagResponse>(
-            query.Id,
-            TagProjectionExtensions.Projection
-        );
-
-        TagResponse? tag = await repository
-            .FindAsync(spec, cancellationToken);
+        TagResponse? tag = await repository.FindAsync(
+            x=> x.Id == query.TagId
+            , TagProjections.Projection
+            , cancellationToken);
 
         if (tag is null)
         {

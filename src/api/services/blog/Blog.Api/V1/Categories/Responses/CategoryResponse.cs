@@ -39,20 +39,17 @@ public static partial class CategoryProjections
 
     public static ListCategoriesResponse ToListResponse(this IPaginatedList<CategoryResponse> categories)
     {
-        var paging = new PagingInfoResponse
-        {
-            ItemCount = categories.ItemCount,
-            PageIndex = categories.PageIndex,
-            PageSize = categories.PageSize,
-            PageCount = categories.PageCount
-        };
-
         var response = new ListCategoriesResponse()
         {
-            Paging = paging
+            Value = { categories },
+            Paging = new PagingInfoResponse
+            {
+                ItemCount = categories.ItemCount,
+                PageIndex = categories.PageIndex,
+                PageSize = categories.PageSize,
+                PageCount = categories.PageCount
+            }
         };
-
-        response.Value.AddRange(categories);
 
         return response;
     }

@@ -6,7 +6,7 @@ using Sisa.Common.Responses;
 
 namespace Sisa.Blog.Api.V1.Tags.Responses;
 
-public static class TagProjectionExtensions
+public static class TagProjections
 {
     public static SingleTagResponse MapToResponse(this Tag tag)
     {
@@ -37,20 +37,17 @@ public static class TagProjectionExtensions
 
     public static ListTagsResponse MapToResponse(this IPaginatedList<TagResponse> tags)
     {
-        var paging = new PagingInfoResponse
-        {
-            ItemCount = tags.ItemCount,
-            PageIndex = tags.PageIndex,
-            PageSize = tags.PageSize,
-            PageCount = tags.PageCount
-        };
-
         var response = new ListTagsResponse()
         {
-            Paging = paging
+            Value = { tags },
+            Paging = new PagingInfoResponse
+            {
+                ItemCount = tags.ItemCount,
+                PageIndex = tags.PageIndex,
+                PageSize = tags.PageSize,
+                PageCount = tags.PageCount
+            }
         };
-
-        response.Value.AddRange(tags);
 
         return response;
     }

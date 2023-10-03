@@ -23,7 +23,7 @@ public class GetTagsQueryHandler(
             query.Filter,
             query.SortBy,
             query.Paging,
-            TagProjectionExtensions.Projection
+            TagProjections.Projection
         );
 
         IPaginatedList<TagResponse> tags = await repository

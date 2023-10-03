@@ -8,7 +8,7 @@ using Sisa.Common.Responses;
 
 namespace Sisa.Blog.Api.V1.Posts.Responses;
 
-public static class PostProjectionExtensions
+public static class PostProjections
 {
     public static SinglePostResponse MapToResponse(this Post post)
     {
@@ -28,20 +28,17 @@ public static class PostProjectionExtensions
 
     public static ListPostsResponse MapToResponse(this IPaginatedList<PostResponse> posts)
     {
-        var paging = new PagingInfoResponse
-        {
-            ItemCount = posts.ItemCount,
-            PageIndex = posts.PageIndex,
-            PageSize = posts.PageSize,
-            PageCount = posts.PageCount
-        };
-
         var response = new ListPostsResponse()
         {
-            Paging = paging
+            Value = { posts },
+            Paging = new PagingInfoResponse
+            {
+                ItemCount = posts.ItemCount,
+                PageIndex = posts.PageIndex,
+                PageSize = posts.PageSize,
+                PageCount = posts.PageCount
+            }
         };
-
-        response.Value.AddRange(posts);
 
         return response;
     }

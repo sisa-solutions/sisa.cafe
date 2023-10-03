@@ -8,6 +8,7 @@ namespace Sisa.Blog.Api.V1.Posts.Queries;
 
 public sealed partial class FindPostByIdQuery : IQuery<SinglePostResponse>
 {
+    public Guid PostId => Guid.TryParse(Id, out var id) ? id : Guid.Empty;
 }
 
 public class FindPostByIdQueryHandler(
@@ -19,8 +20,10 @@ public class FindPostByIdQueryHandler(
     {
         logger.LogInformation("Finding Post by id {Id}", query.Id);
 
-        var post = await repository
-            .FindAsync(query.Id, cancellationToken);
+        var post = await repository.FindAsync(
+            x => x.Id == query.PostId
+            , PostProjections.Projection
+            , cancellationToken);
 
         if (post is null)
         {

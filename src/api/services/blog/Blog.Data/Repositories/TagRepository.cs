@@ -21,7 +21,7 @@ public class TagRepository(BlogDbContext dbContext) : Repository<Tag>(dbContext)
 
     public async ValueTask<IEnumerable<Tag>> GetExistingTagsBySlugsAsync(IEnumerable<string> slugs, CancellationToken cancellationToken = default)
     {
-        return await Query
+        return await _dbSet
             .Where(x => slugs.Contains(x.Slug))
             .ToListAsync(cancellationToken);
     }

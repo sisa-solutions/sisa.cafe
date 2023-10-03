@@ -2,7 +2,6 @@ using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Categories.Responses;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Categories.Queries;
 
@@ -19,12 +18,11 @@ public class FindCategoryBySlugQueryHandler(
     {
         logger.LogInformation("Finding category by slug {Slug}", query.Slug);
 
-        var spec = new CategorySpecification<CategoryResponse>(
-            query.Slug,
-            CategoryProjections.Projection
+        var category = await repository.FindAsync(
+            x => x.Slug == query.Slug
+            , CategoryProjections.Projection
+            , cancellationToken
         );
-
-        var category = await repository.FindAsync(spec, cancellationToken);
 
         if (category is null)
         {

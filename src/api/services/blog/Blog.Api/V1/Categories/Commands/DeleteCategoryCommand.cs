@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Google.Protobuf.WellKnownTypes;
 
 using Sisa.Abstractions;
@@ -9,6 +11,16 @@ namespace Sisa.Blog.Api.V1.Categories.Commands;
 public sealed partial class DeleteCategoryCommand : ICommand<Empty>
 {
     public Guid CategoryId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
+}
+
+public sealed class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
+{
+    public DeleteCategoryCommandValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .Must((request, _) => request.CategoryId != Guid.Empty);
+    }
 }
 
 public class DeleteCategoryCommandHandler(

@@ -9,6 +9,7 @@ namespace Sisa.Blog.Api.V1.Categories.Commands;
 
 public sealed partial class CreateCategoryCommand : ICommand<SingleCategoryResponse>
 {
+    public Guid? ParentCategoryId => Guid.TryParse(ParentId, out var id) ? id : null;
 }
 
 public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
@@ -16,8 +17,10 @@ public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCat
     public CreateCategoryCommandValidator()
     {
         RuleFor(x => x.ParentId)
-            .Must(x => Guid.TryParse(x, out Guid parentId) && parentId != Guid.Empty)
-            .When(x => !string.IsNullOrEmpty(x.ParentId));
+            .NotEmpty()
+            .Must((request, _) => request.ParentCategoryId.HasValue
+                && request.ParentCategoryId.Value != Guid.Empty
+            );
 
         RuleFor(x => x.Name)
             .NotEmpty()

@@ -20,8 +20,6 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
         _dbSet = dbContext.Set<TEntity>();
     }
 
-    public IQueryable<TEntity> Query => _dbSet;
-
     public IUnitOfWork UnitOfWork => _dbContext;
 
     public async ValueTask<TEntity?> FindAsync(object keyValue, CancellationToken cancellationToken = default)
@@ -32,6 +30,26 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
 
     public async ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken = default)
         => await _dbSet.FindAsync(keyValues, cancellationToken);
+
+    public async ValueTask<TEntity?> FindAsync(
+       Expression<Func<TEntity, bool>> predicate
+       , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Where(predicate);
+
+        return await query.FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async ValueTask<TResult?> FindAsync<TResult>(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, TResult>> selector
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Where(predicate)
+            .Select(selector);
+
+        return await query.FirstOrDefaultAsync(cancellationToken);
+    }
 
     public async ValueTask<TEntity?> FindAsync(
        Specification<TEntity> specification
@@ -49,6 +67,96 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
         var query = _dbSet.Specify(specification);
 
         return await query.FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TEntity>> GetAsync(
+        Expression<Func<TEntity, bool>> predicate
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.Where(predicate);
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TEntity>> GetAsync(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, object>> orderBy
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet
+            .Where(predicate)
+            .OrderBy(orderBy);
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, object>> orderBy
+        , Expression<Func<TEntity, TResult>> selector
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet
+            .Where(predicate)
+            .OrderBy(orderBy)
+            .Select(selector);
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    public async ValueTask<IPaginatedList<TEntity>> PaginateAsync(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, object>> orderBy
+        , IPagingParams pagingParams
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet
+            .Where(predicate)
+            .OrderBy(orderBy);
+
+        return await query.ToPaginatedListAsync(pagingParams, cancellationToken);
+    }
+
+    public async ValueTask<IPaginatedList<TResult>> PaginateAsync<TResult>(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, object>> orderBy
+        , IPagingParams pagingParams
+        , Expression<Func<TEntity, TResult>> selector
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet
+            .Where(predicate)
+            .OrderBy(orderBy)
+            .Select(selector);
+
+        return await query.ToPaginatedListAsync(pagingParams, cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, object>> orderBy
+        , IPagingParams pagingParams, Expression<Func<TEntity, TResult>> selector
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet
+            .Where(predicate)
+            .OrderBy(orderBy)
+            .Select(selector);
+
+        return await query.ToPaginatedListAsync(pagingParams, cancellationToken);
+    }
+
+    public async ValueTask<IEnumerable<TEntity>> GetAsync(
+        Expression<Func<TEntity, bool>> predicate
+        , Expression<Func<TEntity, object>> orderBy
+        , IPagingParams pagingParams
+        , CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet
+            .Where(predicate)
+            .OrderBy(orderBy);
+
+        return await query.ToPaginatedListAsync(pagingParams, cancellationToken);
     }
 
     public async ValueTask<IEnumerable<TResult>> GetAsync<TResult>(
@@ -157,6 +265,15 @@ public abstract class Repository<TDbContext, TEntity> : IRepository<TEntity>
 
     public async ValueTask<bool> ExistAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         => await _dbSet.AnyAsync(predicate, cancellationToken);
+
+    public async ValueTask<bool> ExistAsync(Specification<TEntity> specification, CancellationToken cancellationToken = default)
+        => await _dbSet.Specify(specification).AnyAsync(cancellationToken);
+
+    public async ValueTask<int> CountAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        => await _dbSet.CountAsync(predicate, cancellationToken);
+
+    public async ValueTask<int> CountAsync(Specification<TEntity> specification, CancellationToken cancellationToken = default)
+        => await _dbSet.Specify(specification).CountAsync(cancellationToken);
 }
 
 public abstract class Repository<TEntity> : Repository<BaseDbContext, TEntity>
