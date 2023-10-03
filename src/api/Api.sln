@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.DbMigrator", "db-migra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{DE7B1075-AC97-4512-8CA1-CFBA576DCDF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abstractions", "libs\Abstractions\Abstractions.csproj", "{936A449D-48E7-4F5D-8992-13EE225445A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "libs\Core\Core.csproj", "{936A449D-48E7-4F5D-8992-13EE225445A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "libs\Data\Data.csproj", "{E6E5BF2F-B8F0-40F6-8DB0-A36A60A7BF83}"
 EndProject
@@ -37,9 +37,6 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2CD37384-78CB-4051-91FC-F7E96DDFBA3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -86,6 +83,9 @@ Global
 		{5908A95A-06F1-43BE-8527-1057909ABCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5908A95A-06F1-43BE-8527-1057909ABCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5908A95A-06F1-43BE-8527-1057909ABCF8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2CD37384-78CB-4051-91FC-F7E96DDFBA3C} = {EAD17819-22AE-4906-87D1-504D02613B4B}

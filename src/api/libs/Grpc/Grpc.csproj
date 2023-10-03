@@ -8,14 +8,14 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="Google.Protobuf" />
-    <PackageReference Include="Grpc.AspNetCore.Server"/>
+    <PackageReference Include="Grpc.AspNetCore.Server" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" />
     <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" />
     <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
+    <ProjectReference Include="../Core/Core.csproj" />
   </ItemGroup>
 
 </Project>
