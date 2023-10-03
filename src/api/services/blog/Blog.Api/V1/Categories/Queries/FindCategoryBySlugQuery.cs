@@ -19,12 +19,12 @@ public class FindCategoryBySlugQueryHandler(
     {
         logger.LogInformation("Finding category by slug {Slug}", query.Slug);
 
-        var specification = new CategorySpecification<CategoryResponse>(
+        var spec = new CategorySpecification<CategoryResponse>(
             query.Slug,
             CategoryProjections.Projection
         );
 
-        var category = await repository.FindAsync(specification, cancellationToken);
+        var category = await repository.FindAsync(spec, cancellationToken);
 
         if (category is null)
         {

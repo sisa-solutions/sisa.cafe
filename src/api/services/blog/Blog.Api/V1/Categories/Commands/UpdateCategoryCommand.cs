@@ -9,15 +9,21 @@ namespace Sisa.Blog.Api.V1.Categories.Commands;
 
 public sealed partial class UpdateCategoryCommand : ICommand<SingleCategoryResponse>
 {
+    public Guid CategoryId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
+    public Guid? ParentCategoryId => Guid.TryParse(ParentId, out Guid parentId) ? parentId : null;
 }
 
 public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
 {
     public UpdateCategoryCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .Must((a, b) => a.ParentCategoryId != Guid.Empty);
+
         RuleFor(x => x.ParentId)
-            .Must(x => Guid.TryParse(x, out Guid parentId) && parentId != Guid.Empty)
-            .When(x => !string.IsNullOrEmpty(x.ParentId));
+            .NotEmpty()
+            .Must((a, b) => a.ParentCategoryId != null && a.ParentCategoryId != Guid.Empty);
 
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -40,13 +46,13 @@ public class UpdateCategoryCommandHandler(
     public async ValueTask<SingleCategoryResponse> HandleAsync(UpdateCategoryCommand command, CancellationToken cancellationToken = default)
     {
         Category? category = await repository
-            .FindAsync(Guid.Parse(command.Id), cancellationToken);
+            .FindAsync(command.CategoryId, cancellationToken);
 
         if (category is null)
         {
-            logger.LogWarning("Category with id {id} not found", command.Id);
+            logger.LogWarning("Category with id {id} not found", command.CategoryId);
 
-            throw new Exception($"Category with id {command.Id} not found");
+            throw new Exception($"Category with id {command.CategoryId} not found");
         }
 
         bool categoryExists = await repository
@@ -66,21 +72,19 @@ public class UpdateCategoryCommandHandler(
 
         category.Describe(command.Description);
 
-        if (!string.IsNullOrEmpty(command.ParentId)
-            && Guid.TryParse(command.ParentId, out Guid parentId)
-            && parentId != category.ParentId)
+        if (command.ParentCategoryId.HasValue && command.ParentCategoryId != category.ParentId)
         {
             var alreadyExisting = await repository
-                 .ExistAsync(parentId, cancellationToken);
+                .ExistAsync(command.ParentCategoryId.Value, cancellationToken);
 
             if (!alreadyExisting)
             {
-                logger.LogWarning("Parent category with id {id} not found", parentId);
+                logger.LogWarning("Parent category with id {id} not found", command.ParentCategoryId.Value);
 
-                throw new Exception($"Parent category with id {parentId} not found");
+                throw new Exception($"Parent category with id {command.ParentCategoryId.Value} not found");
             }
 
-            category.SetParent(parentId);
+            category.SetParent(command.ParentCategoryId.Value);
         }
 
         repository.Update(category);

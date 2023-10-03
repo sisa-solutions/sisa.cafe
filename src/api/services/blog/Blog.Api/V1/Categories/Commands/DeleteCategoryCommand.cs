@@ -8,6 +8,7 @@ namespace Sisa.Blog.Api.V1.Categories.Commands;
 
 public sealed partial class DeleteCategoryCommand : ICommand<Empty>
 {
+    public Guid CategoryId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
 }
 
 public class DeleteCategoryCommandHandler(
@@ -18,11 +19,11 @@ public class DeleteCategoryCommandHandler(
     public async ValueTask<Empty> HandleAsync(DeleteCategoryCommand command, CancellationToken cancellationToken = default)
     {
         Category? category = await repository
-            .FindAsync(Guid.Parse(command.Id), cancellationToken);
+            .FindAsync(command.CategoryId, cancellationToken);
 
         if (category is null)
         {
-            logger.LogWarning("Category with id {id} not found", command.Id);
+            logger.LogWarning("Category with id {id} not found", command.CategoryId);
 
             throw new Exception($"Category with id {command.Id} not found");
         }

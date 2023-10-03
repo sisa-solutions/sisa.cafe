@@ -18,14 +18,15 @@ public class GetCategoriesQueryHandler(
     public async ValueTask<ListCategoriesResponse> HandleAsync(GetCategoriesQuery query, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Getting categories");
-        var specification = new CategorySpecification<CategoryResponse>(
+
+        var spec = new CategorySpecification<CategoryResponse>(
             query.Filter,
             query.SortBy,
             query.Paging,
             CategoryProjections.Projection);
 
         var categories = await repository
-            .PaginateAsync(specification, cancellationToken);
+            .PaginateAsync(spec, cancellationToken);
 
         return categories.ToListResponse();
     }

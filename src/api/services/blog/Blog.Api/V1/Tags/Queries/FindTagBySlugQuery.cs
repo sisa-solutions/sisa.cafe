@@ -1,9 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
+using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Tags.Queries;
 
@@ -20,10 +19,13 @@ public class FindTagBySlugQueryHandler(
     {
         logger.LogInformation("Finding Tag by slug {Slug}", query.Slug);
 
-        var tag = await repository
-            .Query
-            .ProjectToResponse()
-            .SingleOrDefaultAsync(x => x.Slug == query.Slug, cancellationToken);
+        var spec = new TagSpecification<TagResponse>(
+            query.Slug,
+            TagProjectionExtensions.Projection
+        );
+
+        TagResponse? tag = await repository
+            .FindAsync(spec, cancellationToken);
 
         if (tag is null)
         {

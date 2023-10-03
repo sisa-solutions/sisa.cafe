@@ -2,7 +2,6 @@
 
 using Sisa.Abstractions;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
-using Sisa.Extensions;
 
 namespace Sisa.Blog.Domain.Specifications;
 
@@ -10,16 +9,31 @@ public sealed class TagSpecification<TResult>(Expression<Func<Tag, TResult>> sel
     : Specification<Tag, TResult>(selector) where TResult : class
 {
     public TagSpecification(
-        string keyword
-        , IPagingParams pagingParams,
+        Guid id,
         Expression<Func<Tag, TResult>> selector) : this(selector)
     {
-        if (!string.IsNullOrWhiteSpace(keyword))
-        {
-            Builder.Where(x => x.Name.Like($"%{keyword}%"));
-        }
+        Builder
+            .Where(x => x.Id == id);
+    }
 
-        Builder.OrderBy(x => x.Name)
+    public TagSpecification(
+        string slug,
+        Expression<Func<Tag, TResult>> selector) : this(selector)
+    {
+        Builder
+            .Where(x => x.Slug == slug);
+    }
+
+    public TagSpecification(
+        IFilteringParams filteringParams
+        , IEnumerable<ISortingParams> sortingParams
+        , IPagingParams pagingParams
+        , Expression<Func<Tag, TResult>> selector) : this(selector)
+    {
+        Builder
+
+            .Filter(filteringParams)
+            .Sort(sortingParams)
             .Paginate(pagingParams);
     }
 }

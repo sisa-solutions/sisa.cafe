@@ -1,14 +1,14 @@
-using Microsoft.EntityFrameworkCore;
-
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
+using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Tags.Queries;
 
 public sealed partial class FindTagByIdQuery : IQuery<SingleTagResponse>
 {
+    public Guid TagId => Guid.TryParse(Id, out var id) ? id : Guid.Empty;
 }
 
 public class FindTagByIdQueryHandler(
@@ -20,10 +20,13 @@ public class FindTagByIdQueryHandler(
     {
         logger.LogInformation("Finding Tag by id {Id}", query.Id);
 
-        var tag = await repository
-            .Query
-            .ProjectToResponse()
-            .SingleOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
+        var spec = new TagSpecification<TagResponse>(
+            query.Id,
+            TagProjectionExtensions.Projection
+        );
+
+        TagResponse? tag = await repository
+            .FindAsync(spec, cancellationToken);
 
         if (tag is null)
         {

@@ -1,9 +1,8 @@
 using Sisa.Abstractions;
-using Sisa.Extensions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
-using Microsoft.EntityFrameworkCore;
+using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Tags.Queries;
 
@@ -20,21 +19,15 @@ public class GetTagsQueryHandler(
     {
         logger.LogInformation("Getting Tags");
 
-        var queryBuilder = repository
-            .Query
-            .ProjectToResponse()
-            .OrderBy(x => x.Name)
-            .AsNoTracking();
+        var spec = new TagSpecification<TagResponse>(
+            query.Filter,
+            query.SortBy,
+            query.Paging,
+            TagProjectionExtensions.Projection
+        );
 
-        // if (!string.IsNullOrWhiteSpace(query.Filter.Name))
-        // {
-        //     logger.LogInformation("Filtering by name: {Name}", query.Filter.Name);
-
-        //     queryBuilder = queryBuilder.Where(x => EF.Functions.ILike(x.Name, $"%{query.Filter.Name}%"));
-        // }
-
-        IPaginatedList<TagResponse> tags = await queryBuilder
-            .ToPaginatedListAsync(query.Paging.PageIndex, query.Paging.PageSize, cancellationToken);
+        IPaginatedList<TagResponse> tags = await repository
+            .PaginateAsync(spec, cancellationToken);
 
         return tags.MapToResponse();
     }

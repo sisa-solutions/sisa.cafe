@@ -21,12 +21,12 @@ public class FindCategoryByIdQueryHandler(
     {
         logger.LogInformation("Finding category by id {Id}", query.Id);
 
-        var specification = new CategorySpecification<CategoryResponse>(
+        var spec = new CategorySpecification<CategoryResponse>(
             query.CategoryId,
             CategoryProjections.Projection
         );
 
-        var category = await repository.FindAsync(specification, cancellationToken);
+        var category = await repository.FindAsync(spec, cancellationToken);
 
         if (category is null)
         {
