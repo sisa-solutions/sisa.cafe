@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Sisa.Common.Helpers;
+namespace Sisa.Helpers;
 
 public static class CryptographyHelper
 {

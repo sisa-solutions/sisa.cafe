@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\Abstractions\Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\libs\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>

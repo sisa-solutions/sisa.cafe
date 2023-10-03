@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Sisa.Extensions;
+﻿namespace System.Linq.Expressions;
 
 public static partial class ExpressionExtensions
 {

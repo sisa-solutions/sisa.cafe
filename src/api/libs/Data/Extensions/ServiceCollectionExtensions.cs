@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using Sisa.Abstractions;
-using Sisa.Helpers;
 
 namespace Sisa.Extensions;
 
@@ -29,37 +28,6 @@ public static class ServiceCollectionExtensions
 
         builder.ProtectKeysWithCertificate(certs[0])
             .UnprotectKeysWithAnyCertificate(certs[1..]);
-
-        return services;
-    }
-
-    /// <summary>
-    /// The 1st cert will be the encrypt key, then the rest are decrypt keys
-    /// </summary>
-    public static IServiceCollection AddDataProtectionContext<TDbContext>(
-        this IServiceCollection services,
-        string applicationName,
-        int lifetime = 90,
-        IReadOnlyDictionary<string, string>? certsPath = null)
-        where TDbContext : DbContext, IDataProtectionKeyContext
-    {
-        var builder = services.AddDataProtection()
-            .SetApplicationName(applicationName)
-            .SetDefaultKeyLifetime(TimeSpan.FromDays(lifetime))
-            .PersistKeysToDbContext<TDbContext>();
-
-        if (certsPath != null)
-        {
-            var certs = Task.WhenAll(
-                certsPath.Select(x => CertificateHelper.GetCertificateAsync(x.Key, x.Value))
-            ).GetAwaiter().GetResult();
-
-            if (certs == null || certs.Length < 2)
-                return services;
-
-            builder.ProtectKeysWithCertificate(certs[0])
-                .UnprotectKeysWithAnyCertificate(certs[1..]);
-        }
 
         return services;
     }

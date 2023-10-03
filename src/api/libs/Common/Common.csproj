@@ -1,8 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <AssemblyName>Sisa.Common</AssemblyName>
-    <RootNamespace>Sisa.Common</RootNamespace>
-  </PropertyGroup>
-
-</Project>
