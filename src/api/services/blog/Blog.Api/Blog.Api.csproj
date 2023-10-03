@@ -7,14 +7,16 @@
     <!-- <PublishAot>true</PublishAot> -->
   </PropertyGroup>
 
+  <!-- BEGIN: Packages -->
   <ItemGroup>
     <PackageReference Include="Grpc.Tools">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  <!-- END: Packages -->
 
-  <!-- Libs -->
+  <!-- BEGIN: Libs -->
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\Grpc\Grpc.csproj" />
     <ProjectReference
@@ -22,27 +24,42 @@
       OutputItemType="Analyzer"
       ReferenceOutputAssembly="false" />
   </ItemGroup>
+  <!-- END: Libs -->
 
-  <!-- Dependencies -->
+  <!-- BEGIN: Dependencies -->
   <ItemGroup>
     <ProjectReference Include="..\Blog.Data\Blog.Data.csproj" />
     <ProjectReference Include="..\Blog.Infrastructure\Blog.Infrastructure.csproj" />
   </ItemGroup>
+  <!-- END: Dependencies -->
 
-  <!-- Protos -->
+  <!-- Begin: Protos -->
+  <ItemGroup>
+    <!-- <Content Include="..\..\..\..\protos\google\**\*.proto">
+      <Link>protos\google\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Content> -->
+    <Content Include="..\..\..\..\protos\sisa\libs\**\*.proto">
+      <Link>protos\sisa\libs\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Content>
+    <Content Include="..\..\..\..\protos\sisa\services\blog\**\*.proto">
+      <Link>protos\sisa\services\blog\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Content>
+  </ItemGroup>
+
   <ItemGroup>
     <Protobuf
-      ProtoRoot="../../../../protos"
-      Include="../../../../protos/sisa/libs/**/*.proto"
+      ProtoRoot="..\..\..\..\protos"
+      Include="..\..\..\..\protos\sisa\libs\**\*.proto"
       GrpcServices="None" />
     <Protobuf
-      ProtoRoot="../../../../protos"
-      Include="../../../../protos/sisa/services/blog/**/*.proto"
+      ProtoRoot="..\..\..\..\protos"
+      Include="..\..\..\..\protos\sisa\services\blog\**\*.proto"
       GrpcServices="None" />
     <Protobuf
-      ProtoRoot="../../../../protos"
-      Include="../../../../protos/sisa/services/blog/**/*_grpc_service.proto"
+      ProtoRoot="..\..\..\..\protos"
+      Include="..\..\..\..\protos\sisa\services\blog\**\*_grpc_service.proto"
       GrpcServices="Server" />
   </ItemGroup>
+  <!-- End: Protos -->
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <!-- <TargetFramework>netstandard2.0</TargetFramework> -->
     <AssemblyName>Sisa.Generator</AssemblyName>
     <RootNamespace>Sisa.Generator</RootNamespace>
     <IsRoslynComponent>true</IsRoslynComponent>
@@ -11,9 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CSharp" />
     <PackageReference Include="Scriban" IncludeAssets="Build" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>
 
   <ItemGroup>
