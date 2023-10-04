@@ -45,7 +45,7 @@ public class CreateCategoryCommandHandler(
         logger.LogInformation("Creating category with name {slug}", command.Slug);
 
         bool categoryExists = await repository
-            .ExistAsync(command.Slug, cancellationToken);
+            .ExistAsync(x => x.Slug == command.Slug, cancellationToken);
 
         if (categoryExists)
         {
@@ -62,20 +62,19 @@ public class CreateCategoryCommandHandler(
 
         category.Describe(command.Description);
 
-        if (!string.IsNullOrEmpty(command.ParentId)
-            && Guid.TryParse(command.ParentId, out Guid parentId))
+        if (command.ParentCategoryId.HasValue)
         {
-            var alreadyExisting = await repository
-                .ExistAsync(parentId, cancellationToken);
+            var isParentExisting = await repository
+                .ExistAsync(x => x.Id == command.ParentCategoryId, cancellationToken);
 
-            if (!alreadyExisting)
+            if (!isParentExisting)
             {
-                logger.LogWarning("Parent category with id {id} not found", parentId);
+                logger.LogWarning("Parent category with id {id} not found", command.ParentId);
 
-                throw new Exception($"Parent category with id {parentId} not found");
+                throw new Exception($"Parent category with id {command.ParentId} not found");
             }
 
-            category.SetParent(parentId);
+            category.SetParent(command.ParentCategoryId.Value);
         }
 
         repository.Add(category);

@@ -38,7 +38,7 @@ public class CreateTagCommandHandler(
         logger.LogInformation("Creating Tag with name {slug}", command.Slug);
 
         bool tagExists = await repository
-            .ExistAsync(command.Slug, cancellationToken);
+            .ExistAsync(x => x.Slug == command.Slug, cancellationToken);
 
         if (tagExists)
         {

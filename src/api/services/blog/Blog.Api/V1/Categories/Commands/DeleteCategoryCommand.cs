@@ -35,7 +35,7 @@ public class DeleteCategoryCommandHandler(
 
         if (category is null)
         {
-            logger.LogWarning("Category with id {id} not found", command.CategoryId);
+            logger.LogWarning("Category with id {id} not found", command.Id);
 
             throw new Exception($"Category with id {command.Id} not found");
         }

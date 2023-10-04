@@ -58,13 +58,13 @@ public class UpdateCategoryCommandHandler(
         }
 
         bool categoryExists = await repository
-            .ExistAsync(category.Id, command.Slug, cancellationToken);
+            .ExistAsync(x => x.Id != command.CategoryId && x.Slug == command.Slug, cancellationToken);
 
         if (categoryExists)
         {
-            logger.LogWarning("Category with name {slug} already exists", command.Slug);
+            logger.LogWarning("Category with slug {slug} already exists", command.Slug);
 
-            throw new Exception($"Category with name {command.Slug} already exists");
+            throw new Exception($"Category with slug {command.Slug} already exists");
         }
 
         category.Update(
@@ -76,14 +76,14 @@ public class UpdateCategoryCommandHandler(
 
         if (command.ParentCategoryId.HasValue && command.ParentCategoryId != category.ParentId)
         {
-            var alreadyExisting = await repository
-                .ExistAsync(command.ParentCategoryId.Value, cancellationToken);
+            var isParentExisting = await repository
+                .ExistAsync(x => x.Id == command.ParentCategoryId.Value, cancellationToken);
 
-            if (!alreadyExisting)
+            if (!isParentExisting)
             {
-                logger.LogWarning("Parent category with id {id} not found", command.ParentCategoryId.Value);
+                logger.LogWarning("Parent category with id {id} not found", command.ParentId);
 
-                throw new Exception($"Parent category with id {command.ParentCategoryId.Value} not found");
+                throw new Exception($"Parent category with id {command.ParentId} not found");
             }
 
             category.SetParent(command.ParentCategoryId.Value);

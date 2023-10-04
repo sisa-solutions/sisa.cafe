@@ -9,6 +9,7 @@ namespace Sisa.Blog.Api.V1.Tags.Commands;
 
 public sealed partial class UpdateTagCommand : ICommand<SingleTagResponse>
 {
+    public Guid TagId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
 }
 
 public sealed class UpdateTagCommandValidator : AbstractValidator<UpdateTagCommand>
@@ -36,7 +37,7 @@ public class UpdateTagCommandHandler(
     public async ValueTask<SingleTagResponse> HandleAsync(UpdateTagCommand command, CancellationToken cancellationToken = default)
     {
         Tag? tag = await repository
-            .FindAsync(Guid.Parse(command.Id), cancellationToken);
+            .FindAsync(command.TagId, cancellationToken);
 
         if (tag is null)
         {
@@ -46,7 +47,7 @@ public class UpdateTagCommandHandler(
         }
 
         bool tagExists = await repository
-            .ExistAsync(tag.Id, command.Slug, cancellationToken);
+            .ExistAsync(x => x.Id != command.TagId && x.Slug == command.Slug, cancellationToken);
 
         if (tagExists)
         {
