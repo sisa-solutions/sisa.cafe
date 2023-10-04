@@ -31,8 +31,18 @@ public sealed class TagSpecification<TResult>(Expression<Func<Tag, TResult>> sel
         , Expression<Func<Tag, TResult>> selector) : this(selector)
     {
         Builder
+           .Filter(filteringParams);
 
-            .Filter(filteringParams)
+        if (sortingParams.Any())
+        {
+            Builder.Sort(sortingParams);
+        }
+        else
+        {
+            Builder.OrderBy(x => x.Name);
+        }
+
+        Builder
             .Sort(sortingParams)
             .Paginate(pagingParams);
     }

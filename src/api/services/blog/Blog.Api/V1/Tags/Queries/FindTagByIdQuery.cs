@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
@@ -8,6 +10,17 @@ namespace Sisa.Blog.Api.V1.Tags.Queries;
 public sealed partial class FindTagByIdQuery : IQuery<SingleTagResponse>
 {
     public Guid TagId => Guid.TryParse(Id, out var id) ? id : Guid.Empty;
+}
+
+public sealed class FindTagByIdQueryValidator : AbstractValidator<FindTagByIdQuery>
+{
+    public FindTagByIdQueryValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .Must((x, _) => x.TagId != Guid.Empty)
+                .WithMessage("Invalid Id");
+    }
 }
 
 public class FindTagByIdQueryHandler(

@@ -10,6 +10,7 @@ builder.Services.AddCommonConfiguration();
 builder.Services.AddGrpcService(builder.Environment);
 builder.Services.AddGrpcReflection();
 
+builder.Services.AddFluentValidation();
 builder.Services.AddMediator();
 builder.Services.AddMediatorDependencies();
 builder.Services.AddDataDependencies();

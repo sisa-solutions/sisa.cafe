@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
@@ -8,7 +10,18 @@ namespace Sisa.Blog.Api.V1.Posts.Queries;
 
 public sealed partial class FindPostByIdQuery : IQuery<SinglePostResponse>
 {
-    public Guid PostId => Guid.TryParse(Id, out var id) ? id : Guid.Empty;
+    public Guid ParsedId => Guid.TryParse(Id, out var id) ? id : Guid.Empty;
+}
+
+public sealed class FindPostByIdQueryValidator : AbstractValidator<FindPostByIdQuery>
+{
+    public FindPostByIdQueryValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .Must((x, _) => x.ParsedId != Guid.Empty)
+                .WithMessage("Invalid Id");
+    }
 }
 
 public class FindPostByIdQueryHandler(
@@ -21,7 +34,7 @@ public class FindPostByIdQueryHandler(
         logger.LogInformation("Finding Post by id {Id}", query.Id);
 
         var post = await repository.FindAsync(
-            x => x.Id == query.PostId
+            x => x.Id == query.ParsedId
             , PostProjections.Projection
             , cancellationToken);
 

@@ -10,17 +10,6 @@ namespace Sisa.Blog.Api.V1.Categories.Responses;
 
 public static partial class CategoryProjections
 {
-    public static CategoryInfoResponse MapToInfoResponse(this Category category)
-    {
-        return new CategoryInfoResponse
-        {
-            Id = category.Id.ToString(),
-            Name = category.Name,
-            Slug = category.Slug,
-            Description = category.Description
-        };
-    }
-
     public static SingleCategoryResponse ToSingleResponse(this Category category)
     {
         return new SingleCategoryResponse()

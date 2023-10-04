@@ -30,10 +30,21 @@ public sealed class PostSpecification<TResult>(Expression<Func<Post, TResult>> s
         , IPagingParams pagingParams
         , Expression<Func<Post, TResult>> selector) : this(selector)
     {
-        Builder
+        Builder.Include(x => x.Category);
+        Builder.Include(x => x.Tags);
 
-            .Filter(filteringParams)
-            .Sort(sortingParams)
-            .Paginate(pagingParams);
+        Builder.AsSplitQuery();
+        Builder.Filter(filteringParams);
+
+        if (sortingParams.Any())
+        {
+            Builder.Sort(sortingParams);
+        }
+        else
+        {
+            Builder.OrderBy(x => x.Title);
+        }
+
+        Builder.Paginate(pagingParams);
     }
 }

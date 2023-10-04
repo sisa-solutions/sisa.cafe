@@ -19,13 +19,14 @@ public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCat
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .Must((a, b) => a.ParsedId != Guid.Empty);
+            .Must((a, b) => a.ParsedId != Guid.Empty)
+                .WithMessage("Invalid Id");
 
         RuleFor(x => x.ParentId)
             .NotEmpty()
-            .Must((request, _) => request.ParsedParentId.HasValue
-                && request.ParsedParentId.Value != Guid.Empty
-            );
+            .Must((request, _) => request.ParsedParentId.HasValue && request.ParsedParentId.Value != Guid.Empty)
+                .When((x, _) => x.ParsedParentId.HasValue)
+                .WithMessage("Invalid Parent Id");
 
         RuleFor(x => x.Name)
             .NotEmpty()

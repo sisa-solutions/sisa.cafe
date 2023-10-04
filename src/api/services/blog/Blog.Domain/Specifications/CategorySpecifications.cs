@@ -32,7 +32,18 @@ public sealed class CategorySpecification<TResult>(Expression<Func<Category, TRe
     {
         Builder
             .Include(x => x.Parent)
-            .Filter(filteringParams)
+            .Filter(filteringParams);
+
+        if (sortingParams.Any())
+        {
+            Builder.Sort(sortingParams);
+        }
+        else
+        {
+            Builder.OrderBy(x => x.Name);
+        }
+
+        Builder
             .Sort(sortingParams)
             .Paginate(pagingParams);
     }

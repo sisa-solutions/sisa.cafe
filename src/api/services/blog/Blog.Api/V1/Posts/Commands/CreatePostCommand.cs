@@ -22,7 +22,8 @@ public sealed class CreatePostCommandValidator : AbstractValidator<CreatePostCom
     {
         RuleFor(x => x.CategoryId)
             .NotEmpty()
-            .Must((request, _) => request.ParsedCategoryId != Guid.Empty);
+            .Must((x, _) => x.ParsedCategoryId != Guid.Empty)
+                .WithMessage("Invalid CategoryId");
 
         RuleFor(x => x.Title)
             .NotEmpty()
@@ -58,12 +59,12 @@ public class CreatePostCommandHandler(
 
         if (postExists)
         {
-            logger.LogWarning("Post with name {slug} already exists", command.Slug);
+            logger.LogWarning("Post with slug {slug} already exists", command.Slug);
 
             throw new DomainException(
                 StatusCode.CONFLICT,
                 "400",
-                $"Post with name {command.Slug} already exists"
+                $"Post with slug {command.Slug} already exists"
             );
         }
 
@@ -86,34 +87,21 @@ public class CreatePostCommandHandler(
 
         post.AssociateCategory(category);
 
-        // To associate tag slugs to post
-        // we need to get the list of existings tags by slug
-        // We also need to get the list of non existing tags
-        // Then we need to check in the existing tags, which ones already associated to the post
-        // and which ones are not
-        // Then we need to add the non existing tags to database then associate them to the post
-        // We also need to remove the tags that are not associated anymore to the post
-
         IEnumerable<Tag> existingTags = await tagRepository
             .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
 
-        IEnumerable<string> nonExistingTags = command.Tags
-            .Where(x => !existingTags.Any(y => y.Slug == x));
+        IEnumerable<string> existingTagSlugs = existingTags
+            .Select(x => x.Slug);
 
-        IEnumerable<Tag> nonExistingTagsEntities = nonExistingTags
+        IEnumerable<string> nonExistingTagSlugs = command.Tags
+            .Except(existingTagSlugs);
+
+        IEnumerable<Tag> nonExistingTagsEntities = nonExistingTagSlugs
             .Select(x => new Tag(x, x));
 
-        // await tagRepository.AddRangeAsync(nonExistingTagsEntities, cancellationToken);
-
         IEnumerable<Tag> tagsToAssociate = existingTags
-            .Where(x => !post.Tags.Any(y => y.Id == x.Id))
             .Union(nonExistingTagsEntities);
 
-        List<Tag> tagsToRemove = post.Tags
-            .Where(x => !command.Tags.Contains(x.Slug))
-            .ToList();
-
-        post.RemoveTags(tagsToRemove);
         post.AddTags(tagsToAssociate);
 
         repository.Add(post);
@@ -121,8 +109,6 @@ public class CreatePostCommandHandler(
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         var response = post.MapToResponse();
-
-        response.Value.Tags.AddRange(post.TagSlugs);
 
         return response;
     }

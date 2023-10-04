@@ -2,11 +2,18 @@ using System.Linq.Expressions;
 
 using Sisa.Abstractions;
 using Sisa.Blog.Api.V1.Categories.Responses;
-using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
 using Sisa.Common.Responses;
 
 namespace Sisa.Blog.Api.V1.Posts.Responses;
+
+public sealed partial class PostResponse
+{
+    public PostResponse(IEnumerable<string> tags): base()
+    {
+        Tags.AddRange(tags);
+    }
+}
 
 public static class PostProjections
 {
@@ -52,7 +59,7 @@ public static class PostProjections
     {
         get
         {
-            return x => new PostResponse
+            return x => new PostResponse(x.TagSlugs)
             {
                 Id = x.Id.ToString(),
                 Title = x.Title,
@@ -60,10 +67,13 @@ public static class PostProjections
                 Excerpt = x.Excerpt,
                 Content = x.Content,
 
-                Category = x.Category.MapToInfoResponse(),
-                Tags = {
-                    x.TagSlugs
-                }
+                Category = new CategoryInfoResponse
+                {
+                    Id = x.Category.Id.ToString(),
+                    Name = x.Category.Name,
+                    Slug = x.Category.Slug,
+                    Description = x.Category.Description
+                },
             };
         }
     }

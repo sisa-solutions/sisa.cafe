@@ -19,7 +19,8 @@ public sealed class DeletePostCommandValidator : AbstractValidator<DeletePostCom
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .Must((request, _) => request.ParsedId != Guid.Empty);
+            .Must((x, _) => x.ParsedId != Guid.Empty)
+                .WithMessage("Invalid Id");
     }
 }
 

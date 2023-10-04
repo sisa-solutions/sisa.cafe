@@ -1,11 +1,8 @@
 using Sisa.Abstractions;
-using Sisa.Extensions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Api.V1.Posts.Responses;
-using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
 using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
-using Microsoft.EntityFrameworkCore;
 using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Posts.Queries;

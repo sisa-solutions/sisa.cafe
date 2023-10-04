@@ -22,11 +22,13 @@ public sealed class UpdatePostCommandValidator : AbstractValidator<UpdatePostCom
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .Must((request, _) => request.ParsedId != Guid.Empty);
+            .Must((x, _) => x.ParsedId != Guid.Empty)
+                .WithMessage("Invalid Id");
 
         RuleFor(x => x.CategoryId)
             .NotEmpty()
-            .Must((request, _) => request.ParsedCategoryId != Guid.Empty);
+            .Must((x, _) => x.ParsedCategoryId != Guid.Empty)
+                .WithMessage("Invalid Category Id");
 
         RuleFor(x => x.Title)
             .NotEmpty()

@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Google.Protobuf.WellKnownTypes;
 
 using Sisa.Abstractions;
@@ -9,6 +11,17 @@ namespace Sisa.Blog.Api.V1.Tags.Commands;
 public sealed partial class DeleteTagCommand : ICommand<Empty>
 {
     public Guid ParsedId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
+}
+
+public sealed class DeleteTagCommandValidator : AbstractValidator<DeleteTagCommand>
+{
+    public DeleteTagCommandValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .Must((x, _) => x.ParsedId != Guid.Empty)
+                .WithMessage("Invalid Id");
+    }
 }
 
 public class DeleteTagCommandHandler(

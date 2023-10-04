@@ -1,13 +1,24 @@
+using FluentValidation;
+
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
-using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Tags.Queries;
 
 public sealed partial class FindTagBySlugQuery : IQuery<SingleTagResponse>
 {
+}
+
+public sealed class FindTagBySlugQueryValidator : AbstractValidator<FindTagBySlugQuery>
+{
+    public FindTagBySlugQueryValidator()
+    {
+        RuleFor(x => x.Slug)
+            .NotEmpty()
+            .MaximumLength(50);
+    }
 }
 
 public class FindTagBySlugQueryHandler(

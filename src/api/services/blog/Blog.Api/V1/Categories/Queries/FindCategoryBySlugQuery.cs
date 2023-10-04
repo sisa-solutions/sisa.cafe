@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Categories.Responses;
@@ -7,6 +9,16 @@ namespace Sisa.Blog.Api.V1.Categories.Queries;
 
 public sealed partial class FindCategoryBySlugQuery : IQuery<SingleCategoryResponse>
 {
+}
+
+public sealed class FindCategoryBySlugQueryValidator : AbstractValidator<FindCategoryBySlugQuery>
+{
+    public FindCategoryBySlugQueryValidator()
+    {
+        RuleFor(x => x.Slug)
+            .NotEmpty()
+            .MaximumLength(50);
+    }
 }
 
 public class FindCategoryBySlugQueryHandler(

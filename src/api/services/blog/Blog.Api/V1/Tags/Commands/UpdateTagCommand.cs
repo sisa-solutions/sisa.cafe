@@ -16,6 +16,11 @@ public sealed class UpdateTagCommandValidator : AbstractValidator<UpdateTagComma
 {
     public UpdateTagCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .Must((x, _) => x.ParsedId != Guid.Empty)
+                .WithMessage("Invalid Id");
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(50);

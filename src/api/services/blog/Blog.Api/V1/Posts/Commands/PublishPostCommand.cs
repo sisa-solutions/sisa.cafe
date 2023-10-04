@@ -19,7 +19,8 @@ public sealed class PublishPostCommandValidator : AbstractValidator<PublishPostC
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .Must((request, _) => request.ParsedId != Guid.Empty);
+            .Must((x, _) => x.ParsedId != Guid.Empty)
+                .WithMessage("Invalid Id");
 
         RuleFor(x => x.Remark)
             .NotEmpty()
