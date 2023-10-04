@@ -1,14 +1,8 @@
 ﻿namespace Sisa.Generator;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-public class GrpcResponseAttribute : Attribute
+public class GrpcResponseAttribute(Type? singleType, Type? listType) : Attribute
 {
-    public Type? SingelType { get; private set; }
-    public Type? ListType { get; private set; }
-
-    public GrpcResponseAttribute(Type? singelType, Type? listType)
-    {
-        SingelType = singelType;
-        ListType = listType;
-    }
+    public Type? SingleType { get; private set; } = singleType;
+    public Type? ListType { get; private set; } = listType;
 }

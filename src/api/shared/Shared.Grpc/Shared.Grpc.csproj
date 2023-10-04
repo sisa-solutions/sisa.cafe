@@ -21,13 +21,11 @@
 
   <!-- Begin: Protos -->
   <ItemGroup>
-    <Content Include="..\..\..\protos\sisa\libs\**\*.proto">
-      <Link>protos\sisa\libs\%(RecursiveDir)%(FileName)%(Extension)</Link>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf ProtoRoot="..\..\..\protos" Include="..\..\..\protos\sisa\libs\**\*.proto" GrpcServices="None" />
+    <Protobuf
+      ProtoRoot="..\..\..\protos"
+      Include="..\..\..\protos\sisa\libs\**\*.proto"
+      GrpcServices="None"
+      Link="protos\sisa\libs\%(RecursiveDir)%(FileName)%(Extension)" />
   </ItemGroup>
   <!-- End: Protos -->
 
