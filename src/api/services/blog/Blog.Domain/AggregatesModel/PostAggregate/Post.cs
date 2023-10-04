@@ -82,9 +82,10 @@ public class Post : FullAuditableAggregateRoot
 
     public void RemoveTags(IEnumerable<Tag> tags)
     {
-        _tags.RemoveAll(x => tags.Contains(x));
+        _tags.RemoveAll(x => tags.Select(y => y.Id).Contains(x.Id));
+        // _postTags.RemoveAll(x => x.PostId == Id && tags.Select(y => y.Id).Contains(x.TagId));
 
-        // _postTags.RemoveAll(x => tags.Select(y => y.Id).Contains(x.TagId));
+        _postTags.RemoveAll(x => tags.Select(y => y.Id).Contains(x.TagId));
 
         SyncTagSlugs();
     }

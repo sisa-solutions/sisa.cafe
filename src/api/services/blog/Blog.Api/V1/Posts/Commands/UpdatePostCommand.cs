@@ -6,6 +6,7 @@ using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
 using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
+using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Posts.Commands;
 
@@ -59,8 +60,10 @@ public class UpdatePostCommandHandler(
     {
         logger.LogInformation("Update Post with name {slug}", command.Slug);
 
+        var spec = new PostSpecification(command.ParsedId);
+
         Post? post = await repository
-            .FindAsync(command.Id, cancellationToken);
+            .FindAsync(spec, cancellationToken);
 
         if (post is null)
         {
@@ -91,35 +94,57 @@ public class UpdatePostCommandHandler(
             post.ChangeCategory(categoryId);
         }
 
-        // To associate tag slugs to post
-        // we need to get the list of existings tags by slug
-        // We also need to get the list of non existing tags
-        // Then we need to check in the existing tags, which ones already associated to the post
-        // and which ones are not
-        // Then we need to add the non existing tags to database then associate them to the post
-        // We also need to remove the tags that are not associated anymore to the post
+        // IEnumerable<Tag> existingTags = await tagRepository
+        //     .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
+
+        // IEnumerable<string> nonExistingTags = command.Tags
+        //     .Where(x => !existingTags.Any(y => y.Slug == x));
+
+        // IEnumerable<Tag> nonExistingTagsEntities = nonExistingTags
+        //     .Select(x => new Tag(x, x));
+
+        // // await tagRepository.AddRangeAsync(nonExistingTagsEntities, cancellationToken);
+
+        // IEnumerable<Tag> tagsToAssociate = existingTags
+        //     .Where(x => !post.Tags.Any(y => y.Id == x.Id))
+        //     .Union(nonExistingTagsEntities);
+
+        // List<Tag> tagsToRemove = post.Tags
+        //     .Where(x => !command.Tags.Contains(x.Slug))
+        //     .ToList();
+
+        // post.RemoveTags(tagsToRemove);
+        // post.AddTags(tagsToAssociate);
 
         IEnumerable<Tag> existingTags = await tagRepository
             .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
 
-        IEnumerable<string> nonExistingTags = command.Tags
-            .Where(x => !existingTags.Any(y => y.Slug == x));
+        IEnumerable<string> existingTagSlugs = existingTags
+            .Select(x => x.Slug);
 
-        IEnumerable<Tag> nonExistingTagsEntities = nonExistingTags
+        IEnumerable<string> nonExistingTagSlugs = command.Tags
+            .Except(existingTagSlugs);
+
+        IEnumerable<Tag> nonExistingTagsEntities = nonExistingTagSlugs
             .Select(x => new Tag(x, x));
 
-        // await tagRepository.AddRangeAsync(nonExistingTagsEntities, cancellationToken);
+        IEnumerable<string> nonAssociatedTagSlugs = command.Tags
+            .Except(post.TagSlugs);
 
-        IEnumerable<Tag> tagsToAssociate = existingTags
-            .Where(x => !post.Tags.Any(y => y.Id == x.Id))
+        IEnumerable<Tag> nonAssociatedTags = nonAssociatedTagSlugs
+            .Join(existingTags, l => l, r => r.Slug, (l, r) => r);
+
+        IEnumerable<string> tagSlugsToUnAssociate = post.TagSlugs
+            .Except(command.Tags);
+
+        IEnumerable<Tag> tagsToBeRemoved = post.Tags
+            .Where(x => tagSlugsToUnAssociate.Contains(x.Slug));
+
+        IEnumerable<Tag> tagsToAssociate = nonAssociatedTags
             .Union(nonExistingTagsEntities);
 
-        List<Tag> tagsToRemove = post.Tags
-            .Where(x => !command.Tags.Contains(x.Slug))
-            .ToList();
-
-        post.RemoveTags(tagsToRemove);
         post.AddTags(tagsToAssociate);
+        post.RemoveTags(tagsToBeRemoved);
 
         repository.Update(post);
 

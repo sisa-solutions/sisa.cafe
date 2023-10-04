@@ -5,6 +5,20 @@ using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
 
 namespace Sisa.Blog.Domain.Specifications;
 
+public sealed class PostSpecification : Specification<Post>
+{
+    public PostSpecification(Guid id) : base()
+    {
+        Builder
+            .Include(x => x.Category)
+            .Include(x => x.Tags)
+            .Include(x => x.PostTags)
+            .Where(x => x.Id == id);
+
+        Builder.AsSplitQuery();
+    }
+}
+
 public sealed class PostSpecification<TResult>(Expression<Func<Post, TResult>> selector)
     : Specification<Post, TResult>(selector) where TResult : class
 {
