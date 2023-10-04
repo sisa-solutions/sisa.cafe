@@ -11,12 +11,23 @@ namespace Sisa.Blog.Api.V1.Posts.Commands;
 
 public sealed partial class UpdatePostCommand : ICommand<SinglePostResponse>
 {
+    public Guid ParsedId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
+
+    public Guid ParsedCategoryId => Guid.TryParse(CategoryId, out Guid id) ? id : Guid.Empty;
 }
 
 public sealed class UpdatePostCommandValidator : AbstractValidator<UpdatePostCommand>
 {
     public UpdatePostCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .Must((request, _) => request.ParsedId != Guid.Empty);
+
+        RuleFor(x => x.CategoryId)
+            .NotEmpty()
+            .Must((request, _) => request.ParsedCategoryId != Guid.Empty);
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .MaximumLength(100);
@@ -66,7 +77,7 @@ public class UpdatePostCommandHandler(
         if (Guid.TryParse(command.CategoryId, out Guid categoryId) && categoryId != post.CategoryId)
         {
             var categoryExists = await categoryRepository
-            .ExistAsync(categoryId, cancellationToken);
+                .ExistAsync(x => x.Id == categoryId, cancellationToken);
 
             if (!categoryExists)
             {
@@ -87,7 +98,7 @@ public class UpdatePostCommandHandler(
         // We also need to remove the tags that are not associated anymore to the post
 
         IEnumerable<Tag> existingTags = await tagRepository
-            .GetExistingTagsBySlugsAsync(command.Tags, cancellationToken);
+            .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
 
         IEnumerable<string> nonExistingTags = command.Tags
             .Where(x => !existingTags.Any(y => y.Slug == x));

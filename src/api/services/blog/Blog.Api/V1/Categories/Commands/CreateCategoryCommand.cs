@@ -9,7 +9,7 @@ namespace Sisa.Blog.Api.V1.Categories.Commands;
 
 public sealed partial class CreateCategoryCommand : ICommand<SingleCategoryResponse>
 {
-    public Guid? ParentCategoryId => Guid.TryParse(ParentId, out var id) ? id : null;
+    public Guid? ParsedParentId => Guid.TryParse(ParentId, out var id) ? id : null;
 }
 
 public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
@@ -18,8 +18,8 @@ public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCat
     {
         RuleFor(x => x.ParentId)
             .NotEmpty()
-            .Must((request, _) => request.ParentCategoryId.HasValue
-                && request.ParentCategoryId.Value != Guid.Empty
+            .Must((request, _) => request.ParsedParentId.HasValue
+                && request.ParsedParentId.Value != Guid.Empty
             );
 
         RuleFor(x => x.Name)
@@ -62,10 +62,10 @@ public class CreateCategoryCommandHandler(
 
         category.Describe(command.Description);
 
-        if (command.ParentCategoryId.HasValue)
+        if (command.ParsedParentId.HasValue)
         {
             var isParentExisting = await repository
-                .ExistAsync(x => x.Id == command.ParentCategoryId, cancellationToken);
+                .ExistAsync(x => x.Id == command.ParsedParentId, cancellationToken);
 
             if (!isParentExisting)
             {
@@ -74,7 +74,7 @@ public class CreateCategoryCommandHandler(
                 throw new Exception($"Parent category with id {command.ParentId} not found");
             }
 
-            category.SetParent(command.ParentCategoryId.Value);
+            category.SetParent(command.ParsedParentId.Value);
         }
 
         repository.Add(category);

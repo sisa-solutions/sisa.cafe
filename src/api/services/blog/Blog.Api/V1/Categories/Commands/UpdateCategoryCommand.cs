@@ -9,8 +9,8 @@ namespace Sisa.Blog.Api.V1.Categories.Commands;
 
 public sealed partial class UpdateCategoryCommand : ICommand<SingleCategoryResponse>
 {
-    public Guid CategoryId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
-    public Guid? ParentCategoryId => Guid.TryParse(ParentId, out Guid parentId) ? parentId : null;
+    public Guid ParsedId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
+    public Guid? ParsedParentId => Guid.TryParse(ParentId, out Guid parentId) ? parentId : null;
 }
 
 public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
@@ -19,12 +19,12 @@ public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCat
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .Must((a, b) => a.CategoryId != Guid.Empty);
+            .Must((a, b) => a.ParsedId != Guid.Empty);
 
         RuleFor(x => x.ParentId)
             .NotEmpty()
-            .Must((request, _) => request.ParentCategoryId.HasValue
-                && request.ParentCategoryId.Value != Guid.Empty
+            .Must((request, _) => request.ParsedParentId.HasValue
+                && request.ParsedParentId.Value != Guid.Empty
             );
 
         RuleFor(x => x.Name)
@@ -48,17 +48,17 @@ public class UpdateCategoryCommandHandler(
     public async ValueTask<SingleCategoryResponse> HandleAsync(UpdateCategoryCommand command, CancellationToken cancellationToken = default)
     {
         Category? category = await repository
-            .FindAsync(command.CategoryId, cancellationToken);
+            .FindAsync(command.ParsedId, cancellationToken);
 
         if (category is null)
         {
-            logger.LogWarning("Category with id {id} not found", command.CategoryId);
+            logger.LogWarning("Category with id {id} not found", command.ParsedId);
 
-            throw new Exception($"Category with id {command.CategoryId} not found");
+            throw new Exception($"Category with id {command.ParsedId} not found");
         }
 
         bool categoryExists = await repository
-            .ExistAsync(x => x.Id != command.CategoryId && x.Slug == command.Slug, cancellationToken);
+            .ExistAsync(x => x.Id != command.ParsedId && x.Slug == command.Slug, cancellationToken);
 
         if (categoryExists)
         {
@@ -74,10 +74,10 @@ public class UpdateCategoryCommandHandler(
 
         category.Describe(command.Description);
 
-        if (command.ParentCategoryId.HasValue && command.ParentCategoryId != category.ParentId)
+        if (command.ParsedParentId.HasValue && command.ParsedId != category.ParentId)
         {
             var isParentExisting = await repository
-                .ExistAsync(x => x.Id == command.ParentCategoryId.Value, cancellationToken);
+                .ExistAsync(x => x.Id == command.ParsedParentId.Value, cancellationToken);
 
             if (!isParentExisting)
             {
@@ -86,7 +86,7 @@ public class UpdateCategoryCommandHandler(
                 throw new Exception($"Parent category with id {command.ParentId} not found");
             }
 
-            category.SetParent(command.ParentCategoryId.Value);
+            category.SetParent(command.ParsedParentId.Value);
         }
 
         repository.Update(category);

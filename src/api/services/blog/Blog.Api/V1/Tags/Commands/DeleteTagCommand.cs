@@ -8,7 +8,7 @@ namespace Sisa.Blog.Api.V1.Tags.Commands;
 
 public sealed partial class DeleteTagCommand : ICommand<Empty>
 {
-    public Guid TagId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
+    public Guid ParsedId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
 }
 
 public class DeleteTagCommandHandler(
@@ -19,7 +19,7 @@ public class DeleteTagCommandHandler(
     public async ValueTask<Empty> HandleAsync(DeleteTagCommand command, CancellationToken cancellationToken = default)
     {
         Tag? tag = await repository
-            .FindAsync(command.TagId, cancellationToken);
+            .FindAsync(command.ParsedId, cancellationToken);
 
         if (tag is null)
         {

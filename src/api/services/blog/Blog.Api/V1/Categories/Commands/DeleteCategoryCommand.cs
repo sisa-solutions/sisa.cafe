@@ -10,7 +10,7 @@ namespace Sisa.Blog.Api.V1.Categories.Commands;
 
 public sealed partial class DeleteCategoryCommand : ICommand<Empty>
 {
-    public Guid CategoryId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
+    public Guid ParsedId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
 }
 
 public sealed class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
@@ -19,7 +19,7 @@ public sealed class DeleteCategoryCommandValidator : AbstractValidator<DeleteCat
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .Must((request, _) => request.CategoryId != Guid.Empty);
+            .Must((request, _) => request.ParsedId != Guid.Empty);
     }
 }
 
@@ -31,7 +31,7 @@ public class DeleteCategoryCommandHandler(
     public async ValueTask<Empty> HandleAsync(DeleteCategoryCommand command, CancellationToken cancellationToken = default)
     {
         Category? category = await repository
-            .FindAsync(command.CategoryId, cancellationToken);
+            .FindAsync(command.ParsedId, cancellationToken);
 
         if (category is null)
         {

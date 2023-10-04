@@ -13,12 +13,17 @@ namespace Sisa.Blog.Api.V1.Posts.Commands;
 
 public sealed partial class CreatePostCommand : ICommand<SinglePostResponse>
 {
+    public Guid ParsedCategoryId => Guid.TryParse(CategoryId, out Guid id) ? id : Guid.Empty;
 }
 
 public sealed class CreatePostCommandValidator : AbstractValidator<CreatePostCommand>
 {
     public CreatePostCommandValidator()
     {
+        RuleFor(x => x.CategoryId)
+            .NotEmpty()
+            .Must((request, _) => request.ParsedCategoryId != Guid.Empty);
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .MaximumLength(100);
@@ -62,21 +67,14 @@ public class CreatePostCommandHandler(
             );
         }
 
-        if (!Guid.TryParse(command.CategoryId, out Guid categoryId))
+        var category = await categoryRepository
+            .FindAsync(command.ParsedCategoryId, cancellationToken);
+
+        if (category is null)
         {
             logger.LogWarning("Category with id {id} not found", command.CategoryId);
 
             throw new Exception($"Category with id {command.CategoryId} not found");
-        }
-
-        var category = await categoryRepository
-            .FindAsync(categoryId, cancellationToken);
-
-        if (category is null)
-        {
-            logger.LogWarning("Category with id {id} not found", categoryId);
-
-            throw new Exception($"Category with id {categoryId} not found");
         }
 
         var post = new Post(
@@ -97,7 +95,7 @@ public class CreatePostCommandHandler(
         // We also need to remove the tags that are not associated anymore to the post
 
         IEnumerable<Tag> existingTags = await tagRepository
-            .GetExistingTagsBySlugsAsync(command.Tags, cancellationToken);
+            .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
 
         IEnumerable<string> nonExistingTags = command.Tags
             .Where(x => !existingTags.Any(y => y.Slug == x));
@@ -126,6 +124,6 @@ public class CreatePostCommandHandler(
 
         response.Value.Tags.AddRange(post.TagSlugs);
 
-        return  response;
+        return response;
     }
 }

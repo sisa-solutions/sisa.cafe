@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Google.Protobuf.WellKnownTypes;
 
 using Sisa.Abstractions;
@@ -8,6 +10,21 @@ namespace Sisa.Blog.Api.V1.Posts.Commands;
 
 public sealed partial class PublishPostCommand : ICommand<Empty>
 {
+    public Guid ParsedId => Guid.TryParse(Id, out Guid id) ? id : Guid.Empty;
+}
+
+public sealed class PublishPostCommandValidator : AbstractValidator<PublishPostCommand>
+{
+    public PublishPostCommandValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .Must((request, _) => request.ParsedId != Guid.Empty);
+
+        RuleFor(x => x.Remark)
+            .NotEmpty()
+            .MaximumLength(200);
+    }
 }
 
 public class PublishPostCommandHandler(
@@ -18,7 +35,7 @@ public class PublishPostCommandHandler(
     public async ValueTask<Empty> HandleAsync(PublishPostCommand command, CancellationToken cancellationToken = default)
     {
         Post? post = await repository
-            .FindAsync(Guid.Parse(command.Id), cancellationToken);
+            .FindAsync(command.ParsedId, cancellationToken);
 
         if (post is null)
         {
@@ -27,7 +44,7 @@ public class PublishPostCommandHandler(
             throw new Exception($"Post with id {command.Id} not found");
         }
 
-        if(!post.TryPublish(command.Remark))
+        if (!post.TryPublish(command.Remark))
         {
             logger.LogWarning("Post with id {id} cannot be published", command.Id);
 
