@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Comments.Commands";
+
+package sisa.blog.api.v1.comments.commands;
+
+import "google/protobuf/wrappers.proto";
+
+message ReplyCommentCommand {
+  // reversed field must be reflect to the database
+  reserved 1, 3 to 50; // other data fields
+  reserved 52 to 60; // relationship fields
+
+  // data fields: from 1 to 50
+  string content = 2;
+
+  // relationship fields: from 51 to 60
+  string parentId = 51;
+}
+
+message UpdateCommentCommand {
+  // reversed field must be reflect to the database
+  reserved 3 to 50; // other data fields
+
+  // data fields: from 1 to 50
+  string id = 1;
+  string content = 2;
+}
+
+message DeleteCommentCommand {
+  string id = 1;
+}

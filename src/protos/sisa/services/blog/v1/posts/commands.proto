@@ -45,3 +45,15 @@ message PublishPostCommand {
 message DeletePostCommand {
   string id = 1;
 }
+
+message CreateCommentCommand {
+  // reversed field must be reflect to the database
+  reserved 1, 3 to 50; // other data fields
+  reserved 51, 53 to 60; // relationship fields
+
+  // data fields: from 1 to 50
+  string content = 2;
+
+  // relationship fields: from 51 to 60
+  string postId = 52;
+}

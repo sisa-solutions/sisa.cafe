@@ -1,24 +1,19 @@
 syntax = "proto3";
 
-option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Queries";
+option csharp_namespace = "Sisa.Blog.Api.V1.Comments.Queries";
 
-package sisa.blog.api.v1.posts.queries;
+package sisa.blog.api.v1.comments.queries;
 
 import "sisa/libs/data/params/filtering_params.proto";
 import "sisa/libs/data/params/sorting_params.proto";
 import "sisa/libs/data/params/paging_params.proto";
 
-message FindPostByIdQuery {
+message FindCommentByIdQuery {
   string id = 1;
 }
 
-message GetPostsQuery {
+message GetCommentsQuery {
   sisa.data.params.FilteringParams filter = 1;
   repeated sisa.data.params.SortingParams sortBy = 2;
-  sisa.data.params.PagingParams paging = 3;
-}
-
-message GetCommentsByPostIdQuery {
-  string postId = 1;
   sisa.data.params.PagingParams paging = 3;
 }

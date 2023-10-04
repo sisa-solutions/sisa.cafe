@@ -118,6 +118,9 @@ public class Post : FullAuditableAggregateRoot
         return true;
     }
 
+    public bool IsCommentAble()
+        => Status == PostStatus.PUBLISHED;
+
     public bool TryPublish(string? remarks)
         => TryChangeStatus(PostStatus.PUBLISHED, remarks);
 

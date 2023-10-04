@@ -11,6 +11,8 @@ import "sisa/services/blog/v1/posts/commands.proto";
 import "sisa/services/blog/v1/posts/queries.proto";
 import "sisa/services/blog/v1/posts/responses.proto";
 
+import "sisa/services/blog/v1/comments/responses.proto";
+
 service PostGrpcService {
   rpc GetPosts(sisa.blog.api.v1.posts.queries.GetPostsQuery) returns (sisa.blog.api.v1.posts.responses.ListPostsResponse) {
     option (google.api.http) = {
@@ -45,6 +47,18 @@ service PostGrpcService {
   rpc DeletePost(sisa.blog.api.v1.posts.commands.DeletePostCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/api/v1/posts/{id}"
+    };
+  }
+
+  rpc GetCommentsByPostId(sisa.blog.api.v1.posts.queries.GetCommentsByPostIdQuery) returns (sisa.blog.api.v1.comments.responses.ListCommentsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts/{id}/comments"
+    };
+  }
+
+  rpc CreateComment(sisa.blog.api.v1.posts.commands.CreateCommentCommand) returns (sisa.blog.api.v1.comments.responses.SingleCommentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/posts/{id}/comments"
     };
   }
 }

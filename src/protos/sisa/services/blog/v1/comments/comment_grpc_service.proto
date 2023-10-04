@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sisa.Blog.Api.V1.Comments";
+
+package sisa.blog.api.v1.comments;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+import "sisa/services/blog/v1/comments/commands.proto";
+import "sisa/services/blog/v1/comments/queries.proto";
+import "sisa/services/blog/v1/comments/responses.proto";
+
+service CommentGrpcService {
+  rpc GetComments(sisa.blog.api.v1.comments.queries.GetCommentsQuery) returns (sisa.blog.api.v1.comments.responses.ListCommentsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/comments"
+    };
+  }
+
+  rpc FindCommentById(sisa.blog.api.v1.comments.queries.FindCommentByIdQuery) returns (sisa.blog.api.v1.comments.responses.SingleCommentResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/comments/{id}"
+    };
+  }
+
+  rpc ReplyComment(sisa.blog.api.v1.comments.commands.ReplyCommentCommand) returns (sisa.blog.api.v1.comments.responses.SingleCommentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/comments/{id}/reply"
+    };
+  }
+
+  rpc UpdateComment(sisa.blog.api.v1.comments.commands.UpdateCommentCommand) returns (sisa.blog.api.v1.comments.responses.SingleCommentResponse) {
+    option (google.api.http) = {
+        put: "/api/v1/comments/{id}"
+    };
+  }
+
+  rpc DeleteComment(sisa.blog.api.v1.comments.commands.DeleteCommentCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/comments/{id}"
+    };
+  }
+}
