@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 
 using Sisa.Grpc.Helpers;
 using Sisa.Extensions;
+using System.Text.Json;
 
 namespace Sisa.Grpc.Interceptors;
 
@@ -302,18 +303,20 @@ public class ExceptionInterceptor(
                 new Metadata
                 {
                     { "x-error-code", domainException.ErrorCode },
-                    { "x-errors", domainException.ErrorCode },
+                    { "x-errors", JsonSerializer.Serialize(domainException.Errors) },
                 }
             );
         }
-
-        rpcException = new RpcException(
-            new Status(GrpcStatusCode.Internal, "An error occurred while processing the request", ex),
-            new Metadata
-            {
+        else
+        {
+            rpcException = new RpcException(
+                new Status(GrpcStatusCode.Internal, "An error occurred while processing the request", ex),
+                new Metadata
+                {
                 { "x-error-code", "500" },
-            }
-        );
+                }
+            );
+        }
 
         return rpcException;
     }

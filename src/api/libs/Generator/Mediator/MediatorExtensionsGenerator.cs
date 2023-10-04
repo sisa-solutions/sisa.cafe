@@ -41,8 +41,8 @@ public sealed class MediatorExtensionsGenerator : IIncrementalGenerator
                 .Any(x => DependencyInjection.Constants.REGEX_CLASSES.Any(y => Regex.IsMatch(x, y)))
 
             && classDeclarationSyntax?.BaseList?.Types.Count > 0
-                && classDeclarationSyntax.BaseList.Types
-                    .Any(x => Constants.REQUEST_HANDLERS.Any(y => x.ToString().StartsWith(y)));
+            && classDeclarationSyntax.BaseList.Types
+                .Any(x => Constants.REQUEST_HANDLERS.Any(y => x.ToString().StartsWith(y)));
     }
 
     private static DependencyCollectionModel GetTargetForGeneration(GeneratorSyntaxContext context)

@@ -40,9 +40,8 @@ public sealed class DispatcherExtensionsGenerator : IIncrementalGenerator
             && !classDeclarationSyntax.Modifiers.Any(x => Constants.INVALID_MODIFIERS.Contains(x.Kind()))
 
             && classDeclarationSyntax?.BaseList?.Types.Count > 0
-
-                && classDeclarationSyntax.BaseList.Types
-                    .Any(x => Constants.REQUEST_HANDLERS.Any(y => x.ToString().StartsWith(y)));
+            && classDeclarationSyntax.BaseList.Types
+                .Any(x => Constants.REQUEST_HANDLERS.Any(y => x.ToString().StartsWith(y)));
     }
 
     private static CollectionModel GetTargetForGeneration(GeneratorSyntaxContext context)
