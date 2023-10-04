@@ -90,19 +90,10 @@ public class CreatePostCommandHandler(
         IEnumerable<Tag> existingTags = await tagRepository
             .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
 
-        IEnumerable<string> existingTagSlugs = existingTags
-            .Select(x => x.Slug);
+        var requestTags = command.Tags
+            .Select(tag => existingTags.FirstOrDefault(x => x.Slug == tag) ?? new Tag(tag, tag));
 
-        IEnumerable<string> nonExistingTagSlugs = command.Tags
-            .Except(existingTagSlugs);
-
-        IEnumerable<Tag> nonExistingTagsEntities = nonExistingTagSlugs
-            .Select(x => new Tag(x, x));
-
-        IEnumerable<Tag> tagsToAssociate = existingTags
-            .Union(nonExistingTagsEntities);
-
-        post.AddTags(tagsToAssociate);
+        post.AddTags(requestTags);
 
         repository.Add(post);
 

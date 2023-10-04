@@ -36,7 +36,6 @@
     <Protobuf
       ProtoRoot="..\..\..\..\protos"
       Include="..\..\..\..\protos\sisa\libs\**\*.proto"
-      GrpcServices="None"
       ProtoCompile="false" />
     <Protobuf
       ProtoRoot="..\..\..\..\protos"

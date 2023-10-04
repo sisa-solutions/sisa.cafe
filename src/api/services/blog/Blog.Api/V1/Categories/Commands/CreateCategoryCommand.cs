@@ -18,7 +18,7 @@ public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCat
     {
         RuleFor(x => x.ParentId)
             .NotEmpty()
-            .Must((request, _) => request.ParsedParentId.HasValue && request.ParsedParentId.Value != Guid.Empty)
+            .Must((x, _) => x.ParsedParentId.HasValue && x.ParsedParentId.Value != Guid.Empty)
                 .When((x, _) => x.ParsedParentId.HasValue)
                 .WithMessage("Invalid Parent Id");
 

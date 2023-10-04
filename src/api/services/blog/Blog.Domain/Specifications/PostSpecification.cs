@@ -12,7 +12,6 @@ public sealed class PostSpecification : Specification<Post>
         Builder
             .Include(x => x.Category)
             .Include(x => x.Tags)
-            .Include(x => x.PostTags)
             .Where(x => x.Id == id);
 
         Builder.AsSplitQuery();

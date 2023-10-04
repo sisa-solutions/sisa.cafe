@@ -2,7 +2,6 @@
 
 public abstract class BaseEntity : IEntity, IDomainEventEntity
 {
-
     private readonly HashSet<IEvent> _domainEvents;
     public IReadOnlyCollection<IEvent> DomainEvents => _domainEvents;
 

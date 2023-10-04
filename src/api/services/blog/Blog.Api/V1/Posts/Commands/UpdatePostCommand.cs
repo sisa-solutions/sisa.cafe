@@ -82,9 +82,9 @@ public class UpdatePostCommandHandler(
         if (Guid.TryParse(command.CategoryId, out Guid categoryId) && categoryId != post.CategoryId)
         {
             var categoryExists = await categoryRepository
-                .ExistAsync(x => x.Id == categoryId, cancellationToken);
+                .FindAsync(categoryId, cancellationToken);
 
-            if (!categoryExists)
+            if (categoryExists == null)
             {
                 logger.LogWarning("Category with id {id} not found", categoryId);
 
@@ -94,57 +94,13 @@ public class UpdatePostCommandHandler(
             post.ChangeCategory(categoryId);
         }
 
-        // IEnumerable<Tag> existingTags = await tagRepository
-        //     .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
-
-        // IEnumerable<string> nonExistingTags = command.Tags
-        //     .Where(x => !existingTags.Any(y => y.Slug == x));
-
-        // IEnumerable<Tag> nonExistingTagsEntities = nonExistingTags
-        //     .Select(x => new Tag(x, x));
-
-        // // await tagRepository.AddRangeAsync(nonExistingTagsEntities, cancellationToken);
-
-        // IEnumerable<Tag> tagsToAssociate = existingTags
-        //     .Where(x => !post.Tags.Any(y => y.Id == x.Id))
-        //     .Union(nonExistingTagsEntities);
-
-        // List<Tag> tagsToRemove = post.Tags
-        //     .Where(x => !command.Tags.Contains(x.Slug))
-        //     .ToList();
-
-        // post.RemoveTags(tagsToRemove);
-        // post.AddTags(tagsToAssociate);
-
         IEnumerable<Tag> existingTags = await tagRepository
             .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
 
-        IEnumerable<string> existingTagSlugs = existingTags
-            .Select(x => x.Slug);
+        var requestTags = command.Tags
+            .Select(tag => existingTags.FirstOrDefault(x => x.Slug == tag) ?? new Tag(tag, tag));
 
-        IEnumerable<string> nonExistingTagSlugs = command.Tags
-            .Except(existingTagSlugs);
-
-        IEnumerable<Tag> nonExistingTagsEntities = nonExistingTagSlugs
-            .Select(x => new Tag(x, x));
-
-        IEnumerable<string> nonAssociatedTagSlugs = command.Tags
-            .Except(post.TagSlugs);
-
-        IEnumerable<Tag> nonAssociatedTags = nonAssociatedTagSlugs
-            .Join(existingTags, l => l, r => r.Slug, (l, r) => r);
-
-        IEnumerable<string> tagSlugsToUnAssociate = post.TagSlugs
-            .Except(command.Tags);
-
-        IEnumerable<Tag> tagsToBeRemoved = post.Tags
-            .Where(x => tagSlugsToUnAssociate.Contains(x.Slug));
-
-        IEnumerable<Tag> tagsToAssociate = nonAssociatedTags
-            .Union(nonExistingTagsEntities);
-
-        post.AddTags(tagsToAssociate);
-        post.RemoveTags(tagsToBeRemoved);
+        post.UpdateTags(requestTags);
 
         repository.Update(post);
 

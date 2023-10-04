@@ -72,20 +72,17 @@ public class Post : FullAuditableAggregateRoot
 
     #region Status
 
-    public void AddTags(IEnumerable<Tag> tags)
+    public void AddTags(IEnumerable<Tag> requestTags)
     {
-        _tags.AddRange(tags);
+        _tags.AddRange(requestTags);
 
-        // _postTags.AddRange(tags.Select(x => new PostTag(Id, x.Id)));
         SyncTagSlugs();
     }
 
-    public void RemoveTags(IEnumerable<Tag> tags)
+    public void UpdateTags(IEnumerable<Tag> requestTags)
     {
-        _tags.RemoveAll(x => tags.Select(y => y.Id).Contains(x.Id));
-        // _postTags.RemoveAll(x => x.PostId == Id && tags.Select(y => y.Id).Contains(x.TagId));
-
-        _postTags.RemoveAll(x => tags.Select(y => y.Id).Contains(x.TagId));
+        _tags.Clear();
+        _tags.AddRange(requestTags);
 
         SyncTagSlugs();
     }

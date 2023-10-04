@@ -79,14 +79,11 @@ public class SaveChangesInterceptor(IIdentityService identityService, IEventPubl
 
         foreach (var entry in editingEntries)
         {
-            // if (PatchEntityData(entry))
-            // {
-            //     if (entry.Entity is IUpdateAuditing editableEntity)
-            //         editableEntity.AuditUpdate(_identityService.UserId);
-            // }
-
-            if (entry.Entity is IUpdateAuditing editableEntity)
-                editableEntity.AuditUpdate(identityService.UserId);
+            if (PatchEntityData(entry))
+            {
+                if (entry.Entity is IUpdateAuditing editableEntity)
+                    editableEntity.AuditUpdate(identityService.UserId);
+            }
         }
 
         var softDeletingEntries = dbContext.ChangeTracker.Entries()
@@ -135,7 +132,7 @@ public class SaveChangesInterceptor(IIdentityService identityService, IEventPubl
 
     #endregion
 
-    private bool PatchEntityData(EntityEntry entry)
+    private static bool PatchEntityData(EntityEntry entry)
     {
         PropertyValues originalValues = entry.OriginalValues;
         PropertyValues currentValues = entry.CurrentValues;
@@ -146,14 +143,7 @@ public class SaveChangesInterceptor(IIdentityService identityService, IEventPubl
 
         foreach (var propertyName in patchingPropertiesName)
         {
-            if (originalValues[propertyName] != currentValues[propertyName])
-            {
-                entry.Property(propertyName).IsModified = true;
-            }
-            else
-            {
-                entry.Property(propertyName).IsModified = false;
-            }
+            entry.Property(propertyName).IsModified = !Equals(originalValues[propertyName], currentValues[propertyName]);
         }
 
         return entry.Properties.Any(x => x.IsModified);

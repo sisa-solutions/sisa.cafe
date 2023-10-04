@@ -177,7 +177,7 @@ public class Specification<TEntity> : ISpecification<TEntity>
         => EnableTracking = false;
 
     public virtual void AsSplitQuery()
-        => EnableTracking = false;
+        => EnableSplitQuery = false;
 
     /// <summary>
     /// Tag is a string that can be used to tag a specification
