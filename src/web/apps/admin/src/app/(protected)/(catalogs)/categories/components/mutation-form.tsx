@@ -76,15 +76,15 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         parentId: parent?.id ?? '',
       });
 
-      router.push(`/categories?_s=${randomId()}`);
+      goBack();
     } catch (error) {
       console.log(error);
       alert(error);
     }
   });
 
-  const onCancel = () => {
-    router.push('/categories');
+  const goBack = () => {
+    router.push(`/categories?_s=${randomId()}`);
   };
 
   const onInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
@@ -123,7 +123,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         <SubmitButton submit={onSubmit} disabled={pending} loading={pending}>
           Save
         </SubmitButton>
-        <CancelButton cancel={onCancel} disabled={pending}>
+        <CancelButton cancel={goBack} disabled={pending}>
           Cancel
         </CancelButton>
       </FormActions>
