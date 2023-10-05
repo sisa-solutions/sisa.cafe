@@ -1058,7 +1058,7 @@ __metadata:
     protobufjs: "npm:^7.2.5"
     react: "npm:^18.2.0"
     swr: "npm:^2.2.4"
-    ts-proto: "npm:^1.159.2"
+    ts-proto: "npm:^1.160.0"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
@@ -7400,7 +7400,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-proto@npm:^1.159.2":
+"ts-proto@npm:^1.160.0":
   version: 1.160.0
   resolution: "ts-proto@npm:1.160.0"
   dependencies:

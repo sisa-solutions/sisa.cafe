@@ -72,12 +72,12 @@ const DataGrid = ({
       // cell: ({ getValue }) => getValue()?.toLocaleDateString(),
       enableSorting: true,
     }),
-    columnHelper.accessor('creator.timestamp', {
-      id: 'creator.timestamp',
-      header: () => 'Created At',
-      cell: ({ getValue }) => getValue()?.toLocaleDateString(),
-      enableSorting: true,
-    }),
+    // columnHelper.accessor('creator.timestamp', {
+    //   id: 'creator.timestamp',
+    //   header: () => 'Created At',
+    //   cell: ({ getValue }) => getValue()?.toLocaleDateString(),
+    //   enableSorting: true,
+    // }),
     // columnHelper.accessor('updater', {
     //   id: 'updater.id',
     //   header: () => 'updater',

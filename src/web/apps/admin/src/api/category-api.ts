@@ -10,10 +10,11 @@ import {
   FindCategoryByIdQuery,
   ListCategoriesResponse,
   GetCategoriesQuery,
+  Combinator,
+  Operator,
 } from '@sisa/api';
 
 import { API_DNS, channel } from './common';
-import { revalidatePath } from 'next/cache';
 
 const client = new CategoryGrpcServiceClient(API_DNS, ChannelCredentials.createInsecure(), {
   channelOverride: channel,
@@ -36,7 +37,43 @@ export const getCategories = (request: GetCategoriesQuery) => {
     );
   });
 
-  revalidatePath('/categories');
+  return response;
+};
+
+export const getParentCategories = (name: string) => {
+  const response = new Promise<ListCategoriesResponse>((resolve, reject) => {
+    client.getCategories(
+      {
+        filter: {
+          combinator: Combinator.COMBINATOR_UNSPECIFIED,
+          not: false,
+          rules: [
+            {
+              combinator: Combinator.COMBINATOR_UNSPECIFIED,
+              not: false,
+              rules: [],
+              field: 'Name',
+              operator: Operator.OPERATOR_CONTAINS,
+              value: name,
+            },
+          ],
+        },
+        sortBy: [],
+        paging: {
+          pageIndex: 0,
+          pageSize: 10,
+        },
+      },
+      (err, response) => {
+        if (err) {
+          reject(err);
+        }
+        if (response) {
+          resolve(response);
+        }
+      }
+    );
+  });
 
   return response;
 };

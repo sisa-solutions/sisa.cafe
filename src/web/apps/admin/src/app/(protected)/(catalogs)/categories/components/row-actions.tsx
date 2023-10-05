@@ -13,13 +13,12 @@ import { AlertCircleIcon, PencilLineIcon, XIcon } from 'lucide-react';
 
 import { ConfirmDialog, LinkIconButton } from '@sisa/components';
 import { type CategoryResponse } from '@sisa/api';
-import { useToggle } from '@sisa/utils';
+import { randomId, useToggle } from '@sisa/utils';
 
 import { deleteCategory } from 'api/category-api';
 
 const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ row }) => {
   const router = useRouter();
-
   const { trigger, isMutating } = useMutation(
     ['/api/v1/categories/delete', row.original.id],
     ([_, id]) =>
@@ -42,7 +41,8 @@ const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ 
     await trigger();
 
     closeConfirmDialog();
-    router.refresh();
+
+    router.push(`/categories?_s=${randomId()}`);
   };
 
   return (

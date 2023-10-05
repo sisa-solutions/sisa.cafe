@@ -27,12 +27,10 @@ import {
   type CategoryInfoResponse,
   type CreateCategoryCommand,
   type UpdateCategoryCommand,
-  Combinator,
-  Operator,
-  SortDirection,
 } from '@sisa/api';
 
-import { getCategories } from 'api/category-api';
+import { getParentCategories } from 'api/category-api';
+import { randomId } from '@sisa/utils';
 
 type MutationValues = (CreateCategoryCommand | UpdateCategoryCommand) & {
   parent?: CategoryInfoResponse;
@@ -53,32 +51,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     },
     isLoading,
   } = useQuery(['/api/v1/categories', searchParentCategoryName], ([_, name]) =>
-    getCategories({
-      filter: {
-        combinator: Combinator.COMBINATOR_UNSPECIFIED,
-        not: false,
-        rules: [
-          {
-            combinator: Combinator.COMBINATOR_UNSPECIFIED,
-            not: false,
-            rules: [],
-            field: 'Name',
-            operator: Operator.OPERATOR_CONTAINS,
-            value: name,
-          },
-        ],
-      },
-      sortBy: [
-        {
-          field: 'Name',
-          sort: SortDirection.SORT_DIRECTION_ASC,
-        },
-      ],
-      paging: {
-        pageIndex: 0,
-        pageSize: 10,
-      },
-    })
+    getParentCategories(name)
   );
 
   const router = useRouter();
@@ -103,7 +76,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         parentId: parent?.id ?? '',
       });
 
-      router.push('/categories');
+      router.push(`/categories?_s=${randomId()}`);
     } catch (error) {
       console.log(error);
       alert(error);
@@ -115,6 +88,8 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   };
 
   const onInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
+    if (!newValue) return;
+
     setSearchParentCategoryName(newValue);
   };
 

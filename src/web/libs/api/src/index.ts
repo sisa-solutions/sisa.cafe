@@ -15,13 +15,12 @@ export { Combinator } from './grpc/generated/sisa/libs/common/enums/combinator';
 export { Operator } from './grpc/generated/sisa/libs/common/enums/operator';
 export { SortDirection } from './grpc/generated/sisa/libs/common/enums/sort_direction';
 
-export {
+export type {
   FilterRule,
   FilteringParams,
 } from './grpc/generated/sisa/libs/data/params/filtering_params';
 export { SortingParams } from './grpc/generated/sisa/libs/data/params/sorting_params';
 export { PagingParams } from './grpc/generated/sisa/libs/data/params/paging_params';
-export { QueryParams } from './grpc/generated/sisa/libs/data/params/query_params';
 
 export type { PagingResponse } from './grpc/generated/sisa/libs/common/responses/paging_response';
 
