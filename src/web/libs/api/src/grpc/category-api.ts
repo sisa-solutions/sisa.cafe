@@ -37,44 +37,6 @@ export const getCategories = (request: GetCategoriesQuery) => {
   return response;
 };
 
-export const getParentCategories = (name: string) => {
-  const response = new Promise<ListCategoriesResponse>((resolve, reject) => {
-    client.getCategories(
-      {
-        filter: {
-          combinator: Combinator.COMBINATOR_UNSPECIFIED,
-          not: false,
-          rules: [
-            {
-              combinator: Combinator.COMBINATOR_UNSPECIFIED,
-              not: false,
-              rules: [],
-              field: 'Name',
-              operator: Operator.OPERATOR_CONTAINS,
-              value: name,
-            },
-          ],
-        },
-        sortBy: [],
-        paging: {
-          pageIndex: 0,
-          pageSize: 10,
-        },
-      },
-      (err, response) => {
-        if (err) {
-          reject(err);
-        }
-        if (response) {
-          resolve(response);
-        }
-      }
-    );
-  });
-
-  return response;
-};
-
 export const findCategoryById = (request: FindCategoryByIdQuery) => {
   return new Promise<CategoryResponse>((resolve, reject) => {
     client.findCategoryById(request, (err, { value }) => {

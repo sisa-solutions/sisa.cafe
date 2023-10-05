@@ -7,6 +7,13 @@ export type {
   FilteringParams,
 } from './generated/sisa/libs/data/params/filtering_params';
 export { SortingParams } from './generated/sisa/libs/data/params/sorting_params';
-export { PagingParams } from './generated/sisa/libs/data/params/paging_params';
+import { PagingParams } from './generated/sisa/libs/data/params/paging_params';
+
+export { PagingParams };
 
 export type { PagingResponse } from './generated/sisa/libs/common/responses/paging_response';
+
+export const DEFAULT_PAGING_PARAMS: PagingParams = {
+  pageIndex: 0,
+  pageSize: 10,
+};

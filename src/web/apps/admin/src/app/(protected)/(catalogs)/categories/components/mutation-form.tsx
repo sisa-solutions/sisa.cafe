@@ -27,7 +27,11 @@ import {
   type CategoryInfoResponse,
   type CreateCategoryCommand,
   type UpdateCategoryCommand,
-  getParentCategories,
+  getCategories,
+  Combinator,
+  SortDirection,
+  Operator,
+  DEFAULT_PAGING_PARAMS,
 } from '@sisa/api';
 
 import { randomId } from '@sisa/utils';
@@ -39,7 +43,6 @@ type MutationValues = (CreateCategoryCommand | UpdateCategoryCommand) & {
 export type MutationFormProps = {
   trigger: (data: MutationValues) => Promise<CategoryResponse>;
   defaultValues?: MutationValues;
-  mode?: 'CREATE' | 'UPDATE';
 };
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
@@ -51,7 +54,29 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     },
     isLoading,
   } = useQuery(['/api/v1/categories', searchParentCategoryName], ([_, name]) =>
-    getParentCategories(name)
+    getCategories({
+      filter: {
+        combinator: Combinator.COMBINATOR_AND,
+        not: false,
+        rules: [
+          {
+            combinator: Combinator.COMBINATOR_UNSPECIFIED,
+            not: false,
+            rules: [],
+            field: 'Name',
+            operator: Operator.OPERATOR_CONTAINS,
+            value: name,
+          },
+        ],
+      },
+      sortBy: [
+        {
+          field: 'Name',
+          sort: SortDirection.SORT_DIRECTION_ASC,
+        },
+      ],
+      paging: DEFAULT_PAGING_PARAMS,
+    })
   );
 
   const router = useRouter();
@@ -88,8 +113,6 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   };
 
   const onInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
-    if (!newValue) return;
-
     setSearchParentCategoryName(newValue);
   };
 
