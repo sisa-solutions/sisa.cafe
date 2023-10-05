@@ -2,19 +2,29 @@
 import _m0 from "protobufjs/minimal";
 import { StringValue } from "../../../../../google/protobuf/wrappers";
 
-export const protobufPackage = "sisa.blog.api";
+export const protobufPackage = "sisa.blog.api.v1.tags.commands";
 
 export interface CreateTagCommand {
+  /** data fields: from 1 to 50 */
   name: string;
   slug: string;
-  description: string | undefined;
+  description:
+    | string
+    | undefined;
+  /** relationship fields: from 51 to 60 */
+  parentId: string | undefined;
 }
 
 export interface UpdateTagCommand {
+  /** data fields: from 1 to 50 */
   id: string;
   name: string;
   slug: string;
-  description: string | undefined;
+  description:
+    | string
+    | undefined;
+  /** relationship fields: from 51 to 60 */
+  parentId: string | undefined;
 }
 
 export interface DeleteTagCommand {
@@ -22,19 +32,22 @@ export interface DeleteTagCommand {
 }
 
 function createBaseCreateTagCommand(): CreateTagCommand {
-  return { name: "", slug: "", description: undefined };
+  return { name: "", slug: "", description: undefined, parentId: undefined };
 }
 
 export const CreateTagCommand = {
   encode(message: CreateTagCommand, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
-      writer.uint32(10).string(message.name);
+      writer.uint32(18).string(message.name);
     }
     if (message.slug !== "") {
-      writer.uint32(18).string(message.slug);
+      writer.uint32(26).string(message.slug);
     }
     if (message.description !== undefined) {
-      StringValue.encode({ value: message.description! }, writer.uint32(26).fork()).ldelim();
+      StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.parentId !== undefined) {
+      StringValue.encode({ value: message.parentId! }, writer.uint32(410).fork()).ldelim();
     }
     return writer;
   },
@@ -46,26 +59,33 @@ export const CreateTagCommand = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.name = reader.string();
-          continue;
         case 2:
           if (tag !== 18) {
             break;
           }
 
-          message.slug = reader.string();
+          message.name = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
 
+          message.slug = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.description = StringValue.decode(reader, reader.uint32()).value;
+          continue;
+        case 51:
+          if (tag !== 410) {
+            break;
+          }
+
+          message.parentId = StringValue.decode(reader, reader.uint32()).value;
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -78,9 +98,10 @@ export const CreateTagCommand = {
 
   fromJSON(object: any): CreateTagCommand {
     return {
-      name: isSet(object.name) ? String(object.name) : "",
-      slug: isSet(object.slug) ? String(object.slug) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
+      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
     };
   },
 
@@ -95,6 +116,9 @@ export const CreateTagCommand = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
+    if (message.parentId !== undefined) {
+      obj.parentId = message.parentId;
+    }
     return obj;
   },
 
@@ -106,12 +130,13 @@ export const CreateTagCommand = {
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
+    message.parentId = object.parentId ?? undefined;
     return message;
   },
 };
 
 function createBaseUpdateTagCommand(): UpdateTagCommand {
-  return { id: "", name: "", slug: "", description: undefined };
+  return { id: "", name: "", slug: "", description: undefined, parentId: undefined };
 }
 
 export const UpdateTagCommand = {
@@ -127,6 +152,9 @@ export const UpdateTagCommand = {
     }
     if (message.description !== undefined) {
       StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.parentId !== undefined) {
+      StringValue.encode({ value: message.parentId! }, writer.uint32(410).fork()).ldelim();
     }
     return writer;
   },
@@ -166,6 +194,13 @@ export const UpdateTagCommand = {
 
           message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
+        case 51:
+          if (tag !== 410) {
+            break;
+          }
+
+          message.parentId = StringValue.decode(reader, reader.uint32()).value;
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -177,10 +212,11 @@ export const UpdateTagCommand = {
 
   fromJSON(object: any): UpdateTagCommand {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      slug: isSet(object.slug) ? String(object.slug) : "",
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
+      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
     };
   },
 
@@ -198,6 +234,9 @@ export const UpdateTagCommand = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
+    if (message.parentId !== undefined) {
+      obj.parentId = message.parentId;
+    }
     return obj;
   },
 
@@ -210,6 +249,7 @@ export const UpdateTagCommand = {
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
+    message.parentId = object.parentId ?? undefined;
     return message;
   },
 };
@@ -250,7 +290,7 @@ export const DeleteTagCommand = {
   },
 
   fromJSON(object: any): DeleteTagCommand {
-    return { id: isSet(object.id) ? String(object.id) : "" };
+    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
   },
 
   toJSON(message: DeleteTagCommand): unknown {
@@ -274,7 +314,8 @@ export const DeleteTagCommand = {
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 

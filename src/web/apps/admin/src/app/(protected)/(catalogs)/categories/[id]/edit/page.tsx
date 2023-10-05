@@ -2,7 +2,7 @@ import { PageContent, PageHeader, PageLayout, PageTitle } from '@sisa/components
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 
-import { findCategoryById, updateCategory } from 'api/category-api';
+import { findCategoryById, updateCategory, getCategories } from 'api/category-api';
 import MutationForm from '../../components/mutation-form';
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const EditCategoryPage = async ({ params: { id } }: Props) => {
-  const data = await findCategoryById({id});
+  const data = await findCategoryById({ id });
 
   return (
     <PageLayout>
@@ -31,7 +31,14 @@ const EditCategoryPage = async ({ params: { id } }: Props) => {
         <PageTitle>Edit Category</PageTitle>
       </PageHeader>
       <PageContent>
-        <MutationForm defaultValues={data} trigger={updateCategory} />
+        <MutationForm
+          defaultValues={{
+            ...data,
+            parentId: data.parent?.id || undefined,
+          }}
+          trigger={updateCategory}
+          getCategories={getCategories}
+        />
       </PageContent>
     </PageLayout>
   );

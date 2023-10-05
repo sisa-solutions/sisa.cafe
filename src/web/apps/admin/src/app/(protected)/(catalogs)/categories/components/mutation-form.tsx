@@ -22,11 +22,14 @@ import {
   CancelButton,
 } from '@sisa/components';
 
-import type {
-  CategoryResponse,
-  CategoryInfoResponse,
-  CreateCategoryCommand,
-  UpdateCategoryCommand,
+import {
+  type CategoryResponse,
+  type CategoryInfoResponse,
+  type CreateCategoryCommand,
+  type UpdateCategoryCommand,
+  Combinator,
+  Operator,
+  SortDirection,
 } from '@sisa/api';
 
 import { getCategories } from 'api/category-api';
@@ -52,8 +55,25 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   } = useQuery(['/api/v1/categories', searchParentCategoryName], ([_, name]) =>
     getCategories({
       filter: {
-        name,
+        combinator: Combinator.COMBINATOR_UNSPECIFIED,
+        not: false,
+        rules: [
+          {
+            combinator: Combinator.COMBINATOR_UNSPECIFIED,
+            not: false,
+            rules: [],
+            field: 'Name',
+            operator: Operator.OPERATOR_CONTAINS,
+            value: name,
+          },
+        ],
       },
+      sortBy: [
+        {
+          field: 'Name',
+          sort: SortDirection.SORT_DIRECTION_ASC,
+        },
+      ],
       paging: {
         pageIndex: 0,
         pageSize: 10,
@@ -92,7 +112,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
 
   const onCancel = () => {
     router.push('/categories');
-  }
+  };
 
   const onInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
     setSearchParentCategoryName(newValue);

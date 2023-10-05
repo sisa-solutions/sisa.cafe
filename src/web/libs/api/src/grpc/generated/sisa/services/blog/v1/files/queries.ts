@@ -4,38 +4,34 @@ import { FilteringParams } from "../../../../libs/data/params/filtering_params";
 import { PagingParams } from "../../../../libs/data/params/paging_params";
 import { SortingParams } from "../../../../libs/data/params/sorting_params";
 
-export const protobufPackage = "sisa.blog.api.v1.tags.queries";
+export const protobufPackage = "sisa.blog.api.v1.files.queries";
 
-export interface FindTagByIdQuery {
+export interface FindFileByIdQuery {
   id: string;
 }
 
-export interface FindTagBySlugQuery {
-  slug: string;
-}
-
-export interface GetTagsQuery {
+export interface GetFilesQuery {
   filter: FilteringParams | undefined;
   sortBy: SortingParams[];
   paging: PagingParams | undefined;
 }
 
-function createBaseFindTagByIdQuery(): FindTagByIdQuery {
+function createBaseFindFileByIdQuery(): FindFileByIdQuery {
   return { id: "" };
 }
 
-export const FindTagByIdQuery = {
-  encode(message: FindTagByIdQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FindFileByIdQuery = {
+  encode(message: FindFileByIdQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FindTagByIdQuery {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FindFileByIdQuery {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFindTagByIdQuery();
+    const message = createBaseFindFileByIdQuery();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -55,11 +51,11 @@ export const FindTagByIdQuery = {
     return message;
   },
 
-  fromJSON(object: any): FindTagByIdQuery {
+  fromJSON(object: any): FindFileByIdQuery {
     return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
   },
 
-  toJSON(message: FindTagByIdQuery): unknown {
+  toJSON(message: FindFileByIdQuery): unknown {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
@@ -67,79 +63,22 @@ export const FindTagByIdQuery = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<FindTagByIdQuery>, I>>(base?: I): FindTagByIdQuery {
-    return FindTagByIdQuery.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<FindFileByIdQuery>, I>>(base?: I): FindFileByIdQuery {
+    return FindFileByIdQuery.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<FindTagByIdQuery>, I>>(object: I): FindTagByIdQuery {
-    const message = createBaseFindTagByIdQuery();
+  fromPartial<I extends Exact<DeepPartial<FindFileByIdQuery>, I>>(object: I): FindFileByIdQuery {
+    const message = createBaseFindFileByIdQuery();
     message.id = object.id ?? "";
     return message;
   },
 };
 
-function createBaseFindTagBySlugQuery(): FindTagBySlugQuery {
-  return { slug: "" };
-}
-
-export const FindTagBySlugQuery = {
-  encode(message: FindTagBySlugQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.slug !== "") {
-      writer.uint32(10).string(message.slug);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): FindTagBySlugQuery {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFindTagBySlugQuery();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.slug = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): FindTagBySlugQuery {
-    return { slug: isSet(object.slug) ? globalThis.String(object.slug) : "" };
-  },
-
-  toJSON(message: FindTagBySlugQuery): unknown {
-    const obj: any = {};
-    if (message.slug !== "") {
-      obj.slug = message.slug;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FindTagBySlugQuery>, I>>(base?: I): FindTagBySlugQuery {
-    return FindTagBySlugQuery.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FindTagBySlugQuery>, I>>(object: I): FindTagBySlugQuery {
-    const message = createBaseFindTagBySlugQuery();
-    message.slug = object.slug ?? "";
-    return message;
-  },
-};
-
-function createBaseGetTagsQuery(): GetTagsQuery {
+function createBaseGetFilesQuery(): GetFilesQuery {
   return { filter: undefined, sortBy: [], paging: undefined };
 }
 
-export const GetTagsQuery = {
-  encode(message: GetTagsQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const GetFilesQuery = {
+  encode(message: GetFilesQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.filter !== undefined) {
       FilteringParams.encode(message.filter, writer.uint32(10).fork()).ldelim();
     }
@@ -152,10 +91,10 @@ export const GetTagsQuery = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetTagsQuery {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetFilesQuery {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetTagsQuery();
+    const message = createBaseGetFilesQuery();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -189,7 +128,7 @@ export const GetTagsQuery = {
     return message;
   },
 
-  fromJSON(object: any): GetTagsQuery {
+  fromJSON(object: any): GetFilesQuery {
     return {
       filter: isSet(object.filter) ? FilteringParams.fromJSON(object.filter) : undefined,
       sortBy: globalThis.Array.isArray(object?.sortBy) ? object.sortBy.map((e: any) => SortingParams.fromJSON(e)) : [],
@@ -197,7 +136,7 @@ export const GetTagsQuery = {
     };
   },
 
-  toJSON(message: GetTagsQuery): unknown {
+  toJSON(message: GetFilesQuery): unknown {
     const obj: any = {};
     if (message.filter !== undefined) {
       obj.filter = FilteringParams.toJSON(message.filter);
@@ -211,11 +150,11 @@ export const GetTagsQuery = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetTagsQuery>, I>>(base?: I): GetTagsQuery {
-    return GetTagsQuery.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<GetFilesQuery>, I>>(base?: I): GetFilesQuery {
+    return GetFilesQuery.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetTagsQuery>, I>>(object: I): GetTagsQuery {
-    const message = createBaseGetTagsQuery();
+  fromPartial<I extends Exact<DeepPartial<GetFilesQuery>, I>>(object: I): GetFilesQuery {
+    const message = createBaseGetFilesQuery();
     message.filter = (object.filter !== undefined && object.filter !== null)
       ? FilteringParams.fromPartial(object.filter)
       : undefined;

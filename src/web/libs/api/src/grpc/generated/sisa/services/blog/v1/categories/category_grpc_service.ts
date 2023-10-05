@@ -10,15 +10,15 @@ import type {
 } from "@grpc/grpc-js";
 import { Empty } from "../../../../../google/protobuf/empty";
 import { CreateCategoryCommand, DeleteCategoryCommand, UpdateCategoryCommand } from "./commands";
-import { FindCategoryByIdQuery, GetCategoriesQuery } from "./queries";
+import { FindCategoryByIdQuery, FindCategoryBySlugQuery, GetCategoriesQuery } from "./queries";
 import { ListCategoriesResponse, SingleCategoryResponse } from "./responses";
 
-export const protobufPackage = "sisa.blog.api";
+export const protobufPackage = "sisa.blog.api.v1.categories";
 
 export type CategoryGrpcServiceService = typeof CategoryGrpcServiceService;
 export const CategoryGrpcServiceService = {
   getCategories: {
-    path: "/sisa.blog.api.CategoryGrpcService/GetCategories",
+    path: "/sisa.blog.api.v1.categories.CategoryGrpcService/GetCategories",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: GetCategoriesQuery) => Buffer.from(GetCategoriesQuery.encode(value).finish()),
@@ -27,7 +27,7 @@ export const CategoryGrpcServiceService = {
     responseDeserialize: (value: Buffer) => ListCategoriesResponse.decode(value),
   },
   findCategoryById: {
-    path: "/sisa.blog.api.CategoryGrpcService/FindCategoryById",
+    path: "/sisa.blog.api.v1.categories.CategoryGrpcService/FindCategoryById",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: FindCategoryByIdQuery) => Buffer.from(FindCategoryByIdQuery.encode(value).finish()),
@@ -35,8 +35,17 @@ export const CategoryGrpcServiceService = {
     responseSerialize: (value: SingleCategoryResponse) => Buffer.from(SingleCategoryResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer) => SingleCategoryResponse.decode(value),
   },
+  findCategoryBySlug: {
+    path: "/sisa.blog.api.v1.categories.CategoryGrpcService/FindCategoryBySlug",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: FindCategoryBySlugQuery) => Buffer.from(FindCategoryBySlugQuery.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => FindCategoryBySlugQuery.decode(value),
+    responseSerialize: (value: SingleCategoryResponse) => Buffer.from(SingleCategoryResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => SingleCategoryResponse.decode(value),
+  },
   createCategory: {
-    path: "/sisa.blog.api.CategoryGrpcService/CreateCategory",
+    path: "/sisa.blog.api.v1.categories.CategoryGrpcService/CreateCategory",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: CreateCategoryCommand) => Buffer.from(CreateCategoryCommand.encode(value).finish()),
@@ -45,7 +54,7 @@ export const CategoryGrpcServiceService = {
     responseDeserialize: (value: Buffer) => SingleCategoryResponse.decode(value),
   },
   updateCategory: {
-    path: "/sisa.blog.api.CategoryGrpcService/UpdateCategory",
+    path: "/sisa.blog.api.v1.categories.CategoryGrpcService/UpdateCategory",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: UpdateCategoryCommand) => Buffer.from(UpdateCategoryCommand.encode(value).finish()),
@@ -54,7 +63,7 @@ export const CategoryGrpcServiceService = {
     responseDeserialize: (value: Buffer) => SingleCategoryResponse.decode(value),
   },
   deleteCategory: {
-    path: "/sisa.blog.api.CategoryGrpcService/DeleteCategory",
+    path: "/sisa.blog.api.v1.categories.CategoryGrpcService/DeleteCategory",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: DeleteCategoryCommand) => Buffer.from(DeleteCategoryCommand.encode(value).finish()),
@@ -67,6 +76,7 @@ export const CategoryGrpcServiceService = {
 export interface CategoryGrpcServiceServer extends UntypedServiceImplementation {
   getCategories: handleUnaryCall<GetCategoriesQuery, ListCategoriesResponse>;
   findCategoryById: handleUnaryCall<FindCategoryByIdQuery, SingleCategoryResponse>;
+  findCategoryBySlug: handleUnaryCall<FindCategoryBySlugQuery, SingleCategoryResponse>;
   createCategory: handleUnaryCall<CreateCategoryCommand, SingleCategoryResponse>;
   updateCategory: handleUnaryCall<UpdateCategoryCommand, SingleCategoryResponse>;
   deleteCategory: handleUnaryCall<DeleteCategoryCommand, Empty>;
@@ -99,6 +109,21 @@ export interface CategoryGrpcServiceClient extends Client {
   ): ClientUnaryCall;
   findCategoryById(
     request: FindCategoryByIdQuery,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: SingleCategoryResponse) => void,
+  ): ClientUnaryCall;
+  findCategoryBySlug(
+    request: FindCategoryBySlugQuery,
+    callback: (error: ServiceError | null, response: SingleCategoryResponse) => void,
+  ): ClientUnaryCall;
+  findCategoryBySlug(
+    request: FindCategoryBySlugQuery,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: SingleCategoryResponse) => void,
+  ): ClientUnaryCall;
+  findCategoryBySlug(
+    request: FindCategoryBySlugQuery,
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: SingleCategoryResponse) => void,
@@ -152,7 +177,7 @@ export interface CategoryGrpcServiceClient extends Client {
 
 export const CategoryGrpcServiceClient = makeGenericClientConstructor(
   CategoryGrpcServiceService,
-  "sisa.blog.api.CategoryGrpcService",
+  "sisa.blog.api.v1.categories.CategoryGrpcService",
 ) as unknown as {
   new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): CategoryGrpcServiceClient;
   service: typeof CategoryGrpcServiceService;

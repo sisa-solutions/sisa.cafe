@@ -9,16 +9,24 @@ import type {
   UntypedServiceImplementation,
 } from "@grpc/grpc-js";
 import { Empty } from "../../../../../google/protobuf/empty";
-import { CreatePostCommand, DeletePostCommand, PublishPostCommand, UpdatePostCommand } from "./commands";
-import { FindPostByIdQuery, GetPostsQuery } from "./queries";
+import { ListCommentsResponse, SingleCommentResponse } from "../comments/responses";
+import {
+  CreateCommentCommand,
+  CreatePostCommand,
+  DeletePostCommand,
+  PublishPostCommand,
+  ReactToPostCommand,
+  UpdatePostCommand,
+} from "./commands";
+import { FindPostByIdQuery, GetCommentsByPostIdQuery, GetPostsQuery } from "./queries";
 import { ListPostsResponse, SinglePostResponse } from "./responses";
 
-export const protobufPackage = "sisa.blog.api";
+export const protobufPackage = "sisa.blog.api.v1.posts";
 
 export type PostGrpcServiceService = typeof PostGrpcServiceService;
 export const PostGrpcServiceService = {
   getPosts: {
-    path: "/sisa.blog.api.PostGrpcService/GetPosts",
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/GetPosts",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: GetPostsQuery) => Buffer.from(GetPostsQuery.encode(value).finish()),
@@ -27,7 +35,7 @@ export const PostGrpcServiceService = {
     responseDeserialize: (value: Buffer) => ListPostsResponse.decode(value),
   },
   findPostById: {
-    path: "/sisa.blog.api.PostGrpcService/FindPostById",
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/FindPostById",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: FindPostByIdQuery) => Buffer.from(FindPostByIdQuery.encode(value).finish()),
@@ -36,7 +44,7 @@ export const PostGrpcServiceService = {
     responseDeserialize: (value: Buffer) => SinglePostResponse.decode(value),
   },
   createPost: {
-    path: "/sisa.blog.api.PostGrpcService/CreatePost",
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/CreatePost",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: CreatePostCommand) => Buffer.from(CreatePostCommand.encode(value).finish()),
@@ -45,7 +53,7 @@ export const PostGrpcServiceService = {
     responseDeserialize: (value: Buffer) => SinglePostResponse.decode(value),
   },
   updatePost: {
-    path: "/sisa.blog.api.PostGrpcService/UpdatePost",
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/UpdatePost",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: UpdatePostCommand) => Buffer.from(UpdatePostCommand.encode(value).finish()),
@@ -54,7 +62,7 @@ export const PostGrpcServiceService = {
     responseDeserialize: (value: Buffer) => SinglePostResponse.decode(value),
   },
   publishPost: {
-    path: "/sisa.blog.api.PostGrpcService/PublishPost",
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/PublishPost",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: PublishPostCommand) => Buffer.from(PublishPostCommand.encode(value).finish()),
@@ -63,11 +71,38 @@ export const PostGrpcServiceService = {
     responseDeserialize: (value: Buffer) => Empty.decode(value),
   },
   deletePost: {
-    path: "/sisa.blog.api.PostGrpcService/DeletePost",
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/DeletePost",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: DeletePostCommand) => Buffer.from(DeletePostCommand.encode(value).finish()),
     requestDeserialize: (value: Buffer) => DeletePostCommand.decode(value),
+    responseSerialize: (value: Empty) => Buffer.from(Empty.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => Empty.decode(value),
+  },
+  getCommentsByPostId: {
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/GetCommentsByPostId",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetCommentsByPostIdQuery) => Buffer.from(GetCommentsByPostIdQuery.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => GetCommentsByPostIdQuery.decode(value),
+    responseSerialize: (value: ListCommentsResponse) => Buffer.from(ListCommentsResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => ListCommentsResponse.decode(value),
+  },
+  createComment: {
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/CreateComment",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: CreateCommentCommand) => Buffer.from(CreateCommentCommand.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => CreateCommentCommand.decode(value),
+    responseSerialize: (value: SingleCommentResponse) => Buffer.from(SingleCommentResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => SingleCommentResponse.decode(value),
+  },
+  react: {
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/React",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: ReactToPostCommand) => Buffer.from(ReactToPostCommand.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => ReactToPostCommand.decode(value),
     responseSerialize: (value: Empty) => Buffer.from(Empty.encode(value).finish()),
     responseDeserialize: (value: Buffer) => Empty.decode(value),
   },
@@ -80,6 +115,9 @@ export interface PostGrpcServiceServer extends UntypedServiceImplementation {
   updatePost: handleUnaryCall<UpdatePostCommand, SinglePostResponse>;
   publishPost: handleUnaryCall<PublishPostCommand, Empty>;
   deletePost: handleUnaryCall<DeletePostCommand, Empty>;
+  getCommentsByPostId: handleUnaryCall<GetCommentsByPostIdQuery, ListCommentsResponse>;
+  createComment: handleUnaryCall<CreateCommentCommand, SingleCommentResponse>;
+  react: handleUnaryCall<ReactToPostCommand, Empty>;
 }
 
 export interface PostGrpcServiceClient extends Client {
@@ -173,11 +211,53 @@ export interface PostGrpcServiceClient extends Client {
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: Empty) => void,
   ): ClientUnaryCall;
+  getCommentsByPostId(
+    request: GetCommentsByPostIdQuery,
+    callback: (error: ServiceError | null, response: ListCommentsResponse) => void,
+  ): ClientUnaryCall;
+  getCommentsByPostId(
+    request: GetCommentsByPostIdQuery,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: ListCommentsResponse) => void,
+  ): ClientUnaryCall;
+  getCommentsByPostId(
+    request: GetCommentsByPostIdQuery,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: ListCommentsResponse) => void,
+  ): ClientUnaryCall;
+  createComment(
+    request: CreateCommentCommand,
+    callback: (error: ServiceError | null, response: SingleCommentResponse) => void,
+  ): ClientUnaryCall;
+  createComment(
+    request: CreateCommentCommand,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: SingleCommentResponse) => void,
+  ): ClientUnaryCall;
+  createComment(
+    request: CreateCommentCommand,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: SingleCommentResponse) => void,
+  ): ClientUnaryCall;
+  react(request: ReactToPostCommand, callback: (error: ServiceError | null, response: Empty) => void): ClientUnaryCall;
+  react(
+    request: ReactToPostCommand,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: Empty) => void,
+  ): ClientUnaryCall;
+  react(
+    request: ReactToPostCommand,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: Empty) => void,
+  ): ClientUnaryCall;
 }
 
 export const PostGrpcServiceClient = makeGenericClientConstructor(
   PostGrpcServiceService,
-  "sisa.blog.api.PostGrpcService",
+  "sisa.blog.api.v1.posts.PostGrpcService",
 ) as unknown as {
   new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): PostGrpcServiceClient;
   service: typeof PostGrpcServiceService;

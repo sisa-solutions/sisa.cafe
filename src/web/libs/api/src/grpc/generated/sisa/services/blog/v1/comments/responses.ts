@@ -1,98 +1,76 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
+import { StringValue } from "../../../../../google/protobuf/wrappers";
 import { ActorInfoResponse } from "../../../../libs/common/responses/actor_info_response";
 import { PagingInfoResponse } from "../../../../libs/common/responses/paging_info_response";
-import { CategoryInfoResponse } from "../categories/responses";
 
-export const protobufPackage = "sisa.blog.api.v1.posts.responses";
+export const protobufPackage = "sisa.blog.api.v1.comments.responses";
 
-export interface PostResponse {
+export interface CommentResponse {
   /** data fields: from 1 to 50 */
   id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
   content: string;
-  tags: string[];
-  viewCount: number;
-  commentCount: number;
+  level: number;
   reactionCount: number;
   reactionCounts: { [key: string]: number };
   /** relationship fields: from 51 to 60 */
-  category:
-    | CategoryInfoResponse
-    | undefined;
+  parentId: string | undefined;
+  postId: string;
   /** audit fields: from 63 to 70 */
   creator: ActorInfoResponse | undefined;
   updater: ActorInfoResponse | undefined;
 }
 
-export interface PostResponse_ReactionCountsEntry {
+export interface CommentResponse_ReactionCountsEntry {
   key: string;
   value: number;
 }
 
-export interface SinglePostResponse {
-  value: PostResponse | undefined;
+export interface SingleCommentResponse {
+  value: CommentResponse | undefined;
 }
 
-export interface ListPostsResponse {
-  value: PostResponse[];
+export interface ListCommentsResponse {
+  value: CommentResponse[];
   paging: PagingInfoResponse | undefined;
 }
 
-function createBasePostResponse(): PostResponse {
+function createBaseCommentResponse(): CommentResponse {
   return {
     id: "",
-    title: "",
-    slug: "",
-    excerpt: "",
     content: "",
-    tags: [],
-    viewCount: 0,
-    commentCount: 0,
+    level: 0,
     reactionCount: 0,
     reactionCounts: {},
-    category: undefined,
+    parentId: undefined,
+    postId: "",
     creator: undefined,
     updater: undefined,
   };
 }
 
-export const PostResponse = {
-  encode(message: PostResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const CommentResponse = {
+  encode(message: CommentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.title !== "") {
-      writer.uint32(18).string(message.title);
-    }
-    if (message.slug !== "") {
-      writer.uint32(26).string(message.slug);
-    }
-    if (message.excerpt !== "") {
-      writer.uint32(34).string(message.excerpt);
-    }
     if (message.content !== "") {
-      writer.uint32(42).string(message.content);
+      writer.uint32(18).string(message.content);
     }
-    for (const v of message.tags) {
-      writer.uint32(50).string(v!);
-    }
-    if (message.viewCount !== 0) {
-      writer.uint32(56).int32(message.viewCount);
-    }
-    if (message.commentCount !== 0) {
-      writer.uint32(64).int32(message.commentCount);
+    if (message.level !== 0) {
+      writer.uint32(24).int32(message.level);
     }
     if (message.reactionCount !== 0) {
-      writer.uint32(72).int32(message.reactionCount);
+      writer.uint32(32).int32(message.reactionCount);
     }
     Object.entries(message.reactionCounts).forEach(([key, value]) => {
-      PostResponse_ReactionCountsEntry.encode({ key: key as any, value }, writer.uint32(82).fork()).ldelim();
+      CommentResponse_ReactionCountsEntry.encode({ key: key as any, value }, writer.uint32(42).fork()).ldelim();
     });
-    if (message.category !== undefined) {
-      CategoryInfoResponse.encode(message.category, writer.uint32(410).fork()).ldelim();
+    if (message.parentId !== undefined) {
+      StringValue.encode({ value: message.parentId! }, writer.uint32(410).fork()).ldelim();
+    }
+    if (message.postId !== "") {
+      writer.uint32(418).string(message.postId);
     }
     if (message.creator !== undefined) {
       ActorInfoResponse.encode(message.creator, writer.uint32(490).fork()).ldelim();
@@ -103,10 +81,10 @@ export const PostResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PostResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommentResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePostResponse();
+    const message = createBaseCommentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -122,65 +100,30 @@ export const PostResponse = {
             break;
           }
 
-          message.title = reader.string();
+          message.content = reader.string();
           continue;
         case 3:
-          if (tag !== 26) {
+          if (tag !== 24) {
             break;
           }
 
-          message.slug = reader.string();
+          message.level = reader.int32();
           continue;
         case 4:
-          if (tag !== 34) {
+          if (tag !== 32) {
             break;
           }
 
-          message.excerpt = reader.string();
+          message.reactionCount = reader.int32();
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
 
-          message.content = reader.string();
-          continue;
-        case 6:
-          if (tag !== 50) {
-            break;
-          }
-
-          message.tags.push(reader.string());
-          continue;
-        case 7:
-          if (tag !== 56) {
-            break;
-          }
-
-          message.viewCount = reader.int32();
-          continue;
-        case 8:
-          if (tag !== 64) {
-            break;
-          }
-
-          message.commentCount = reader.int32();
-          continue;
-        case 9:
-          if (tag !== 72) {
-            break;
-          }
-
-          message.reactionCount = reader.int32();
-          continue;
-        case 10:
-          if (tag !== 82) {
-            break;
-          }
-
-          const entry10 = PostResponse_ReactionCountsEntry.decode(reader, reader.uint32());
-          if (entry10.value !== undefined) {
-            message.reactionCounts[entry10.key] = entry10.value;
+          const entry5 = CommentResponse_ReactionCountsEntry.decode(reader, reader.uint32());
+          if (entry5.value !== undefined) {
+            message.reactionCounts[entry5.key] = entry5.value;
           }
           continue;
         case 51:
@@ -188,7 +131,14 @@ export const PostResponse = {
             break;
           }
 
-          message.category = CategoryInfoResponse.decode(reader, reader.uint32());
+          message.parentId = StringValue.decode(reader, reader.uint32()).value;
+          continue;
+        case 52:
+          if (tag !== 418) {
+            break;
+          }
+
+          message.postId = reader.string();
           continue;
         case 61:
           if (tag !== 490) {
@@ -213,16 +163,11 @@ export const PostResponse = {
     return message;
   },
 
-  fromJSON(object: any): PostResponse {
+  fromJSON(object: any): CommentResponse {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
-      title: isSet(object.title) ? globalThis.String(object.title) : "",
-      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
-      excerpt: isSet(object.excerpt) ? globalThis.String(object.excerpt) : "",
       content: isSet(object.content) ? globalThis.String(object.content) : "",
-      tags: globalThis.Array.isArray(object?.tags) ? object.tags.map((e: any) => globalThis.String(e)) : [],
-      viewCount: isSet(object.viewCount) ? globalThis.Number(object.viewCount) : 0,
-      commentCount: isSet(object.commentCount) ? globalThis.Number(object.commentCount) : 0,
+      level: isSet(object.level) ? globalThis.Number(object.level) : 0,
       reactionCount: isSet(object.reactionCount) ? globalThis.Number(object.reactionCount) : 0,
       reactionCounts: isObject(object.reactionCounts)
         ? Object.entries(object.reactionCounts).reduce<{ [key: string]: number }>((acc, [key, value]) => {
@@ -230,37 +175,23 @@ export const PostResponse = {
           return acc;
         }, {})
         : {},
-      category: isSet(object.category) ? CategoryInfoResponse.fromJSON(object.category) : undefined,
+      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
+      postId: isSet(object.postId) ? globalThis.String(object.postId) : "",
       creator: isSet(object.creator) ? ActorInfoResponse.fromJSON(object.creator) : undefined,
       updater: isSet(object.updater) ? ActorInfoResponse.fromJSON(object.updater) : undefined,
     };
   },
 
-  toJSON(message: PostResponse): unknown {
+  toJSON(message: CommentResponse): unknown {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.title !== "") {
-      obj.title = message.title;
-    }
-    if (message.slug !== "") {
-      obj.slug = message.slug;
-    }
-    if (message.excerpt !== "") {
-      obj.excerpt = message.excerpt;
-    }
     if (message.content !== "") {
       obj.content = message.content;
     }
-    if (message.tags?.length) {
-      obj.tags = message.tags;
-    }
-    if (message.viewCount !== 0) {
-      obj.viewCount = Math.round(message.viewCount);
-    }
-    if (message.commentCount !== 0) {
-      obj.commentCount = Math.round(message.commentCount);
+    if (message.level !== 0) {
+      obj.level = Math.round(message.level);
     }
     if (message.reactionCount !== 0) {
       obj.reactionCount = Math.round(message.reactionCount);
@@ -274,8 +205,11 @@ export const PostResponse = {
         });
       }
     }
-    if (message.category !== undefined) {
-      obj.category = CategoryInfoResponse.toJSON(message.category);
+    if (message.parentId !== undefined) {
+      obj.parentId = message.parentId;
+    }
+    if (message.postId !== "") {
+      obj.postId = message.postId;
     }
     if (message.creator !== undefined) {
       obj.creator = ActorInfoResponse.toJSON(message.creator);
@@ -286,19 +220,14 @@ export const PostResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PostResponse>, I>>(base?: I): PostResponse {
-    return PostResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<CommentResponse>, I>>(base?: I): CommentResponse {
+    return CommentResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PostResponse>, I>>(object: I): PostResponse {
-    const message = createBasePostResponse();
+  fromPartial<I extends Exact<DeepPartial<CommentResponse>, I>>(object: I): CommentResponse {
+    const message = createBaseCommentResponse();
     message.id = object.id ?? "";
-    message.title = object.title ?? "";
-    message.slug = object.slug ?? "";
-    message.excerpt = object.excerpt ?? "";
     message.content = object.content ?? "";
-    message.tags = object.tags?.map((e) => e) || [];
-    message.viewCount = object.viewCount ?? 0;
-    message.commentCount = object.commentCount ?? 0;
+    message.level = object.level ?? 0;
     message.reactionCount = object.reactionCount ?? 0;
     message.reactionCounts = Object.entries(object.reactionCounts ?? {}).reduce<{ [key: string]: number }>(
       (acc, [key, value]) => {
@@ -309,9 +238,8 @@ export const PostResponse = {
       },
       {},
     );
-    message.category = (object.category !== undefined && object.category !== null)
-      ? CategoryInfoResponse.fromPartial(object.category)
-      : undefined;
+    message.parentId = object.parentId ?? undefined;
+    message.postId = object.postId ?? "";
     message.creator = (object.creator !== undefined && object.creator !== null)
       ? ActorInfoResponse.fromPartial(object.creator)
       : undefined;
@@ -322,12 +250,12 @@ export const PostResponse = {
   },
 };
 
-function createBasePostResponse_ReactionCountsEntry(): PostResponse_ReactionCountsEntry {
+function createBaseCommentResponse_ReactionCountsEntry(): CommentResponse_ReactionCountsEntry {
   return { key: "", value: 0 };
 }
 
-export const PostResponse_ReactionCountsEntry = {
-  encode(message: PostResponse_ReactionCountsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const CommentResponse_ReactionCountsEntry = {
+  encode(message: CommentResponse_ReactionCountsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -337,10 +265,10 @@ export const PostResponse_ReactionCountsEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PostResponse_ReactionCountsEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommentResponse_ReactionCountsEntry {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePostResponse_ReactionCountsEntry();
+    const message = createBaseCommentResponse_ReactionCountsEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -367,14 +295,14 @@ export const PostResponse_ReactionCountsEntry = {
     return message;
   },
 
-  fromJSON(object: any): PostResponse_ReactionCountsEntry {
+  fromJSON(object: any): CommentResponse_ReactionCountsEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value) ? globalThis.Number(object.value) : 0,
     };
   },
 
-  toJSON(message: PostResponse_ReactionCountsEntry): unknown {
+  toJSON(message: CommentResponse_ReactionCountsEntry): unknown {
     const obj: any = {};
     if (message.key !== "") {
       obj.key = message.key;
@@ -385,37 +313,37 @@ export const PostResponse_ReactionCountsEntry = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PostResponse_ReactionCountsEntry>, I>>(
+  create<I extends Exact<DeepPartial<CommentResponse_ReactionCountsEntry>, I>>(
     base?: I,
-  ): PostResponse_ReactionCountsEntry {
-    return PostResponse_ReactionCountsEntry.fromPartial(base ?? ({} as any));
+  ): CommentResponse_ReactionCountsEntry {
+    return CommentResponse_ReactionCountsEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PostResponse_ReactionCountsEntry>, I>>(
+  fromPartial<I extends Exact<DeepPartial<CommentResponse_ReactionCountsEntry>, I>>(
     object: I,
-  ): PostResponse_ReactionCountsEntry {
-    const message = createBasePostResponse_ReactionCountsEntry();
+  ): CommentResponse_ReactionCountsEntry {
+    const message = createBaseCommentResponse_ReactionCountsEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? 0;
     return message;
   },
 };
 
-function createBaseSinglePostResponse(): SinglePostResponse {
+function createBaseSingleCommentResponse(): SingleCommentResponse {
   return { value: undefined };
 }
 
-export const SinglePostResponse = {
-  encode(message: SinglePostResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const SingleCommentResponse = {
+  encode(message: SingleCommentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value !== undefined) {
-      PostResponse.encode(message.value, writer.uint32(10).fork()).ldelim();
+      CommentResponse.encode(message.value, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): SinglePostResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SingleCommentResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSinglePostResponse();
+    const message = createBaseSingleCommentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -424,7 +352,7 @@ export const SinglePostResponse = {
             break;
           }
 
-          message.value = PostResponse.decode(reader, reader.uint32());
+          message.value = CommentResponse.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -435,38 +363,38 @@ export const SinglePostResponse = {
     return message;
   },
 
-  fromJSON(object: any): SinglePostResponse {
-    return { value: isSet(object.value) ? PostResponse.fromJSON(object.value) : undefined };
+  fromJSON(object: any): SingleCommentResponse {
+    return { value: isSet(object.value) ? CommentResponse.fromJSON(object.value) : undefined };
   },
 
-  toJSON(message: SinglePostResponse): unknown {
+  toJSON(message: SingleCommentResponse): unknown {
     const obj: any = {};
     if (message.value !== undefined) {
-      obj.value = PostResponse.toJSON(message.value);
+      obj.value = CommentResponse.toJSON(message.value);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SinglePostResponse>, I>>(base?: I): SinglePostResponse {
-    return SinglePostResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<SingleCommentResponse>, I>>(base?: I): SingleCommentResponse {
+    return SingleCommentResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<SinglePostResponse>, I>>(object: I): SinglePostResponse {
-    const message = createBaseSinglePostResponse();
+  fromPartial<I extends Exact<DeepPartial<SingleCommentResponse>, I>>(object: I): SingleCommentResponse {
+    const message = createBaseSingleCommentResponse();
     message.value = (object.value !== undefined && object.value !== null)
-      ? PostResponse.fromPartial(object.value)
+      ? CommentResponse.fromPartial(object.value)
       : undefined;
     return message;
   },
 };
 
-function createBaseListPostsResponse(): ListPostsResponse {
+function createBaseListCommentsResponse(): ListCommentsResponse {
   return { value: [], paging: undefined };
 }
 
-export const ListPostsResponse = {
-  encode(message: ListPostsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const ListCommentsResponse = {
+  encode(message: ListCommentsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.value) {
-      PostResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+      CommentResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.paging !== undefined) {
       PagingInfoResponse.encode(message.paging, writer.uint32(18).fork()).ldelim();
@@ -474,10 +402,10 @@ export const ListPostsResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListPostsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ListCommentsResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseListPostsResponse();
+    const message = createBaseListCommentsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -486,7 +414,7 @@ export const ListPostsResponse = {
             break;
           }
 
-          message.value.push(PostResponse.decode(reader, reader.uint32()));
+          message.value.push(CommentResponse.decode(reader, reader.uint32()));
           continue;
         case 2:
           if (tag !== 18) {
@@ -504,17 +432,17 @@ export const ListPostsResponse = {
     return message;
   },
 
-  fromJSON(object: any): ListPostsResponse {
+  fromJSON(object: any): ListCommentsResponse {
     return {
-      value: globalThis.Array.isArray(object?.value) ? object.value.map((e: any) => PostResponse.fromJSON(e)) : [],
+      value: globalThis.Array.isArray(object?.value) ? object.value.map((e: any) => CommentResponse.fromJSON(e)) : [],
       paging: isSet(object.paging) ? PagingInfoResponse.fromJSON(object.paging) : undefined,
     };
   },
 
-  toJSON(message: ListPostsResponse): unknown {
+  toJSON(message: ListCommentsResponse): unknown {
     const obj: any = {};
     if (message.value?.length) {
-      obj.value = message.value.map((e) => PostResponse.toJSON(e));
+      obj.value = message.value.map((e) => CommentResponse.toJSON(e));
     }
     if (message.paging !== undefined) {
       obj.paging = PagingInfoResponse.toJSON(message.paging);
@@ -522,12 +450,12 @@ export const ListPostsResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ListPostsResponse>, I>>(base?: I): ListPostsResponse {
-    return ListPostsResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ListCommentsResponse>, I>>(base?: I): ListCommentsResponse {
+    return ListCommentsResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ListPostsResponse>, I>>(object: I): ListPostsResponse {
-    const message = createBaseListPostsResponse();
-    message.value = object.value?.map((e) => PostResponse.fromPartial(e)) || [];
+  fromPartial<I extends Exact<DeepPartial<ListCommentsResponse>, I>>(object: I): ListCommentsResponse {
+    const message = createBaseListCommentsResponse();
+    message.value = object.value?.map((e) => CommentResponse.fromPartial(e)) || [];
     message.paging = (object.paging !== undefined && object.paging !== null)
       ? PagingInfoResponse.fromPartial(object.paging)
       : undefined;

@@ -18,6 +18,7 @@ import Breadcrumbs from 'components/common/breadcrumbs';
 import { getCategories } from 'api/category-api';
 import DataGrid from './components/data-grid';
 import Loading from 'components/common/loading';
+import { Combinator, Operator, SortDirection } from '@sisa/api';
 
 type CategoriesPageProps = {
   searchParams: {
@@ -40,8 +41,25 @@ const CategoriesPage = async ({
     },
   } = await getCategories({
     filter: {
-      name: name,
+      combinator: Combinator.COMBINATOR_UNSPECIFIED,
+      not: false,
+      rules: [
+        {
+          combinator: Combinator.COMBINATOR_UNSPECIFIED,
+          not: false,
+          rules: [],
+          field: 'Name',
+          operator: Operator.OPERATOR_CONTAINS,
+          value: name,
+        },
+      ],
     },
+    sortBy: [
+      {
+        field: 'Name',
+        sort: SortDirection.SORT_DIRECTION_ASC,
+      },
+    ],
     paging: {
       pageIndex: pageNumber - 1,
       pageSize,
@@ -81,7 +99,7 @@ const CategoriesPage = async ({
               name: name,
             }}
             paging={{
-              ...paging
+              ...paging,
             }}
           />
         </Suspense>

@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-export const protobufPackage = "sisa.blog.api";
+export const protobufPackage = "sisa.blog.api.v1.posts.requests";
 
 export enum PostStatus {
   POST_STATUS_DRAFT = 0,

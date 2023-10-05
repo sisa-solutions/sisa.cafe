@@ -13,13 +13,14 @@ import {
 } from '@sisa/api';
 
 import { API_DNS, channel } from './common';
+import { revalidatePath } from 'next/cache';
 
 const client = new CategoryGrpcServiceClient(API_DNS, ChannelCredentials.createInsecure(), {
   channelOverride: channel,
 });
 
 export const getCategories = (request: GetCategoriesQuery) => {
-  return new Promise<ListCategoriesResponse>((resolve, reject) => {
+  const response = new Promise<ListCategoriesResponse>((resolve, reject) => {
     client.getCategories(
       {
         ...request,
@@ -34,6 +35,10 @@ export const getCategories = (request: GetCategoriesQuery) => {
       }
     );
   });
+
+  revalidatePath('/categories');
+
+  return response;
 };
 
 export const findCategoryById = (request: FindCategoryByIdQuery) => {

@@ -2,21 +2,29 @@
 import _m0 from "protobufjs/minimal";
 import { StringValue } from "../../../../../google/protobuf/wrappers";
 
-export const protobufPackage = "sisa.blog.api";
+export const protobufPackage = "sisa.blog.api.v1.categories.commands";
 
 export interface CreateCategoryCommand {
-  parentId: string | undefined;
+  /** data fields: from 1 to 50 */
   name: string;
   slug: string;
-  description: string | undefined;
+  description:
+    | string
+    | undefined;
+  /** relationship fields: from 51 to 60 */
+  parentId: string | undefined;
 }
 
 export interface UpdateCategoryCommand {
+  /** data fields: from 1 to 50 */
   id: string;
-  parentId: string | undefined;
   name: string;
   slug: string;
-  description: string | undefined;
+  description:
+    | string
+    | undefined;
+  /** relationship fields: from 51 to 60 */
+  parentId: string | undefined;
 }
 
 export interface DeleteCategoryCommand {
@@ -24,14 +32,11 @@ export interface DeleteCategoryCommand {
 }
 
 function createBaseCreateCategoryCommand(): CreateCategoryCommand {
-  return { parentId: undefined, name: "", slug: "", description: undefined };
+  return { name: "", slug: "", description: undefined, parentId: undefined };
 }
 
 export const CreateCategoryCommand = {
   encode(message: CreateCategoryCommand, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.parentId !== undefined) {
-      StringValue.encode({ value: message.parentId! }, writer.uint32(10).fork()).ldelim();
-    }
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
@@ -40,6 +45,9 @@ export const CreateCategoryCommand = {
     }
     if (message.description !== undefined) {
       StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.parentId !== undefined) {
+      StringValue.encode({ value: message.parentId! }, writer.uint32(410).fork()).ldelim();
     }
     return writer;
   },
@@ -51,13 +59,6 @@ export const CreateCategoryCommand = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.parentId = StringValue.decode(reader, reader.uint32()).value;
-          continue;
         case 2:
           if (tag !== 18) {
             break;
@@ -79,6 +80,13 @@ export const CreateCategoryCommand = {
 
           message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
+        case 51:
+          if (tag !== 410) {
+            break;
+          }
+
+          message.parentId = StringValue.decode(reader, reader.uint32()).value;
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -90,18 +98,15 @@ export const CreateCategoryCommand = {
 
   fromJSON(object: any): CreateCategoryCommand {
     return {
-      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      slug: isSet(object.slug) ? String(object.slug) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
+      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
     };
   },
 
   toJSON(message: CreateCategoryCommand): unknown {
     const obj: any = {};
-    if (message.parentId !== undefined) {
-      obj.parentId = message.parentId;
-    }
     if (message.name !== "") {
       obj.name = message.name;
     }
@@ -111,6 +116,9 @@ export const CreateCategoryCommand = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
+    if (message.parentId !== undefined) {
+      obj.parentId = message.parentId;
+    }
     return obj;
   },
 
@@ -119,16 +127,16 @@ export const CreateCategoryCommand = {
   },
   fromPartial<I extends Exact<DeepPartial<CreateCategoryCommand>, I>>(object: I): CreateCategoryCommand {
     const message = createBaseCreateCategoryCommand();
-    message.parentId = object.parentId ?? undefined;
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
+    message.parentId = object.parentId ?? undefined;
     return message;
   },
 };
 
 function createBaseUpdateCategoryCommand(): UpdateCategoryCommand {
-  return { id: "", parentId: undefined, name: "", slug: "", description: undefined };
+  return { id: "", name: "", slug: "", description: undefined, parentId: undefined };
 }
 
 export const UpdateCategoryCommand = {
@@ -136,17 +144,17 @@ export const UpdateCategoryCommand = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.parentId !== undefined) {
-      StringValue.encode({ value: message.parentId! }, writer.uint32(18).fork()).ldelim();
-    }
     if (message.name !== "") {
-      writer.uint32(26).string(message.name);
+      writer.uint32(18).string(message.name);
     }
     if (message.slug !== "") {
-      writer.uint32(34).string(message.slug);
+      writer.uint32(26).string(message.slug);
     }
     if (message.description !== undefined) {
-      StringValue.encode({ value: message.description! }, writer.uint32(42).fork()).ldelim();
+      StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.parentId !== undefined) {
+      StringValue.encode({ value: message.parentId! }, writer.uint32(410).fork()).ldelim();
     }
     return writer;
   },
@@ -170,28 +178,28 @@ export const UpdateCategoryCommand = {
             break;
           }
 
-          message.parentId = StringValue.decode(reader, reader.uint32()).value;
+          message.name = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
 
-          message.name = reader.string();
+          message.slug = reader.string();
           continue;
         case 4:
           if (tag !== 34) {
             break;
           }
 
-          message.slug = reader.string();
+          message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
-        case 5:
-          if (tag !== 42) {
+        case 51:
+          if (tag !== 410) {
             break;
           }
 
-          message.description = StringValue.decode(reader, reader.uint32()).value;
+          message.parentId = StringValue.decode(reader, reader.uint32()).value;
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -204,11 +212,11 @@ export const UpdateCategoryCommand = {
 
   fromJSON(object: any): UpdateCategoryCommand {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      slug: isSet(object.slug) ? String(object.slug) : "",
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
+      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
     };
   },
 
@@ -216,9 +224,6 @@ export const UpdateCategoryCommand = {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
-    }
-    if (message.parentId !== undefined) {
-      obj.parentId = message.parentId;
     }
     if (message.name !== "") {
       obj.name = message.name;
@@ -229,6 +234,9 @@ export const UpdateCategoryCommand = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
+    if (message.parentId !== undefined) {
+      obj.parentId = message.parentId;
+    }
     return obj;
   },
 
@@ -238,10 +246,10 @@ export const UpdateCategoryCommand = {
   fromPartial<I extends Exact<DeepPartial<UpdateCategoryCommand>, I>>(object: I): UpdateCategoryCommand {
     const message = createBaseUpdateCategoryCommand();
     message.id = object.id ?? "";
-    message.parentId = object.parentId ?? undefined;
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
+    message.parentId = object.parentId ?? undefined;
     return message;
   },
 };
@@ -282,7 +290,7 @@ export const DeleteCategoryCommand = {
   },
 
   fromJSON(object: any): DeleteCategoryCommand {
-    return { id: isSet(object.id) ? String(object.id) : "" };
+    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
   },
 
   toJSON(message: DeleteCategoryCommand): unknown {
@@ -306,7 +314,8 @@ export const DeleteCategoryCommand = {
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 

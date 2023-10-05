@@ -10,15 +10,15 @@ import type {
 } from "@grpc/grpc-js";
 import { Empty } from "../../../../../google/protobuf/empty";
 import { CreateTagCommand, DeleteTagCommand, UpdateTagCommand } from "./commands";
-import { FindTagByIdQuery, GetTagsQuery } from "./queries";
+import { FindTagByIdQuery, FindTagBySlugQuery, GetTagsQuery } from "./queries";
 import { ListTagsResponse, SingleTagResponse } from "./responses";
 
-export const protobufPackage = "sisa.blog.api";
+export const protobufPackage = "sisa.blog.api.v1.tags";
 
 export type TagGrpcServiceService = typeof TagGrpcServiceService;
 export const TagGrpcServiceService = {
   getTags: {
-    path: "/sisa.blog.api.TagGrpcService/GetTags",
+    path: "/sisa.blog.api.v1.tags.TagGrpcService/GetTags",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: GetTagsQuery) => Buffer.from(GetTagsQuery.encode(value).finish()),
@@ -27,7 +27,7 @@ export const TagGrpcServiceService = {
     responseDeserialize: (value: Buffer) => ListTagsResponse.decode(value),
   },
   findTagById: {
-    path: "/sisa.blog.api.TagGrpcService/FindTagById",
+    path: "/sisa.blog.api.v1.tags.TagGrpcService/FindTagById",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: FindTagByIdQuery) => Buffer.from(FindTagByIdQuery.encode(value).finish()),
@@ -35,8 +35,17 @@ export const TagGrpcServiceService = {
     responseSerialize: (value: SingleTagResponse) => Buffer.from(SingleTagResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer) => SingleTagResponse.decode(value),
   },
+  findTagBySlug: {
+    path: "/sisa.blog.api.v1.tags.TagGrpcService/FindTagBySlug",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: FindTagBySlugQuery) => Buffer.from(FindTagBySlugQuery.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => FindTagBySlugQuery.decode(value),
+    responseSerialize: (value: SingleTagResponse) => Buffer.from(SingleTagResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => SingleTagResponse.decode(value),
+  },
   createTag: {
-    path: "/sisa.blog.api.TagGrpcService/CreateTag",
+    path: "/sisa.blog.api.v1.tags.TagGrpcService/CreateTag",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: CreateTagCommand) => Buffer.from(CreateTagCommand.encode(value).finish()),
@@ -45,7 +54,7 @@ export const TagGrpcServiceService = {
     responseDeserialize: (value: Buffer) => SingleTagResponse.decode(value),
   },
   updateTag: {
-    path: "/sisa.blog.api.TagGrpcService/UpdateTag",
+    path: "/sisa.blog.api.v1.tags.TagGrpcService/UpdateTag",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: UpdateTagCommand) => Buffer.from(UpdateTagCommand.encode(value).finish()),
@@ -54,7 +63,7 @@ export const TagGrpcServiceService = {
     responseDeserialize: (value: Buffer) => SingleTagResponse.decode(value),
   },
   deleteTag: {
-    path: "/sisa.blog.api.TagGrpcService/DeleteTag",
+    path: "/sisa.blog.api.v1.tags.TagGrpcService/DeleteTag",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: DeleteTagCommand) => Buffer.from(DeleteTagCommand.encode(value).finish()),
@@ -67,6 +76,7 @@ export const TagGrpcServiceService = {
 export interface TagGrpcServiceServer extends UntypedServiceImplementation {
   getTags: handleUnaryCall<GetTagsQuery, ListTagsResponse>;
   findTagById: handleUnaryCall<FindTagByIdQuery, SingleTagResponse>;
+  findTagBySlug: handleUnaryCall<FindTagBySlugQuery, SingleTagResponse>;
   createTag: handleUnaryCall<CreateTagCommand, SingleTagResponse>;
   updateTag: handleUnaryCall<UpdateTagCommand, SingleTagResponse>;
   deleteTag: handleUnaryCall<DeleteTagCommand, Empty>;
@@ -99,6 +109,21 @@ export interface TagGrpcServiceClient extends Client {
   ): ClientUnaryCall;
   findTagById(
     request: FindTagByIdQuery,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: SingleTagResponse) => void,
+  ): ClientUnaryCall;
+  findTagBySlug(
+    request: FindTagBySlugQuery,
+    callback: (error: ServiceError | null, response: SingleTagResponse) => void,
+  ): ClientUnaryCall;
+  findTagBySlug(
+    request: FindTagBySlugQuery,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: SingleTagResponse) => void,
+  ): ClientUnaryCall;
+  findTagBySlug(
+    request: FindTagBySlugQuery,
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: SingleTagResponse) => void,
@@ -152,7 +177,7 @@ export interface TagGrpcServiceClient extends Client {
 
 export const TagGrpcServiceClient = makeGenericClientConstructor(
   TagGrpcServiceService,
-  "sisa.blog.api.TagGrpcService",
+  "sisa.blog.api.v1.tags.TagGrpcService",
 ) as unknown as {
   new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): TagGrpcServiceClient;
   service: typeof TagGrpcServiceService;

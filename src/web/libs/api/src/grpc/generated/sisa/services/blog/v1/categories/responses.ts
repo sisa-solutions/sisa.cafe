@@ -1,10 +1,10 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
 import { StringValue } from "../../../../../google/protobuf/wrappers";
-import { ActorInfoResponse } from "../../../../libs/common/responses/actor_response";
-import { PagingResponse } from "../../../../libs/common/responses/paging_response";
+import { ActorInfoResponse } from "../../../../libs/common/responses/actor_info_response";
+import { PagingInfoResponse } from "../../../../libs/common/responses/paging_info_response";
 
-export const protobufPackage = "sisa.blog.api";
+export const protobufPackage = "sisa.blog.api.v1.categories.responses";
 
 export interface CategoryInfoResponse {
   id: string;
@@ -14,12 +14,18 @@ export interface CategoryInfoResponse {
 }
 
 export interface CategoryResponse {
+  /** data fields: from 1 to 50 */
   id: string;
-  parentId: string | undefined;
   name: string;
   slug: string;
-  description: string | undefined;
-  parent: CategoryInfoResponse | undefined;
+  description:
+    | string
+    | undefined;
+  /** relationship fields: from 51 to 60 */
+  parent:
+    | CategoryInfoResponse
+    | undefined;
+  /** audit fields: from 63 to 70 */
   creator: ActorInfoResponse | undefined;
   updater: ActorInfoResponse | undefined;
 }
@@ -30,7 +36,7 @@ export interface SingleCategoryResponse {
 
 export interface ListCategoriesResponse {
   value: CategoryResponse[];
-  paging: PagingResponse | undefined;
+  paging: PagingInfoResponse | undefined;
 }
 
 function createBaseCategoryInfoResponse(): CategoryInfoResponse {
@@ -100,9 +106,9 @@ export const CategoryInfoResponse = {
 
   fromJSON(object: any): CategoryInfoResponse {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      slug: isSet(object.slug) ? String(object.slug) : "",
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
     };
   },
@@ -140,7 +146,6 @@ export const CategoryInfoResponse = {
 function createBaseCategoryResponse(): CategoryResponse {
   return {
     id: "",
-    parentId: undefined,
     name: "",
     slug: "",
     description: undefined,
@@ -155,26 +160,23 @@ export const CategoryResponse = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.parentId !== undefined) {
-      StringValue.encode({ value: message.parentId! }, writer.uint32(18).fork()).ldelim();
-    }
     if (message.name !== "") {
-      writer.uint32(26).string(message.name);
+      writer.uint32(18).string(message.name);
     }
     if (message.slug !== "") {
-      writer.uint32(34).string(message.slug);
+      writer.uint32(26).string(message.slug);
     }
     if (message.description !== undefined) {
-      StringValue.encode({ value: message.description! }, writer.uint32(42).fork()).ldelim();
+      StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
     }
     if (message.parent !== undefined) {
-      CategoryInfoResponse.encode(message.parent, writer.uint32(50).fork()).ldelim();
+      CategoryInfoResponse.encode(message.parent, writer.uint32(410).fork()).ldelim();
     }
     if (message.creator !== undefined) {
-      ActorInfoResponse.encode(message.creator, writer.uint32(242).fork()).ldelim();
+      ActorInfoResponse.encode(message.creator, writer.uint32(490).fork()).ldelim();
     }
     if (message.updater !== undefined) {
-      ActorInfoResponse.encode(message.updater, writer.uint32(250).fork()).ldelim();
+      ActorInfoResponse.encode(message.updater, writer.uint32(498).fork()).ldelim();
     }
     return writer;
   },
@@ -198,45 +200,38 @@ export const CategoryResponse = {
             break;
           }
 
-          message.parentId = StringValue.decode(reader, reader.uint32()).value;
+          message.name = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
 
-          message.name = reader.string();
+          message.slug = reader.string();
           continue;
         case 4:
           if (tag !== 34) {
             break;
           }
 
-          message.slug = reader.string();
-          continue;
-        case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
-        case 6:
-          if (tag !== 50) {
+        case 51:
+          if (tag !== 410) {
             break;
           }
 
           message.parent = CategoryInfoResponse.decode(reader, reader.uint32());
           continue;
-        case 30:
-          if (tag !== 242) {
+        case 61:
+          if (tag !== 490) {
             break;
           }
 
           message.creator = ActorInfoResponse.decode(reader, reader.uint32());
           continue;
-        case 31:
-          if (tag !== 250) {
+        case 62:
+          if (tag !== 498) {
             break;
           }
 
@@ -253,10 +248,9 @@ export const CategoryResponse = {
 
   fromJSON(object: any): CategoryResponse {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      slug: isSet(object.slug) ? String(object.slug) : "",
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
       parent: isSet(object.parent) ? CategoryInfoResponse.fromJSON(object.parent) : undefined,
       creator: isSet(object.creator) ? ActorInfoResponse.fromJSON(object.creator) : undefined,
@@ -268,9 +262,6 @@ export const CategoryResponse = {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
-    }
-    if (message.parentId !== undefined) {
-      obj.parentId = message.parentId;
     }
     if (message.name !== "") {
       obj.name = message.name;
@@ -299,7 +290,6 @@ export const CategoryResponse = {
   fromPartial<I extends Exact<DeepPartial<CategoryResponse>, I>>(object: I): CategoryResponse {
     const message = createBaseCategoryResponse();
     message.id = object.id ?? "";
-    message.parentId = object.parentId ?? undefined;
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
@@ -385,7 +375,7 @@ export const ListCategoriesResponse = {
       CategoryResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.paging !== undefined) {
-      PagingResponse.encode(message.paging, writer.uint32(18).fork()).ldelim();
+      PagingInfoResponse.encode(message.paging, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -409,7 +399,7 @@ export const ListCategoriesResponse = {
             break;
           }
 
-          message.paging = PagingResponse.decode(reader, reader.uint32());
+          message.paging = PagingInfoResponse.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -422,8 +412,8 @@ export const ListCategoriesResponse = {
 
   fromJSON(object: any): ListCategoriesResponse {
     return {
-      value: Array.isArray(object?.value) ? object.value.map((e: any) => CategoryResponse.fromJSON(e)) : [],
-      paging: isSet(object.paging) ? PagingResponse.fromJSON(object.paging) : undefined,
+      value: globalThis.Array.isArray(object?.value) ? object.value.map((e: any) => CategoryResponse.fromJSON(e)) : [],
+      paging: isSet(object.paging) ? PagingInfoResponse.fromJSON(object.paging) : undefined,
     };
   },
 
@@ -433,7 +423,7 @@ export const ListCategoriesResponse = {
       obj.value = message.value.map((e) => CategoryResponse.toJSON(e));
     }
     if (message.paging !== undefined) {
-      obj.paging = PagingResponse.toJSON(message.paging);
+      obj.paging = PagingInfoResponse.toJSON(message.paging);
     }
     return obj;
   },
@@ -445,7 +435,7 @@ export const ListCategoriesResponse = {
     const message = createBaseListCategoriesResponse();
     message.value = object.value?.map((e) => CategoryResponse.fromPartial(e)) || [];
     message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingResponse.fromPartial(object.paging)
+      ? PagingInfoResponse.fromPartial(object.paging)
       : undefined;
     return message;
   },
@@ -454,7 +444,8 @@ export const ListCategoriesResponse = {
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 

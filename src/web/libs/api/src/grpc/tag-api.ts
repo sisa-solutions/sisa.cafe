@@ -7,13 +7,14 @@ export {
 } from './generated/sisa/services/blog/v1/tags/commands';
 
 export {
-  FilterTagsParams,
   FindTagByIdQuery,
+  FindTagBySlugQuery,
   GetTagsQuery,
 } from './generated/sisa/services/blog/v1/tags/queries';
 
 export type {
   TagResponse,
   SingleTagResponse,
+  TagInfoResponse,
   ListTagsResponse,
 } from './generated/sisa/services/blog/v1/tags/responses';

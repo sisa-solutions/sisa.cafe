@@ -1,15 +1,33 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
 import { StringValue } from "../../../../../google/protobuf/wrappers";
-import { PagingResponse } from "../../../../libs/common/responses/paging_response";
+import { ActorInfoResponse } from "../../../../libs/common/responses/actor_info_response";
+import { PagingInfoResponse } from "../../../../libs/common/responses/paging_info_response";
 
-export const protobufPackage = "sisa.blog.api";
+export const protobufPackage = "sisa.blog.api.v1.tags.responses";
 
-export interface TagResponse {
+export interface TagInfoResponse {
   id: string;
   name: string;
   slug: string;
   description: string | undefined;
+}
+
+export interface TagResponse {
+  /** data fields: from 1 to 50 */
+  id: string;
+  name: string;
+  slug: string;
+  description:
+    | string
+    | undefined;
+  /** relationship fields: from 51 to 60 */
+  parent:
+    | TagInfoResponse
+    | undefined;
+  /** audit fields: from 63 to 70 */
+  creator: ActorInfoResponse | undefined;
+  updater: ActorInfoResponse | undefined;
 }
 
 export interface SingleTagResponse {
@@ -18,15 +36,15 @@ export interface SingleTagResponse {
 
 export interface ListTagsResponse {
   value: TagResponse[];
-  paging: PagingResponse | undefined;
+  paging: PagingInfoResponse | undefined;
 }
 
-function createBaseTagResponse(): TagResponse {
+function createBaseTagInfoResponse(): TagInfoResponse {
   return { id: "", name: "", slug: "", description: undefined };
 }
 
-export const TagResponse = {
-  encode(message: TagResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const TagInfoResponse = {
+  encode(message: TagInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -42,10 +60,10 @@ export const TagResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): TagResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): TagInfoResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTagResponse();
+    const message = createBaseTagInfoResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -86,12 +104,157 @@ export const TagResponse = {
     return message;
   },
 
+  fromJSON(object: any): TagInfoResponse {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
+      description: isSet(object.description) ? String(object.description) : undefined,
+    };
+  },
+
+  toJSON(message: TagInfoResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.slug !== "") {
+      obj.slug = message.slug;
+    }
+    if (message.description !== undefined) {
+      obj.description = message.description;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<TagInfoResponse>, I>>(base?: I): TagInfoResponse {
+    return TagInfoResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<TagInfoResponse>, I>>(object: I): TagInfoResponse {
+    const message = createBaseTagInfoResponse();
+    message.id = object.id ?? "";
+    message.name = object.name ?? "";
+    message.slug = object.slug ?? "";
+    message.description = object.description ?? undefined;
+    return message;
+  },
+};
+
+function createBaseTagResponse(): TagResponse {
+  return {
+    id: "",
+    name: "",
+    slug: "",
+    description: undefined,
+    parent: undefined,
+    creator: undefined,
+    updater: undefined,
+  };
+}
+
+export const TagResponse = {
+  encode(message: TagResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.slug !== "") {
+      writer.uint32(26).string(message.slug);
+    }
+    if (message.description !== undefined) {
+      StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.parent !== undefined) {
+      TagInfoResponse.encode(message.parent, writer.uint32(410).fork()).ldelim();
+    }
+    if (message.creator !== undefined) {
+      ActorInfoResponse.encode(message.creator, writer.uint32(490).fork()).ldelim();
+    }
+    if (message.updater !== undefined) {
+      ActorInfoResponse.encode(message.updater, writer.uint32(498).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TagResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTagResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.slug = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.description = StringValue.decode(reader, reader.uint32()).value;
+          continue;
+        case 51:
+          if (tag !== 410) {
+            break;
+          }
+
+          message.parent = TagInfoResponse.decode(reader, reader.uint32());
+          continue;
+        case 61:
+          if (tag !== 490) {
+            break;
+          }
+
+          message.creator = ActorInfoResponse.decode(reader, reader.uint32());
+          continue;
+        case 62:
+          if (tag !== 498) {
+            break;
+          }
+
+          message.updater = ActorInfoResponse.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): TagResponse {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      slug: isSet(object.slug) ? String(object.slug) : "",
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
+      parent: isSet(object.parent) ? TagInfoResponse.fromJSON(object.parent) : undefined,
+      creator: isSet(object.creator) ? ActorInfoResponse.fromJSON(object.creator) : undefined,
+      updater: isSet(object.updater) ? ActorInfoResponse.fromJSON(object.updater) : undefined,
     };
   },
 
@@ -109,6 +272,15 @@ export const TagResponse = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
+    if (message.parent !== undefined) {
+      obj.parent = TagInfoResponse.toJSON(message.parent);
+    }
+    if (message.creator !== undefined) {
+      obj.creator = ActorInfoResponse.toJSON(message.creator);
+    }
+    if (message.updater !== undefined) {
+      obj.updater = ActorInfoResponse.toJSON(message.updater);
+    }
     return obj;
   },
 
@@ -121,6 +293,15 @@ export const TagResponse = {
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
+    message.parent = (object.parent !== undefined && object.parent !== null)
+      ? TagInfoResponse.fromPartial(object.parent)
+      : undefined;
+    message.creator = (object.creator !== undefined && object.creator !== null)
+      ? ActorInfoResponse.fromPartial(object.creator)
+      : undefined;
+    message.updater = (object.updater !== undefined && object.updater !== null)
+      ? ActorInfoResponse.fromPartial(object.updater)
+      : undefined;
     return message;
   },
 };
@@ -194,7 +375,7 @@ export const ListTagsResponse = {
       TagResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.paging !== undefined) {
-      PagingResponse.encode(message.paging, writer.uint32(18).fork()).ldelim();
+      PagingInfoResponse.encode(message.paging, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -218,7 +399,7 @@ export const ListTagsResponse = {
             break;
           }
 
-          message.paging = PagingResponse.decode(reader, reader.uint32());
+          message.paging = PagingInfoResponse.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -231,8 +412,8 @@ export const ListTagsResponse = {
 
   fromJSON(object: any): ListTagsResponse {
     return {
-      value: Array.isArray(object?.value) ? object.value.map((e: any) => TagResponse.fromJSON(e)) : [],
-      paging: isSet(object.paging) ? PagingResponse.fromJSON(object.paging) : undefined,
+      value: globalThis.Array.isArray(object?.value) ? object.value.map((e: any) => TagResponse.fromJSON(e)) : [],
+      paging: isSet(object.paging) ? PagingInfoResponse.fromJSON(object.paging) : undefined,
     };
   },
 
@@ -242,7 +423,7 @@ export const ListTagsResponse = {
       obj.value = message.value.map((e) => TagResponse.toJSON(e));
     }
     if (message.paging !== undefined) {
-      obj.paging = PagingResponse.toJSON(message.paging);
+      obj.paging = PagingInfoResponse.toJSON(message.paging);
     }
     return obj;
   },
@@ -254,7 +435,7 @@ export const ListTagsResponse = {
     const message = createBaseListTagsResponse();
     message.value = object.value?.map((e) => TagResponse.fromPartial(e)) || [];
     message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingResponse.fromPartial(object.paging)
+      ? PagingInfoResponse.fromPartial(object.paging)
       : undefined;
     return message;
   },
@@ -263,7 +444,8 @@ export const ListTagsResponse = {
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 

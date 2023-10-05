@@ -7,8 +7,8 @@ export {
 } from './generated/sisa/services/blog/v1/categories/commands';
 
 export {
-  FilterCategoriesParams,
   FindCategoryByIdQuery,
+  FindCategoryBySlugQuery,
   GetCategoriesQuery
 } from './generated/sisa/services/blog/v1/categories/queries';
 
