@@ -64,6 +64,12 @@ public static partial class CategoryProjections
                     DisplayName = "Administrator",
                     Timestamp = x.CreatedAt.ToTimestamp()
                 },
+                Updater = x.UpdatedBy != null ? new ActorInfoResponse()
+                {
+                    Id = x.UpdatedBy.Value.ToString(),
+                    DisplayName = "Administrator",
+                    Timestamp = x.UpdatedAt!.Value.ToTimestamp()
+                } : null,
                 Parent = x.Parent == null ? null : new CategoryInfoResponse
                 {
                     Id = x.Parent.Id.ToString(),

@@ -8,11 +8,11 @@ export interface ActorInfoResponse {
   id: string;
   userName: string;
   displayName: string;
-  Timestamp: Date | undefined;
+  timestamp: Date | undefined;
 }
 
 function createBaseActorInfoResponse(): ActorInfoResponse {
-  return { id: "", userName: "", displayName: "", Timestamp: undefined };
+  return { id: "", userName: "", displayName: "", timestamp: undefined };
 }
 
 export const ActorInfoResponse = {
@@ -26,8 +26,8 @@ export const ActorInfoResponse = {
     if (message.displayName !== "") {
       writer.uint32(26).string(message.displayName);
     }
-    if (message.Timestamp !== undefined) {
-      Timestamp.encode(toTimestamp(message.Timestamp), writer.uint32(82).fork()).ldelim();
+    if (message.timestamp !== undefined) {
+      Timestamp.encode(toTimestamp(message.timestamp), writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -65,7 +65,7 @@ export const ActorInfoResponse = {
             break;
           }
 
-          message.Timestamp = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.timestamp = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -81,7 +81,7 @@ export const ActorInfoResponse = {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
       userName: isSet(object.userName) ? globalThis.String(object.userName) : "",
       displayName: isSet(object.displayName) ? globalThis.String(object.displayName) : "",
-      Timestamp: isSet(object.Timestamp) ? fromJsonTimestamp(object.Timestamp) : undefined,
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
     };
   },
 
@@ -96,8 +96,8 @@ export const ActorInfoResponse = {
     if (message.displayName !== "") {
       obj.displayName = message.displayName;
     }
-    if (message.Timestamp !== undefined) {
-      obj.Timestamp = message.Timestamp.toISOString();
+    if (message.timestamp !== undefined) {
+      obj.timestamp = message.timestamp.toISOString();
     }
     return obj;
   },
@@ -110,7 +110,7 @@ export const ActorInfoResponse = {
     message.id = object.id ?? "";
     message.userName = object.userName ?? "";
     message.displayName = object.displayName ?? "";
-    message.Timestamp = object.Timestamp ?? undefined;
+    message.timestamp = object.timestamp ?? undefined;
     return message;
   },
 };

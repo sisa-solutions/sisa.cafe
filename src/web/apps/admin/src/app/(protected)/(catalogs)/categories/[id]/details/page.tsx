@@ -73,6 +73,22 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
             <Box>Description</Box>
             <Box>{data.description}</Box>
           </Box>
+          <Box>
+            <Box>Created By</Box>
+            <Box>{data.creator?.displayName}</Box>
+          </Box>
+          <Box>
+            <Box>Created at</Box>
+            <Box>{data.creator?.timestamp?.toLocaleString()}</Box>
+          </Box>
+          <Box>
+            <Box>Updated By</Box>
+            <Box>{data.updater?.displayName}</Box>
+          </Box>
+          <Box>
+            <Box>Updated at</Box>
+            <Box>{data.updater?.timestamp?.toLocaleString()}</Box>
+          </Box>
         </DescriptionList>
       </PageContent>
     </PageLayout>
