@@ -5,6 +5,17 @@ using Sisa.Blog.Domain.AggregatesModel.CommentAggregate;
 
 namespace Sisa.Blog.Domain.Specifications;
 
+public sealed class CommentSpecification : Specification<Comment>
+{
+    public CommentSpecification(Guid id)
+    {
+        Builder
+            .Include(x => x.Post)
+            .Where(x => x.Id == id);
+    }
+}
+
+
 public sealed class CommentSpecification<TResult>(Expression<Func<Comment, TResult>> selector)
     : Specification<Comment, TResult>(selector) where TResult : class
 {

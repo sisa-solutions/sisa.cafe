@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sisa.Data.EntityConfigurations;
 
-using Sisa.Blog.Domain.AggregatesModel.ReactionAggregate;
 using Sisa.Extensions;
+using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
 
 namespace Sisa.Blog.Data.EntityConfigurations;
 

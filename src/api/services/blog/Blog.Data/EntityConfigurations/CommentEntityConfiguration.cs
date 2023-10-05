@@ -22,6 +22,11 @@ public class CommentEntityConfiguration : EntityConfiguration<Comment>
             .HasDefaultValueSql("''");
 
         builder
+            .Property(p => p.ReactionCounts)
+            .HasColumnType("jsonb")
+            .HasDefaultValueSql("'[]'");
+
+        builder
             .HasOne(p => p.Parent)
             .WithMany(p => p.Children)
             .HasForeignKey(p => p.ParentId)

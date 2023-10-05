@@ -44,4 +44,11 @@ public sealed class PostService(IMediator mediator) : PostGrpcService.PostGrpcSe
         => await mediator.SendAsync(command, context.CancellationToken);
 
     #endregion
+
+    #region Reactions
+
+    public override async Task<Empty> React(ReactToPostCommand command, ServerCallContext context)
+        => await mediator.SendAsync(command, context.CancellationToken);
+
+    #endregion
 }

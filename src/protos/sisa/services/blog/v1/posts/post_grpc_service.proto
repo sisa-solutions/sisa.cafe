@@ -61,4 +61,10 @@ service PostGrpcService {
       post: "/api/v1/posts/{id}/comments"
     };
   }
+
+  rpc React(sisa.blog.api.v1.posts.commands.ReactToPostCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/posts/{id}/reactions"
+    };
+  }
 }

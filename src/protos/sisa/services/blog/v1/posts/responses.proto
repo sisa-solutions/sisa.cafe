@@ -11,7 +11,7 @@ import "sisa/services/blog/v1/categories/responses.proto";
 
 message PostResponse {
   // reversed field must be reflect to the database
-  reserved 7 to 50; // other data fields
+  reserved 11 to 50; // other data fields
   reserved 52 to 60; // relationship fields
   reserved 63 to 70; // audit fields
 
@@ -22,6 +22,10 @@ message PostResponse {
   string excerpt = 4;
   string content = 5;
   repeated string tags = 6;
+  int32 viewCount = 7;
+  int32 commentCount = 8;
+  int32 reactionCount = 9;
+  map<string, int32> reactionCounts = 10;
 
   // relationship fields: from 51 to 60
   sisa.blog.api.v1.categories.responses.CategoryInfoResponse category = 51;

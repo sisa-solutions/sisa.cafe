@@ -17,6 +17,11 @@ public class Post : FullAuditableAggregateRoot
 
     public PostStatus Status { get; private set; } = PostStatus.DRAFT;
 
+    public int ViewCount { get; private set; }
+    public int CommentCount { get; private set; }
+    public int ReactionCount { get; private set; }
+    public Dictionary<ReactionType, int> ReactionCounts { get; private set; } = [];
+
     private readonly List<PostStatusHistory> _statusHistories = [];
     public IReadOnlyCollection<PostStatusHistory> StatusHistories => _statusHistories;
 
@@ -121,6 +126,9 @@ public class Post : FullAuditableAggregateRoot
     public bool IsCommentAble()
         => Status == PostStatus.PUBLISHED;
 
+    public bool IsReactAble()
+        => Status == PostStatus.PUBLISHED;
+
     public bool TryPublish(string? remarks)
         => TryChangeStatus(PostStatus.PUBLISHED, remarks);
 
@@ -159,9 +167,70 @@ public class Post : FullAuditableAggregateRoot
 
         userReaction?.RemoveReaction(reactionType);
     }
-
     public void AssociateCategory(Category category)
     {
         Category = category;
+    }
+
+    public void IncreaseViewCount()
+    {
+        ViewCount++;
+    }
+
+    public void IncreaseCommentCount()
+    {
+        CommentCount++;
+    }
+
+    public void DecreaseCommentCount()
+    {
+        CommentCount--;
+    }
+
+    public void React(Guid userId, ReactionType reactionType)
+    {
+        var reaction = _reactions
+            .FirstOrDefault(x => x.UserId == userId);
+
+        if (reaction == null)
+        {
+            reaction = new PostReaction(userId);
+
+            reaction.AddReaction(reactionType);
+
+            _reactions.Add(reaction);
+
+            IncreaseReactionCount(reactionType);
+        }
+        else
+        {
+            var reactionItem = reaction.Reactions
+                .FirstOrDefault(x => x.Type == reactionType);
+
+            if (reactionItem == null)
+            {
+                reaction.AddReaction(reactionType);
+
+                IncreaseReactionCount(reactionType);
+            }
+            else
+            {
+                reaction.RemoveReaction(reactionType);
+
+                DecreaseReactionCount(reactionType);
+            }
+        }
+    }
+
+    private void IncreaseReactionCount(ReactionType reactionType)
+    {
+        ReactionCount++;
+        ReactionCounts[reactionType]++;
+    }
+
+    private void DecreaseReactionCount(ReactionType reactionType)
+    {
+        ReactionCount--;
+        ReactionCounts[reactionType]--;
     }
 }

@@ -55,6 +55,11 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
             .HasDefaultValueSql("'[]'");
 
         builder
+            .Property(p => p.ReactionCounts)
+            .HasColumnType("jsonb")
+            .HasDefaultValueSql("'[]'");
+
+        builder
             .HasOne(p => p.Category)
             .WithMany(p => p.Posts)
             .HasForeignKey(p => p.CategoryId)

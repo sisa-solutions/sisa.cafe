@@ -1,21 +1,26 @@
 using Sisa.Abstractions;
-using Sisa.Blog.Domain.AggregatesModel.CommentAggregate;
+using Sisa.Blog.Domain.AggregatesModel.ReactionAggregate;
 
-namespace Sisa.Blog.Domain.AggregatesModel.ReactionAggregate;
+namespace Sisa.Blog.Domain.AggregatesModel.PostAggregate;
 
-public class CommentReaction : AggregateRoot
+public class PostReaction : Entity
 {
-    public Guid CommentId { get; private set; }
+    public Guid PostId { get; private set; }
     public Guid UserId { get; private set; }
 
     private readonly List<Reaction> _reactions = [];
     public IReadOnlyCollection<Reaction> Reactions => _reactions;
 
-    public Comment Comment { get; private set; } = null!;
+    public Post Post { get; private set; } = null!;
 
-    public CommentReaction(Guid userId)
+    public PostReaction(Guid userId)
     {
         UserId = userId;
+    }
+
+    public PostReaction(Guid userId, ReactionType type) : this(userId)
+    {
+        AddReaction(type);
     }
 
     public void AddReaction(ReactionType type)

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Requests";
+option csharp_namespace = "Sisa.Blog.Api.V1.Posts.Enums";
 
 package sisa.blog.api.v1.posts.requests;
 

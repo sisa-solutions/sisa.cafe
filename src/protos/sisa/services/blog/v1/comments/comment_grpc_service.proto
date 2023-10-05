@@ -41,4 +41,10 @@ service CommentGrpcService {
       delete: "/api/v1/comments/{id}"
     };
   }
+
+  rpc React(sisa.blog.api.v1.comments.commands.ReactToCommentCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/comments/{id}/reactions"
+    };
+  }
 }

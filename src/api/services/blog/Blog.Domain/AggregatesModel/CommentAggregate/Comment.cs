@@ -11,6 +11,11 @@ public class Comment : FullAuditableAggregateRoot
 
     public string Content { get; private set; }
 
+    public int Level { get; private set; }
+
+    public int ReactionCount { get; private set; }
+    public Dictionary<ReactionType, int> ReactionCounts { get; private set; } = [];
+
     public Comment? Parent { get; private set; }
 
     private readonly List<Comment> _children = [];
@@ -26,10 +31,14 @@ public class Comment : FullAuditableAggregateRoot
         Content = content;
     }
 
-    public Comment(Guid postId, string content)
+    public Comment(Guid postId, string content) : this(content)
     {
         PostId = postId;
-        Content = content;
+    }
+
+    public Comment(Guid postId, string content, int level) : this(postId, content)
+    {
+        Level = level;
     }
 
     public void Update(string content)
@@ -37,33 +46,47 @@ public class Comment : FullAuditableAggregateRoot
         Content = content;
     }
 
-    public void AddComment(string content)
+    public void Reply(string content)
     {
-        var comment = new Comment(PostId, content);
+        var comment = new Comment(PostId, content, Level + 1);
 
         _children.Add(comment);
+
+        Post.IncreaseCommentCount();
     }
 
-    public void RemoveComment(Comment comment)
+    public void React(Guid userId, ReactionType reactionType)
     {
-        _children.Remove(comment);
-    }
+        var reaction = _reactions
+            .FirstOrDefault(x => x.UserId == userId);
 
-    public void AddReaction(Guid userId, ReactionType reactionType)
-    {
-        var userReaction = _reactions.FirstOrDefault(x => x.UserId == userId);
-
-        if (userReaction is not null)
+        if (reaction == null)
         {
-            userReaction.AddReaction(reactionType);
-        }
-        else
-        {
-            var reaction = new CommentReaction(userId);
+            reaction = new CommentReaction(userId);
 
             reaction.AddReaction(reactionType);
 
             _reactions.Add(reaction);
+
+            IncreaseReactionCount(reactionType);
+        }
+        else
+        {
+            var reactionItem = reaction.Reactions
+                .FirstOrDefault(x => x.Type == reactionType);
+
+            if (reactionItem == null)
+            {
+                reaction.AddReaction(reactionType);
+
+                IncreaseReactionCount(reactionType);
+            }
+            else
+            {
+                reaction.RemoveReaction(reactionType);
+
+                DecreaseReactionCount(reactionType);
+            }
         }
     }
 
@@ -72,5 +95,17 @@ public class Comment : FullAuditableAggregateRoot
         var userReaction = _reactions.FirstOrDefault(x => x.UserId == userId);
 
         userReaction?.RemoveReaction(reactionType);
+    }
+
+    public void IncreaseReactionCount(ReactionType reactionType)
+    {
+        ReactionCount++;
+        ReactionCounts[reactionType]++;
+    }
+
+    public void DecreaseReactionCount(ReactionType reactionType)
+    {
+        ReactionCount--;
+        ReactionCounts[reactionType]--;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sisa.Blog.Data;
@@ -14,9 +15,11 @@ using Sisa.Blog.Domain.AggregatesModel.ReactionAggregate;
 namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    partial class BlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231005030846_UpdateComment")]
+    partial class UpdateComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,6 +132,10 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                         .HasColumnName("id")
                         .HasDefaultValueSql("gen_random_uuid()");
 
+                    b.Property<int>("CommentCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("comment_count");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -183,6 +190,10 @@ namespace Sisa.Blog.DbMigrator.PostgreSQL.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uuid")
                         .HasColumnName("updated_by");
+
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("view_count");
 
                     b.HasKey("Id")
                         .HasName("pk_comments");
