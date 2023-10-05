@@ -1,9 +1,9 @@
 import { PageContent, PageHeader, PageTitle } from '@sisa/components';
 
+import { createTag } from '@sisa/api';
+
 import Breadcrumbs from 'components/common/breadcrumbs';
 import MutationForm from '../components/mutation-form';
-
-import { createTag } from 'api/tag-api';
 
 const AddTagPage = () => {
   return (

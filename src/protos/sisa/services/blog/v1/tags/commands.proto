@@ -23,7 +23,7 @@ message CreateTagCommand {
 message UpdateTagCommand {
   // reversed field must be reflect to the database
   reserved 5 to 50; // other data fields
-  reserved 52 to 60; // relationship fields
+  reserved 51 to 60; // relationship fields
   reserved 63 to 70; // audit fields
 
   // data fields: from 1 to 50
@@ -33,7 +33,6 @@ message UpdateTagCommand {
   google.protobuf.StringValue description = 4;
 
   // relationship fields: from 51 to 60
-  google.protobuf.StringValue parentId = 51;
 }
 
 message DeleteTagCommand {

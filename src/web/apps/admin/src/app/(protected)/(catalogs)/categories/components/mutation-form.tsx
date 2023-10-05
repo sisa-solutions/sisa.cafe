@@ -27,9 +27,9 @@ import {
   type CategoryInfoResponse,
   type CreateCategoryCommand,
   type UpdateCategoryCommand,
+  getParentCategories,
 } from '@sisa/api';
 
-import { getParentCategories } from 'api/category-api';
 import { randomId } from '@sisa/utils';
 
 type MutationValues = (CreateCategoryCommand | UpdateCategoryCommand) & {

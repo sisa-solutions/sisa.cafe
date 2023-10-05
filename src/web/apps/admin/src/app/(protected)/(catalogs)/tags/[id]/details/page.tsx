@@ -10,9 +10,10 @@ import {
   PageLayout,
   PageTitle,
 } from '@sisa/components';
-import Breadcrumbs from 'components/common/breadcrumbs';
 
-import { findTagById } from 'api/tag-api';
+import { findTagById } from '@sisa/api';
+
+import Breadcrumbs from 'components/common/breadcrumbs';
 
 type Props = {
   params: {
@@ -22,7 +23,7 @@ type Props = {
 
 const NewTagPage = async ({ params: { id } }: Props) => {
   const data = await findTagById({
-    id
+    id,
   });
 
   return (
@@ -41,12 +42,7 @@ const NewTagPage = async ({ params: { id } }: Props) => {
       <PageHeader>
         <PageTitle
           endDecorator={
-            <Link
-              href={`/tags/${id}/edit`}
-              variant="outlined"
-              fontSize="md"
-              borderRadius="sm"
-            >
+            <Link href={`/tags/${id}/edit`} variant="outlined" fontSize="md" borderRadius="sm">
               <PencilLine />
             </Link>
           }

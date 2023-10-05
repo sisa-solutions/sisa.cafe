@@ -12,20 +12,18 @@ import IconButton from '@mui/joy/IconButton';
 import { AlertCircleIcon, PencilLineIcon, XIcon } from 'lucide-react';
 
 import { ConfirmDialog, LinkIconButton } from '@sisa/components';
-import { type CategoryResponse } from '@sisa/api';
-import { useToggle } from '@sisa/utils';
 
-import { deleteCategory } from 'api/category-api';
+import { deleteCategory, type CategoryResponse } from '@sisa/api';
+
+import { useToggle } from '@sisa/utils';
 
 const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ row }) => {
   const router = useRouter();
 
-  const { trigger, isMutating } = useMutation(
-    ['/api/v1/tags/delete', row.original.id],
-    ([_, id]) =>
-      deleteCategory({
-        id,
-      })
+  const { trigger, isMutating } = useMutation(['/api/v1/tags/delete', row.original.id], ([_, id]) =>
+    deleteCategory({
+      id,
+    })
   );
 
   const {

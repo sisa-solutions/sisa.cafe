@@ -20,11 +20,7 @@ export interface UpdateTagCommand {
   id: string;
   name: string;
   slug: string;
-  description:
-    | string
-    | undefined;
-  /** relationship fields: from 51 to 60 */
-  parentId: string | undefined;
+  description: string | undefined;
 }
 
 export interface DeleteTagCommand {
@@ -136,7 +132,7 @@ export const CreateTagCommand = {
 };
 
 function createBaseUpdateTagCommand(): UpdateTagCommand {
-  return { id: "", name: "", slug: "", description: undefined, parentId: undefined };
+  return { id: "", name: "", slug: "", description: undefined };
 }
 
 export const UpdateTagCommand = {
@@ -152,9 +148,6 @@ export const UpdateTagCommand = {
     }
     if (message.description !== undefined) {
       StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.parentId !== undefined) {
-      StringValue.encode({ value: message.parentId! }, writer.uint32(410).fork()).ldelim();
     }
     return writer;
   },
@@ -194,13 +187,6 @@ export const UpdateTagCommand = {
 
           message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
-        case 51:
-          if (tag !== 410) {
-            break;
-          }
-
-          message.parentId = StringValue.decode(reader, reader.uint32()).value;
-          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -216,7 +202,6 @@ export const UpdateTagCommand = {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
-      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
     };
   },
 
@@ -234,9 +219,6 @@ export const UpdateTagCommand = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
-    if (message.parentId !== undefined) {
-      obj.parentId = message.parentId;
-    }
     return obj;
   },
 
@@ -249,7 +231,6 @@ export const UpdateTagCommand = {
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
-    message.parentId = object.parentId ?? undefined;
     return message;
   },
 };

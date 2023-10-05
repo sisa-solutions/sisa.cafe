@@ -1,30 +1,32 @@
+export * from './grpc/common';
+
+/* BEGIN: CATEGORIES */
+
 export {
-  ChannelCredentials,
-  Metadata,
-  Channel,
-  InterceptingCall,
-  type InterceptorProvider,
-  RequesterBuilder,
-  type Requester,
-  ListenerBuilder,
-  type Listener,
-  status as grpcStatus,
-} from '@grpc/grpc-js';
+  CategoryResponse,
+  CategoryInfoResponse,
+  SingleCategoryResponse,
+} from './grpc/generated/sisa/services/blog/v1/categories/responses';
+export {
+  CreateCategoryCommand,
+  UpdateCategoryCommand,
+} from './grpc/generated/sisa/services/blog/v1/categories/commands';
 
-export { Combinator } from './grpc/generated/sisa/libs/common/enums/combinator';
-export { Operator } from './grpc/generated/sisa/libs/common/enums/operator';
-export { SortDirection } from './grpc/generated/sisa/libs/common/enums/sort_direction';
+/* END: CATEGORIES */
 
-export type {
-  FilterRule,
-  FilteringParams,
-} from './grpc/generated/sisa/libs/data/params/filtering_params';
-export { SortingParams } from './grpc/generated/sisa/libs/data/params/sorting_params';
-export { PagingParams } from './grpc/generated/sisa/libs/data/params/paging_params';
-
-export type { PagingResponse } from './grpc/generated/sisa/libs/common/responses/paging_response';
-
+/* BEGIN: TAGS */
 export * from './grpc/category-api';
+
+export {
+  CreateTagCommand,
+  UpdateTagCommand,
+} from './grpc/generated/sisa/services/blog/v1/tags/commands';
+
+export { TagResponse } from './grpc/generated/sisa/services/blog/v1/tags/responses';
+
 export * from './grpc/tag-api';
-export * from './grpc/post-api';
-export * from './grpc/comment-api';
+
+/* END: TAGS */
+
+// export * from './grpc/post-api';
+// export * from './grpc/comment-api';

@@ -12,10 +12,9 @@ import IconButton from '@mui/joy/IconButton';
 import { AlertCircleIcon, PencilLineIcon, XIcon } from 'lucide-react';
 
 import { ConfirmDialog, LinkIconButton } from '@sisa/components';
-import { type CategoryResponse } from '@sisa/api';
-import { randomId, useToggle, useQueryString } from '@sisa/utils';
 
-import { deleteCategory } from 'api/category-api';
+import { type CategoryResponse, deleteCategory } from '@sisa/api';
+import { randomId, useToggle, useQueryString } from '@sisa/utils';
 
 const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ row }) => {
   const router = useRouter();
@@ -46,7 +45,7 @@ const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ 
 
     setQueryString({
       _s: randomId(),
-    })
+    });
   };
 
   return (

@@ -1,8 +1,9 @@
 import { PageContent, PageHeader, PageLayout, PageTitle } from '@sisa/components';
 
+import { findCategoryById, updateCategory } from '@sisa/api';
+
 import Breadcrumbs from 'components/common/breadcrumbs';
 
-import { findCategoryById, updateCategory, getCategories } from 'api/category-api';
 import MutationForm from '../../components/mutation-form';
 
 type Props = {
@@ -37,7 +38,6 @@ const EditCategoryPage = async ({ params: { id } }: Props) => {
             parentId: data.parent?.id || undefined,
           }}
           trigger={updateCategory}
-          getCategories={getCategories}
         />
       </PageContent>
     </PageLayout>

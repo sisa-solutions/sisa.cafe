@@ -21,9 +21,7 @@ import {
 
 import type { TagResponse, CreateTagCommand, UpdateTagCommand } from '@sisa/api';
 
-type MutationValues = (CreateTagCommand | UpdateTagCommand) & {
-  parent?: TagResponse;
-};
+type MutationValues = CreateTagCommand | UpdateTagCommand;
 
 export type MutationFormProps = {
   trigger: (data: MutationValues) => Promise<TagResponse>;

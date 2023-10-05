@@ -15,10 +15,10 @@ import {
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 
-import { getCategories } from 'api/category-api';
+// import { getCategories } from 'api/category-api';
 import DataGrid from './components/data-grid';
 import Loading from 'components/common/loading';
-import { Combinator, Operator, SortDirection } from '@sisa/api';
+import { Combinator, Operator, SortDirection, getCategories } from '@sisa/api';
 
 type CategoriesPageProps = {
   searchParams: {

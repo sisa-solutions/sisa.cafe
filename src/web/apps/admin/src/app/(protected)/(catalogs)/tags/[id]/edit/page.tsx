@@ -1,8 +1,9 @@
 import { PageContent, PageHeader, PageLayout, PageTitle } from '@sisa/components';
 
+import { findTagById, updateTag } from '@sisa/api';
+
 import Breadcrumbs from 'components/common/breadcrumbs';
 
-import { findTagById, updateTag } from 'api/tag-api';
 import MutationForm from '../../components/mutation-form';
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 };
 
 const EditTagPage = async ({ params: { id } }: Props) => {
-  const data = await findTagById({id});
+  const data = await findTagById({ id });
 
   return (
     <PageLayout>

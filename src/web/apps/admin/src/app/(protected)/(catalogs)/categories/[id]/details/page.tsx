@@ -10,9 +10,10 @@ import {
   PageLayout,
   PageTitle,
 } from '@sisa/components';
-import Breadcrumbs from 'components/common/breadcrumbs';
 
-import { findCategoryById } from 'api/category-api';
+import { findCategoryById } from '@sisa/api';
+
+import Breadcrumbs from 'components/common/breadcrumbs';
 
 type Props = {
   params: {
@@ -22,7 +23,7 @@ type Props = {
 
 const NewCategoryPage = async ({ params: { id } }: Props) => {
   const data = await findCategoryById({
-    id
+    id,
   });
 
   return (

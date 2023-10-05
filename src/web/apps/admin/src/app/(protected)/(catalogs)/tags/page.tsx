@@ -13,12 +13,12 @@ import {
   LinkButton,
 } from '@sisa/components';
 
+import { Combinator, Operator, SortDirection, getTags } from '@sisa/api';
+
 import Breadcrumbs from 'components/common/breadcrumbs';
 
-import { getTags } from 'api/tag-api';
 import DataGrid from './components/data-grid';
 import Loading from 'components/common/loading';
-import { Combinator, Operator, SortDirection } from '@sisa/api';
 
 type TagsPageProps = {
   searchParams: {
