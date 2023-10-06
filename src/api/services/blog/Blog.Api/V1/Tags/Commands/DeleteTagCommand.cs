@@ -41,6 +41,13 @@ public class DeleteTagCommandHandler(
             throw new Exception($"Tag with id {command.Id} not found");
         }
 
+        if (tag.IsInUse())
+        {
+            logger.LogWarning("Tag with id {id} is in use", command.Id);
+
+            throw new Exception($"Tag with id {command.Id} is in use");
+        }
+
         repository.Remove(tag);
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

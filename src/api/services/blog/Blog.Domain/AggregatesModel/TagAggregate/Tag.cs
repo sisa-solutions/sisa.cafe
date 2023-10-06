@@ -43,4 +43,9 @@ public class Tag : FullAuditableAggregateRoot
     {
         PostCount--;
     }
+
+    public bool IsInUse()
+    {
+        return PostCount > 0;
+    }
 }
