@@ -29,6 +29,7 @@ type Props<T> = Pick<
   | 'state'
   | 'pageCount'
   | 'manualPagination'
+  | 'enableMultiSort'
   | 'enableRowSelection'
   | 'onRowSelectionChange'
   | 'onPaginationChange'
@@ -52,6 +53,7 @@ const DataGrid = <T extends {}>(props: Props<T>) => {
     itemCount,
     pageCount,
     manualPagination,
+    enableMultiSort,
     onPaginationChange,
     onRowSelectionChange,
     onSortingChange,
@@ -77,6 +79,7 @@ const DataGrid = <T extends {}>(props: Props<T>) => {
     pageCount,
     manualPagination: manualPagination ?? true,
     debugTable: true,
+    enableMultiSort,
 
     onRowSelectionChange,
     onPaginationChange,

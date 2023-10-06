@@ -13,7 +13,7 @@ import {
   LinkButton,
 } from '@sisa/components';
 
-import { Combinator, Operator, SortDirection, getTags } from '@sisa/api';
+import { Combinator, Operator, SortDirection, getTags, sortStringToParams } from '@sisa/api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 
@@ -25,12 +25,15 @@ type TagsPageProps = {
     name?: string;
     pageNumber?: number;
     pageSize?: number;
+    sortBy?: string;
   };
 };
 
 const TagsPage = async ({
-  searchParams: { name = '', pageNumber = 1, pageSize = 10 },
+  searchParams: { name = '', pageNumber = 1, pageSize = 10, sortBy = '' },
 }: TagsPageProps) => {
+  const sortingParams = sortStringToParams(sortBy);
+
   const {
     value,
     paging = {
@@ -54,12 +57,7 @@ const TagsPage = async ({
         },
       ],
     },
-    sortBy: [
-      {
-        field: 'Name',
-        sort: SortDirection.SORT_DIRECTION_ASC,
-      },
-    ],
+    sortBy: sortingParams,
     paging: {
       pageIndex: pageNumber - 1,
       pageSize,

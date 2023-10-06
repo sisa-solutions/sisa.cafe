@@ -13,24 +13,27 @@ import {
   LinkButton,
 } from '@sisa/components';
 
+import { Combinator, Operator, getCategories, sortStringToParams } from '@sisa/api';
+
 import Breadcrumbs from 'components/common/breadcrumbs';
 
-// import { getCategories } from 'api/category-api';
 import DataGrid from './components/data-grid';
 import Loading from 'components/common/loading';
-import { Combinator, Operator, SortDirection, getCategories } from '@sisa/api';
 
 type CategoriesPageProps = {
   searchParams: {
     name?: string;
     pageNumber?: number;
     pageSize?: number;
+    sortBy?: string;
   };
 };
 
 const CategoriesPage = async ({
-  searchParams: { name = '', pageNumber = 1, pageSize = 10 },
+  searchParams: { name = '', pageNumber = 1, pageSize = 10, sortBy = '' },
 }: CategoriesPageProps) => {
+  const sortingParams = sortStringToParams(sortBy);
+
   const {
     value,
     paging = {
@@ -54,12 +57,7 @@ const CategoriesPage = async ({
         },
       ],
     },
-    sortBy: [
-      {
-        field: 'Name',
-        sort: SortDirection.SORT_DIRECTION_ASC,
-      },
-    ],
+    sortBy: sortingParams,
     paging: {
       pageIndex: pageNumber - 1,
       pageSize,

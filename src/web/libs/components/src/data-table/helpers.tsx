@@ -3,6 +3,7 @@ import {
   type RowData,
   type ColumnDef,
   type AccessorColumnDef,
+  SortingState,
 } from '@tanstack/react-table';
 
 import { Checkbox } from '../inputs';

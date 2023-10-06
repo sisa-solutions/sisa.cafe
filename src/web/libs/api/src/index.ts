@@ -1,4 +1,5 @@
 export * from './grpc/common';
+export * from './grpc/helpers';
 
 /* BEGIN: CATEGORIES */
 

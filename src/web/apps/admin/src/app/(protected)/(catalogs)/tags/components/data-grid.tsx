@@ -13,11 +13,11 @@ import {
 } from '@sisa/components';
 
 import { type TagResponse } from '@sisa/api';
+import { sortParamsToString, useQueryString } from '@sisa/utils';
 
 import DetailsLink from './details-link';
 import RowActions from './row-actions';
 import FilterToolbar from './filter-toolbar';
-import { useQueryString } from '@sisa/utils';
 
 const columnHelper = createColumnHelper<TagResponse>();
 
@@ -46,10 +46,12 @@ const DataGrid = ({
       id: 'name',
       header: () => 'Name',
       cell: DetailsLink,
+      enableSorting: true,
     }),
     columnHelper.accessor('slug', {
       id: 'slug',
       header: () => 'Slug',
+      enableSorting: true,
     }),
     columnHelper.accessor('description', {
       id: 'description',
@@ -61,20 +63,26 @@ const DataGrid = ({
       header: () => 'Post Count',
       enableSorting: true,
     }),
+    columnHelper.accessor('creator.id', {
+      id: 'createdBy',
+      header: () => 'Created By',
+      cell: ({ row }) => row.original.creator?.displayName ?? '',
+      enableSorting: false,
+    }),
     columnHelper.accessor('creator.timestamp', {
-      id: 'creator.timestamp',
+      id: 'createdAt',
       header: () => 'Created At',
       cell: ({ getValue }) => getValue()?.toLocaleString(),
       enableSorting: true,
     }),
-    columnHelper.accessor('updater.displayName', {
-      id: 'updater.displayName',
+    columnHelper.accessor('updater.id', {
+      id: 'updatedBy',
       header: () => 'Updated by',
       cell: ({ row }) => row.original.updater?.displayName ?? '',
-      enableSorting: true,
+      enableSorting: false,
     }),
     columnHelper.accessor('updater.timestamp', {
-      id: 'updater.timestamp',
+      id: 'updatedAt',
       header: () => 'Updated At',
       cell: ({ row }) => row.original.updater?.timestamp?.toLocaleString() ?? '',
       enableSorting: true,
@@ -106,6 +114,12 @@ const DataGrid = ({
       pageSize: pagination.pageSize === 10 ? undefined : pagination.pageSize,
     });
   }, [pagination.pageIndex, pagination.pageSize]);
+
+  useEffect(() => {
+    setQueryString({
+      sortBy: sortParamsToString(sorting),
+    });
+  }, [sorting]);
 
   return (
     <DataTable

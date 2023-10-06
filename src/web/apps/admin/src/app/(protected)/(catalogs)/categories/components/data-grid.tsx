@@ -13,7 +13,7 @@ import {
 } from '@sisa/components';
 
 import { type CategoryResponse } from '@sisa/api';
-import { useQueryString } from '@sisa/utils';
+import { sortParamsToString, useQueryString } from '@sisa/utils';
 
 import DetailsLink from './details-link';
 import RowActions from './row-actions';
@@ -46,11 +46,13 @@ const DataGrid = ({
       id: 'name',
       header: () => 'Name',
       cell: DetailsLink,
+      enableMultiSort: true,
     }),
     columnHelper.accessor('parent.name', {
       id: 'parent.name',
       header: () => 'Parent',
       cell: ({ row }) => row.original.parent?.name ?? '',
+      enableSorting: false,
     }),
     columnHelper.accessor('slug', {
       id: 'slug',
@@ -64,10 +66,10 @@ const DataGrid = ({
     columnHelper.accessor('creator.displayName', {
       id: 'creator.displayName',
       header: () => 'Created by',
-      enableSorting: true,
+      enableSorting: false,
     }),
     columnHelper.accessor('creator.timestamp', {
-      id: 'creator.timestamp',
+      id: 'createdAt',
       header: () => 'Created At',
       cell: ({ getValue }) => getValue()?.toLocaleString(),
       enableSorting: true,
@@ -76,10 +78,10 @@ const DataGrid = ({
       id: 'updater.displayName',
       header: () => 'Updated by',
       cell: ({ row }) => row.original.updater?.displayName ?? '',
-      enableSorting: true,
+      enableSorting: false,
     }),
     columnHelper.accessor('updater.timestamp', {
-      id: 'updater.timestamp',
+      id: 'updatedAt',
       header: () => 'Updated At',
       cell: ({ row }) => row.original.updater?.timestamp?.toLocaleString() ?? '',
       enableSorting: true,
@@ -112,6 +114,12 @@ const DataGrid = ({
     });
   }, [pagination.pageIndex, pagination.pageSize]);
 
+  useEffect(() => {
+    setQueryString({
+      sortBy: sortParamsToString(sorting),
+    });
+  }, [sorting]);
+
   return (
     <DataTable
       columns={columns}
@@ -119,6 +127,7 @@ const DataGrid = ({
       itemCount={itemCount}
       pageCount={pageCount}
       enableRowSelection
+      enableMultiSort
       state={{
         pagination,
         rowSelection,
