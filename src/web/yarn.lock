@@ -1107,7 +1107,7 @@ __metadata:
   dependencies:
     eslint-config-next: "npm:^13.5.4"
     eslint-config-prettier: "npm:^9.0.0"
-    eslint-config-turbo: "npm:^1.10.14"
+    eslint-config-turbo: "npm:^1.10.15"
     eslint-plugin-react: "npm:7.33.2"
   languageName: unknown
   linkType: soft
@@ -1205,10 +1205,10 @@ __metadata:
   dependencies:
     "@changesets/cli": "npm:^2.26.2"
     "@sisa/eslint-config": "workspace:*"
-    "@turbo/gen": "npm:^1.10.14"
+    "@turbo/gen": "npm:^1.10.15"
     eslint: "npm:^8.50.0"
     prettier: "npm:^3.0.3"
-    turbo: "npm:^1.10.14"
+    turbo: "npm:^1.10.15"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
@@ -1276,11 +1276,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@turbo/gen@npm:^1.10.14":
-  version: 1.10.14
-  resolution: "@turbo/gen@npm:1.10.14"
+"@turbo/gen@npm:^1.10.15":
+  version: 1.10.15
+  resolution: "@turbo/gen@npm:1.10.15"
   dependencies:
-    "@turbo/workspaces": "npm:1.10.14"
+    "@turbo/workspaces": "npm:1.10.15"
     chalk: "npm:2.4.2"
     commander: "npm:^10.0.0"
     fs-extra: "npm:^10.1.0"
@@ -1293,13 +1293,13 @@ __metadata:
     validate-npm-package-name: "npm:^5.0.0"
   bin:
     gen: dist/cli.js
-  checksum: ba724fd4163937e3a7adacf06cfc83f82fc72a8d8eb6f278ba2dc65858b8ebf4479eaea76df6c5c19bf8275cf2aa3ece5f211bdb123ad9baf13d965302db5392
+  checksum: 9254fbf069cdc98bcdc81d07b807a73f3d997586f2d6f4e949535dd0203aaa6ce252502111031f6277c5e87eb89e6723cedf84c11d2506aad1224948603ddac8
   languageName: node
   linkType: hard
 
-"@turbo/workspaces@npm:1.10.14":
-  version: 1.10.14
-  resolution: "@turbo/workspaces@npm:1.10.14"
+"@turbo/workspaces@npm:1.10.15":
+  version: 1.10.15
+  resolution: "@turbo/workspaces@npm:1.10.15"
   dependencies:
     chalk: "npm:2.4.2"
     commander: "npm:^10.0.0"
@@ -1315,7 +1315,7 @@ __metadata:
     update-check: "npm:^1.5.4"
   bin:
     workspaces: dist/cli.js
-  checksum: 9049541c0a6072fd59f57ec3d439bac807fa6308e218153405eb9cdc3c8fed459c779b58f0cb73a0fe305d9866bf9d1cf7306037f447aa8b5991a619f062829d
+  checksum: c1622f42cc6dd9df5a280d6d8be3f63eb768cef0da1707cba422653e67a6c7f12ad47bc36e159553cb3893fd264a992ecf6bd098cb5ba4a592b9942cfcaf2244
   languageName: node
   linkType: hard
 
@@ -3153,14 +3153,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-turbo@npm:^1.10.14":
-  version: 1.10.14
-  resolution: "eslint-config-turbo@npm:1.10.14"
+"eslint-config-turbo@npm:^1.10.15":
+  version: 1.10.15
+  resolution: "eslint-config-turbo@npm:1.10.15"
   dependencies:
-    eslint-plugin-turbo: "npm:1.10.14"
+    eslint-plugin-turbo: "npm:1.10.15"
   peerDependencies:
     eslint: ">6.6.0"
-  checksum: 4f674d36bc906ce30dde19bbeeeecb514fccb82e902dcae90462c2ec10a4a014b22925124e4426b5d9eeb7288d9da85b7a0c56c11357ba4e3bd4a4ad050984a1
+  checksum: 9491b5f8c20d4531b03bdbbf52d9100c93dda2f6dcb9f5cea65ba0cc6eb7e8fcf5a9eaa58b4400591ed87da07760e05d3936c298f438656f4e5f4235d5fdcd79
   languageName: node
   linkType: hard
 
@@ -3293,14 +3293,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-turbo@npm:1.10.14":
-  version: 1.10.14
-  resolution: "eslint-plugin-turbo@npm:1.10.14"
+"eslint-plugin-turbo@npm:1.10.15":
+  version: 1.10.15
+  resolution: "eslint-plugin-turbo@npm:1.10.15"
   dependencies:
     dotenv: "npm:16.0.3"
   peerDependencies:
     eslint: ">6.6.0"
-  checksum: c32ba297718510db3ad68cee5e236dddf52b224795161fde59907c83daa0c9435a6e3a8d44d75d4fc93fecc510bc596c8df6f4b6d4dc4ae5f9036703c153e948
+  checksum: d878e918a471003e68b7abac624b6f0578b8ee49783709099dc61b079244fa23902d2943c3a46c78a72ce9de1b07c5a704bc6b149b454e5d1d6f95967c0958ed
   languageName: node
   linkType: hard
 
@@ -7464,58 +7464,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-darwin-64@npm:1.10.14":
-  version: 1.10.14
-  resolution: "turbo-darwin-64@npm:1.10.14"
+"turbo-darwin-64@npm:1.10.15":
+  version: 1.10.15
+  resolution: "turbo-darwin-64@npm:1.10.15"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-darwin-arm64@npm:1.10.14":
-  version: 1.10.14
-  resolution: "turbo-darwin-arm64@npm:1.10.14"
+"turbo-darwin-arm64@npm:1.10.15":
+  version: 1.10.15
+  resolution: "turbo-darwin-arm64@npm:1.10.15"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-64@npm:1.10.14":
-  version: 1.10.14
-  resolution: "turbo-linux-64@npm:1.10.14"
+"turbo-linux-64@npm:1.10.15":
+  version: 1.10.15
+  resolution: "turbo-linux-64@npm:1.10.15"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm64@npm:1.10.14":
-  version: 1.10.14
-  resolution: "turbo-linux-arm64@npm:1.10.14"
+"turbo-linux-arm64@npm:1.10.15":
+  version: 1.10.15
+  resolution: "turbo-linux-arm64@npm:1.10.15"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-windows-64@npm:1.10.14":
-  version: 1.10.14
-  resolution: "turbo-windows-64@npm:1.10.14"
+"turbo-windows-64@npm:1.10.15":
+  version: 1.10.15
+  resolution: "turbo-windows-64@npm:1.10.15"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-windows-arm64@npm:1.10.14":
-  version: 1.10.14
-  resolution: "turbo-windows-arm64@npm:1.10.14"
+"turbo-windows-arm64@npm:1.10.15":
+  version: 1.10.15
+  resolution: "turbo-windows-arm64@npm:1.10.15"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo@npm:^1.10.14":
-  version: 1.10.14
-  resolution: "turbo@npm:1.10.14"
+"turbo@npm:^1.10.15":
+  version: 1.10.15
+  resolution: "turbo@npm:1.10.15"
   dependencies:
-    turbo-darwin-64: "npm:1.10.14"
-    turbo-darwin-arm64: "npm:1.10.14"
-    turbo-linux-64: "npm:1.10.14"
-    turbo-linux-arm64: "npm:1.10.14"
-    turbo-windows-64: "npm:1.10.14"
-    turbo-windows-arm64: "npm:1.10.14"
+    turbo-darwin-64: "npm:1.10.15"
+    turbo-darwin-arm64: "npm:1.10.15"
+    turbo-linux-64: "npm:1.10.15"
+    turbo-linux-arm64: "npm:1.10.15"
+    turbo-windows-64: "npm:1.10.15"
+    turbo-windows-arm64: "npm:1.10.15"
   dependenciesMeta:
     turbo-darwin-64:
       optional: true
@@ -7531,7 +7531,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: 4e23c41ad04ad278587c2ae1f1fa1edf7402b4ec122d5e55133dcad3c5d6c20a9ce8f98bfadbeaf7003f276bed500cfe82ae54e27d8cde78b5754bf853288990
+  checksum: c47138d2ad42b05eecedd590fe1dd631879116d9a06927d26adbeaa2177ee1449051c109e992ceec74631958d55e16442903840d41ee9094c1261172ac3866ed
   languageName: node
   linkType: hard
 
