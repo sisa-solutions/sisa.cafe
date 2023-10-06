@@ -13,7 +13,8 @@ import {
 } from '@sisa/components';
 
 import { type TagResponse } from '@sisa/api';
-import { sortParamsToString, useQueryString } from '@sisa/utils';
+import { useQueryString } from '@sisa/hooks';
+import { sortParamsToString } from '@sisa/utils';
 
 import DetailsLink from './details-link';
 import RowActions from './row-actions';

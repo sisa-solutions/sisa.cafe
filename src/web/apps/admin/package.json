@@ -16,6 +16,7 @@
     "@mui/joy": "5.0.0-beta.9",
     "@sisa/api": "workspace:*",
     "@sisa/components": "workspace:*",
+    "@sisa/hooks": "workspace:*",
     "@sisa/i18n": "workspace:*",
     "@sisa/utils": "workspace:*",
     "@tanstack/react-table": "^8.10.3",

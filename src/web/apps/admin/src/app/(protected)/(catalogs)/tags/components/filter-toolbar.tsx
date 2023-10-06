@@ -8,7 +8,7 @@ import Button from '@mui/joy/Button';
 import { EraserIcon, SearchIcon } from 'lucide-react';
 
 import { TextField } from '@sisa/components';
-import { useQueryString } from '@sisa/utils';
+import { useQueryString } from '@sisa/hooks';
 
 type FilterFormValues = {
   name?: string;

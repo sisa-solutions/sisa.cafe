@@ -12,6 +12,10 @@ module.exports = {
       transform: '@sisa/components/src/{{kebabCase member}}',
       preventFullImport: true,
     },
+    '@sisa/hooks': {
+      transform: '@sisa/hooks/src/{{kebabCase member}}',
+      preventFullImport: true,
+    },
   },
   cleanDistDir: true,
   poweredByHeader: false,

@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import useMutation from 'swr/mutation';
 
 import type { CellContext, ColumnDefTemplate } from '@tanstack/react-table';
@@ -15,7 +13,8 @@ import { ConfirmDialog, LinkIconButton } from '@sisa/components';
 
 import { deleteTag, type TagResponse } from '@sisa/api';
 
-import { randomId, useQueryString, useToggle } from '@sisa/utils';
+import { useQueryString, useToggle } from '@sisa/hooks';
+import { randomId } from '@sisa/utils';
 
 const RowActions: ColumnDefTemplate<CellContext<TagResponse, string>> = ({ row }) => {
   const setQueryString = useQueryString();

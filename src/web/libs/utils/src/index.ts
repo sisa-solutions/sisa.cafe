@@ -4,6 +4,4 @@ export { default as guid } from './guid';
 export { default as deepMerge } from './deep-merge';
 export { default as randomId } from './random-id';
 
-export * from './hooks';
-
 export * from './query-string-helpers';
