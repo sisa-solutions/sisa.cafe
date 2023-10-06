@@ -19,12 +19,13 @@ public class BlogDbContextFactory : IDesignTimeDbContextFactory<BlogDbContext>
 
     /*
      * cd db-migrators/Blog.DbMigrator
-     * dotnet ef migrations add SimplizeComment -c Sisa.Blog.Data.BlogDbContext -o PostgreSQL/Migrations
+     * dotnet ef migrations add AddPostCountToTag -c Sisa.Blog.Data.BlogDbContext -o PostgreSQL/Migrations
      *
      * dotnet ef migrations script -i -c Sisa.Blog.Data.BlogDbContext -o PostgreSQL/Scripts/000_Snapshot.sql
      *
      * dotnet ef migrations script -i -c Sisa.Blog.Data.BlogDbContext 0 Initialize -o PostgreSQL/Scripts/010_Initialize.sql
      * dotnet ef migrations script -i -c Sisa.Blog.Data.BlogDbContext Initialize UpdateComment -o PostgreSQL/Scripts/012_UpdateComment.sql
      * dotnet ef migrations script -i -c Sisa.Blog.Data.BlogDbContext UpdateComment SimplizeComment -o PostgreSQL/Scripts/013_SimplizeComment.sql
+     * dotnet ef migrations script -i -c Sisa.Blog.Data.BlogDbContext SimplizeComment AddPostCountToTag -o PostgreSQL/Scripts/014_AddPostCountToTag.sql
      */
 }

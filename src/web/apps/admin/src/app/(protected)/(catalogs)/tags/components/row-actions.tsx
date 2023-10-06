@@ -13,15 +13,15 @@ import { AlertCircleIcon, PencilLineIcon, XIcon } from 'lucide-react';
 
 import { ConfirmDialog, LinkIconButton } from '@sisa/components';
 
-import { deleteCategory, type CategoryResponse } from '@sisa/api';
+import { deleteTag, type TagResponse } from '@sisa/api';
 
-import { useToggle } from '@sisa/utils';
+import { randomId, useQueryString, useToggle } from '@sisa/utils';
 
-const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ row }) => {
-  const router = useRouter();
+const RowActions: ColumnDefTemplate<CellContext<TagResponse, string>> = ({ row }) => {
+  const setQueryString = useQueryString();
 
   const { trigger, isMutating } = useMutation(['/api/v1/tags/delete', row.original.id], ([_, id]) =>
-    deleteCategory({
+    deleteTag({
       id,
     })
   );
@@ -40,7 +40,10 @@ const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ 
     await trigger();
 
     closeConfirmDialog();
-    router.refresh();
+
+    setQueryString({
+      _s: randomId(),
+    });
   };
 
   return (

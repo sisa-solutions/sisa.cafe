@@ -9,6 +9,8 @@ public class Tag : FullAuditableAggregateRoot
     public string Slug { get; private set; }
     public string? Description { get; private set; }
 
+    public int PostCount { get; private set; }
+
     private readonly List<Post> _posts = [];
     public IReadOnlyCollection<Post> Posts => _posts;
 
@@ -30,5 +32,15 @@ public class Tag : FullAuditableAggregateRoot
     public void Describe(string? description)
     {
         Description = description;
+    }
+
+    public void IncreasePostCount()
+    {
+        PostCount++;
+    }
+
+    public void DecreasePostCount()
+    {
+        PostCount--;
     }
 }

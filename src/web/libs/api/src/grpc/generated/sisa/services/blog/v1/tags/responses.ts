@@ -11,6 +11,7 @@ export interface TagInfoResponse {
   name: string;
   slug: string;
   description: string | undefined;
+  postCount: number;
 }
 
 export interface TagResponse {
@@ -18,13 +19,8 @@ export interface TagResponse {
   id: string;
   name: string;
   slug: string;
-  description:
-    | string
-    | undefined;
-  /** relationship fields: from 51 to 60 */
-  parent:
-    | TagInfoResponse
-    | undefined;
+  description: string | undefined;
+  postCount: number;
   /** audit fields: from 63 to 70 */
   creator: ActorInfoResponse | undefined;
   updater: ActorInfoResponse | undefined;
@@ -40,7 +36,7 @@ export interface ListTagsResponse {
 }
 
 function createBaseTagInfoResponse(): TagInfoResponse {
-  return { id: "", name: "", slug: "", description: undefined };
+  return { id: "", name: "", slug: "", description: undefined, postCount: 0 };
 }
 
 export const TagInfoResponse = {
@@ -56,6 +52,9 @@ export const TagInfoResponse = {
     }
     if (message.description !== undefined) {
       StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.postCount !== 0) {
+      writer.uint32(40).int32(message.postCount);
     }
     return writer;
   },
@@ -95,6 +94,13 @@ export const TagInfoResponse = {
 
           message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.postCount = reader.int32();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -110,6 +116,7 @@ export const TagInfoResponse = {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
+      postCount: isSet(object.postCount) ? globalThis.Number(object.postCount) : 0,
     };
   },
 
@@ -127,6 +134,9 @@ export const TagInfoResponse = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
+    if (message.postCount !== 0) {
+      obj.postCount = Math.round(message.postCount);
+    }
     return obj;
   },
 
@@ -139,20 +149,13 @@ export const TagInfoResponse = {
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
+    message.postCount = object.postCount ?? 0;
     return message;
   },
 };
 
 function createBaseTagResponse(): TagResponse {
-  return {
-    id: "",
-    name: "",
-    slug: "",
-    description: undefined,
-    parent: undefined,
-    creator: undefined,
-    updater: undefined,
-  };
+  return { id: "", name: "", slug: "", description: undefined, postCount: 0, creator: undefined, updater: undefined };
 }
 
 export const TagResponse = {
@@ -169,8 +172,8 @@ export const TagResponse = {
     if (message.description !== undefined) {
       StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
     }
-    if (message.parent !== undefined) {
-      TagInfoResponse.encode(message.parent, writer.uint32(410).fork()).ldelim();
+    if (message.postCount !== 0) {
+      writer.uint32(40).int32(message.postCount);
     }
     if (message.creator !== undefined) {
       ActorInfoResponse.encode(message.creator, writer.uint32(490).fork()).ldelim();
@@ -216,12 +219,12 @@ export const TagResponse = {
 
           message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
-        case 51:
-          if (tag !== 410) {
+        case 5:
+          if (tag !== 40) {
             break;
           }
 
-          message.parent = TagInfoResponse.decode(reader, reader.uint32());
+          message.postCount = reader.int32();
           continue;
         case 61:
           if (tag !== 490) {
@@ -252,7 +255,7 @@ export const TagResponse = {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
       description: isSet(object.description) ? String(object.description) : undefined,
-      parent: isSet(object.parent) ? TagInfoResponse.fromJSON(object.parent) : undefined,
+      postCount: isSet(object.postCount) ? globalThis.Number(object.postCount) : 0,
       creator: isSet(object.creator) ? ActorInfoResponse.fromJSON(object.creator) : undefined,
       updater: isSet(object.updater) ? ActorInfoResponse.fromJSON(object.updater) : undefined,
     };
@@ -272,8 +275,8 @@ export const TagResponse = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
-    if (message.parent !== undefined) {
-      obj.parent = TagInfoResponse.toJSON(message.parent);
+    if (message.postCount !== 0) {
+      obj.postCount = Math.round(message.postCount);
     }
     if (message.creator !== undefined) {
       obj.creator = ActorInfoResponse.toJSON(message.creator);
@@ -293,9 +296,7 @@ export const TagResponse = {
     message.name = object.name ?? "";
     message.slug = object.slug ?? "";
     message.description = object.description ?? undefined;
-    message.parent = (object.parent !== undefined && object.parent !== null)
-      ? TagInfoResponse.fromPartial(object.parent)
-      : undefined;
+    message.postCount = object.postCount ?? 0;
     message.creator = (object.creator !== undefined && object.creator !== null)
       ? ActorInfoResponse.fromPartial(object.creator)
       : undefined;

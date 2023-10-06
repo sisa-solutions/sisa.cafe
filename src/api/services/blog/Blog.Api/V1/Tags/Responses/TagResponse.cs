@@ -1,5 +1,7 @@
 using System.Linq.Expressions;
 
+using Google.Protobuf.WellKnownTypes;
+
 using Sisa.Abstractions;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
 using Sisa.Common.Responses;
@@ -24,6 +26,7 @@ public static class TagProjections
             Slug = tag.Slug,
             Name = tag.Name,
             Description = tag.Description,
+            PostCount = tag.PostCount
         };
     }
 
@@ -67,6 +70,20 @@ public static class TagProjections
                 Slug = x.Slug,
                 Name = x.Name,
                 Description = x.Description,
+                PostCount = x.PostCount,
+
+                Creator = new ActorInfoResponse()
+                {
+                    Id = x.CreatedBy.ToString(),
+                    DisplayName = "Administrator",
+                    Timestamp = x.CreatedAt.ToTimestamp()
+                },
+                Updater = x.UpdatedBy != null ? new ActorInfoResponse()
+                {
+                    Id = x.UpdatedBy.Value.ToString(),
+                    DisplayName = "Administrator",
+                    Timestamp = x.UpdatedAt!.Value.ToTimestamp()
+                } : null,
             };
         }
     }

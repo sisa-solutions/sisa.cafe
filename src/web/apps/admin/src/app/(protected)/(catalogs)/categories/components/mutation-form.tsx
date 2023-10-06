@@ -46,6 +46,8 @@ export type MutationFormProps = {
 };
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
+  const router = useRouter();
+  const { pending } = useFormStatus();
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
 
   const {
@@ -78,9 +80,6 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       paging: DEFAULT_PAGING_PARAMS,
     })
   );
-
-  const router = useRouter();
-  const { pending } = useFormStatus();
 
   const { control, handleSubmit } = useForm<MutationValues>({
     defaultValues: {

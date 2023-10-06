@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import useMutation from 'swr/mutation';
 
 import type { CellContext, ColumnDefTemplate } from '@tanstack/react-table';
@@ -17,7 +15,6 @@ import { type CategoryResponse, deleteCategory } from '@sisa/api';
 import { randomId, useToggle, useQueryString } from '@sisa/utils';
 
 const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ row }) => {
-  const router = useRouter();
   const setQueryString = useQueryString();
 
   const { trigger, isMutating } = useMutation(

@@ -79,6 +79,11 @@ public class Post : FullAuditableAggregateRoot
 
     public void AddTags(IEnumerable<Tag> requestTags)
     {
+        foreach (var tag in requestTags)
+        {
+            tag.IncreasePostCount();
+        }
+
         _tags.AddRange(requestTags);
 
         SyncTagSlugs();
@@ -86,6 +91,11 @@ public class Post : FullAuditableAggregateRoot
 
     public void UpdateTags(IEnumerable<Tag> requestTags)
     {
+        foreach (var tag in requestTags)
+        {
+            tag.IncreasePostCount();
+        }
+
         _tags.Clear();
         _tags.AddRange(requestTags);
 

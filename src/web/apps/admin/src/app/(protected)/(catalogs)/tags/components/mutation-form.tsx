@@ -20,6 +20,7 @@ import {
 } from '@sisa/components';
 
 import type { TagResponse, CreateTagCommand, UpdateTagCommand } from '@sisa/api';
+import { randomId } from '@sisa/utils';
 
 type MutationValues = CreateTagCommand | UpdateTagCommand;
 
@@ -41,12 +42,16 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     try {
       await trigger(data);
 
-      router.push('/tags');
+      goBack();
     } catch (error) {
       console.log(error);
       alert(error);
     }
   });
+
+  const goBack = () => {
+    router.push(`/tags?_s=${randomId()}`);
+  };
 
   return (
     <FormContainer orientation="horizontal">
