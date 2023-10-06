@@ -1,23 +1,95 @@
-export { PostGrpcServiceClient } from './generated/sisa/services/blog/v1/posts/post_grpc_service';
+'use server';
 
-export {
+import { PostGrpcClient as client } from './clients';
+
+import {
   CreatePostCommand,
   UpdatePostCommand,
-  PublishPostCommand,
   DeletePostCommand,
-  CreateCommentCommand,
-  ReactToPostCommand
 } from './generated/sisa/services/blog/v1/posts/commands';
 
-export {
-  FindPostByIdQuery,
-  GetPostsQuery,
-  GetCommentsByPostIdQuery,
-} from './generated/sisa/services/blog/v1/posts/queries';
+import { FindPostByIdQuery, GetPostsQuery } from './generated/sisa/services/blog/v1/posts/queries';
 
-export type {
-  ListPostsResponse,
-  PostResponse,
-  SinglePostResponse
-} from './generated/sisa/services/blog/v1/posts/responses';
+import { ListPostsResponse, PostResponse } from './generated/sisa/services/blog/v1/posts/responses';
 
+export const getPosts = (request: GetPostsQuery) => {
+  const response = new Promise<ListPostsResponse>((resolve, reject) => {
+    client.getPosts(request,
+      (err, response) => {
+        if (err) {
+          reject(err);
+        }
+        if (response) {
+          resolve(response);
+        }
+      }
+    );
+  });
+
+  return response;
+};
+
+export const findPostById = (request: FindPostByIdQuery) => {
+  return new Promise<PostResponse>((resolve, reject) => {
+    client.findPostById(request, (err, { value }) => {
+      if (err) {
+        reject(err);
+      }
+      if (value) {
+        resolve(value);
+      }
+    });
+  });
+};
+
+// export const FindPostBySlug = (request: FindPostBySlugQuery) => {
+//   return new Promise<PostResponse>((resolve, reject) => {
+//     client.findPostBySlug(request, (err, { value }) => {
+//       if (err) {
+//         reject(err);
+//       }
+//       if (value) {
+//         resolve(value);
+//       }
+//     });
+//   });
+// };
+
+export const createPost = (request: CreatePostCommand) => {
+  return new Promise<PostResponse>((resolve, reject) => {
+    client.createPost(request, (err, { value }) => {
+      if (err) {
+        reject(err);
+      }
+      if (value) {
+        resolve(value);
+      }
+    });
+  });
+};
+
+export const updatePost = (request: UpdatePostCommand) => {
+  return new Promise<PostResponse>((resolve, reject) => {
+    client.updatePost(request, (err, { value }) => {
+      if (err) {
+        reject(err);
+      }
+      if (value) {
+        resolve(value);
+      }
+    });
+  });
+};
+
+export const deletePost = (request: DeletePostCommand) => {
+  return new Promise<void>((resolve, reject) => {
+    client.deletePost(request, (err, value) => {
+      if (err) {
+        reject(err);
+      }
+      if (value) {
+        resolve();
+      }
+    });
+  });
+};

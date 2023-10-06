@@ -24,9 +24,9 @@ import {
 
 import {
   type CategoryResponse,
-  type CategoryInfoResponse,
-  type CreateCategoryCommand,
-  type UpdateCategoryCommand,
+  type PostResponse,
+  type CreatePostCommand,
+  type UpdatePostCommand,
   getCategories,
   Combinator,
   SortDirection,
@@ -36,12 +36,10 @@ import {
 
 import { randomId } from '@sisa/utils';
 
-type MutationValues = (CreateCategoryCommand | UpdateCategoryCommand) & {
-  parent?: CategoryInfoResponse;
-};
+type MutationValues = CreatePostCommand | UpdatePostCommand;
 
 export type MutationFormProps = {
-  trigger: (data: MutationValues) => Promise<CategoryResponse>;
+  trigger: (data: MutationValues) => Promise<PostResponse>;
   defaultValues?: MutationValues;
 };
 
@@ -84,21 +82,12 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const { control, handleSubmit } = useForm<MutationValues>({
     defaultValues: {
       ...defaultValues,
-      parent: defaultValues?.parent ?? {
-        id: '',
-        name: '',
-      },
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const { parent, ...rest } = data;
-
-      await trigger({
-        ...rest,
-        parentId: parent?.id ?? '',
-      });
+      await trigger(data);
 
       goBack();
     } catch (error) {
@@ -119,7 +108,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     <FormContainer orientation="horizontal">
       <AutocompleteField
         control={control}
-        name="parent"
+        name="categoryId"
         label="Parent Category"
         loading={isLoading}
         options={data.value.map((x) => {
@@ -134,13 +123,14 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         inputValue={searchParentCategoryName}
         onInputChange={onInputChange}
       />
-      <TextField control={control} name="name" label="Name" />
+      <TextField control={control} name="title" label="Title" />
       <TextField control={control} name="slug" label="Slug" />
+      <RichTextField control={control} name="excerpt" label="Excerpt" />
       <FormControl>
         <FormLabel>Picture</FormLabel>
         <FileUploadInput options={{}} />
       </FormControl>
-      <RichTextField control={control} name="description" label="Description" />
+      <RichTextField control={control} name="content" label="Content" />
       <FormActions>
         <SubmitButton submit={onSubmit} disabled={pending} loading={pending}>
           Save

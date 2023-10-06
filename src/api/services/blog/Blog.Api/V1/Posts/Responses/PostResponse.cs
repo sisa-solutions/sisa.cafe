@@ -1,8 +1,9 @@
 using System.Linq.Expressions;
 
+using Google.Protobuf.WellKnownTypes;
+
 using Sisa.Abstractions;
 using Sisa.Blog.Api.V1.Categories.Responses;
-using Sisa.Blog.Api.V1.Comments.Responses;
 using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
 using Sisa.Common.Responses;
 
@@ -75,6 +76,19 @@ public static class PostProjections
                     Slug = x.Category.Slug,
                     Description = x.Category.Description
                 },
+
+                Creator = new ActorInfoResponse()
+                {
+                    Id = x.CreatedBy.ToString(),
+                    DisplayName = "Administrator",
+                    Timestamp = x.CreatedAt.ToTimestamp()
+                },
+                Updater = x.UpdatedBy != null ? new ActorInfoResponse()
+                {
+                    Id = x.UpdatedBy.Value.ToString(),
+                    DisplayName = "Administrator",
+                    Timestamp = x.UpdatedAt!.Value.ToTimestamp()
+                } : null,
             };
         }
     }

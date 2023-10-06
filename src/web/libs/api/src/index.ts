@@ -29,5 +29,26 @@ export * from './grpc/tag-api';
 
 /* END: TAGS */
 
-// export * from './grpc/post-api';
+/* BEGIN: POSTS */
+
+export {
+  CreatePostCommand,
+  UpdatePostCommand,
+  DeletePostCommand,
+} from './grpc/generated/sisa/services/blog/v1/posts/commands';
+
+export {
+  FindPostByIdQuery,
+  GetPostsQuery,
+} from './grpc/generated/sisa/services/blog/v1/posts/queries';
+
+export {
+  ListPostsResponse,
+  PostResponse,
+} from './grpc/generated/sisa/services/blog/v1/posts/responses';
+
+export * from './grpc/post-api';
+
+/* END: POSTS */
+
 // export * from './grpc/comment-api';
