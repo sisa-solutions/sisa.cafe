@@ -62,7 +62,12 @@ const NewTagPage = async ({ params: { id } }: Props) => {
           </Box>
           <Box>
             <Box>Description</Box>
-            <Box>{data.description}</Box>
+            <Box
+              dangerouslySetInnerHTML={{
+                __html: data.description ?? '',
+              }}
+            >
+            </Box>
           </Box>
         </DescriptionList>
       </PageContent>

@@ -42,12 +42,7 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
       <PageHeader>
         <PageTitle
           endDecorator={
-            <Link
-              href={`/posts/${id}/edit`}
-              variant="outlined"
-              fontSize="md"
-              borderRadius="sm"
-            >
+            <Link href={`/posts/${id}/edit`} variant="outlined" fontSize="md" borderRadius="sm">
               <PencilLine />
             </Link>
           }
@@ -71,11 +66,23 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
           </Box>
           <Box>
             <Box>Excerpt</Box>
-            <Box>{data.excerpt}</Box>
+            <Box
+              dangerouslySetInnerHTML={{
+                __html: data.excerpt,
+              }}
+            ></Box>
           </Box>
           <Box>
             <Box>Content</Box>
-            <Box>{data.content}</Box>
+            <Box
+              dangerouslySetInnerHTML={{
+                __html: data.content,
+              }}
+            ></Box>
+          </Box>
+          <Box>
+            <Box>Comment Count</Box>
+            <Box>{data.commentCount}</Box>
           </Box>
           <Box>
             <Box>Created By</Box>

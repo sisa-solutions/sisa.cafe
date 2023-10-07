@@ -54,6 +54,14 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
       ...column,
     });
 
+  const dangerouslyHtml = (accessor: accessorArgs[0], column?: accessorArgs[1]) =>
+    baseHelperFuncs.accessor(accessor, {
+      // @ts-ignore
+      id: column?.id,
+      cell: ({ getValue }) => <div dangerouslySetInnerHTML={{ __html: getValue<string>() ?? '' }} />,
+      ...column,
+    });
+
   const actions = (accessor: accessorArgs[0], column?: accessorArgs[1]) =>
     baseHelperFuncs.accessor(accessor, {
       id: ACTIONS_COLUMN_ID,
@@ -88,6 +96,7 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
     selection,
     actions,
     flex,
+    dangerouslyHtml,
   };
 };
 

@@ -59,7 +59,7 @@ const DataGrid = ({
       id: 'slug',
       header: () => 'Slug',
     }),
-    columnHelper.accessor('description', {
+    columnHelper.dangerouslyHtml('description', {
       id: 'description',
       header: () => 'Description',
       enableSorting: true,

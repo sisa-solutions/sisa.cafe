@@ -71,7 +71,11 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
           </Box>
           <Box>
             <Box>Description</Box>
-            <Box>{data.description}</Box>
+            <Box
+              dangerouslySetInnerHTML={{
+                __html: data.description ?? '',
+              }}
+            ></Box>
           </Box>
           <Box>
             <Box>Created By</Box>

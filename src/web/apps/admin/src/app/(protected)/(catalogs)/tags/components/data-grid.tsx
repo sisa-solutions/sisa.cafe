@@ -44,46 +44,46 @@ const DataGrid = ({
     columnHelper.selection('id'),
 
     columnHelper.accessor('name', {
-      id: 'name',
+      id: 'Name',
       header: () => 'Name',
       cell: DetailsLink,
       enableSorting: true,
     }),
     columnHelper.accessor('slug', {
-      id: 'slug',
+      id: 'Slug',
       header: () => 'Slug',
       enableSorting: true,
     }),
-    columnHelper.accessor('description', {
-      id: 'description',
+    columnHelper.dangerouslyHtml('description', {
+      id: 'Description',
       header: () => 'Description',
       enableSorting: true,
     }),
     columnHelper.accessor('postCount', {
-      id: 'postCount',
+      id: 'PostCount',
       header: () => 'Post Count',
       enableSorting: true,
     }),
     columnHelper.accessor('creator.id', {
-      id: 'createdBy',
+      id: 'CreatedBy',
       header: () => 'Created By',
       cell: ({ row }) => row.original.creator?.displayName ?? '',
       enableSorting: false,
     }),
     columnHelper.accessor('creator.timestamp', {
-      id: 'createdAt',
+      id: 'CreatedAt',
       header: () => 'Created At',
       cell: ({ getValue }) => getValue()?.toLocaleString(),
       enableSorting: true,
     }),
     columnHelper.accessor('updater.id', {
-      id: 'updatedBy',
+      id: 'UpdatedBy',
       header: () => 'Updated by',
       cell: ({ row }) => row.original.updater?.displayName ?? '',
       enableSorting: false,
     }),
     columnHelper.accessor('updater.timestamp', {
-      id: 'updatedAt',
+      id: 'UpdatedAt',
       header: () => 'Updated At',
       cell: ({ row }) => row.original.updater?.timestamp?.toLocaleString() ?? '',
       enableSorting: true,

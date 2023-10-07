@@ -59,13 +59,19 @@ const DataGrid = ({
       id: 'Slug',
       header: () => 'Slug',
     }),
-    columnHelper.accessor('excerpt', {
+    columnHelper.dangerouslyHtml('excerpt', {
       id: 'Excerpt',
       header: () => 'Excerpt',
+      enableSorting: true,
     }),
     columnHelper.accessor('creator.displayName', {
       id: 'CreatedBy',
       header: () => 'Created by',
+      enableSorting: false,
+    }),
+    columnHelper.accessor('commentCount', {
+      id: 'CommentCount',
+      header: () => 'Comment Count',
       enableSorting: false,
     }),
     columnHelper.accessor('creator.timestamp', {
