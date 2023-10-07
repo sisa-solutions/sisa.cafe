@@ -18,7 +18,7 @@
     "@sisa/components": "workspace:*",
     "@sisa/i18n": "workspace:*",
     "@sisa/utils": "workspace:*",
-    "@tanstack/react-table": "^8.10.3",
+    "@tanstack/react-table": "^8.10.4",
     "lucide-react": "^0.284.0",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",
@@ -34,9 +34,9 @@
     "@sisa/eslint-config": "workspace:*",
     "@sisa/next-config": "workspace:*",
     "@sisa/tsconfig": "workspace:*",
-    "@types/node": "^20.8.2",
+    "@types/node": "^20.8.3",
     "@types/react": "^18.2.25",
-    "@types/react-dom": "^18.2.10",
+    "@types/react-dom": "^18.2.11",
     "typescript": "^5.2.2"
   }
 }
