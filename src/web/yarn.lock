@@ -1069,6 +1069,7 @@ __metadata:
   resolution: "@sisa/components@workspace:libs/components"
   dependencies:
     "@sisa/eslint-config": "workspace:*"
+    "@sisa/hooks": "workspace:*"
     "@sisa/i18n": "workspace:*"
     "@sisa/tsconfig": "workspace:*"
     "@sisa/utils": "workspace:*"

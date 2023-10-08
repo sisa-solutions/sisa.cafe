@@ -58,7 +58,9 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
     baseHelperFuncs.accessor(accessor, {
       // @ts-ignore
       id: column?.id,
-      cell: ({ getValue }) => <div dangerouslySetInnerHTML={{ __html: getValue<string>() ?? '' }} />,
+      cell: ({ getValue }) => (
+        <div dangerouslySetInnerHTML={{ __html: getValue<string>() ?? '' }} />
+      ),
       ...column,
     });
 

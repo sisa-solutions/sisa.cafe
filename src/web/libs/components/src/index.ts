@@ -120,6 +120,9 @@ export * from './modal-header';
 export { default as DataTable } from './data-table';
 export * from './data-table';
 
+export { default as DataGrid } from './data-grid';
+export * from './data-grid';
+
 export { default as createColumnHelper } from './create-column-helper';
 export * from './create-column-helper';
 

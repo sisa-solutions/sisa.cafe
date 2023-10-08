@@ -11,14 +11,16 @@ import {
   PageToolbar,
   PageActions,
   LinkButton,
+  DataGrid,
 } from '@sisa/components';
 
-import { Combinator, Operator, SortDirection, getTags, sortStringToParams } from '@sisa/api';
+import { Combinator, Operator, getTags, sortStringToParams } from '@sisa/api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 
-import DataGrid from './components/data-grid';
 import Loading from 'components/common/loading';
+import FilterToolbar from './components/filter-toolbar';
+import columnDefs from './components/column-defs';
 
 type TagsPageProps = {
   searchParams: {
@@ -92,12 +94,22 @@ const TagsPage = async ({
       <PageContent>
         <Suspense fallback={<Loading />}>
           <DataGrid
+            columns={columnDefs}
             data={value}
-            filter={{
-              name: name,
-            }}
-            paging={{
-              ...paging,
+            pageIndex={paging.pageIndex}
+            pageSize={paging.pageSize}
+            itemCount={paging.itemCount}
+            pageCount={paging.pageCount}
+            enableRowSelection
+            enableMultiSort
+            slots={{
+              toolbar: (
+                <FilterToolbar
+                  defaultValues={{
+                    name,
+                  }}
+                />
+              ),
             }}
           />
         </Suspense>

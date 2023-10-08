@@ -11,36 +11,36 @@ const useQueryString = <QueryObject extends Record<string, string | number>>(
 
   useEffect(() => {
     if (initParams) {
-      const pararms = new URLSearchParams(searchParams);
+      const params = new URLSearchParams(searchParams);
 
       Object.keys(initParams).forEach((key) => {
         const value = initParams[key];
 
         if (value) {
-          pararms.set(key, value.toString());
+          params.set(key, value.toString());
         }
       });
 
-      router.push(`${pathname}?${pararms.toString()}`);
+      router.push(`${pathname}?${params.toString()}`);
     }
   }, [initParams]);
   // Get a new searchParams string by merging the current
   // searchParams with a provided key/value pair
   const setQueryString = useCallback(
     (newParams: Partial<QueryObject>) => {
-      const pararms = new URLSearchParams(searchParams);
+      const params = new URLSearchParams(searchParams);
 
       Object.keys(newParams).forEach((key) => {
         const value = newParams[key];
 
         if (value) {
-          pararms.set(key, value.toString());
+          params.set(key, value.toString());
         } else {
-          pararms.delete(key);
+          params.delete(key);
         }
       });
 
-      router.push(`${pathname}?${pararms.toString()}`);
+      router.push(`${pathname}?${params.toString()}`);
     },
     [searchParams]
   );

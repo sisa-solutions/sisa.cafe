@@ -11,14 +11,16 @@ import {
   PageToolbar,
   PageActions,
   LinkButton,
+  DataGrid,
 } from '@sisa/components';
 
 import { Combinator, Operator, getPosts, sortStringToParams } from '@sisa/api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 
-import DataGrid from './components/data-grid';
 import Loading from 'components/common/loading';
+import FilterToolbar from './components/filter-toolbar';
+import columnDefs from './components/column-defs';
 
 type PostsPageProps = {
   searchParams: {
@@ -92,12 +94,22 @@ const CategoriesPage = async ({
       <PageContent>
         <Suspense fallback={<Loading />}>
           <DataGrid
+            columns={columnDefs}
             data={value}
-            filter={{
-              name: name,
-            }}
-            paging={{
-              ...paging,
+            pageIndex={paging.pageIndex}
+            pageSize={paging.pageSize}
+            itemCount={paging.itemCount}
+            pageCount={paging.pageCount}
+            enableRowSelection
+            enableMultiSort
+            slots={{
+              toolbar: (
+                <FilterToolbar
+                  defaultValues={{
+                    name,
+                  }}
+                />
+              ),
             }}
           />
         </Suspense>

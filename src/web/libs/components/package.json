@@ -8,6 +8,7 @@
     "generate:component": "turbo gen react-component"
   },
   "dependencies": {
+    "@sisa/hooks": "workspace:*",
     "@sisa/i18n": "workspace:*",
     "@sisa/utils": "workspace:*",
     "@tanstack/react-table": "^8.10.4",

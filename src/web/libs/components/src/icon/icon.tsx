@@ -13,7 +13,7 @@ type IconProps = LucideProps & {
 
 const Icon = memo(({ name, ...props }: IconProps) => {
   const LucideIcon = dynamic(dynamicIconImports[name], {
-    ssr: false,
+    ssr: true,
     loading: () => <LoadingIcon />,
   });
 

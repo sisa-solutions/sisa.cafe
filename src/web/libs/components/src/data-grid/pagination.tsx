@@ -1,5 +1,3 @@
-import { Table } from '@tanstack/react-table';
-
 import Box from '@mui/joy/Box';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
@@ -17,20 +15,38 @@ import {
   ChevronsUpDownIcon,
 } from 'lucide-react';
 
-type Props<T> = {
-  table: Table<T>;
+type PaginationProps = {
+  pageIndex: number;
+  pageSize: number;
   itemCount: number;
+  pageCount: number;
+  pageSizeOptions?: number[];
+
+  onPageIndexChange: (pageIndex: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
+  nextPage: () => void;
+  previousPage: () => void;
 };
 
-const Pagination = <T extends {}>(props: Props<T>) => {
-  const { table, itemCount } = props;
+const Pagination = ({
+  pageIndex,
+  pageSize,
+  itemCount,
+  pageCount,
+  pageSizeOptions = [5, 10, 25, 50, 100],
 
-  const page = table.getState().pagination.pageIndex + 1;
-  const pageSize = table.getState().pagination.pageSize;
-  const pageSizeOptions = [5, 10, 25, 50, 100];
+  onPageIndexChange,
+  onPageSizeChange,
+  nextPage,
+  previousPage,
+}: PaginationProps) => {
+  const pageNumber = pageIndex + 1;
 
-  const fromRow = (page - 1) * pageSize + 1;
-  const toRow = Math.min(page * pageSize, itemCount);
+  const fromRow = pageIndex * pageSize + (itemCount === 0 ? 0 : 1);
+  const toRow = Math.min(pageNumber * pageSize, itemCount);
+
+  const hasNextPage = () => pageNumber < pageCount;
+  const hasPreviousPage = () => pageNumber > 1;
 
   return (
     <Box
@@ -83,9 +99,9 @@ const Pagination = <T extends {}>(props: Props<T>) => {
               },
             },
           }}
-          value={table.getState().pagination.pageSize}
+          value={pageSize}
           onChange={(_, value) => {
-            table.setPageSize(Number(value));
+            onPageSizeChange(Number(value));
           }}
         >
           {pageSizeOptions.map((value) => (
@@ -106,8 +122,8 @@ const Pagination = <T extends {}>(props: Props<T>) => {
           size="sm"
           variant="outlined"
           color="neutral"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.setPageIndex(0)}
+          disabled={!hasPreviousPage()}
+          onClick={() => onPageIndexChange(0)}
         >
           <ChevronsLeftIcon />
         </IconButton>
@@ -115,8 +131,8 @@ const Pagination = <T extends {}>(props: Props<T>) => {
           size="sm"
           variant="outlined"
           color="neutral"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
+          disabled={!hasPreviousPage()}
+          onClick={() => previousPage()}
         >
           <ChevronLeftIcon />
         </IconButton>
@@ -130,7 +146,7 @@ const Pagination = <T extends {}>(props: Props<T>) => {
               md: 'inherit',
             },
           }}
-          value={page}
+          value={pageNumber}
           slotProps={{
             input: {
               sx: {
@@ -143,16 +159,17 @@ const Pagination = <T extends {}>(props: Props<T>) => {
             },
           }}
           onChange={(e) => {
-            const page = e.target.value ? Number(e.target.value) - 1 : 0;
-            table.setPageIndex(page);
+            const newPageIndex = e.target.value ? Number(e.target.value) - 1 : 0;
+
+            onPageIndexChange(newPageIndex);
           }}
         />
         <IconButton
           size="sm"
           variant="outlined"
           color="neutral"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
+          disabled={!hasNextPage()}
+          onClick={() => nextPage()}
         >
           <ChevronRightIcon />
         </IconButton>
@@ -160,8 +177,8 @@ const Pagination = <T extends {}>(props: Props<T>) => {
           size="sm"
           variant="outlined"
           color="neutral"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!hasNextPage()}
+          onClick={() => onPageIndexChange(pageCount - 1)}
         >
           <ChevronsRightIcon />
         </IconButton>

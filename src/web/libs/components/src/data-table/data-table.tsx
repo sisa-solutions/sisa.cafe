@@ -1,28 +1,19 @@
-'use client';
-
-import { useState } from 'react';
-
 import {
   type TableOptions,
   useReactTable,
   getSortedRowModel,
   getFilteredRowModel,
   getCoreRowModel,
-  ColumnOrderState,
   getPaginationRowModel,
 } from '@tanstack/react-table';
 
-import Box from '@mui/joy/Box';
-import Sheet from '@mui/joy/Sheet';
 import Table from '@mui/joy/Table';
 
 import THead from './thead';
 import TBody from './tbody';
-import Pagination from './pagination';
 import LoadingOverlay from './loading-overlay';
-import Toolbar from './toolbar';
 
-type Props<T> = Pick<
+export type DataTableProps<T> = Pick<
   TableOptions<T>,
   | 'data'
   | 'columns'
@@ -36,6 +27,7 @@ type Props<T> = Pick<
   | 'onSortingChange'
   | 'onColumnFiltersChange'
   | 'onColumnPinningChange'
+  | 'onColumnOrderChange'
 > & {
   itemCount: number;
   isLoading?: boolean;
@@ -44,13 +36,12 @@ type Props<T> = Pick<
   };
 };
 
-const DataGrid = <T extends {}>(props: Props<T>) => {
+const DataTable = <T extends {}>(props: DataTableProps<T>) => {
   const {
     isLoading,
     columns,
     data,
     state,
-    itemCount,
     pageCount,
     manualPagination,
     enableMultiSort,
@@ -59,12 +50,8 @@ const DataGrid = <T extends {}>(props: Props<T>) => {
     onSortingChange,
     onColumnFiltersChange,
     onColumnPinningChange,
-    slots = {},
+    onColumnOrderChange,
   } = props;
-
-  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
-    columns.map((column) => column.id as string)
-  );
 
   const table = useReactTable({
     data,
@@ -86,7 +73,7 @@ const DataGrid = <T extends {}>(props: Props<T>) => {
     onSortingChange,
     onColumnFiltersChange,
     onColumnPinningChange,
-    onColumnOrderChange: setColumnOrder,
+    onColumnOrderChange,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -116,65 +103,42 @@ const DataGrid = <T extends {}>(props: Props<T>) => {
   // const hasPinningRight = table.getState().columnPinning?.right?.length ?? 0 > 0;
 
   return (
-    <Box
+    <Table
+      aria-label="data-table"
+      stickyHeader
+      stickyFooter
+      borderAxis="xBetween"
+      hoverRow
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 1,
-        overflow: 'hidden',
+        '--TableCell-headBackground': 'var(--joy-palette-background-level1)',
+        '--TableRow-hoverBackground': 'var(--joy-palette-background-level1)',
+        '& thead > tr > th.data-table-pinned-left': {
+          zIndex: 'calc(var(--joy-zIndex-table) + 2)',
+        },
+        '& thead > tr > th.data-table-pinned-right': {
+          zIndex: 'calc(var(--joy-zIndex-table) + 2)',
+        },
+        '& .data-table-pinned-left': {
+          position: 'sticky',
+          left: 0,
+          zIndex: 'calc(var(--joy-zIndex-table) + 1)',
+          backgroundColor: 'var(--TableCell-headBackground)',
+          borderRight: '1px solid var(--TableCell-borderColor)',
+        },
+        '& .data-table-pinned-right': {
+          position: 'sticky',
+          right: 0,
+          zIndex: 'calc(var(--joy-zIndex-table) + 1)',
+          backgroundColor: 'var(--TableCell-headBackground)',
+          borderLeft: '1px solid var(--TableCell-borderColor)',
+        },
       }}
     >
-      <Toolbar>{slots.toolbar}</Toolbar>
-      <Sheet
-        variant="outlined"
-        className="table-container"
-        sx={{
-          width: '100%',
-          borderRadius: 'sm',
-          flex: 1,
-          overflow: 'auto',
-          minHeight: 0,
-        }}
-      >
-        <Table
-          aria-label="data-table"
-          stickyHeader
-          stickyFooter
-          borderAxis="xBetween"
-          hoverRow
-          sx={{
-            '--TableCell-headBackground': 'var(--joy-palette-background-level1)',
-            '--TableRow-hoverBackground': 'var(--joy-palette-background-level1)',
-            '& thead > tr > th.data-table-pinned-left': {
-              zIndex: 'calc(var(--joy-zIndex-table) + 2)',
-            },
-            '& thead > tr > th.data-table-pinned-right': {
-              zIndex: 'calc(var(--joy-zIndex-table) + 2)',
-            },
-            '& .data-table-pinned-left': {
-              position: 'sticky',
-              left: 0,
-              zIndex: 'calc(var(--joy-zIndex-table) + 1)',
-              backgroundColor: 'var(--TableCell-headBackground)',
-              borderRight: '1px solid var(--TableCell-borderColor)',
-            },
-            '& .data-table-pinned-right': {
-              position: 'sticky',
-              right: 0,
-              zIndex: 'calc(var(--joy-zIndex-table) + 1)',
-              backgroundColor: 'var(--TableCell-headBackground)',
-              borderLeft: '1px solid var(--TableCell-borderColor)',
-            },
-          }}
-        >
-          <THead headerGroups={table.getHeaderGroups()} />
-          {isLoading && <LoadingOverlay table={table} />}
-          {!isLoading && <TBody rows={table.getRowModel().rows} />}
-        </Table>
-      </Sheet>
-      <Pagination table={table} itemCount={itemCount} />
-    </Box>
+      <THead headerGroups={table.getHeaderGroups()} />
+      {isLoading && <LoadingOverlay table={table} />}
+      {!isLoading && <TBody rows={table.getRowModel().rows} />}
+    </Table>
   );
 };
 
-export default DataGrid;
+export default DataTable;
