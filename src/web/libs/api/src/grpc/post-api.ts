@@ -1,11 +1,14 @@
 'use server';
 
 import { PostGrpcClient as client } from './clients';
+import { CommentResponse } from './generated/sisa/services/blog/v1/comments/responses';
 
 import {
   CreatePostCommand,
   UpdatePostCommand,
   DeletePostCommand,
+  CreateCommentCommand,
+  ReactToPostCommand,
 } from './generated/sisa/services/blog/v1/posts/commands';
 
 import { FindPostByIdQuery, GetPostsQuery } from './generated/sisa/services/blog/v1/posts/queries';
@@ -14,16 +17,14 @@ import { ListPostsResponse, PostResponse } from './generated/sisa/services/blog/
 
 export const getPosts = (request: GetPostsQuery) => {
   const response = new Promise<ListPostsResponse>((resolve, reject) => {
-    client.getPosts(request,
-      (err, response) => {
-        if (err) {
-          reject(err);
-        }
-        if (response) {
-          resolve(response);
-        }
+    client.getPosts(request, (err, response) => {
+      if (err) {
+        reject(err);
       }
-    );
+      if (response) {
+        resolve(response);
+      }
+    });
   });
 
   return response;
@@ -84,6 +85,32 @@ export const updatePost = (request: UpdatePostCommand) => {
 export const deletePost = (request: DeletePostCommand) => {
   return new Promise<void>((resolve, reject) => {
     client.deletePost(request, (err, value) => {
+      if (err) {
+        reject(err);
+      }
+      if (value) {
+        resolve();
+      }
+    });
+  });
+};
+
+export const comment = (request: CreateCommentCommand) => {
+  return new Promise<CommentResponse>((resolve, reject) => {
+    client.createComment(request, (err, { value }) => {
+      if (err) {
+        reject(err);
+      }
+      if (value) {
+        resolve(value);
+      }
+    });
+  });
+};
+
+export const reactToPost = (request: ReactToPostCommand) => {
+  return new Promise<void>((resolve, reject) => {
+    client.react(request, (err, value) => {
       if (err) {
         reject(err);
       }

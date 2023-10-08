@@ -28,4 +28,18 @@ public sealed class CommentSpecification<TResult>(Expression<Func<Comment, TResu
             .Where(x => x.PostId == postId)
             .Paginate(pagingParams);
     }
+
+    public CommentSpecification(
+        IFilteringParams filteringParams
+        , IEnumerable<ISortingParams> sortingParams
+        , IPagingParams pagingParams
+        , Expression<Func<Comment, TResult>> selector) : this(selector)
+    {
+        Builder
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Filter(filteringParams)
+            .Sort(sortingParams)
+            .Paginate(pagingParams);
+    }
 }

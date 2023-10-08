@@ -49,6 +49,23 @@ export {
 
 export * from './grpc/post-api';
 
+export {
+  UpdateCommentCommand,
+  DeleteCommentCommand,
+} from './grpc/generated/sisa/services/blog/v1/comments/commands';
+
+export {
+  FindCommentByIdQuery,
+  GetCommentsQuery,
+} from './grpc/generated/sisa/services/blog/v1/comments/queries';
+
+export {
+  CommentResponse,
+  ListCommentsResponse,
+} from './grpc/generated/sisa/services/blog/v1/comments/responses';
+
+export * from './grpc/comment-api';
+
 /* END: POSTS */
 
 // export * from './grpc/comment-api';
