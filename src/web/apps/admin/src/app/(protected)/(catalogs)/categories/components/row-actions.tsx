@@ -14,7 +14,7 @@ import { ConfirmDialog, LinkIconButton } from '@sisa/components';
 import { randomId } from '@sisa/utils';
 import { useQueryString, useToggle } from '@sisa/hooks';
 
-import { type CategoryResponse, deleteCategory } from '@sisa/api';
+import { type CategoryResponse, deleteCategory } from '@sisa/grpc-api';
 
 const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ row }) => {
   const setQueryString = useQueryString();

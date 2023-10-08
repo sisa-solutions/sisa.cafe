@@ -8,7 +8,7 @@ import {
   PageTitle,
 } from '@sisa/components';
 
-import { findTagById } from '@sisa/api';
+import { findTagById } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 

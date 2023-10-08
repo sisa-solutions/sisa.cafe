@@ -11,7 +11,7 @@ import { AlertCircleIcon, PencilLineIcon, XIcon } from 'lucide-react';
 
 import { ConfirmDialog, LinkIconButton } from '@sisa/components';
 
-import { deleteTag, type TagResponse } from '@sisa/api';
+import { deleteTag, type TagResponse } from '@sisa/grpc-api';
 
 import { useQueryString, useToggle } from '@sisa/hooks';
 import { randomId } from '@sisa/utils';

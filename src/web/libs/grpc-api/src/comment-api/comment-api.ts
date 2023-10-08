@@ -1,6 +1,6 @@
 'use server';
 
-import { CommentGrpcClient as client } from './clients';
+import { CommentGrpcClient as client } from '../clients';
 
 import {
   DeleteCommentCommand,

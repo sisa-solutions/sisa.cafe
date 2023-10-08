@@ -32,7 +32,7 @@ import {
   SortDirection,
   Operator,
   DEFAULT_PAGING_PARAMS,
-} from '@sisa/api';
+} from '@sisa/grpc-api';
 
 import { randomId } from '@sisa/utils';
 

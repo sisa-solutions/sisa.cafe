@@ -11,7 +11,7 @@ import {
   PageTitle,
 } from '@sisa/components';
 
-import { findPostById } from '@sisa/api';
+import { findPostById } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 

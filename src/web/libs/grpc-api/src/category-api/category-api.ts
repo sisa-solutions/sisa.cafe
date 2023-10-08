@@ -1,6 +1,6 @@
 'use server';
 
-import { CategoryGrpcClient as client } from './clients';
+import { CategoryGrpcClient as client } from '../clients';
 
 import {
   CreateCategoryCommand,

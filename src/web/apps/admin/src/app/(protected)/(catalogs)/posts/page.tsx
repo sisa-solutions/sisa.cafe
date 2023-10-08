@@ -14,7 +14,7 @@ import {
   DataGrid,
 } from '@sisa/components';
 
-import { Combinator, Operator, getPosts, sortStringToParams } from '@sisa/api';
+import { Combinator, Operator, getPosts, sortStringToParams } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 

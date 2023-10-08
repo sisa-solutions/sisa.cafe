@@ -1,6 +1,6 @@
 'use server';
 
-import { TagGrpcClient as client } from './clients';
+import { TagGrpcClient as client } from '../clients';
 
 import {
   CreateTagCommand,

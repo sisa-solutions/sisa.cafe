@@ -11,7 +11,7 @@ import {
   PageTitle,
 } from '@sisa/components';
 
-import { findCategoryById } from '@sisa/api';
+import { findCategoryById } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 

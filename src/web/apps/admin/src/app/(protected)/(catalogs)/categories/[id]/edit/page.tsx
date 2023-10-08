@@ -1,6 +1,6 @@
 import { PageContent, PageHeader, PageLayout, PageTitle } from '@sisa/components';
 
-import { findCategoryById, updateCategory } from '@sisa/api';
+import { findCategoryById, updateCategory } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 

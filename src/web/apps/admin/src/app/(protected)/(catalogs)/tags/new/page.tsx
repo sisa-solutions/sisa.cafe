@@ -1,6 +1,6 @@
 import { PageContent, PageHeader, PageTitle } from '@sisa/components';
 
-import { createTag } from '@sisa/api';
+import { createTag } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 import MutationForm from '../components/mutation-form';

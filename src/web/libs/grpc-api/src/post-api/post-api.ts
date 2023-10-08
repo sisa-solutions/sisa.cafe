@@ -1,6 +1,6 @@
 'use server';
 
-import { PostGrpcClient as client } from './clients';
+import { PostGrpcClient as client } from '../clients';
 import { CommentResponse } from './generated/sisa/services/blog/v1/comments/responses';
 
 import {

@@ -3,7 +3,7 @@ import { PageContent, PageHeader, PageTitle } from '@sisa/components';
 import Breadcrumbs from 'components/common/breadcrumbs';
 import MutationForm from '../components/mutation-form';
 
-import { createCategory } from '@sisa/api';
+import { createCategory } from '@sisa/grpc-api';
 
 const AddCategoryPage = () => {
   return (

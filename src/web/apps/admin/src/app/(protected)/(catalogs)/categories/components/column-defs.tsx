@@ -2,7 +2,7 @@
 
 import { createColumnHelper, type ColumnDef, Link } from '@sisa/components';
 
-import { type CategoryResponse } from '@sisa/api';
+import { type CategoryResponse } from '@sisa/grpc-api';
 
 import RowActions from './row-actions';
 

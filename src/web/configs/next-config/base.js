@@ -2,7 +2,7 @@
 module.exports = {
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'mdx'],
-  transpilePackages: ['@sisa/api', '@sisa/components', '@sisa/i18n', '@sisa/utils'],
+  transpilePackages: ['@sisa/grpc-api', '@sisa/components', '@sisa/i18n', '@sisa/utils'],
   modularizeImports: {
     '@mui/joy': {
       transform: '@mui/joy/{{member}}',

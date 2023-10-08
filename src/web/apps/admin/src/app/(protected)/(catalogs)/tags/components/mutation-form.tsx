@@ -19,7 +19,7 @@ import {
   CancelButton,
 } from '@sisa/components';
 
-import type { TagResponse, CreateTagCommand, UpdateTagCommand } from '@sisa/api';
+import type { TagResponse, CreateTagCommand, UpdateTagCommand } from '@sisa/grpc-api';
 import { randomId } from '@sisa/utils';
 
 type MutationValues = CreateTagCommand | UpdateTagCommand;
