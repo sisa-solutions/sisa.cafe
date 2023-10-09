@@ -58,6 +58,11 @@
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="1.0.0" />
   </ItemGroup>
 
+  <!-- AWS -->
+  <ItemGroup>
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.205.9" />
+  </ItemGroup>
+
   <!-- Testing -->
   <ItemGroup>
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />

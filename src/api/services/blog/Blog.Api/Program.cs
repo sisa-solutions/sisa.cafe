@@ -14,6 +14,7 @@ builder.Services.AddFluentValidation();
 builder.Services.AddMediator();
 builder.Services.AddMediatorDependencies();
 builder.Services.AddDataDependencies();
+builder.Services.AddFileStorageService(new Sisa.Infrastructure.Settings.AwsSettings("xxx", "xxx", "us-east-1", "sisa-cafe-dev"));
 
 // builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(AppSettings)));
 // var appSettings = builder.Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>()!;

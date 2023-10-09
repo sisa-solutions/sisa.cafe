@@ -11,20 +11,23 @@ import "sisa/libs/common/responses/actor_info_response.proto";
 
 message FileResponse {
   // reversed field must be reflect to the database
-  reserved 11 to 50; // other data fields
+  reserved 14 to 50; // other data fields
   reserved 52 to 60; // relationship fields
   reserved 63 to 70; // audit fields
 
   string id = 1;
-  string name = 2; // original file name
-  google.protobuf.StringValue title = 3;
-  google.protobuf.StringValue description = 4;
-  map<string, string> meta = 5;
-
-  string bucket = 6;
-  string path = 7;
-  string key = 8;  
-  string url = 9;
+  string originalName = 2; // original file name
+  string bucket = 3;
+  string path = 4;
+  string name = 5;
+  int32 size = 6;
+  google.protobuf.StringValue extension = 7;
+  google.protobuf.StringValue mimeType = 8;
+  google.protobuf.StringValue title = 9;
+  google.protobuf.StringValue description = 10;
+  bool isUploaded = 11;
+  map<string, string> tags = 12;
+  string url = 13;
 
   // audit fields: from 63 to 70
   sisa.common.responses.ActorInfoResponse creator = 61;

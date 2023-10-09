@@ -24,7 +24,7 @@ service FileGrpcService {
     };
   }
 
-  rpc UploadFile(sisa.blog.api.v1.files.commands.UploadFileCommand) returns (sisa.blog.api.v1.files.responses.SingleFileResponse) {
+  rpc UploadFile(stream sisa.blog.api.v1.files.commands.UploadFileCommand) returns (sisa.blog.api.v1.files.responses.SingleFileResponse) {
     option (google.api.http) = {
       post: "/api/v1/files"
     };

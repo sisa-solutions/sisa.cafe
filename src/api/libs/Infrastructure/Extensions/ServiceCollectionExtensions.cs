@@ -1,5 +1,8 @@
 ﻿using System.Globalization;
 
+using Amazon;
+using Amazon.S3;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
@@ -8,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Sisa.Abstractions;
 using Sisa.Infrastructure.Services;
+using Sisa.Infrastructure.Settings;
 
 // using Sisa.Abstractions.DependencyInjection;
 // using Sisa.Abstractions.Services;
@@ -85,6 +89,16 @@ public static class ServiceCollectionExtensions
                 new AcceptLanguageHeaderRequestCultureProvider()
             };
         });
+
+        return services;
+    }
+
+    public static IServiceCollection AddFileStorageService(this IServiceCollection services, AwsSettings settings)
+    {
+        services.AddSingleton<IAmazonS3>(serviceProvider =>
+            new AmazonS3Client(settings.AccessKey, settings.SecretKey, RegionEndpoint.GetBySystemName(settings.Region)));
+
+        services.AddSingleton<IFileStorageService, FileStorageService>();
 
         return services;
     }

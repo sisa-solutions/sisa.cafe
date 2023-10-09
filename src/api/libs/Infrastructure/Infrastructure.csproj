@@ -13,6 +13,8 @@
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Settings.Configuration" />
     <PackageReference Include="Serilog.Sinks.Async" />
+
+    <PackageReference Include="AWSSDK.S3" />
   </ItemGroup>
 
   <ItemGroup>

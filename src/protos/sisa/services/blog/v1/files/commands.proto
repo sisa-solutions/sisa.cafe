@@ -8,21 +8,21 @@ import "google/protobuf/wrappers.proto";
 
 import "sisa/libs/common/params/file_info_params.proto";
 
-message UploadFileCommand {
-  message FileInfoParams {
-    reserved 1;
-    reserved "id";
-  
-    string name = 2; // original file name
-    google.protobuf.StringValue title = 3;
-    google.protobuf.StringValue description = 4;
-    map<string, string> meta = 5;
-  }
-  
-  message FileContentParams {
-    bytes chunk = 1;
-  }
+message FileInfoParams {
+  reserved 1;
+  reserved "id";
 
+  string name = 2; // original file name
+  google.protobuf.StringValue title = 3;
+  google.protobuf.StringValue description = 4;
+  map<string, string> tags = 5;
+}
+
+message FileContentParams {
+  bytes chunk = 1;
+}
+
+message UploadFileCommand {
   oneof file {
     FileInfoParams info = 1;
     FileContentParams content = 2;
@@ -35,7 +35,7 @@ message UpdateFileInfoCommand {
   string name = 2; // original file name
   google.protobuf.StringValue title = 3;
   google.protobuf.StringValue description = 4;
-  map<string, string> meta = 5;
+  map<string, string> tags = 5;
 }
 
 message DeleteFileCommand {
