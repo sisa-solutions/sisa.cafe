@@ -19,7 +19,7 @@
     "@sisa/hooks": "workspace:*",
     "@sisa/i18n": "workspace:*",
     "@sisa/utils": "workspace:*",
-    "@tanstack/react-table": "^8.10.4",
+    "@tanstack/react-table": "^8.10.6",
     "lucide-react": "^0.284.0",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",

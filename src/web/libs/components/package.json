@@ -11,7 +11,7 @@
     "@sisa/hooks": "workspace:*",
     "@sisa/i18n": "workspace:*",
     "@sisa/utils": "workspace:*",
-    "@tanstack/react-table": "^8.10.4",
+    "@tanstack/react-table": "^8.10.6",
     "date-fns": "^2.30.0",
     "echarts": "^5.4.3",
     "flag-icons": "^6.11.1",
