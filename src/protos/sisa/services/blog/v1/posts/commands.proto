@@ -6,7 +6,7 @@ package sisa.blog.api.v1.posts.commands;
 
 import "google/protobuf/wrappers.proto";
 
-import "sisa/services/blog/v1/posts/enums.proto";
+// import "sisa/services/blog/v1/posts/enums.proto";
 
 message CreatePostCommand {
   // reversed field must be reflect to the database

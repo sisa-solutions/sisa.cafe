@@ -36,20 +36,20 @@ public class FileStorageService(
             Expires = DateTime.UtcNow.Add(expiration ?? TimeSpan.FromMinutes(5))
         };
 
-        string url = string.Empty;
-
         try
         {
-            url = _s3Client.GetPreSignedURL(request);
+            var url = _s3Client.GetPreSignedURL(request);
 
             _logger.LogInformation($"Successfully got Presigned URL for object from bucket {bucket} with file path {filePath}");
+
+            return url;
         }
         catch (AmazonS3Exception ex)
         {
             _logger.LogError(ex, $"Failed to get Presigned URL for object from bucket {bucket} with file path {filePath}");
-        }
 
-        return url;
+            throw;
+        }
     }
 
     /// <inheritdoc/>
@@ -66,6 +66,7 @@ public class FileStorageService(
         try
         {
             var response = await _s3Client.GetObjectAsync(request);
+
             if (response is not null && response.HttpStatusCode == HttpStatusCode.OK)
             {
                 _logger.LogInformation($"Successfully downloaded object from bucket {bucket} with file path {filePath}");
@@ -78,24 +79,30 @@ public class FileStorageService(
             }
 
             _logger.LogError($"Failed to download object from bucket {bucket} with file path {filePath}");
+
+            return null;
         }
         catch (AmazonS3Exception ex)
         {
             _logger.LogError(ex, $"Failed to download object from bucket {bucket} with file path {filePath}");
-        }
 
-        return null;
+            throw;
+        }
     }
 
     /// <inheritdoc/>
-    public async ValueTask<IUploadResponse> UploadAsync(
+    public async ValueTask<IUploadResponse?> UploadAsync(
         string bucket, string path, string fileName,
-        Stream stream, string? contentType, IDictionary<string, string>? tags,
+        Stream stream, string contentType, IDictionary<string, string> tags,
         CancellationToken cancellationToken = default)
     {
-        var currentDate = DateTime.UtcNow.Date;
-        var filePath = $"{path}/{currentDate:yyyy}/{currentDate:MM}/{currentDate:dd}";
-        var key = $"{filePath}/{fileName}";
+        string newFileName = Guid.NewGuid().ToString();
+        string originalName = fileName;
+        string extension = Path.GetExtension(fileName)?.ToLower() ?? string.Empty;
+        DateTime currentDate = DateTime.UtcNow.Date;
+        string filePath = $"{path}/{currentDate:yyyy}/{currentDate:MM}/{currentDate:dd}";
+        string key = $"{filePath}/{newFileName}{extension}";
+        long size = stream.Length;
 
         _logger.LogInformation($"Uploading object to bucket {bucket} with key {key}");
 
@@ -104,36 +111,45 @@ public class FileStorageService(
             BucketName = bucket,
             Key = key,
             InputStream = stream,
-            TagSet = [],
+            TagSet = tags.Select(x => new Tag { Key = x.Key, Value = x.Value }).ToList(),
+            ContentType = contentType,
             DisablePayloadSigning = _options.Value.DisablePayloadSigning
         };
 
-        if (!string.IsNullOrEmpty(request.ContentType))
-            request.ContentType = contentType;
-
-        if (tags is not null && tags.Any())
-            request.TagSet.AddRange(tags.Select(x => new Tag { Key = x.Key, Value = x.Value }));
-
         try
         {
-            var response = await _s3Client.PutObjectAsync(request);
+            PutObjectResponse response = await _s3Client.PutObjectAsync(request);
 
-            if (response is not null && response.HttpStatusCode == HttpStatusCode.OK)
+            if (response.HttpStatusCode == HttpStatusCode.OK)
             {
-                _logger.LogInformation($"Successfully uploaded object to bucket {bucket} with key {key}");
+                _logger.LogInformation($"Successfully uploaded object to bucket {bucket} with key {key}.");
 
-                return new UploadResponse(true, bucket, filePath, contentType ?? string.Empty, tags ?? new Dictionary<string, string>());
+                return new UploadResponse
+                {
+                    Bucket = bucket,
+                    Path = path,
+                    Name = newFileName,
+                    Extension = extension,
+
+                    Size = size,
+                    ContentType = contentType,
+
+                    Tags = tags,
+
+                    OriginalName = fileName,
+                    Key = key
+                };
             }
 
-            _logger.LogError($"Failed to upload object to bucket {bucket} with key {key}");
+            _logger.LogError($"Failed to upload object to bucket {bucket} with key {key}.");
 
-            return new UploadResponse(false, bucket, filePath, contentType ?? string.Empty, tags ?? new Dictionary<string, string>());
+            return null;
         }
-        catch (Exception ex)
+        catch (AmazonS3Exception ex)
         {
-            _logger.LogError(ex, $"Failed to upload object to bucket {bucket} with key {key}");
+            _logger.LogError(ex, $"Failed to upload object to bucket {bucket} with key {key}.");
 
-            return new UploadResponse(false, bucket, filePath, contentType ?? string.Empty, tags ?? new Dictionary<string, string>());
+            throw;
         }
     }
 
@@ -158,16 +174,18 @@ public class FileStorageService(
         return false;
     }
 
-    public async ValueTask<IUploadPartResponse> InitMultiPartUploadAsync(string bucket, string path, string? contentType, IDictionary<string, string>? tags, CancellationToken cancellationToken = default)
+    public async ValueTask<IUploadPartResponse?> InitMultiPartUploadAsync(string bucket, string path, string fileName, string contentType, IDictionary<string, string> tags, CancellationToken cancellationToken = default)
     {
-        var fileName = Guid.NewGuid().ToString();
+        var newFileName = Guid.NewGuid().ToString();
+        var originalName = fileName;
+        var extension = Path.GetExtension(fileName)?.ToLower() ?? string.Empty;
         var currentDate = DateTime.UtcNow.Date;
         var filePath = $"{path}/{currentDate:yyyy}/{currentDate:MM}/{currentDate:dd}";
-        var key = $"{filePath}/{fileName}";
+        var key = $"{filePath}/{newFileName}{extension}";
 
         _logger.LogInformation($"Uploading object to bucket {bucket} with key {key}");
 
-        var request = new InitiateMultipartUploadRequest()
+        InitiateMultipartUploadRequest request = new()
         {
             BucketName = bucket,
             Key = key,
@@ -175,24 +193,44 @@ public class FileStorageService(
             TagSet = []
         };
 
-        if (!string.IsNullOrEmpty(request.ContentType))
-            request.ContentType = contentType;
-
-        if (tags is not null && tags.Any())
-            request.TagSet.AddRange(tags.Select(x => new Tag { Key = x.Key, Value = x.Value }));
-
-        InitiateMultipartUploadResponse response = await _s3Client.InitiateMultipartUploadAsync(request);
-
-        return new UploadPartResponse()
+        try
         {
-            UploadId = response.UploadId,
-            PartNumber = 1,
-            Key = key,
-            Name = fileName,
-        };
+            InitiateMultipartUploadResponse response = await _s3Client.InitiateMultipartUploadAsync(request);
+
+            if (response.HttpStatusCode == HttpStatusCode.OK)
+            {
+                _logger.LogInformation($"Successfully uploaded part of object to bucket {bucket} with key {key}.");
+
+                return new UploadPartResponse
+                {
+                    Bucket = bucket,
+                    Path = path,
+                    Name = newFileName,
+                    Extension = extension,
+
+                    ContentType = contentType,
+
+                    Tags = tags,
+
+                    OriginalName = fileName,
+                    Key = key,
+                    UploadId = response.UploadId
+                };
+            }
+
+            _logger.LogError($"Failed to upload part of object to bucket {bucket} with key {key}.");
+
+            return null;
+        }
+        catch (AmazonS3Exception ex)
+        {
+            _logger.LogError(ex, $"Failed to upload part of object to bucket {bucket} with key {key}.");
+
+            throw;
+        }
     }
 
-    public async ValueTask<IUploadPartResponse> UploadPartAsync(string bucket, string key, Stream streamPart, string uploadId, int partNumber, CancellationToken cancellationToken = default)
+    public async ValueTask<IUploadPartResponse?> UploadPartAsync(string bucket, string key, Stream streamPart, string uploadId, int partNumber, CancellationToken cancellationToken = default)
     {
         var request = new UploadPartRequest()
         {
@@ -206,14 +244,49 @@ public class FileStorageService(
             DisablePayloadSigning = _options.Value.DisablePayloadSigning
         };
 
-        var response = await _s3Client.UploadPartAsync(request);
-
-        return new UploadPartResponse()
+        try
         {
-            UploadId = uploadId,
-            PartNumber = partNumber,
-            ETag = response.ETag,
-        };
+            var response = await _s3Client.UploadPartAsync(request);
+
+            if (response.HttpStatusCode == HttpStatusCode.OK)
+            {
+                _logger.LogInformation($"Successfully uploaded part ({partNumber}) of object to bucket {bucket} with key {key}.");
+
+                return new UploadPartResponse()
+                {
+                    Bucket = bucket,
+                    Key = key,
+
+                    UploadId = uploadId,
+                    PartNumber = partNumber,
+                    ETag = response.ETag,
+                };
+            }
+
+            _logger.LogError($"Failed to upload part ({partNumber}) of object to bucket {bucket} with key {key}.");
+
+            return null;
+        }
+        catch (AmazonS3Exception ex)
+        {
+            _logger.LogError(ex, $"Failed to upload part ({partNumber}) of object to bucket {bucket} with key {key}.");
+
+            try
+            {
+                _logger.LogInformation($"Aborting multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+                await AbortMultipartUploadAsync(bucket, key, uploadId, cancellationToken);
+
+            }
+            catch (AmazonS3Exception abortEx)
+            {
+                _logger.LogError(abortEx, $"Failed to abort multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+                throw;
+            }
+
+            throw;
+        }
     }
 
     public async ValueTask<bool> CompleteMultiPartUploadAsync(string bucket, string key, string uploadId, Dictionary<int, string> eTags, CancellationToken cancellationToken = default)
@@ -226,30 +299,106 @@ public class FileStorageService(
             PartETags = eTags.Select(x => new PartETag(x.Key, x.Value)).ToList()
         };
 
-        await _s3Client.CompleteMultipartUploadAsync(request);
+        try
+        {
+            var response = await _s3Client.CompleteMultipartUploadAsync(request, cancellationToken);
 
-        return true;
+            // https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
+            if (response.HttpStatusCode == HttpStatusCode.OK)
+            {
+                _logger.LogInformation($"Successfully completed multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+                return true;
+            }
+
+            _logger.LogError($"Failed to complete multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+            return response.HttpStatusCode == HttpStatusCode.OK;
+        }
+        catch (AmazonS3Exception ex)
+        {
+            _logger.LogError(ex, $"Failed to complete multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+            try
+            {
+                _logger.LogInformation($"Aborting multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+                await AbortMultipartUploadAsync(bucket, key, uploadId, cancellationToken);
+
+            }
+            catch (AmazonS3Exception abortEx)
+            {
+                _logger.LogError(abortEx, $"Failed to abort multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+                throw;
+            }
+
+            throw;
+        }
+    }
+
+    public async ValueTask<bool> AbortMultipartUploadAsync(string bucket, string key, string uploadId, CancellationToken cancellationToken = default)
+    {
+        var request = new AbortMultipartUploadRequest()
+        {
+            BucketName = bucket,
+            Key = key,
+            UploadId = uploadId,
+        };
+
+        try
+        {
+            var response = await _s3Client.AbortMultipartUploadAsync(request, cancellationToken);
+
+            // https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html
+            if (response.HttpStatusCode == HttpStatusCode.NoContent)
+            {
+                _logger.LogInformation($"Successfully aborted multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+                return true;
+            }
+
+            _logger.LogError($"Failed to abort multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+            return false;
+        }
+        catch (AmazonS3Exception ex)
+        {
+            _logger.LogError(ex, $"Failed to abort multipart upload ({uploadId}) of object to bucket {bucket} with key {key}.");
+
+            throw;
+        }
     }
 }
 
-public class UploadResponse(bool success, string bucket, string filePath, string contentType, IDictionary<string, string> tags)
-    : IUploadResponse
+public record UploadResponse : IUploadResponse
 {
-    public bool Success { get; set; } = success;
+    public string Bucket { get; set; } = string.Empty;
+    public string Path { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Extension { get; set; } = string.Empty;
+    public long Size { get; set; }
+    public IDictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
+    public string ContentType { get; set; } = string.Empty;
 
-    public string Bucket { get; set; } = bucket;
-
-    public string FilePath { get; set; } = filePath;
-
-    public string ContentType { get; set; } = contentType;
-
-    public IDictionary<string, string> Tags { get; set; } = tags;
+    public string OriginalName { get; set; } = string.Empty;
+    public string Key { get; set; } = string.Empty;
 }
 
-public class UploadPartResponse : IUploadPartResponse
+public record UploadPartResponse : IUploadPartResponse
 {
-    public string UploadId { get; set; } = string.Empty;
+    public string Bucket { get; set; } = string.Empty;
+    public string Path { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    public string Extension { get; set; } = string.Empty;
+    public long Size { get; set; }
+    public IDictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
+    public string ContentType { get; set; } = string.Empty;
+
+    public string OriginalName { get; set; } = string.Empty;
+    public string FilePath { get; set; } = string.Empty;
+
+    public string UploadId { get; set; } = string.Empty;
     public int PartNumber { get; set; }
     public string Key { get; set; } = string.Empty;
     public string ETag { get; set; } = string.Empty;

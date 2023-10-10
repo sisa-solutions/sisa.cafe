@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 
 import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import useQuery from 'swr';
 
@@ -24,25 +27,35 @@ import {
   type CategoryResponse,
   type CategoryInfoResponse,
   type CreateCategoryCommand,
-  type UpdateCategoryCommand,
   getCategories,
   Combinator,
   SortDirection,
   Operator,
   DEFAULT_PAGING_PARAMS,
   uploadFile,
+  UpdateCategoryCommand,
 } from '@sisa/grpc-api';
 
 import { randomId } from '@sisa/utils';
 
 type MutationValues = (CreateCategoryCommand | UpdateCategoryCommand) & {
   parent?: CategoryInfoResponse;
+  pictures?: Array<File>;
 };
 
 export type MutationFormProps = {
   trigger: (data: MutationValues) => Promise<CategoryResponse>;
   defaultValues?: MutationValues;
 };
+
+const validationSchema = yup
+  .object<MutationValues>().shape({
+    name: yup.string().required().max(100),
+    slug: yup.string().required().lowercase().max(100),
+    description: yup.string().nullable().max(500),
+    pictures: yup.array<File>().nullable(),
+    parentId: yup.string().nullable(),
+  });
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const router = useRouter();
@@ -80,36 +93,47 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     })
   );
 
-  const { control, handleSubmit } = useForm<
-    MutationValues & {
-      pictures: Array<File>;
-    }
-  >({
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    watch,
+    formState = { errors: {} },
+  } = useForm<MutationValues>({
+    // @ts-ignore
+    resolver: yupResolver(validationSchema),
     defaultValues: {
       ...defaultValues,
-      parent: defaultValues?.parent ?? {
-        id: '',
-        name: '',
-      },
     },
   });
 
+  const watchParentId = watch('parent.id');
+
+  console.log(formState.errors);
+
+  useEffect(() => {
+    setValue('parentId', watchParentId);
+  }, [watchParentId]);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const { parent, pictures, ...rest } = data;
-      const formData = new FormData();
-      const file = pictures[0];
+      const { parent, pictures = [], ...rest } = data;
 
-      formData.append('file', file);
-      formData.append('name', file.name);
-      formData.append('type', file.type);
-      formData.append('size', `${file.size}`);
+      if (pictures.length > 0) {
+        const formData = new FormData();
+        const file = pictures[0];
 
-      const picture = await uploadFile(formData);
+        formData.append('file', file);
+        formData.append('path', 'categories');
+        formData.append('name', file.name);
+        formData.append('contentType', file.type);
+        formData.append('size', `${file.size}`);
+
+        await uploadFile(formData);
+      }
 
       await trigger({
         ...rest,
-        parentId: parent?.id ?? '',
       });
 
       goBack();

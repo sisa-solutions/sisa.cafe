@@ -16,12 +16,13 @@ builder.Services.AddMediatorDependencies();
 builder.Services.AddDataDependencies();
 builder.Services.AddFileStorageService(
     new Sisa.Infrastructure.Settings.AwsSettings(
-        "https://48cc388ce8732400b061994f2395fb01.r2.cloudflarestorage.com",
-        "96d5ba19024eb350ee856dfd031d26b3",
-        "96ef6d4686f29ef1cfa1e209bee29dcb3a2327660f88a7404a77bae03282c915",
-        "us-east-1",
-        true,
-        "sisa-cafe-local"
+        serviceUrl: "https://48cc388ce8732400b061994f2395fb01.r2.cloudflarestorage.com",
+        region: "us-east-1",
+        accessKey: "96d5ba19024eb350ee856dfd031d26b3",
+        secretKey: "96ef6d4686f29ef1cfa1e209bee29dcb3a2327660f88a7404a77bae03282c915",
+        chunkSize: 5_242_880L,
+        disablePayloadSigning: true,
+        defaultBucket: "sisa-cafe-local"
     )
 );
 

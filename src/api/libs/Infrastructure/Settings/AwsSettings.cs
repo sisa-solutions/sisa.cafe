@@ -6,35 +6,38 @@ public class AwsSettings
     public string AccessKey { get; set; } = string.Empty;
     public string SecretKey { get; set; } = string.Empty;
     public string Region { get; set; } = string.Empty;
-    public string Bucket { get; set; } = string.Empty;
-
+    public long ChunkSize { get; set; } = 5_242_880L;
+    public string DefaultBucket { get; set; } = string.Empty;
     public bool DisablePayloadSigning { get; set; } = false;
 
     public AwsSettings() { }
 
     public AwsSettings(
+        string region,
         string accessKey,
         string secretKey,
-        string region,
+        long chunkSize = 5_242_880L,
         bool disablePayloadSigning = false,
-        string bucket = ""
+        string defaultBucket = ""
     ) : this()
     {
+        Region = region;
         AccessKey = accessKey;
         SecretKey = secretKey;
-        Region = region;
+        ChunkSize = chunkSize;
         DisablePayloadSigning = disablePayloadSigning;
-        Bucket = bucket;
+        DefaultBucket = defaultBucket;
     }
 
     public AwsSettings(
         string serviceUrl,
+        string region,
         string accessKey,
         string secretKey,
-        string region,
+        long chunkSize = 5_242_880L,
         bool disablePayloadSigning = false,
-        string bucket = ""
-    ) : this(accessKey, secretKey, region, disablePayloadSigning, bucket)
+        string defaultBucket = ""
+    ) : this(region, accessKey, secretKey, chunkSize, disablePayloadSigning, defaultBucket)
     {
         ServiceUrl = serviceUrl;
     }

@@ -5,11 +5,13 @@ import { StringValue } from "../../../../../google/protobuf/wrappers";
 
 export const protobufPackage = "sisa.blog.api.v1.files.commands";
 
-export interface FileInfoParams {
+export interface FileMetadata {
   /** original file name */
   name: string;
+  /** file path */
+  path: string;
   /** mime type */
-  type: string;
+  contentType: string;
   /** file size in bytes */
   size: number;
   title: string | undefined;
@@ -17,13 +19,13 @@ export interface FileInfoParams {
   tags: { [key: string]: string };
 }
 
-export interface FileInfoParams_TagsEntry {
+export interface FileMetadata_TagsEntry {
   key: string;
   value: string;
 }
 
 export interface UploadFileCommand {
-  info?: FileInfoParams | undefined;
+  metadata?: FileMetadata | undefined;
   content?: Buffer | undefined;
 }
 
@@ -43,37 +45,40 @@ export interface DeleteFileCommand {
   id: string;
 }
 
-function createBaseFileInfoParams(): FileInfoParams {
-  return { name: "", type: "", size: 0, title: undefined, description: undefined, tags: {} };
+function createBaseFileMetadata(): FileMetadata {
+  return { name: "", path: "", contentType: "", size: 0, title: undefined, description: undefined, tags: {} };
 }
 
-export const FileInfoParams = {
-  encode(message: FileInfoParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FileMetadata = {
+  encode(message: FileMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.type !== "") {
-      writer.uint32(26).string(message.type);
+    if (message.path !== "") {
+      writer.uint32(26).string(message.path);
+    }
+    if (message.contentType !== "") {
+      writer.uint32(34).string(message.contentType);
     }
     if (message.size !== 0) {
-      writer.uint32(32).int64(message.size);
+      writer.uint32(40).int64(message.size);
     }
     if (message.title !== undefined) {
-      StringValue.encode({ value: message.title! }, writer.uint32(42).fork()).ldelim();
+      StringValue.encode({ value: message.title! }, writer.uint32(50).fork()).ldelim();
     }
     if (message.description !== undefined) {
-      StringValue.encode({ value: message.description! }, writer.uint32(50).fork()).ldelim();
+      StringValue.encode({ value: message.description! }, writer.uint32(58).fork()).ldelim();
     }
     Object.entries(message.tags).forEach(([key, value]) => {
-      FileInfoParams_TagsEntry.encode({ key: key as any, value }, writer.uint32(58).fork()).ldelim();
+      FileMetadata_TagsEntry.encode({ key: key as any, value }, writer.uint32(66).fork()).ldelim();
     });
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FileInfoParams {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FileMetadata {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFileInfoParams();
+    const message = createBaseFileMetadata();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -89,37 +94,44 @@ export const FileInfoParams = {
             break;
           }
 
-          message.type = reader.string();
+          message.path = reader.string();
           continue;
         case 4:
-          if (tag !== 32) {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.contentType = reader.string();
+          continue;
+        case 5:
+          if (tag !== 40) {
             break;
           }
 
           message.size = longToNumber(reader.int64() as Long);
-          continue;
-        case 5:
-          if (tag !== 42) {
-            break;
-          }
-
-          message.title = StringValue.decode(reader, reader.uint32()).value;
           continue;
         case 6:
           if (tag !== 50) {
             break;
           }
 
-          message.description = StringValue.decode(reader, reader.uint32()).value;
+          message.title = StringValue.decode(reader, reader.uint32()).value;
           continue;
         case 7:
           if (tag !== 58) {
             break;
           }
 
-          const entry7 = FileInfoParams_TagsEntry.decode(reader, reader.uint32());
-          if (entry7.value !== undefined) {
-            message.tags[entry7.key] = entry7.value;
+          message.description = StringValue.decode(reader, reader.uint32()).value;
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          const entry8 = FileMetadata_TagsEntry.decode(reader, reader.uint32());
+          if (entry8.value !== undefined) {
+            message.tags[entry8.key] = entry8.value;
           }
           continue;
       }
@@ -131,10 +143,11 @@ export const FileInfoParams = {
     return message;
   },
 
-  fromJSON(object: any): FileInfoParams {
+  fromJSON(object: any): FileMetadata {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      type: isSet(object.type) ? globalThis.String(object.type) : "",
+      path: isSet(object.path) ? globalThis.String(object.path) : "",
+      contentType: isSet(object.contentType) ? globalThis.String(object.contentType) : "",
       size: isSet(object.size) ? globalThis.Number(object.size) : 0,
       title: isSet(object.title) ? String(object.title) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
@@ -147,13 +160,16 @@ export const FileInfoParams = {
     };
   },
 
-  toJSON(message: FileInfoParams): unknown {
+  toJSON(message: FileMetadata): unknown {
     const obj: any = {};
     if (message.name !== "") {
       obj.name = message.name;
     }
-    if (message.type !== "") {
-      obj.type = message.type;
+    if (message.path !== "") {
+      obj.path = message.path;
+    }
+    if (message.contentType !== "") {
+      obj.contentType = message.contentType;
     }
     if (message.size !== 0) {
       obj.size = Math.round(message.size);
@@ -176,13 +192,14 @@ export const FileInfoParams = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<FileInfoParams>, I>>(base?: I): FileInfoParams {
-    return FileInfoParams.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<FileMetadata>, I>>(base?: I): FileMetadata {
+    return FileMetadata.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<FileInfoParams>, I>>(object: I): FileInfoParams {
-    const message = createBaseFileInfoParams();
+  fromPartial<I extends Exact<DeepPartial<FileMetadata>, I>>(object: I): FileMetadata {
+    const message = createBaseFileMetadata();
     message.name = object.name ?? "";
-    message.type = object.type ?? "";
+    message.path = object.path ?? "";
+    message.contentType = object.contentType ?? "";
     message.size = object.size ?? 0;
     message.title = object.title ?? undefined;
     message.description = object.description ?? undefined;
@@ -196,12 +213,12 @@ export const FileInfoParams = {
   },
 };
 
-function createBaseFileInfoParams_TagsEntry(): FileInfoParams_TagsEntry {
+function createBaseFileMetadata_TagsEntry(): FileMetadata_TagsEntry {
   return { key: "", value: "" };
 }
 
-export const FileInfoParams_TagsEntry = {
-  encode(message: FileInfoParams_TagsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FileMetadata_TagsEntry = {
+  encode(message: FileMetadata_TagsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -211,10 +228,10 @@ export const FileInfoParams_TagsEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FileInfoParams_TagsEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FileMetadata_TagsEntry {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFileInfoParams_TagsEntry();
+    const message = createBaseFileMetadata_TagsEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -241,14 +258,14 @@ export const FileInfoParams_TagsEntry = {
     return message;
   },
 
-  fromJSON(object: any): FileInfoParams_TagsEntry {
+  fromJSON(object: any): FileMetadata_TagsEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value) ? globalThis.String(object.value) : "",
     };
   },
 
-  toJSON(message: FileInfoParams_TagsEntry): unknown {
+  toJSON(message: FileMetadata_TagsEntry): unknown {
     const obj: any = {};
     if (message.key !== "") {
       obj.key = message.key;
@@ -259,11 +276,11 @@ export const FileInfoParams_TagsEntry = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<FileInfoParams_TagsEntry>, I>>(base?: I): FileInfoParams_TagsEntry {
-    return FileInfoParams_TagsEntry.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<FileMetadata_TagsEntry>, I>>(base?: I): FileMetadata_TagsEntry {
+    return FileMetadata_TagsEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<FileInfoParams_TagsEntry>, I>>(object: I): FileInfoParams_TagsEntry {
-    const message = createBaseFileInfoParams_TagsEntry();
+  fromPartial<I extends Exact<DeepPartial<FileMetadata_TagsEntry>, I>>(object: I): FileMetadata_TagsEntry {
+    const message = createBaseFileMetadata_TagsEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
     return message;
@@ -271,13 +288,13 @@ export const FileInfoParams_TagsEntry = {
 };
 
 function createBaseUploadFileCommand(): UploadFileCommand {
-  return { info: undefined, content: undefined };
+  return { metadata: undefined, content: undefined };
 }
 
 export const UploadFileCommand = {
   encode(message: UploadFileCommand, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.info !== undefined) {
-      FileInfoParams.encode(message.info, writer.uint32(10).fork()).ldelim();
+    if (message.metadata !== undefined) {
+      FileMetadata.encode(message.metadata, writer.uint32(10).fork()).ldelim();
     }
     if (message.content !== undefined) {
       writer.uint32(18).bytes(message.content);
@@ -297,7 +314,7 @@ export const UploadFileCommand = {
             break;
           }
 
-          message.info = FileInfoParams.decode(reader, reader.uint32());
+          message.metadata = FileMetadata.decode(reader, reader.uint32());
           continue;
         case 2:
           if (tag !== 18) {
@@ -317,15 +334,15 @@ export const UploadFileCommand = {
 
   fromJSON(object: any): UploadFileCommand {
     return {
-      info: isSet(object.info) ? FileInfoParams.fromJSON(object.info) : undefined,
+      metadata: isSet(object.metadata) ? FileMetadata.fromJSON(object.metadata) : undefined,
       content: isSet(object.content) ? Buffer.from(bytesFromBase64(object.content)) : undefined,
     };
   },
 
   toJSON(message: UploadFileCommand): unknown {
     const obj: any = {};
-    if (message.info !== undefined) {
-      obj.info = FileInfoParams.toJSON(message.info);
+    if (message.metadata !== undefined) {
+      obj.metadata = FileMetadata.toJSON(message.metadata);
     }
     if (message.content !== undefined) {
       obj.content = base64FromBytes(message.content);
@@ -338,8 +355,8 @@ export const UploadFileCommand = {
   },
   fromPartial<I extends Exact<DeepPartial<UploadFileCommand>, I>>(object: I): UploadFileCommand {
     const message = createBaseUploadFileCommand();
-    message.info = (object.info !== undefined && object.info !== null)
-      ? FileInfoParams.fromPartial(object.info)
+    message.metadata = (object.metadata !== undefined && object.metadata !== null)
+      ? FileMetadata.fromPartial(object.metadata)
       : undefined;
     message.content = object.content ?? undefined;
     return message;

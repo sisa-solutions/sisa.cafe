@@ -12,12 +12,14 @@ public class File : AuditableAggregateRoot
     public string Bucket { get; init; }
     public string Path { get; private set; }
     public string Name { get; private set; }
-    public int Size { get; private set; }
+    public long Size { get; private set; }
 
     public string? Extension { get; private set; }
-    public string? MimeType { get; private set; }
+    public string? ContentType { get; private set; }
     public string? Title { get; private set; }
     public string? Description { get; private set; }
+
+    public string Key { get; private set; }
 
     /// <summary>
     /// Determine if the file was uploaded to the cloud or not
@@ -29,14 +31,15 @@ public class File : AuditableAggregateRoot
 
     public IReadOnlyDictionary<string, string> Tags => _tags;
 
-    public File(string originalName, string bucket, string path, string name, int size, string extension, string mimeType)
+    public File(string originalName, string bucket, string path, string name, long size, string extension, string contentType)
     {
         OriginalName = originalName;
         Bucket = bucket;
         Path = path;
         Name = name;
         Extension = extension;
-        MimeType = mimeType;
+        Key = $"{path}/{name}{extension}";
+        ContentType = contentType;
         Size = size;
     }
 

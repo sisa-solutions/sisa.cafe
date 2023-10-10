@@ -34,7 +34,7 @@ public interface IFileStorageService
     /// <param name="tags">The tags of the object to upload.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>True if the object was uploaded successfully, false otherwise.</returns>
-    ValueTask<IUploadResponse> UploadAsync(string bucket, string path, string fileName, Stream stream, string? contentType, IDictionary<string, string>? tags, CancellationToken cancellationToken = default);
+    ValueTask<IUploadResponse?> UploadAsync(string bucket, string path, string fileName, Stream stream, string contentType, IDictionary<string, string> tags, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes the object from the specified bucket and key.
@@ -45,19 +45,25 @@ public interface IFileStorageService
     /// <returns>True if the object was deleted successfully, false otherwise.</returns>
     ValueTask<bool> DeleteAsync(string bucket, string filePath, CancellationToken cancellationToken = default);
 
-    ValueTask<IUploadPartResponse> InitMultiPartUploadAsync(string bucket, string path, string? contentType, IDictionary<string, string>? tags, CancellationToken cancellationToken = default);
+    ValueTask<IUploadPartResponse?> InitMultiPartUploadAsync(string bucket, string path, string fileName, string contentType, IDictionary<string, string> tags, CancellationToken cancellationToken = default);
 
-    ValueTask<IUploadPartResponse> UploadPartAsync(string bucket, string key, Stream streamPart, string uploadId, int partNumber, CancellationToken cancellationToken = default);
+    ValueTask<IUploadPartResponse?> UploadPartAsync(string bucket, string key, Stream streamPart, string uploadId, int partNumber, CancellationToken cancellationToken = default);
     ValueTask<bool> CompleteMultiPartUploadAsync(string bucket, string key, string uploadId, Dictionary<int, string> eTags, CancellationToken cancellationToken = default);
+
+    ValueTask<bool> AbortMultipartUploadAsync(string bucket, string key, string uploadId, CancellationToken cancellationToken = default);
 }
 
 public interface IUploadResponse
 {
-    bool Success { get; }
     string Bucket { get; }
-    string FilePath { get; }
-    string ContentType { get; }
+    string Name { get; }
+    string Extension { get; }
+    long Size { get; }
     IDictionary<string, string> Tags { get; }
+    string ContentType { get; }
+
+    string OriginalName { get; }
+    string Key { get; }
 }
 
 public interface IUploadPartResponse

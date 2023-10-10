@@ -1,12 +1,9 @@
 'use server';
 
-import { IncomingForm } from 'formidable';
-
 import { FileGrpcClient as client } from '../clients';
 
 import {
   UpdateFileInfoCommand,
-  UploadFileCommand,
   DeleteFileCommand,
 } from '../generated/sisa/services/blog/v1/files/commands';
 
@@ -45,8 +42,9 @@ export const findFileById = (request: FindFileByIdQuery) => {
 
 export const uploadFile = (formData: FormData) => {
   const file = formData.get('file') as File;
+  const path = formData.get('path') as string;
   const name = formData.get('name') as string;
-  const type = formData.get('type') as string;
+  const contentType = formData.get('contentType') as string;
   const size = formData.get('size') as unknown as number;
 
   if (!file) {
@@ -67,9 +65,10 @@ export const uploadFile = (formData: FormData) => {
     });
 
     call.write({
-      info: {
+      metadata: {
+        path,
         name,
-        type,
+        contentType,
         size,
         title: '',
         description: '',
@@ -79,35 +78,18 @@ export const uploadFile = (formData: FormData) => {
 
     const reader = file.stream().getReader();
 
-    // const sendChunk = async () => {
-    //   const { done, value } = await reader.read();
-
-    //   if (!done) {
-    //     call.write({
-    //       content: Buffer.from(value),
-    //     });
-
-    //     sendChunk();
-    //   } else {
-    //     call.end();
-    //   }
-    // };
-
     const sendChunk = async () => {
-      let done = false;
+      const { done, value } = await reader.read();
 
-      while (!done) {
-        const { done: isDone, value } = await reader.read();
-        done = isDone;
+      if (!done) {
+        call.write({
+          content: Buffer.from(value),
+        });
 
-        if (!done) {
-          call.write({
-            content: Buffer.from(value!),
-          });
-        }
+        sendChunk();
+      } else {
+        call.end();
       }
-
-      call.end();
     };
 
     sendChunk();

@@ -7,11 +7,13 @@ using Sisa.Extensions;
 using Sisa.Blog.Api.V1.Files.Commands;
 using Sisa.Blog.Api.V1.Files.Queries;
 using Sisa.Blog.Api.V1.Files.Responses;
+using Microsoft.Extensions.Options;
+using Sisa.Infrastructure.Settings;
 
 namespace Sisa.Blog.Api.V1.Files;
 
 [GrpcService]
-public sealed class FileService(IMediator mediator, IFileStorageService fileStorageService) : FileGrpcService.FileGrpcServiceBase
+public sealed class FileService(IMediator mediator, IFileStorageService fileStorageService, IOptions<AwsSettings> awsSettings) : FileGrpcService.FileGrpcServiceBase
 {
     public override async Task<SingleFileResponse> FindFileById(FindFileByIdQuery request, ServerCallContext context)
         => await mediator.SendAsync(request, context.CancellationToken);
@@ -21,18 +23,17 @@ public sealed class FileService(IMediator mediator, IFileStorageService fileStor
 
     public override async Task<SingleFileResponse> UploadFile(IAsyncStreamReader<UploadFileCommand> requestStream, ServerCallContext context)
     {
-        string bucket = "sisa-cafe-local";
-        string path = "path";
-        string uploadId = "";
-        int partNumber = 1;
-        string originalName = "";
-        string fileName = "";
-        string key = "";
-        string contentType = "";
+        CreateFileInfoCommand command = new()
+        {
+            Bucket = "sisa-cafe-local",
+            Path = ""
+        };
 
-        Dictionary<string, string> tags = [];
+        string uploadId = "";
+        string key = "";
+        int partNumber = 1;
+        bool preferMultiPartUpload = false;
         Dictionary<int, string> eTags = [];
-        long minPartSize = 5_242_880L; // 5 MB
 
         using var streamPart = new MemoryStream();
 
@@ -40,60 +41,88 @@ public sealed class FileService(IMediator mediator, IFileStorageService fileStor
         {
             var commandStream = requestStream.Current;
 
-            if (commandStream.FileCase == UploadFileCommand.FileOneofCase.Info)
+            if (commandStream.FileCase == UploadFileCommand.FileOneofCase.Metadata)
             {
-                originalName = commandStream.Info.Name;
-                contentType = commandStream.Info.Type;
-                tags = commandStream.Info.Tags.ToDictionary();
+                command.Path = commandStream.Metadata.Path;
+                command.ContentType = commandStream.Metadata.ContentType;
+                command.Extension = Path.GetExtension(commandStream.Metadata.Name);
 
-                var response = await fileStorageService.InitMultiPartUploadAsync(bucket, path, contentType, new Dictionary<string, string>(), context.CancellationToken);
+                command.Size = commandStream.Metadata.Size;
+                command.Tags = commandStream.Metadata.Tags.ToDictionary();
 
-                uploadId = response.UploadId;
-                fileName = response.Name;
-                key = response.Key;
+                command.OriginalName = commandStream.Metadata.Name;
+
+                preferMultiPartUpload = command.Size > awsSettings.Value.ChunkSize;
+
+                if (preferMultiPartUpload)
+                {
+                    var response = await fileStorageService.InitMultiPartUploadAsync(
+                        command.Bucket, command.Path, command.OriginalName, command.ContentType, command.Tags, context.CancellationToken);
+
+                    if (response == null)
+                    {
+                        throw new Exception("Error initializing multipart upload");
+                    }
+
+                    command.Name = response.Name;
+
+                    uploadId = response.UploadId;
+                    key = response.Key;
+                }
             }
             else if (commandStream.FileCase == UploadFileCommand.FileOneofCase.Content)
             {
                 commandStream.Content.WriteTo(streamPart);
 
-                if (streamPart.Length >= minPartSize)
+                if (preferMultiPartUpload)
                 {
-                    var partETag = await UpaloadPartAsync(bucket, key, streamPart, uploadId, partNumber, context.CancellationToken);
-                    eTags.Add(partNumber, partETag);
+                    if (streamPart.Length >= awsSettings.Value.ChunkSize)
+                    {
+                        var partETag = await UploadPartAsync(command.Bucket, key, streamPart, uploadId, partNumber, context.CancellationToken);
 
-                    partNumber += 1;
-                    streamPart.SetLength(0);
+                        eTags.Add(partNumber, partETag);
+
+                        partNumber += 1;
+                        streamPart.SetLength(0);
+                    }
                 }
             }
         }
 
-        if (streamPart.Length > 0)
+        if (preferMultiPartUpload)
         {
-            var eTag = await UpaloadPartAsync(bucket, key, streamPart, uploadId, partNumber, context.CancellationToken);
-            eTags.Add(partNumber, eTag);
+            if (streamPart.Length > 0)
+            {
+                var eTag = await UploadPartAsync(command.Bucket, key, streamPart, uploadId, partNumber, context.CancellationToken);
+                eTags.Add(partNumber, eTag);
+            }
+
+            await fileStorageService.CompleteMultiPartUploadAsync(command.Bucket, key, uploadId, eTags, context.CancellationToken);
         }
-
-        await fileStorageService.CompleteMultiPartUploadAsync(bucket, key, uploadId, eTags, context.CancellationToken);
-
-        CreateFileInfoCommand command = new()
+        else
         {
-            Bucket = bucket,
-            Path = path,
-            Name = fileName,
-            Extension = "ext",
-            MimeType = contentType,
-            Size = 0,
-            Tags = tags,
-            OriginalName = originalName
-        };
+            var response = await fileStorageService.UploadAsync(command.Bucket, command.Path, command.OriginalName, streamPart, command.ContentType, command.Tags, context.CancellationToken);
+
+            if (response == null)
+            {
+                throw new Exception("Error uploading file");
+            }
+
+            command.Name = response.Name;
+        }
 
         return await mediator.SendAsync(command, context.CancellationToken);
     }
 
-    private async ValueTask<string> UpaloadPartAsync(string bucket, string key, Stream stream, string uploadId, int partNumber, CancellationToken cancellationToken)
+    private async ValueTask<string> UploadPartAsync(string bucket, string key, Stream stream, string uploadId, int partNumber, CancellationToken cancellationToken = default)
     {
         stream.Seek(0, SeekOrigin.Begin);
         var response = await fileStorageService.UploadPartAsync(bucket, key, stream, uploadId, partNumber, cancellationToken);
+
+        if (response == null)
+        {
+            throw new Exception("Error uploading part");
+        }
 
         return response.ETag;
     }

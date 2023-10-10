@@ -1,12 +1,9 @@
 using FluentValidation;
 
-using Grpc.Core;
-
 using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Files.Responses;
 using Sisa.Blog.Domain.AggregatesModel.FileAggregate;
-using Sisa.Grpc;
 
 using File = Sisa.Blog.Domain.AggregatesModel.FileAggregate.File;
 
@@ -17,9 +14,9 @@ public sealed partial class CreateFileInfoCommand: ICommand<SingleFileResponse>
     public string Bucket { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
-    public string MimeType { get; set; } = string.Empty;
+    public string ContentType { get; set; } = string.Empty;
     public string Extension { get; set; } = string.Empty;
-    public int Size { get; set; }
+    public long Size { get; set; }
     public IDictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
 
     public string OriginalName { get; set; } = string.Empty;
@@ -41,7 +38,7 @@ public class CreateFileInfoCommandHandler(
     {
         logger.LogInformation("Uploading File with name {name}", command.OriginalName);
 
-        File file = new(command.OriginalName, command.Bucket, command.Path, command.Name, command.Size, command.Extension, command.MimeType);
+        File file = new(command.OriginalName, command.Bucket, command.Path, command.Name, command.Size, command.Extension, command.ContentType);
 
         foreach (var tag in command.Tags)
         {

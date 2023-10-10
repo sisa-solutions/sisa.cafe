@@ -581,7 +581,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:^3.3.1":
+"@hookform/resolvers@npm:^3.1.1, @hookform/resolvers@npm:^3.3.1":
   version: 3.3.1
   resolution: "@hookform/resolvers@npm:3.3.1"
   peerDependencies:
@@ -1019,7 +1019,7 @@ __metadata:
     "@emotion/cache": "npm:^11.11.0"
     "@emotion/react": "npm:^11.11.1"
     "@emotion/styled": "npm:^11.11.0"
-    "@hookform/resolvers": "npm:^3.3.1"
+    "@hookform/resolvers": "npm:^3.1.1"
     "@mui/joy": "npm:5.0.0-beta.9"
     "@sisa/components": "workspace:*"
     "@sisa/eslint-config": "workspace:*"
@@ -1082,7 +1082,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-hook-form: ^7.45.2
-    yup: ^1.2.0
+    yup: ^1.3.2
   languageName: unknown
   linkType: soft
 
@@ -1146,9 +1146,7 @@ __metadata:
     "@grpc/grpc-js": "npm:^1.9.5"
     "@sisa/eslint-config": "workspace:*"
     "@sisa/tsconfig": "workspace:*"
-    "@types/formidable": "npm:^3.4.3"
     eslint: "npm:^8.51.0"
-    formidable: "npm:^3.5.1"
     long: "npm:^5.2.3"
     protobufjs: "npm:^7.2.5"
     react: "npm:^18.2.0"
@@ -1403,15 +1401,6 @@ __metadata:
   version: 3.0.0
   resolution: "@types/d3-timer@npm:3.0.0"
   checksum: 7f6cd693f6c99a360dc01e1b5aa1185cfa8f65d603f537c52c810d475c8ef8aa07ac2f8be24cc489d2e69b843e384ab30dd079ac75011dbc91b21cd216a79502
-  languageName: node
-  linkType: hard
-
-"@types/formidable@npm:^3.4.3":
-  version: 3.4.3
-  resolution: "@types/formidable@npm:3.4.3"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 2f2cd2c0d7719a359db8fc84457ea47cd99d8960ff43d09cf35f922b11f296e454d236ac9abdd2c164252e9a5c7b2a1b37f1f66d4d2a112fffda092af970ad7c
   languageName: node
   linkType: hard
 
@@ -1875,13 +1864,6 @@ __metadata:
   version: 1.0.1
   resolution: "arrify@npm:1.0.1"
   checksum: c35c8d1a81bcd5474c0c57fe3f4bad1a4d46a5fa353cedcff7a54da315df60db71829e69104b859dff96c5d68af46bd2be259fe5e50dc6aa9df3b36bea0383ab
-  languageName: node
-  linkType: hard
-
-"asap@npm:^2.0.0":
-  version: 2.0.6
-  resolution: "asap@npm:2.0.6"
-  checksum: c6d5e39fe1f15e4b87677460bd66b66050cd14c772269cee6688824c1410a08ab20254bb6784f9afb75af9144a9f9a7692d49547f4d19d715aeb7c0318f3136d
   languageName: node
   linkType: hard
 
@@ -2869,16 +2851,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dezalgo@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "dezalgo@npm:1.0.4"
-  dependencies:
-    asap: "npm:^2.0.0"
-    wrappy: "npm:1"
-  checksum: 8a870ed42eade9a397e6141fe5c025148a59ed52f1f28b1db5de216b4d57f0af7a257070c3af7ce3d5508c1ce9dd5009028a76f4b2cc9370dc56551d2355fad8
-  languageName: node
-  linkType: hard
-
 "diff@npm:^4.0.1":
   version: 4.0.2
   resolution: "diff@npm:4.0.2"
@@ -3770,17 +3742,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formidable@npm:^3.5.1":
-  version: 3.5.1
-  resolution: "formidable@npm:3.5.1"
-  dependencies:
-    dezalgo: "npm:^1.0.4"
-    hexoid: "npm:^1.0.0"
-    once: "npm:^1.4.0"
-  checksum: c02fa1a027876dd9fc5abde16e9c537bec41bc652b362d0b3fd26daaae0615b9a472129c29b328a130d11f543f676acd1b13e6f28f3adc1b088cdaea9fb9e054
-  languageName: node
-  linkType: hard
-
 "forwarded@npm:0.2.0":
   version: 0.2.0
   resolution: "forwarded@npm:0.2.0"
@@ -4151,13 +4112,6 @@ __metadata:
     no-case: "npm:^2.2.0"
     upper-case: "npm:^1.1.3"
   checksum: 973b81b3fba82140cf8cdc819edb32edd5959ff61ff42128c5f54e56f7454bb8f61c0197180c38cde84a4be1dddbc780e1413d5e1602c96caf0195d863e6bd03
-  languageName: node
-  linkType: hard
-
-"hexoid@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "hexoid@npm:1.0.0"
-  checksum: 9c45e8ba676b9eb88455631ebceec4c829a8374a583410dc735472ab9808bf11339fcd074633c3fa30e420901b894d8a92ffd5e2e21eddd41149546e05a91f69
   languageName: node
   linkType: hard
 
@@ -5693,7 +5647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"once@npm:^1.3.0, once@npm:^1.4.0":
+"once@npm:^1.3.0":
   version: 1.4.0
   resolution: "once@npm:1.4.0"
   dependencies:
