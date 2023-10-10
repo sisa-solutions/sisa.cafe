@@ -1,7 +1,7 @@
 'use server';
 
 import { PostGrpcClient as client } from '../clients';
-import { CommentResponse } from './generated/sisa/services/blog/v1/comments/responses';
+import { CommentResponse } from '../generated/sisa/services/blog/v1/comments/responses';
 
 import {
   CreatePostCommand,
@@ -9,11 +9,11 @@ import {
   DeletePostCommand,
   CreateCommentCommand,
   ReactToPostCommand,
-} from './generated/sisa/services/blog/v1/posts/commands';
+} from '../generated/sisa/services/blog/v1/posts/commands';
 
-import { FindPostByIdQuery, GetPostsQuery } from './generated/sisa/services/blog/v1/posts/queries';
+import { FindPostByIdQuery, GetPostsQuery } from '../generated/sisa/services/blog/v1/posts/queries';
 
-import { ListPostsResponse, PostResponse } from './generated/sisa/services/blog/v1/posts/responses';
+import { ListPostsResponse, PostResponse } from '../generated/sisa/services/blog/v1/posts/responses';
 
 export const getPosts = (request: GetPostsQuery) => {
   const response = new Promise<ListPostsResponse>((resolve, reject) => {

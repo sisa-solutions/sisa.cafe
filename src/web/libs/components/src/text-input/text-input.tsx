@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 
-import FormControl, { type FormControlProps } from '@mui/joy/FormControl';
+import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Input, { type InputProps } from '@mui/joy/Input';

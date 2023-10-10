@@ -29,16 +29,12 @@ const AutocompleteField = <
     <Controller
       name={name}
       control={control}
-      render={({
-        field: { onChange, ...restFieldProps },
-        fieldState: { invalid, error },
-      }) => {
+      render={({ field: { onChange, ...restFieldProps }, fieldState: { invalid, error } }) => {
         return (
           <AutocompleteInput
             {...rest}
             {...restFieldProps}
             onChange={(_, value, __, ___) => {
-              // @ts-ignore
               onChange(value);
             }}
             error={!!error || invalid}

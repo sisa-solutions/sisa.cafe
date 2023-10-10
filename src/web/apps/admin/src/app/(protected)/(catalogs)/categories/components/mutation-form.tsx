@@ -6,20 +6,18 @@ import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
-import useQuery from 'swr';
 
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
+import useQuery from 'swr';
 
 import {
   AutocompleteField,
   FormContainer,
   TextField,
-  FileUploadInput,
   RichTextField,
   FormActions,
   SubmitButton,
   CancelButton,
+  FileUploadField,
 } from '@sisa/components';
 
 import {
@@ -32,6 +30,7 @@ import {
   SortDirection,
   Operator,
   DEFAULT_PAGING_PARAMS,
+  uploadFile,
 } from '@sisa/grpc-api';
 
 import { randomId } from '@sisa/utils';
@@ -81,7 +80,11 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     })
   );
 
-  const { control, handleSubmit } = useForm<MutationValues>({
+  const { control, handleSubmit } = useForm<
+    MutationValues & {
+      pictures: Array<File>;
+    }
+  >({
     defaultValues: {
       ...defaultValues,
       parent: defaultValues?.parent ?? {
@@ -93,7 +96,16 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const { parent, ...rest } = data;
+      const { parent, pictures, ...rest } = data;
+      const formData = new FormData();
+      const file = pictures[0];
+
+      formData.append('file', file);
+      formData.append('name', file.name);
+      formData.append('type', file.type);
+      formData.append('size', `${file.size}`);
+
+      const picture = await uploadFile(formData);
 
       await trigger({
         ...rest,
@@ -136,10 +148,18 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       />
       <TextField control={control} name="name" label="Name" />
       <TextField control={control} name="slug" label="Slug" />
-      <FormControl>
-        <FormLabel>Picture</FormLabel>
-        <FileUploadInput options={{}} />
-      </FormControl>
+      <FileUploadField
+        control={control}
+        name="pictures"
+        label="Pictures"
+        options={{
+          accept: {
+            'image/*': [],
+          },
+          multiple: false,
+          maxFiles: 1,
+        }}
+      />
       <RichTextField control={control} name="description" label="Description" />
       <FormActions>
         <SubmitButton submit={onSubmit} disabled={pending} loading={pending}>

@@ -6,33 +6,30 @@ package sisa.blog.api.v1.files.commands;
 
 import "google/protobuf/wrappers.proto";
 
-import "sisa/libs/common/params/file_info_params.proto";
-
 message FileInfoParams {
   reserved 1;
   reserved "id";
 
   string name = 2; // original file name
-  google.protobuf.StringValue title = 3;
-  google.protobuf.StringValue description = 4;
-  map<string, string> tags = 5;
-}
-
-message FileContentParams {
-  bytes chunk = 1;
+  string type = 3; // mime type
+  int64 size = 4; // file size in bytes
+  google.protobuf.StringValue title = 5;
+  google.protobuf.StringValue description = 6;
+  map<string, string> tags = 7;
 }
 
 message UploadFileCommand {
   oneof file {
     FileInfoParams info = 1;
-    FileContentParams content = 2;
+    bytes content = 2;
   }
 }
 
 message UpdateFileInfoCommand {
   // data fields: from 1 to 50
+  reserved 2;
+
   string id = 1;
-  string name = 2; // original file name
   google.protobuf.StringValue title = 3;
   google.protobuf.StringValue description = 4;
   map<string, string> tags = 5;

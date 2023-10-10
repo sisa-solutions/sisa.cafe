@@ -1,42 +1,40 @@
 /* eslint-disable */
+import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { StringValue } from "../../../../../google/protobuf/wrappers";
 
 export const protobufPackage = "sisa.blog.api.v1.files.commands";
 
-export interface UploadFileCommand {
-  info?: UploadFileCommand_FileInfoParams | undefined;
-  content?: UploadFileCommand_FileContentParams | undefined;
-}
-
-export interface UploadFileCommand_FileInfoParams {
+export interface FileInfoParams {
   /** original file name */
   name: string;
+  /** mime type */
+  type: string;
+  /** file size in bytes */
+  size: number;
   title: string | undefined;
   description: string | undefined;
-  meta: { [key: string]: string };
+  tags: { [key: string]: string };
 }
 
-export interface UploadFileCommand_FileInfoParams_MetaEntry {
+export interface FileInfoParams_TagsEntry {
   key: string;
   value: string;
 }
 
-export interface UploadFileCommand_FileContentParams {
-  chunk: Buffer;
+export interface UploadFileCommand {
+  info?: FileInfoParams | undefined;
+  content?: Buffer | undefined;
 }
 
 export interface UpdateFileInfoCommand {
-  /** data fields: from 1 to 50 */
   id: string;
-  /** original file name */
-  name: string;
   title: string | undefined;
   description: string | undefined;
-  meta: { [key: string]: string };
+  tags: { [key: string]: string };
 }
 
-export interface UpdateFileInfoCommand_MetaEntry {
+export interface UpdateFileInfoCommand_TagsEntry {
   key: string;
   value: string;
 }
@@ -45,109 +43,37 @@ export interface DeleteFileCommand {
   id: string;
 }
 
-function createBaseUploadFileCommand(): UploadFileCommand {
-  return { info: undefined, content: undefined };
+function createBaseFileInfoParams(): FileInfoParams {
+  return { name: "", type: "", size: 0, title: undefined, description: undefined, tags: {} };
 }
 
-export const UploadFileCommand = {
-  encode(message: UploadFileCommand, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.info !== undefined) {
-      UploadFileCommand_FileInfoParams.encode(message.info, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.content !== undefined) {
-      UploadFileCommand_FileContentParams.encode(message.content, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): UploadFileCommand {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUploadFileCommand();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.info = UploadFileCommand_FileInfoParams.decode(reader, reader.uint32());
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.content = UploadFileCommand_FileContentParams.decode(reader, reader.uint32());
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): UploadFileCommand {
-    return {
-      info: isSet(object.info) ? UploadFileCommand_FileInfoParams.fromJSON(object.info) : undefined,
-      content: isSet(object.content) ? UploadFileCommand_FileContentParams.fromJSON(object.content) : undefined,
-    };
-  },
-
-  toJSON(message: UploadFileCommand): unknown {
-    const obj: any = {};
-    if (message.info !== undefined) {
-      obj.info = UploadFileCommand_FileInfoParams.toJSON(message.info);
-    }
-    if (message.content !== undefined) {
-      obj.content = UploadFileCommand_FileContentParams.toJSON(message.content);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UploadFileCommand>, I>>(base?: I): UploadFileCommand {
-    return UploadFileCommand.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UploadFileCommand>, I>>(object: I): UploadFileCommand {
-    const message = createBaseUploadFileCommand();
-    message.info = (object.info !== undefined && object.info !== null)
-      ? UploadFileCommand_FileInfoParams.fromPartial(object.info)
-      : undefined;
-    message.content = (object.content !== undefined && object.content !== null)
-      ? UploadFileCommand_FileContentParams.fromPartial(object.content)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseUploadFileCommand_FileInfoParams(): UploadFileCommand_FileInfoParams {
-  return { name: "", title: undefined, description: undefined, meta: {} };
-}
-
-export const UploadFileCommand_FileInfoParams = {
-  encode(message: UploadFileCommand_FileInfoParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FileInfoParams = {
+  encode(message: FileInfoParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
+    if (message.type !== "") {
+      writer.uint32(26).string(message.type);
+    }
+    if (message.size !== 0) {
+      writer.uint32(32).int64(message.size);
+    }
     if (message.title !== undefined) {
-      StringValue.encode({ value: message.title! }, writer.uint32(26).fork()).ldelim();
+      StringValue.encode({ value: message.title! }, writer.uint32(42).fork()).ldelim();
     }
     if (message.description !== undefined) {
-      StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
+      StringValue.encode({ value: message.description! }, writer.uint32(50).fork()).ldelim();
     }
-    Object.entries(message.meta).forEach(([key, value]) => {
-      UploadFileCommand_FileInfoParams_MetaEntry.encode({ key: key as any, value }, writer.uint32(42).fork()).ldelim();
+    Object.entries(message.tags).forEach(([key, value]) => {
+      FileInfoParams_TagsEntry.encode({ key: key as any, value }, writer.uint32(58).fork()).ldelim();
     });
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): UploadFileCommand_FileInfoParams {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FileInfoParams {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUploadFileCommand_FileInfoParams();
+    const message = createBaseFileInfoParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -163,23 +89,37 @@ export const UploadFileCommand_FileInfoParams = {
             break;
           }
 
-          message.title = StringValue.decode(reader, reader.uint32()).value;
+          message.type = reader.string();
           continue;
         case 4:
-          if (tag !== 34) {
+          if (tag !== 32) {
             break;
           }
 
-          message.description = StringValue.decode(reader, reader.uint32()).value;
+          message.size = longToNumber(reader.int64() as Long);
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
 
-          const entry5 = UploadFileCommand_FileInfoParams_MetaEntry.decode(reader, reader.uint32());
-          if (entry5.value !== undefined) {
-            message.meta[entry5.key] = entry5.value;
+          message.title = StringValue.decode(reader, reader.uint32()).value;
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.description = StringValue.decode(reader, reader.uint32()).value;
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          const entry7 = FileInfoParams_TagsEntry.decode(reader, reader.uint32());
+          if (entry7.value !== undefined) {
+            message.tags[entry7.key] = entry7.value;
           }
           continue;
       }
@@ -191,13 +131,15 @@ export const UploadFileCommand_FileInfoParams = {
     return message;
   },
 
-  fromJSON(object: any): UploadFileCommand_FileInfoParams {
+  fromJSON(object: any): FileInfoParams {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
+      type: isSet(object.type) ? globalThis.String(object.type) : "",
+      size: isSet(object.size) ? globalThis.Number(object.size) : 0,
       title: isSet(object.title) ? String(object.title) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
-      meta: isObject(object.meta)
-        ? Object.entries(object.meta).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+      tags: isObject(object.tags)
+        ? Object.entries(object.tags).reduce<{ [key: string]: string }>((acc, [key, value]) => {
           acc[key] = String(value);
           return acc;
         }, {})
@@ -205,10 +147,16 @@ export const UploadFileCommand_FileInfoParams = {
     };
   },
 
-  toJSON(message: UploadFileCommand_FileInfoParams): unknown {
+  toJSON(message: FileInfoParams): unknown {
     const obj: any = {};
     if (message.name !== "") {
       obj.name = message.name;
+    }
+    if (message.type !== "") {
+      obj.type = message.type;
+    }
+    if (message.size !== 0) {
+      obj.size = Math.round(message.size);
     }
     if (message.title !== undefined) {
       obj.title = message.title;
@@ -216,31 +164,29 @@ export const UploadFileCommand_FileInfoParams = {
     if (message.description !== undefined) {
       obj.description = message.description;
     }
-    if (message.meta) {
-      const entries = Object.entries(message.meta);
+    if (message.tags) {
+      const entries = Object.entries(message.tags);
       if (entries.length > 0) {
-        obj.meta = {};
+        obj.tags = {};
         entries.forEach(([k, v]) => {
-          obj.meta[k] = v;
+          obj.tags[k] = v;
         });
       }
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<UploadFileCommand_FileInfoParams>, I>>(
-    base?: I,
-  ): UploadFileCommand_FileInfoParams {
-    return UploadFileCommand_FileInfoParams.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<FileInfoParams>, I>>(base?: I): FileInfoParams {
+    return FileInfoParams.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<UploadFileCommand_FileInfoParams>, I>>(
-    object: I,
-  ): UploadFileCommand_FileInfoParams {
-    const message = createBaseUploadFileCommand_FileInfoParams();
+  fromPartial<I extends Exact<DeepPartial<FileInfoParams>, I>>(object: I): FileInfoParams {
+    const message = createBaseFileInfoParams();
     message.name = object.name ?? "";
+    message.type = object.type ?? "";
+    message.size = object.size ?? 0;
     message.title = object.title ?? undefined;
     message.description = object.description ?? undefined;
-    message.meta = Object.entries(object.meta ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+    message.tags = Object.entries(object.tags ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = globalThis.String(value);
       }
@@ -250,12 +196,12 @@ export const UploadFileCommand_FileInfoParams = {
   },
 };
 
-function createBaseUploadFileCommand_FileInfoParams_MetaEntry(): UploadFileCommand_FileInfoParams_MetaEntry {
+function createBaseFileInfoParams_TagsEntry(): FileInfoParams_TagsEntry {
   return { key: "", value: "" };
 }
 
-export const UploadFileCommand_FileInfoParams_MetaEntry = {
-  encode(message: UploadFileCommand_FileInfoParams_MetaEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FileInfoParams_TagsEntry = {
+  encode(message: FileInfoParams_TagsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -265,10 +211,10 @@ export const UploadFileCommand_FileInfoParams_MetaEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): UploadFileCommand_FileInfoParams_MetaEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FileInfoParams_TagsEntry {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUploadFileCommand_FileInfoParams_MetaEntry();
+    const message = createBaseFileInfoParams_TagsEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -295,14 +241,14 @@ export const UploadFileCommand_FileInfoParams_MetaEntry = {
     return message;
   },
 
-  fromJSON(object: any): UploadFileCommand_FileInfoParams_MetaEntry {
+  fromJSON(object: any): FileInfoParams_TagsEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value) ? globalThis.String(object.value) : "",
     };
   },
 
-  toJSON(message: UploadFileCommand_FileInfoParams_MetaEntry): unknown {
+  toJSON(message: FileInfoParams_TagsEntry): unknown {
     const obj: any = {};
     if (message.key !== "") {
       obj.key = message.key;
@@ -313,37 +259,36 @@ export const UploadFileCommand_FileInfoParams_MetaEntry = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<UploadFileCommand_FileInfoParams_MetaEntry>, I>>(
-    base?: I,
-  ): UploadFileCommand_FileInfoParams_MetaEntry {
-    return UploadFileCommand_FileInfoParams_MetaEntry.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<FileInfoParams_TagsEntry>, I>>(base?: I): FileInfoParams_TagsEntry {
+    return FileInfoParams_TagsEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<UploadFileCommand_FileInfoParams_MetaEntry>, I>>(
-    object: I,
-  ): UploadFileCommand_FileInfoParams_MetaEntry {
-    const message = createBaseUploadFileCommand_FileInfoParams_MetaEntry();
+  fromPartial<I extends Exact<DeepPartial<FileInfoParams_TagsEntry>, I>>(object: I): FileInfoParams_TagsEntry {
+    const message = createBaseFileInfoParams_TagsEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
     return message;
   },
 };
 
-function createBaseUploadFileCommand_FileContentParams(): UploadFileCommand_FileContentParams {
-  return { chunk: Buffer.alloc(0) };
+function createBaseUploadFileCommand(): UploadFileCommand {
+  return { info: undefined, content: undefined };
 }
 
-export const UploadFileCommand_FileContentParams = {
-  encode(message: UploadFileCommand_FileContentParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.chunk.length !== 0) {
-      writer.uint32(10).bytes(message.chunk);
+export const UploadFileCommand = {
+  encode(message: UploadFileCommand, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.info !== undefined) {
+      FileInfoParams.encode(message.info, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.content !== undefined) {
+      writer.uint32(18).bytes(message.content);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): UploadFileCommand_FileContentParams {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UploadFileCommand {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUploadFileCommand_FileContentParams();
+    const message = createBaseUploadFileCommand();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -352,7 +297,14 @@ export const UploadFileCommand_FileContentParams = {
             break;
           }
 
-          message.chunk = reader.bytes() as Buffer;
+          message.info = FileInfoParams.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.content = reader.bytes() as Buffer;
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -363,34 +315,39 @@ export const UploadFileCommand_FileContentParams = {
     return message;
   },
 
-  fromJSON(object: any): UploadFileCommand_FileContentParams {
-    return { chunk: isSet(object.chunk) ? Buffer.from(bytesFromBase64(object.chunk)) : Buffer.alloc(0) };
+  fromJSON(object: any): UploadFileCommand {
+    return {
+      info: isSet(object.info) ? FileInfoParams.fromJSON(object.info) : undefined,
+      content: isSet(object.content) ? Buffer.from(bytesFromBase64(object.content)) : undefined,
+    };
   },
 
-  toJSON(message: UploadFileCommand_FileContentParams): unknown {
+  toJSON(message: UploadFileCommand): unknown {
     const obj: any = {};
-    if (message.chunk.length !== 0) {
-      obj.chunk = base64FromBytes(message.chunk);
+    if (message.info !== undefined) {
+      obj.info = FileInfoParams.toJSON(message.info);
+    }
+    if (message.content !== undefined) {
+      obj.content = base64FromBytes(message.content);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<UploadFileCommand_FileContentParams>, I>>(
-    base?: I,
-  ): UploadFileCommand_FileContentParams {
-    return UploadFileCommand_FileContentParams.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<UploadFileCommand>, I>>(base?: I): UploadFileCommand {
+    return UploadFileCommand.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<UploadFileCommand_FileContentParams>, I>>(
-    object: I,
-  ): UploadFileCommand_FileContentParams {
-    const message = createBaseUploadFileCommand_FileContentParams();
-    message.chunk = object.chunk ?? Buffer.alloc(0);
+  fromPartial<I extends Exact<DeepPartial<UploadFileCommand>, I>>(object: I): UploadFileCommand {
+    const message = createBaseUploadFileCommand();
+    message.info = (object.info !== undefined && object.info !== null)
+      ? FileInfoParams.fromPartial(object.info)
+      : undefined;
+    message.content = object.content ?? undefined;
     return message;
   },
 };
 
 function createBaseUpdateFileInfoCommand(): UpdateFileInfoCommand {
-  return { id: "", name: "", title: undefined, description: undefined, meta: {} };
+  return { id: "", title: undefined, description: undefined, tags: {} };
 }
 
 export const UpdateFileInfoCommand = {
@@ -398,17 +355,14 @@ export const UpdateFileInfoCommand = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
-    }
     if (message.title !== undefined) {
       StringValue.encode({ value: message.title! }, writer.uint32(26).fork()).ldelim();
     }
     if (message.description !== undefined) {
       StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
     }
-    Object.entries(message.meta).forEach(([key, value]) => {
-      UpdateFileInfoCommand_MetaEntry.encode({ key: key as any, value }, writer.uint32(42).fork()).ldelim();
+    Object.entries(message.tags).forEach(([key, value]) => {
+      UpdateFileInfoCommand_TagsEntry.encode({ key: key as any, value }, writer.uint32(42).fork()).ldelim();
     });
     return writer;
   },
@@ -427,13 +381,6 @@ export const UpdateFileInfoCommand = {
 
           message.id = reader.string();
           continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.name = reader.string();
-          continue;
         case 3:
           if (tag !== 26) {
             break;
@@ -453,9 +400,9 @@ export const UpdateFileInfoCommand = {
             break;
           }
 
-          const entry5 = UpdateFileInfoCommand_MetaEntry.decode(reader, reader.uint32());
+          const entry5 = UpdateFileInfoCommand_TagsEntry.decode(reader, reader.uint32());
           if (entry5.value !== undefined) {
-            message.meta[entry5.key] = entry5.value;
+            message.tags[entry5.key] = entry5.value;
           }
           continue;
       }
@@ -470,11 +417,10 @@ export const UpdateFileInfoCommand = {
   fromJSON(object: any): UpdateFileInfoCommand {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
       title: isSet(object.title) ? String(object.title) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
-      meta: isObject(object.meta)
-        ? Object.entries(object.meta).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+      tags: isObject(object.tags)
+        ? Object.entries(object.tags).reduce<{ [key: string]: string }>((acc, [key, value]) => {
           acc[key] = String(value);
           return acc;
         }, {})
@@ -487,21 +433,18 @@ export const UpdateFileInfoCommand = {
     if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
     if (message.title !== undefined) {
       obj.title = message.title;
     }
     if (message.description !== undefined) {
       obj.description = message.description;
     }
-    if (message.meta) {
-      const entries = Object.entries(message.meta);
+    if (message.tags) {
+      const entries = Object.entries(message.tags);
       if (entries.length > 0) {
-        obj.meta = {};
+        obj.tags = {};
         entries.forEach(([k, v]) => {
-          obj.meta[k] = v;
+          obj.tags[k] = v;
         });
       }
     }
@@ -514,10 +457,9 @@ export const UpdateFileInfoCommand = {
   fromPartial<I extends Exact<DeepPartial<UpdateFileInfoCommand>, I>>(object: I): UpdateFileInfoCommand {
     const message = createBaseUpdateFileInfoCommand();
     message.id = object.id ?? "";
-    message.name = object.name ?? "";
     message.title = object.title ?? undefined;
     message.description = object.description ?? undefined;
-    message.meta = Object.entries(object.meta ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+    message.tags = Object.entries(object.tags ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = globalThis.String(value);
       }
@@ -527,12 +469,12 @@ export const UpdateFileInfoCommand = {
   },
 };
 
-function createBaseUpdateFileInfoCommand_MetaEntry(): UpdateFileInfoCommand_MetaEntry {
+function createBaseUpdateFileInfoCommand_TagsEntry(): UpdateFileInfoCommand_TagsEntry {
   return { key: "", value: "" };
 }
 
-export const UpdateFileInfoCommand_MetaEntry = {
-  encode(message: UpdateFileInfoCommand_MetaEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const UpdateFileInfoCommand_TagsEntry = {
+  encode(message: UpdateFileInfoCommand_TagsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -542,10 +484,10 @@ export const UpdateFileInfoCommand_MetaEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateFileInfoCommand_MetaEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateFileInfoCommand_TagsEntry {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUpdateFileInfoCommand_MetaEntry();
+    const message = createBaseUpdateFileInfoCommand_TagsEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -572,14 +514,14 @@ export const UpdateFileInfoCommand_MetaEntry = {
     return message;
   },
 
-  fromJSON(object: any): UpdateFileInfoCommand_MetaEntry {
+  fromJSON(object: any): UpdateFileInfoCommand_TagsEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value) ? globalThis.String(object.value) : "",
     };
   },
 
-  toJSON(message: UpdateFileInfoCommand_MetaEntry): unknown {
+  toJSON(message: UpdateFileInfoCommand_TagsEntry): unknown {
     const obj: any = {};
     if (message.key !== "") {
       obj.key = message.key;
@@ -590,13 +532,13 @@ export const UpdateFileInfoCommand_MetaEntry = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<UpdateFileInfoCommand_MetaEntry>, I>>(base?: I): UpdateFileInfoCommand_MetaEntry {
-    return UpdateFileInfoCommand_MetaEntry.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<UpdateFileInfoCommand_TagsEntry>, I>>(base?: I): UpdateFileInfoCommand_TagsEntry {
+    return UpdateFileInfoCommand_TagsEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<UpdateFileInfoCommand_MetaEntry>, I>>(
+  fromPartial<I extends Exact<DeepPartial<UpdateFileInfoCommand_TagsEntry>, I>>(
     object: I,
-  ): UpdateFileInfoCommand_MetaEntry {
-    const message = createBaseUpdateFileInfoCommand_MetaEntry();
+  ): UpdateFileInfoCommand_TagsEntry {
+    const message = createBaseUpdateFileInfoCommand_TagsEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
     return message;
@@ -696,6 +638,18 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(long: Long): number {
+  if (long.gt(globalThis.Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isObject(value: any): boolean {
   return typeof value === "object" && value !== null;

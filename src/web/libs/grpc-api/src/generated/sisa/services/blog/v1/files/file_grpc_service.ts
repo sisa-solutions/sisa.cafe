@@ -1,5 +1,12 @@
 /* eslint-disable */
-import { ChannelCredentials, Client, makeGenericClientConstructor, Metadata } from "@grpc/grpc-js";
+import {
+  ChannelCredentials,
+  Client,
+  ClientWritableStream,
+  handleClientStreamingCall,
+  makeGenericClientConstructor,
+  Metadata,
+} from "@grpc/grpc-js";
 import type {
   CallOptions,
   ClientOptions,
@@ -37,7 +44,7 @@ export const FileGrpcServiceService = {
   },
   uploadFile: {
     path: "/sisa.blog.api.v1.files.FileGrpcService/UploadFile",
-    requestStream: false,
+    requestStream: true,
     responseStream: false,
     requestSerialize: (value: UploadFileCommand) => Buffer.from(UploadFileCommand.encode(value).finish()),
     requestDeserialize: (value: Buffer) => UploadFileCommand.decode(value),
@@ -67,7 +74,7 @@ export const FileGrpcServiceService = {
 export interface FileGrpcServiceServer extends UntypedServiceImplementation {
   getFiles: handleUnaryCall<GetFilesQuery, ListFilesResponse>;
   findFileById: handleUnaryCall<FindFileByIdQuery, SingleFileResponse>;
-  uploadFile: handleUnaryCall<UploadFileCommand, SingleFileResponse>;
+  uploadFile: handleClientStreamingCall<UploadFileCommand, SingleFileResponse>;
   updateFileInfo: handleUnaryCall<UpdateFileInfoCommand, SingleFileResponse>;
   deleteFile: handleUnaryCall<DeleteFileCommand, Empty>;
 }
@@ -104,20 +111,21 @@ export interface FileGrpcServiceClient extends Client {
     callback: (error: ServiceError | null, response: SingleFileResponse) => void,
   ): ClientUnaryCall;
   uploadFile(
-    request: UploadFileCommand,
     callback: (error: ServiceError | null, response: SingleFileResponse) => void,
-  ): ClientUnaryCall;
+  ): ClientWritableStream<UploadFileCommand>;
   uploadFile(
-    request: UploadFileCommand,
     metadata: Metadata,
     callback: (error: ServiceError | null, response: SingleFileResponse) => void,
-  ): ClientUnaryCall;
+  ): ClientWritableStream<UploadFileCommand>;
   uploadFile(
-    request: UploadFileCommand,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: SingleFileResponse) => void,
+  ): ClientWritableStream<UploadFileCommand>;
+  uploadFile(
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: SingleFileResponse) => void,
-  ): ClientUnaryCall;
+  ): ClientWritableStream<UploadFileCommand>;
   updateFileInfo(
     request: UpdateFileInfoCommand,
     callback: (error: ServiceError | null, response: SingleFileResponse) => void,

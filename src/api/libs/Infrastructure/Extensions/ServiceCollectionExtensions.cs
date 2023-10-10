@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 using Sisa.Abstractions;
 using Sisa.Infrastructure.Services;
@@ -95,8 +96,17 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddFileStorageService(this IServiceCollection services, AwsSettings settings)
     {
-        services.AddSingleton<IAmazonS3>(serviceProvider =>
-            new AmazonS3Client(settings.AccessKey, settings.SecretKey, RegionEndpoint.GetBySystemName(settings.Region)));
+        services.AddSingleton(Options.Create(settings));
+
+        services.AddSingleton<IAmazonS3>(_ =>
+        {
+            return new AmazonS3Client(settings.AccessKey, settings.SecretKey, new AmazonS3Config()
+            {
+                RegionEndpoint = RegionEndpoint.GetBySystemName(settings.Region),
+                ServiceURL = settings.ServiceUrl
+            });
+
+        });
 
         services.AddSingleton<IFileStorageService, FileStorageService>();
 

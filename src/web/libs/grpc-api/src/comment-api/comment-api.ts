@@ -6,17 +6,17 @@ import {
   DeleteCommentCommand,
   ReactToCommentCommand,
   ReplyCommentCommand,
-} from './generated/sisa/services/blog/v1/comments/commands';
+} from '../generated/sisa/services/blog/v1/comments/commands';
 
 import {
   FindCommentByIdQuery,
   GetCommentsQuery,
-} from './generated/sisa/services/blog/v1/comments/queries';
+} from '../generated/sisa/services/blog/v1/comments/queries';
 
 import {
   CommentResponse,
   ListCommentsResponse,
-} from './generated/sisa/services/blog/v1/comments/responses';
+} from '../generated/sisa/services/blog/v1/comments/responses';
 
 export const getComments = (request: GetCommentsQuery) => {
   return new Promise<ListCommentsResponse>((resolve, reject) => {

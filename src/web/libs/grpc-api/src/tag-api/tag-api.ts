@@ -6,15 +6,15 @@ import {
   CreateTagCommand,
   DeleteTagCommand,
   UpdateTagCommand,
-} from './generated/sisa/services/blog/v1/tags/commands';
+} from '../generated/sisa/services/blog/v1/tags/commands';
 
 import {
   FindTagByIdQuery,
   FindTagBySlugQuery,
   GetTagsQuery,
-} from './generated/sisa/services/blog/v1/tags/queries';
+} from '../generated/sisa/services/blog/v1/tags/queries';
 
-import { ListTagsResponse, TagResponse } from './generated/sisa/services/blog/v1/tags/responses';
+import { ListTagsResponse, TagResponse } from '../generated/sisa/services/blog/v1/tags/responses';
 
 export const getTags = (request: GetTagsQuery) => {
   return new Promise<ListTagsResponse>((resolve, reject) => {

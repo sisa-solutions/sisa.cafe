@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { type FileRejection } from 'react-dropzone';
 
 import AspectRatio from '@mui/joy/AspectRatio';
 
@@ -13,6 +14,10 @@ import Icon from '../icon';
 export type FileWithPreview = File & {
   id: string;
   preview: string;
+};
+
+export type RejectedFileWithId = FileRejection & {
+  id: string;
 };
 
 type Props = {

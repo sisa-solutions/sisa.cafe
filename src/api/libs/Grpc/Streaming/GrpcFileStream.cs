@@ -4,27 +4,31 @@ using Grpc.Core;
 
 namespace Sisa.Grpc;
 
-public interface IFileContentParams
+public interface IGrpcFileStreamInfo
 {
-    ByteString Chunk { get; }
+    string Name { get; }
+    string? Title { get; }
+    string? Description { get; }
+    Dictionary<string, string> Tags { get; }
 }
 
-public interface IFileStream<T>
-    where T : class, IFileContentParams
+public interface IGrpcFileStreamCommand<T>
+    where T : class, IGrpcFileStreamInfo
 {
-    T Content { get; }
+    T Info { get; }
+
+    ByteString Content { get; }
 }
 
-public class DirectFileStream<C, T> : Stream
-    where C : class, IFileStream<T>
-    where T : class, IFileContentParams
+public class GrpcFileStream<TCommand> : Stream
+    where TCommand : class, IGrpcFileStreamCommand<IGrpcFileStreamInfo>
 {
-    private readonly IAsyncStreamReader<C> _requestStream;
+    private readonly IAsyncStreamReader<TCommand> _requestStream;
     private byte[] _buffer = [];
     private int _position;
     private int _length;
 
-    public DirectFileStream(IAsyncStreamReader<C> requestStream)
+    public GrpcFileStream(IAsyncStreamReader<TCommand> requestStream)
     {
         _requestStream = requestStream;
     }
@@ -51,7 +55,7 @@ public class DirectFileStream<C, T> : Stream
             // Read the next chunk from the request stream
             if (!_requestStream.MoveNext(default).Result) return 0; // End of stream
 
-            var chunk = _requestStream.Current.Content.Chunk;
+            var chunk = _requestStream.Current.Content;
 
             _buffer = chunk.ToByteArray();
             _position = 0;
@@ -61,8 +65,10 @@ public class DirectFileStream<C, T> : Stream
         // Copy from the buffer to the destination array
         var available = _length - _position;
         var bytesToCopy = Math.Min(available, count);
+
         Buffer.BlockCopy(_buffer, _position, buffer, offset, bytesToCopy);
         _position += bytesToCopy;
+
         return bytesToCopy;
     }
 
@@ -80,5 +86,4 @@ public class DirectFileStream<C, T> : Stream
     {
         throw new NotImplementedException();
     }
-
 }

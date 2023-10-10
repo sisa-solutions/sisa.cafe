@@ -6,18 +6,18 @@ import {
   CreateCategoryCommand,
   UpdateCategoryCommand,
   DeleteCategoryCommand,
-} from './generated/sisa/services/blog/v1/categories/commands';
+} from '../generated/sisa/services/blog/v1/categories/commands';
 
 import {
   GetCategoriesQuery,
   FindCategoryByIdQuery,
   FindCategoryBySlugQuery,
-} from './generated/sisa/services/blog/v1/categories/queries';
+} from '../generated/sisa/services/blog/v1/categories/queries';
 
 import type {
   CategoryResponse,
   ListCategoriesResponse,
-} from './generated/sisa/services/blog/v1/categories/responses';
+} from '../generated/sisa/services/blog/v1/categories/responses';
 
 export const getCategories = (request: GetCategoriesQuery) => {
   const response = new Promise<ListCategoriesResponse>((resolve, reject) => {

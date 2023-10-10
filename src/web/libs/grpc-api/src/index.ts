@@ -5,6 +5,7 @@ export * from './category-api';
 export * from './tag-api';
 export * from './post-api';
 export * from './comment-api';
+export * from './file-api';
 
 /* END: POSTS */
 

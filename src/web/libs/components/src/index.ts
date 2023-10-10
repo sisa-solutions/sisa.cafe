@@ -91,8 +91,8 @@ export * from './autocomplete-field';
 // export { default as DropdownField } from './dropdown-field';
 // export * from './dropdown-field';
 
-// export { default as FileUploadField } from './file-upload-field';
-// export * from './file-upload-field';
+export { default as FileUploadField } from './file-upload-field';
+export * from './file-upload-field';
 
 export { default as RichTextField } from './rich-text-field';
 export * from './rich-text-field';
