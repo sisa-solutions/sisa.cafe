@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 
 import { useRouter } from 'next/navigation';
 
@@ -20,7 +19,7 @@ import {
   FormActions,
   SubmitButton,
   CancelButton,
-} from '@sisa/components';
+} from '@sisa/form';
 
 import {
   type CategoryResponse,
@@ -45,7 +44,6 @@ export type MutationFormProps = {
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const router = useRouter();
-  const { pending } = useFormStatus();
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
 
   const {
@@ -132,10 +130,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       </FormControl>
       <RichTextField control={control} name="content" label="Content" />
       <FormActions>
-        <SubmitButton submit={onSubmit} disabled={pending} loading={pending}>
+        <SubmitButton submit={onSubmit}>
           Save
         </SubmitButton>
-        <CancelButton cancel={goBack} disabled={pending}>
+        <CancelButton cancel={goBack}>
           Cancel
         </CancelButton>
       </FormActions>

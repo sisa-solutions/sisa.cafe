@@ -1,6 +1,7 @@
 import { createColumnHelper as createColumnHelperBase, type RowData } from '@tanstack/react-table';
 
-import { Checkbox } from '../inputs';
+import Checkbox from '@mui/joy/Checkbox';
+import { CheckIcon, MinusIcon } from 'lucide-react';
 
 import { ACTIONS_COLUMN_ID, FLEX_COLUMN_ID, SELECTION_COLUMN_ID } from '../data-table/constants';
 
@@ -14,6 +15,8 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
       id: SELECTION_COLUMN_ID,
       header: ({ table }) => (
         <Checkbox
+          checkedIcon={<CheckIcon />}
+          indeterminateIcon={<MinusIcon />}
           {...{
             checked: table.getIsAllRowsSelected(),
             indeterminate: table.getIsSomeRowsSelected(),
@@ -28,6 +31,8 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
       ),
       cell: ({ row, getValue }) => (
         <Checkbox
+          checkedIcon={<CheckIcon />}
+          indeterminateIcon={<MinusIcon />}
           value={getValue() as any}
           {...{
             checked: row.getIsSelected(),

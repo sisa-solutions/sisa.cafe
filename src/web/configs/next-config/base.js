@@ -2,7 +2,7 @@
 module.exports = {
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'mdx'],
-  transpilePackages: ['@sisa/grpc-api', '@sisa/components', '@sisa/i18n', '@sisa/utils'],
+  transpilePackages: ['@sisa/grpc-api', '@sisa/components', '@sisa/form', '@sisa/i18n', '@sisa/utils'],
   modularizeImports: {
     '@mui/joy': {
       transform: '@mui/joy/{{member}}',
@@ -10,6 +10,10 @@ module.exports = {
     },
     '@sisa/components': {
       transform: '@sisa/components/src/{{kebabCase member}}',
+      preventFullImport: true,
+    },
+    '@sisa/form': {
+      transform: '@sisa/form/src/{{kebabCase member}}',
       preventFullImport: true,
     },
     '@sisa/hooks': {

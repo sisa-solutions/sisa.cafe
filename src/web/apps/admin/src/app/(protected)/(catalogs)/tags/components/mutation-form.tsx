@@ -1,7 +1,5 @@
 'use client';
 
-import { experimental_useFormStatus as useFormStatus } from 'react-dom';
-
 import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
@@ -17,7 +15,7 @@ import {
   FormActions,
   SubmitButton,
   CancelButton,
-} from '@sisa/components';
+} from '@sisa/form';
 
 import type { TagResponse, CreateTagCommand, UpdateTagCommand } from '@sisa/grpc-api';
 import { randomId } from '@sisa/utils';
@@ -32,7 +30,6 @@ export type MutationFormProps = {
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const router = useRouter();
-  const { pending } = useFormStatus();
 
   const { control, handleSubmit, reset } = useForm<MutationValues>({
     defaultValues,
@@ -63,10 +60,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       </FormControl>
       <RichTextField control={control} error name="description" label="Description" />
       <FormActions>
-        <SubmitButton submit={submit} disabled={pending} loading={pending}>
+        <SubmitButton submit={submit}>
           Save
         </SubmitButton>
-        <CancelButton cancel={() => reset(defaultValues)} disabled={pending}>
+        <CancelButton cancel={() => reset(defaultValues)}>
           Cancel
         </CancelButton>
       </FormActions>

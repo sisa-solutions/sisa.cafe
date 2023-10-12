@@ -17,7 +17,7 @@ import {
   FormContainer,
   TextInput,
   TextareaInput,
-} from '@sisa/components';
+} from '@sisa/form';
 
 const ContactPage = () => {
   return (

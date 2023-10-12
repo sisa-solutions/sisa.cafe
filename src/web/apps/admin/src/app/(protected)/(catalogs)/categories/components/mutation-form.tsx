@@ -1,16 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { experimental_useFormStatus as useFormStatus } from 'react-dom';
+import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
+import useQuery from 'swr';
 
 import { useForm } from 'react-hook-form';
-
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
-import useQuery from 'swr';
+import * as y from 'yup';
 
 import {
   AutocompleteField,
@@ -21,45 +19,70 @@ import {
   SubmitButton,
   CancelButton,
   FileUploadField,
-} from '@sisa/components';
+} from '@sisa/form';
 
 import {
   type CategoryResponse,
-  type CategoryInfoResponse,
-  type CreateCategoryCommand,
   getCategories,
   Combinator,
   SortDirection,
   Operator,
   DEFAULT_PAGING_PARAMS,
   uploadFile,
+  CreateCategoryCommand,
   UpdateCategoryCommand,
 } from '@sisa/grpc-api';
 
 import { randomId } from '@sisa/utils';
 
-type MutationValues = (CreateCategoryCommand | UpdateCategoryCommand) & {
-  parent?: CategoryInfoResponse;
-  pictures?: Array<File>;
-};
+const createSchema = y.object({
+  name: y.string().required().min(4).max(100),
+  slug: y.string().required().min(4).max(100),
+  description: y.string().max(500).optional(),
+  parentId: y.string().optional(),
+  parent: y
+    .object({
+      id: y.string().uuid().required(),
+      name: y.string().required().min(4).max(100),
+    })
+    .optional()
+    .partial(),
+  pictures: y.array<File, File>().optional(),
+});
 
-export type MutationFormProps = {
-  trigger: (data: MutationValues) => Promise<CategoryResponse>;
-  defaultValues?: MutationValues;
-};
+const updateSchema = y.object({
+  id: y.string().uuid().notRequired(),
+  name: y.string().required().min(4).max(100),
+  slug: y.string().required().min(4).max(100),
+  description: y.string().max(500).optional(),
+  parentId: y.string().optional(),
+  parent: y
+    .object({
+      id: y.string().uuid().required(),
+      name: y.string().required().min(4).max(100),
+    })
+    .optional()
+    .partial(),
+  pictures: y.array<File, File>().optional(),
+});
 
-const validationSchema = yup
-  .object<MutationValues>().shape({
-    name: yup.string().required().max(100),
-    slug: yup.string().required().lowercase().max(100),
-    description: yup.string().nullable().max(500),
-    pictures: yup.array<File>().nullable(),
-    parentId: yup.string().nullable(),
-  });
+const validationSchema = y.lazy((values) => {
+  if ('id' in values) {
+    return updateSchema;
+  }
+
+  return createSchema;
+});
+
+type FormValues = y.InferType<typeof validationSchema>;
+
+type MutationFormProps = {
+  trigger: (data: CreateCategoryCommand | UpdateCategoryCommand) => Promise<CategoryResponse>;
+  defaultValues?: FormValues;
+};
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const router = useRouter();
-  const { pending } = useFormStatus();
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
 
   const {
@@ -99,21 +122,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     setValue,
     watch,
     formState = { errors: {} },
-  } = useForm<MutationValues>({
-    // @ts-ignore
+  } = useForm<FormValues>({
     resolver: yupResolver(validationSchema),
-    defaultValues: {
-      ...defaultValues,
-    },
+    defaultValues,
   });
-
-  const watchParentId = watch('parent.id');
-
-  console.log(formState.errors);
-
-  useEffect(() => {
-    setValue('parentId', watchParentId);
-  }, [watchParentId]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -134,6 +146,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
 
       await trigger({
         ...rest,
+        parentId: parent?.id,
       });
 
       goBack();
@@ -186,10 +199,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       />
       <RichTextField control={control} name="description" label="Description" />
       <FormActions>
-        <SubmitButton submit={onSubmit} disabled={pending} loading={pending}>
+        <SubmitButton submit={onSubmit}>
           Save
         </SubmitButton>
-        <CancelButton cancel={goBack} disabled={pending}>
+        <CancelButton cancel={goBack}>
           Cancel
         </CancelButton>
       </FormActions>

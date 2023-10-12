@@ -9,7 +9,8 @@ import CardOverflow from '@mui/joy/CardOverflow';
 
 import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
-import Icon from '../icon';
+
+import { XIcon } from 'lucide-react';
 
 export type FileWithPreview = File & {
   id: string;
@@ -56,7 +57,7 @@ const Preview = ({ file, handleRemove }: Props) => {
         sx={{ mt: -1, mr: -1 }}
         onClick={() => handleRemove(file.id)}
       >
-        <Icon name="x" />
+        <XIcon />
       </IconButton>
     </Card>
   );

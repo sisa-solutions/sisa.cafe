@@ -8,9 +8,8 @@ import FormLabel from '@mui/joy/FormLabel';
 import FormHelperText from '@mui/joy/FormHelperText';
 
 import Autocomplete, { type AutocompleteProps } from '@mui/joy/Autocomplete';
-import { ChevronDownIcon, XIcon } from 'lucide-react';
 
-import LoadingIcon from '../loading-icon';
+import { ChevronDownIcon, LoaderIcon, XIcon } from 'lucide-react';
 
 export type AutocompleteInputProps<
   T,
@@ -61,7 +60,7 @@ const AutocompleteInput = forwardRef(
               },
             }}
             loading={loading}
-            endDecorator={loading ? <LoadingIcon /> : null}
+            endDecorator={loading ? <LoaderIcon className="animate-spin" /> : null}
             {...inputProps}
           />
           {errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}
