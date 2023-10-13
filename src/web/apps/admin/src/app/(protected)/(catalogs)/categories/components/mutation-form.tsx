@@ -5,12 +5,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useQuery from 'swr';
 
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-
-import * as yup from 'yup';
-
 import {
+  useForm,
+  yupResolver,
+  yup,
   AutocompleteField,
   FormContainer,
   TextField,
@@ -47,18 +45,20 @@ type FormValues = (CreateCategoryCommand | UpdateCategoryCommand) & AdditionaFor
 
 const creationSchema = yup.object<FormValues>({
   id: yup.string().optional(),
-  name: yup.string().required().min(4).max(100),
-  slug: yup.string().required().min(4).max(100),
+  name: yup.string().required().min(4).max(100).label('Name'),
+  slug: yup.string().required().min(4).max(100).lowercase().label('Slug'),
 
-  description: yup.string().max(500).optional(),
+  description: yup.string().max(500).optional().label('Description'),
   parentId: yup.string().optional(),
   parent: yup
     .object({
       id: yup.string().uuid().required(),
       name: yup.string().required().min(4).max(100),
     })
-    .optional(),
-  pictures: yup.array<File>().optional(),
+    .optional()
+    .partial()
+    .label('Parent Category'),
+  pictures: yup.array<File>().optional().label('Pictures'),
 });
 
 const updateSchema = creationSchema.shape({

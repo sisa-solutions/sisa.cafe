@@ -1,3 +1,14 @@
+export * as yup from 'yup';
+export { yupResolver } from '@hookform/resolvers/yup';
+export {
+  useForm,
+  useController,
+  useFieldArray,
+  useFormContext,
+  useFormState,
+  useWatch,
+} from 'react-hook-form';
+
 // buttons
 export { default as SplitButton } from './split-button';
 export * from './split-button';
@@ -124,6 +135,3 @@ export * from './date-input';
 export { default as MaskInput } from './mask-input';
 export * from './mask-input';
 export { default as MaskField } from './mask-field';
-
-
-export * as y from 'yup';

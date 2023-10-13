@@ -1019,7 +1019,6 @@ __metadata:
     "@emotion/cache": "npm:^11.11.0"
     "@emotion/react": "npm:^11.11.1"
     "@emotion/styled": "npm:^11.11.0"
-    "@hookform/resolvers": "npm:^3.3.2"
     "@mui/joy": "npm:5.0.0-beta.10"
     "@sisa/components": "workspace:*"
     "@sisa/eslint-config": "workspace:*"
@@ -1030,21 +1029,18 @@ __metadata:
     "@sisa/next-config": "workspace:*"
     "@sisa/tsconfig": "workspace:*"
     "@sisa/utils": "workspace:*"
-    "@tanstack/react-table": "npm:^8.10.6"
-    "@types/node": "npm:^20.8.4"
+    "@types/node": "npm:^20.8.6"
     "@types/react": "npm:^18.2.28"
     "@types/react-dom": "npm:^18.2.13"
-    lucide-react: "npm:^0.286.0"
+    lucide-react: "npm:^0.287.0"
     mobx: "npm:^6.10.2"
     mobx-react-lite: "npm:^4.0.5"
     next: "npm:^13.5.4"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
-    react-hook-form: "npm:^7.47.0"
     recharts: "npm:^2.8.0"
     swr: "npm:^2.2.4"
     typescript: "npm:^5.2.2"
-    yup: "npm:^1.3.2"
   languageName: unknown
   linkType: soft
 
@@ -1057,7 +1053,7 @@ __metadata:
     "@sisa/i18n": "workspace:*"
     "@sisa/tsconfig": "workspace:*"
     "@sisa/utils": "workspace:*"
-    "@tanstack/react-table": "npm:^8.10.6"
+    "@tanstack/react-table": "npm:^8.10.7"
     "@types/quill": "npm:^2.0.12"
     "@types/react": "npm:^18.2.28"
     "@types/react-dom": "npm:^18.2.13"
@@ -1076,14 +1072,11 @@ __metadata:
   peerDependencies:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
-    "@hookform/resolvers": ^3.1.1
     "@mui/joy": ^5.0.0-beta.7
     lucide-react: ^0.284.0
     next: ~13.5.4
     react: ^18.2.0
     react-dom: ^18.2.0
-    react-hook-form: ^7.45.2
-    yup: ^1.3.2
   languageName: unknown
   linkType: soft
 
@@ -1155,11 +1148,11 @@ __metadata:
     "@sisa/next-config": "workspace:*"
     "@sisa/tsconfig": "workspace:*"
     "@sisa/utils": "workspace:*"
-    "@tanstack/react-table": "npm:^8.10.6"
-    "@types/node": "npm:^20.8.4"
+    "@tanstack/react-table": "npm:^8.10.7"
+    "@types/node": "npm:^20.8.6"
     "@types/react": "npm:^18.2.28"
     "@types/react-dom": "npm:^18.2.13"
-    lucide-react: "npm:^0.286.0"
+    lucide-react: "npm:^0.287.0"
     mobx: "npm:^6.10.2"
     mobx-react-lite: "npm:^4.0.5"
     next: "npm:^13.5.4"
@@ -1185,7 +1178,7 @@ __metadata:
     protobufjs: "npm:^7.2.5"
     react: "npm:^18.2.0"
     swr: "npm:^2.2.4"
-    ts-proto: "npm:^1.161.1"
+    ts-proto: "npm:^1.162.1"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
@@ -1214,7 +1207,7 @@ __metadata:
     i18next: "npm:^23.5.1"
     i18next-browser-languagedetector: "npm:^7.1.0"
     react: "npm:^18.2.0"
-    react-i18next: "npm:^13.2.2"
+    react-i18next: "npm:^13.3.0"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
@@ -1272,22 +1265,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-table@npm:^8.10.6":
-  version: 8.10.6
-  resolution: "@tanstack/react-table@npm:8.10.6"
+"@tanstack/react-table@npm:^8.10.7":
+  version: 8.10.7
+  resolution: "@tanstack/react-table@npm:8.10.7"
   dependencies:
-    "@tanstack/table-core": "npm:8.10.6"
+    "@tanstack/table-core": "npm:8.10.7"
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 862c50ac8d7ab664bb08af7833223f39be1797da5358142c697d1c389a6abe936ed3f3102b3b134c3f16610a9f41c450db7a98e46c8f295a88a45d5f7a9558fb
+  checksum: 2ddf6f90b06e7af069f16dbe5d0dc8c8afab3de88c25e33f6c297beaf2507c2e46fee1f746f7977d48bad2114909bba0016026fc2b6a85bcaee472cdafdc7ffd
   languageName: node
   linkType: hard
 
-"@tanstack/table-core@npm:8.10.6":
-  version: 8.10.6
-  resolution: "@tanstack/table-core@npm:8.10.6"
-  checksum: 87c496e56ab73aca6c3631f302cafe7669054ce36e325fc6d4ee864a542dfdab6a1a9513a4165283d3516cd1000c71f153f8778efd123da69e450eb6ee02c221
+"@tanstack/table-core@npm:8.10.7":
+  version: 8.10.7
+  resolution: "@tanstack/table-core@npm:8.10.7"
+  checksum: 3f671484319094443bb2db86356f408d4246e22bebd7ad444edc919fef131899384c3a27261c5ee01fb18887bc9157c5a0d9db3e32aae940ce5416f6e58b038b
   languageName: node
   linkType: hard
 
@@ -1502,12 +1495,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.8.4":
-  version: 20.8.4
-  resolution: "@types/node@npm:20.8.4"
+"@types/node@npm:^20.8.6":
+  version: 20.8.6
+  resolution: "@types/node@npm:20.8.6"
   dependencies:
     undici-types: "npm:~5.25.1"
-  checksum: 8d1e03d5bb186e7706d2c336c81eebd82b21b76e48ad482b9f731e1a948ff1f30f42d63f2379e6f9d99b31215a7467052317187def21c07aa1128ad28b2c01f9
+  checksum: d0a2bef7e041553540291091d171b6aa7e5e647e4c2d5092e71d5d69bfb272625cd023d5208b91955a78780dac6fdea591962576cfd7a7a94fabbc707fadf7a1
   languageName: node
   linkType: hard
 
@@ -5166,12 +5159,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.286.0":
-  version: 0.286.0
-  resolution: "lucide-react@npm:0.286.0"
+"lucide-react@npm:^0.287.0":
+  version: 0.287.0
+  resolution: "lucide-react@npm:0.287.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: 0a0374709a4365b39aee8111279514a6b476e4f1c83cfd169a70d49a518c7659ce79cac92977c160d6f708422ec46bcd0072623424fdbf6c616a446a0da3c9f5
+  checksum: d53e7afa2eb0a401d6a880ed619c7802f0c247f5557dc733e7495786e7379341eed9570c00c4aca58f25b956ecdebe431a92738e376658c1a490be0df985a4cf
   languageName: node
   linkType: hard
 
@@ -6323,9 +6316,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^13.2.2":
-  version: 13.2.2
-  resolution: "react-i18next@npm:13.2.2"
+"react-i18next@npm:^13.3.0":
+  version: 13.3.0
+  resolution: "react-i18next@npm:13.3.0"
   dependencies:
     "@babel/runtime": "npm:^7.22.5"
     html-parse-stringify: "npm:^3.0.1"
@@ -6337,7 +6330,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 846e73130414989304c395c247cec8371ec25b5a0284588c913542741ce0cc33b4681d573980c64320138601d08a2ddec5042dc6f841e48a575e3f11ab83a368
+  checksum: 8c03ea4432fabb1cb3dc53fa7d04f8197600ada98a2c111ac8adf31baf3d0c23a0c1ee944d65c7c5b45deeabe52f625aed72d1bf2e60571ef6f22fd8e0391c81
   languageName: node
   linkType: hard
 
@@ -7470,9 +7463,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-proto@npm:^1.161.1":
-  version: 1.161.1
-  resolution: "ts-proto@npm:1.161.1"
+"ts-proto@npm:^1.162.1":
+  version: 1.162.1
+  resolution: "ts-proto@npm:1.162.1"
   dependencies:
     case-anything: "npm:^2.1.13"
     protobufjs: "npm:^7.2.4"
@@ -7480,7 +7473,7 @@ __metadata:
     ts-proto-descriptors: "npm:1.15.0"
   bin:
     protoc-gen-ts_proto: protoc-gen-ts_proto
-  checksum: 55b7c431ac9bb1ee1450b0d487b14bf1a392b069e8c1335532ed835957af5599949d7b962cdd5fd03c3ad0f6cdbc4cc8131870ae594372c6b903a4ce3841a0a3
+  checksum: ea1658a9e4696370001509576ff215aec63554fe5a0845e4802a35e0fd58311a8ebd270222bb98e09bde830a70574551021c3b4433c55e828a7a435794be552d
   languageName: node
   linkType: hard
 
