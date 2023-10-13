@@ -1,9 +1,9 @@
-export {
+export type {
   CategoryResponse,
   CategoryInfoResponse,
   SingleCategoryResponse,
 } from '../generated/sisa/services/blog/v1/categories/responses';
-export {
+export type {
   CreateCategoryCommand,
   UpdateCategoryCommand,
 } from '../generated/sisa/services/blog/v1/categories/commands';

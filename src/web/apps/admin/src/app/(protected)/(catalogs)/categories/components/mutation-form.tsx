@@ -8,7 +8,7 @@ import useQuery from 'swr';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import * as y from 'yup';
+import * as yup from 'yup';
 
 import {
   AutocompleteField,
@@ -23,58 +23,51 @@ import {
 
 import {
   type CategoryResponse,
+  type UpdateCategoryCommand,
+  type CreateCategoryCommand,
   getCategories,
   Combinator,
   SortDirection,
   Operator,
   DEFAULT_PAGING_PARAMS,
   uploadFile,
-  CreateCategoryCommand,
-  UpdateCategoryCommand,
 } from '@sisa/grpc-api';
 
 import { randomId } from '@sisa/utils';
 
-const createSchema = y.object({
-  name: y.string().required().min(4).max(100),
-  slug: y.string().required().min(4).max(100),
-  description: y.string().max(500).optional(),
-  parentId: y.string().optional(),
-  parent: y
+type AdditionaFormValues = {
+  parent?: {
+    id: string;
+    name: string;
+  };
+  pictures?: File[];
+};
+
+type FormValues = (CreateCategoryCommand | UpdateCategoryCommand) & AdditionaFormValues;
+
+const creationSchema = yup.object<FormValues>({
+  id: yup.string().optional(),
+  name: yup.string().required().min(4).max(100),
+  slug: yup.string().required().min(4).max(100),
+
+  description: yup.string().max(500).optional(),
+  parentId: yup.string().optional(),
+  parent: yup
     .object({
-      id: y.string().uuid().required(),
-      name: y.string().required().min(4).max(100),
+      id: yup.string().uuid().required(),
+      name: yup.string().required().min(4).max(100),
     })
-    .optional()
-    .partial(),
-  pictures: y.array<File, File>().optional(),
+    .optional(),
+  pictures: yup.array<File>().optional(),
 });
 
-const updateSchema = y.object({
-  id: y.string().uuid().notRequired(),
-  name: y.string().required().min(4).max(100),
-  slug: y.string().required().min(4).max(100),
-  description: y.string().max(500).optional(),
-  parentId: y.string().optional(),
-  parent: y
-    .object({
-      id: y.string().uuid().required(),
-      name: y.string().required().min(4).max(100),
-    })
-    .optional()
-    .partial(),
-  pictures: y.array<File, File>().optional(),
+const updateSchema = creationSchema.shape({
+  id: yup.string().uuid().required(),
 });
 
-const validationSchema = y.lazy((values) => {
-  if ('id' in values) {
-    return updateSchema;
-  }
-
-  return createSchema;
+const validationSchema = yup.lazy((values: FormValues) => {
+  return 'id' in values ? updateSchema : creationSchema;
 });
-
-type FormValues = y.InferType<typeof validationSchema>;
 
 type MutationFormProps = {
   trigger: (data: CreateCategoryCommand | UpdateCategoryCommand) => Promise<CategoryResponse>;
@@ -116,15 +109,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     })
   );
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    watch,
-    formState = { errors: {} },
-  } = useForm<FormValues>({
-    resolver: yupResolver(validationSchema),
+  const { control, handleSubmit } = useForm<FormValues>({
     defaultValues,
+    // @ts-ignore
+    resolver: yupResolver(validationSchema),
   });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -199,12 +187,8 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       />
       <RichTextField control={control} name="description" label="Description" />
       <FormActions>
-        <SubmitButton submit={onSubmit}>
-          Save
-        </SubmitButton>
-        <CancelButton cancel={goBack}>
-          Cancel
-        </CancelButton>
+        <SubmitButton submit={onSubmit}>Save</SubmitButton>
+        <CancelButton cancel={goBack}>Cancel</CancelButton>
       </FormActions>
     </FormContainer>
   );
