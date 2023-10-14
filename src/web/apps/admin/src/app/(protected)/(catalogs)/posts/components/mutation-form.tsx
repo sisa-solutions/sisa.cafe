@@ -5,19 +5,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useQuery from 'swr';
 
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-
 import {
   useForm,
+  yupResolver,
+  yup,
   AutocompleteField,
   FormContainer,
   TextField,
-  FileUploadInput,
   RichTextField,
   FormActions,
   SubmitButton,
   CancelButton,
+  FileUploadField,
 } from '@sisa/form';
 
 import {
@@ -30,15 +29,50 @@ import {
   SortDirection,
   Operator,
   DEFAULT_PAGING_PARAMS,
+  uploadFile,
 } from '@sisa/grpc-api';
 
 import { randomId } from '@sisa/utils';
 
-type MutationValues = CreatePostCommand | UpdatePostCommand;
+type AdditionFormValues = {
+  category: {
+    id: string;
+    name: string;
+  };
+  pictures?: File[];
+};
 
-export type MutationFormProps = {
-  trigger: (data: MutationValues) => Promise<PostResponse>;
-  defaultValues?: MutationValues;
+type FormValues = (CreatePostCommand | UpdatePostCommand) & AdditionFormValues;
+
+const creationSchema = yup.object<FormValues>({
+  title: yup.string().required().min(4).max(100).label('Title'),
+  slug: yup.string().lowercase().required().min(4).max(100).label('Slug'),
+
+  excerpt: yup.string().required().min(4).max(500).label('Excerpt'),
+  content: yup.string().required().min(4).max(5000).label('Content'),
+  categoryId: yup.string().uuid().required(),
+  category: yup
+    .object({
+      id: yup.string().uuid(),
+      name: yup.string().min(4).max(100),
+    })
+    .default(null)
+    .required()
+    .label('Category'),
+  pictures: yup.array<File>().optional().label('Pictures'),
+});
+
+const updateSchema = creationSchema.shape({
+  id: yup.string().uuid().required(),
+});
+
+const validationSchema = yup.lazy((values: FormValues) => {
+  return 'id' in values ? updateSchema : creationSchema;
+});
+
+type MutationFormProps = {
+  trigger: (data: CreatePostCommand | UpdatePostCommand) => Promise<PostResponse>;
+  defaultValues?: FormValues;
 };
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
@@ -76,15 +110,33 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     })
   );
 
-  const { control, handleSubmit } = useForm<MutationValues>({
-    defaultValues: {
-      ...defaultValues,
-    },
+  const { control, handleSubmit } = useForm<FormValues>({
+    defaultValues,
+    // @ts-ignore
+    resolver: yupResolver(validationSchema),
   });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await trigger(data);
+      const { category, pictures = [], ...rest } = data;
+
+      if (pictures.length > 0) {
+        const formData = new FormData();
+        const file = pictures[0];
+
+        formData.append('file', file);
+        formData.append('path', 'categories');
+        formData.append('name', file.name);
+        formData.append('contentType', file.type);
+        formData.append('size', `${file.size}`);
+
+        await uploadFile(formData);
+      }
+
+      await trigger({
+        ...rest,
+        categoryId: category.id,
+      });
 
       goBack();
     } catch (error) {
@@ -105,8 +157,9 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     <FormContainer orientation="horizontal">
       <AutocompleteField
         control={control}
-        name="categoryId"
-        label="Parent Category"
+        name="category"
+        label="Category"
+        required
         loading={isLoading}
         options={data.value.map((x) => {
           return {
@@ -120,21 +173,25 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         inputValue={searchParentCategoryName}
         onInputChange={onInputChange}
       />
-      <TextField control={control} name="title" label="Title" />
-      <TextField control={control} name="slug" label="Slug" />
-      <RichTextField control={control} name="excerpt" label="Excerpt" />
-      <FormControl>
-        <FormLabel>Picture</FormLabel>
-        <FileUploadInput options={{}} />
-      </FormControl>
-      <RichTextField control={control} name="content" label="Content" />
+      <TextField control={control} required name="title" label="Title" />
+      <TextField control={control} required name="slug" label="Slug" />
+      <RichTextField control={control} required name="excerpt" label="Excerpt" />
+      <FileUploadField
+        control={control}
+        name="pictures"
+        label="Pictures"
+        options={{
+          accept: {
+            'image/*': [],
+          },
+          multiple: false,
+          maxFiles: 1,
+        }}
+      />
+      <RichTextField control={control} required name="content" label="Content" />
       <FormActions>
-        <SubmitButton submit={onSubmit}>
-          Save
-        </SubmitButton>
-        <CancelButton cancel={goBack}>
-          Cancel
-        </CancelButton>
+        <SubmitButton submit={onSubmit}>Save</SubmitButton>
+        <CancelButton cancel={goBack}>Cancel</CancelButton>
       </FormActions>
     </FormContainer>
   );

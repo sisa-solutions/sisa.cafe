@@ -33,7 +33,7 @@ import {
 
 import { randomId } from '@sisa/utils';
 
-type AdditionaFormValues = {
+type AdditionFormValues = {
   parent?: {
     id: string;
     name: string;
@@ -41,10 +41,9 @@ type AdditionaFormValues = {
   pictures?: File[];
 };
 
-type FormValues = (CreateCategoryCommand | UpdateCategoryCommand) & AdditionaFormValues;
+type FormValues = (CreateCategoryCommand | UpdateCategoryCommand) & AdditionFormValues;
 
 const creationSchema = yup.object<FormValues>({
-  id: yup.string().optional(),
   name: yup.string().required().min(4).max(100).label('Name'),
   slug: yup.string().required().min(4).max(100).lowercase().label('Slug'),
 
@@ -171,8 +170,8 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         inputValue={searchParentCategoryName}
         onInputChange={onInputChange}
       />
-      <TextField control={control} name="name" label="Name" />
-      <TextField control={control} name="slug" label="Slug" />
+      <TextField control={control} required name="name" label="Name" />
+      <TextField control={control} required name="slug" label="Slug" />
       <FileUploadField
         control={control}
         name="pictures"
