@@ -9,6 +9,9 @@
     "eslint-config-turbo": "^1.10.15",
     "eslint-plugin-react": "7.33.2"
   },
+  "peerDependencies": {
+    "eslint": "^8.51.0"
+  },
   "publishConfig": {
     "access": "public"
   }
