@@ -5,7 +5,6 @@ import Badge from '@mui/joy/Badge';
 import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
-import Chip from '@mui/joy/Chip';
 import Link from '@mui/joy/Link';
 import IconButton from '@mui/joy/IconButton';
 import Stack from '@mui/joy/Stack';
@@ -24,7 +23,9 @@ import {
 
 import { LinkChip, LinkIconButton, LinkTypography } from '@sisa/components';
 
-const PostCard = () => {
+import { PostResponse } from '@sisa/grpc-api';
+
+const PostCard = ({ id, title, slug, excerpt, content, creator, category, tags }: PostResponse) => {
   return (
     <Card
       className="post-card"
@@ -41,7 +42,7 @@ const PostCard = () => {
           display: 'flex',
         }}
       >
-        <Link href="/blog/posts/abc-xyz/details">
+        <Link href={`/blog/posts/${slug}/details`}>
           <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?fm=jpg&fit=crop&w=1024" />
         </Link>
       </AspectRatio>
@@ -52,9 +53,9 @@ const PostCard = () => {
             variant="soft"
             color="primary"
             startDecorator={<LayersIcon />}
-            href="/blog/categories/tin-tuc"
+            href={`/blog/categories/${category?.slug}`}
           >
-            tin-tuc
+            {category?.name}
           </LinkChip>
           <Typography
             level="body-xs"
@@ -63,7 +64,7 @@ const PostCard = () => {
             }}
             startDecorator={<CalendarIcon />}
           >
-            2 days ago
+            {creator?.timestamp?.toLocaleString()}
           </Typography>
           <Box
             sx={{
@@ -92,25 +93,27 @@ const PostCard = () => {
             }
           ></Typography>
         </Stack>
-        <LinkTypography level="h3" color="primary" href="/blog/posts/abc-xyz/details">
-          Cựu điều tra viên Hoàng Văn Hưng kháng cáo kêu oan
+        <LinkTypography level="h3" color="primary" href={`/blog/posts/${slug}/details`}>
+          {title}
         </LinkTypography>
 
-        <Typography level="body-sm" textAlign="justify">
-          {`Cựu điều tra viên Hoàng Văn Hưng kháng cáo kêu oan khi bị phạt tù chung thân vì lừa đảo
-      "chạy án" 800.000 USD trong vụ án chuyến bay giải cứu.`}
+        <Typography level="body-sm" textAlign="justify" component="div">
+          <p dangerouslySetInnerHTML={{ __html: excerpt }} />
         </Typography>
 
         <Stack direction="row" spacing={1} alignItems="center">
-          <LinkChip
-            size="sm"
-            variant="soft"
-            color="neutral"
-            startDecorator={<TagIcon />}
-            href="/blog/tags/tin-tuc"
-          >
-            tin-tuc
-          </LinkChip>
+          {tags.map((tag) => (
+            <LinkChip
+              key={tag}
+              size="sm"
+              variant="soft"
+              color="neutral"
+              startDecorator={<TagIcon />}
+              href={`/blog/tags/${tag}`}
+            >
+              {tag}
+            </LinkChip>
+          ))}
         </Stack>
         <Stack
           direction="row"

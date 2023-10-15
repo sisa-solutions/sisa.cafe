@@ -26,6 +26,18 @@ service PostGrpcService {
     };
   }
 
+  rpc GetPublishedPosts(sisa.blog.api.v1.posts.queries.GetPublishedPostsQuery) returns (sisa.blog.api.v1.posts.responses.ListPostsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts/published"
+    };
+  }
+
+  rpc FindPublishedPostBySlug(sisa.blog.api.v1.posts.queries.FindPublishedPostBySlugQuery) returns (sisa.blog.api.v1.posts.responses.SinglePostResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts/{id}/published"
+    };
+  }
+
   rpc CreatePost(sisa.blog.api.v1.posts.commands.CreatePostCommand) returns (sisa.blog.api.v1.posts.responses.SinglePostResponse) {
     option (google.api.http) = {
       post: "/api/v1/posts"

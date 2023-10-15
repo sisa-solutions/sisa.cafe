@@ -1,7 +1,4 @@
 import AspectRatio from '@mui/joy/AspectRatio';
-import Avatar from '@mui/joy/Avatar';
-import AvatarGroup from '@mui/joy/AvatarGroup';
-import Badge from '@mui/joy/Badge';
 import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
@@ -11,21 +8,22 @@ import IconButton from '@mui/joy/IconButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 
-import {
-  BookmarkPlusIcon,
-  CalendarIcon,
-  LayersIcon,
-  HeartIcon,
-  MessageSquareIcon,
-  RocketIcon,
-  SmileIcon,
-  TagIcon,
-} from 'lucide-react';
+import { BookmarkPlusIcon, CalendarIcon, LayersIcon, TagIcon } from 'lucide-react';
 
-import { LinkChip, LinkIconButton, LinkTypography } from '@sisa/components';
-import CommentList from '../../_components/comment-list';
+import { LinkChip, LinkTypography } from '@sisa/components';
 
-const PostDetails = () => {
+import { findPublishedPostBySlug } from '@sisa/grpc-api';
+
+interface PostDetailsProps {
+  params: {
+    slug: string;
+  };
+}
+
+const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
+  const { id, title, excerpt, content, category, tags, creator } =
+    await findPublishedPostBySlug(slug);
+
   return (
     <>
       <Card className="post-details">
@@ -47,16 +45,15 @@ const PostDetails = () => {
         <CardContent sx={{ gap: 1 }}>
           <Stack direction="row" spacing={1} alignItems="center">
             <LinkChip
-              size="sm"
               variant="soft"
               color="primary"
               startDecorator={<LayersIcon />}
-              href="/blog/categories/tin-tuc"
+              href={`/blog/categories/${category?.slug}`}
             >
-              tin-tuc
+              {category?.name}
             </LinkChip>
-            <Chip size="sm" variant="soft" startDecorator={<CalendarIcon />}>
-              2 days ago
+            <Chip variant="soft" startDecorator={<CalendarIcon />}>
+              {creator?.timestamp?.toLocaleString()}
             </Chip>
             <Box
               sx={{
@@ -71,30 +68,38 @@ const PostDetails = () => {
               }
             ></Typography>
           </Stack>
-          <LinkTypography level="h2" component="h1" color="primary" href="/blog/posts/abc-xyz">
-            Cựu điều tra viên Hoàng Văn Hưng kháng cáo kêu oan
+          <LinkTypography
+            level="h2"
+            component="h1"
+            color="primary"
+            href={`/blog/posts/${slug}/details`}
+          >
+            {title}
           </LinkTypography>
 
-          <Typography level="body-sm" textAlign="justify">
-            {`Cụ thể, lúc xây nhà máy đã có dân cư nằm trong phạm vi 1.000 m tính từ bãi chôn lấp nhưng quá trình khảo sát, lập và trình phê duyệt quy hoạch, đơn vị tư vấn và Sở Xây dựng không đề cập đến. Điều này dẫn đến bãi chôn lấp gần khu dân cư, không đảm bảo khoảng cách an toàn. Nhà máy cũng chưa đúng quy hoạch, không lấy ý kiến các sở ngành liên quan.
-
-Tháng 9/2019, Tỉnh ủy Quảng Ngãi khiển trách ông Trần Em – nguyên chủ tịch huyện Đức Phổ và ông Nguyễn Quốc Tân – Phó giám đốc Sở Tài nguyên Môi trường và một số cán bộ về sai phạm tại dự án trên.
-
-Người dân Phổ Thạnh sau đó được vận động đồng thuận cho nhà máy xử lý rác MD vận hành đến năm 2022 nhằm xử lý 22.500 m3 rác ở bãi rác cũ và thu gom, xử lý chất thải sinh hoạt hàng ngày của Sa Huỳnh. Nhà máy sẽ được di dời sau khi hoàn thành xử lý lượng rác tồn đọng.`}
+          <Typography level="body-sm" textAlign="justify" component="div">
+            <p
+              dangerouslySetInnerHTML={{
+                __html: content,
+              }}
+            />
           </Typography>
 
           <Stack direction="row" spacing={1} alignItems="center">
-            <LinkChip
-              size="sm"
-              variant="soft"
-              color="neutral"
-              startDecorator={<TagIcon />}
-              href="/blog/tags/tin-tuc"
-            >
-              tin-tuc
-            </LinkChip>
+            {tags.map((tag) => (
+              <LinkChip
+                key={tag}
+                size="sm"
+                variant="soft"
+                color="neutral"
+                startDecorator={<TagIcon />}
+                href={`/blog/tags/${tag}`}
+              >
+                {tag}
+              </LinkChip>
+            ))}
           </Stack>
-          <Stack
+          {/* <Stack
             direction="row"
             spacing={2}
             sx={{
@@ -140,10 +145,10 @@ Người dân Phổ Thạnh sau đó được vận động đồng thuận cho 
               }}
             />
             <Typography level="body-sm">2 min read</Typography>
-          </Stack>
+          </Stack> */}
         </CardContent>
       </Card>
-      <CommentList />
+      {/* <CommentList /> */}
     </>
   );
 };

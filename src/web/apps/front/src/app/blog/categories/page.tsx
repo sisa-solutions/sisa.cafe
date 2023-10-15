@@ -6,7 +6,7 @@ import Typography from '@mui/joy/Typography';
 
 import { LayersIcon, SearchIcon } from 'lucide-react';
 
-import CategoryCard from './_components/category-card';
+import CategoryCard from './components/category-card';
 
 const CategoriesPage = () => {
   return (

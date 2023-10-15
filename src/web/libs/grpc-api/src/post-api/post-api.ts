@@ -11,13 +11,35 @@ import {
   ReactToPostCommand,
 } from '../generated/sisa/services/blog/v1/posts/commands';
 
-import { FindPostByIdQuery, GetPostsQuery } from '../generated/sisa/services/blog/v1/posts/queries';
+import {
+  FindPostByIdQuery,
+  GetPostsQuery,
+  GetPublishedPostsQuery,
+} from '../generated/sisa/services/blog/v1/posts/queries';
 
-import { ListPostsResponse, PostResponse } from '../generated/sisa/services/blog/v1/posts/responses';
+import {
+  ListPostsResponse,
+  PostResponse,
+} from '../generated/sisa/services/blog/v1/posts/responses';
 
 export const getPosts = (request: GetPostsQuery) => {
   const response = new Promise<ListPostsResponse>((resolve, reject) => {
     client.getPosts(request, (err, response) => {
+      if (err) {
+        reject(err);
+      }
+      if (response) {
+        resolve(response);
+      }
+    });
+  });
+
+  return response;
+};
+
+export const getPublishedPosts = (request: GetPublishedPostsQuery) => {
+  const response = new Promise<ListPostsResponse>((resolve, reject) => {
+    client.getPublishedPosts(request, (err, response) => {
       if (err) {
         reject(err);
       }
@@ -43,18 +65,23 @@ export const findPostById = (request: FindPostByIdQuery) => {
   });
 };
 
-// export const FindPostBySlug = (request: FindPostBySlugQuery) => {
-//   return new Promise<PostResponse>((resolve, reject) => {
-//     client.findPostBySlug(request, (err, { value }) => {
-//       if (err) {
-//         reject(err);
-//       }
-//       if (value) {
-//         resolve(value);
-//       }
-//     });
-//   });
-// };
+export const findPublishedPostBySlug = (slug: string) => {
+  return new Promise<PostResponse>((resolve, reject) => {
+    client.findPublishedPostBySlug(
+      {
+        slug,
+      },
+      (err, { value }) => {
+        if (err) {
+          reject(err);
+        }
+        if (value) {
+          resolve(value);
+        }
+      }
+    );
+  });
+};
 
 export const createPost = (request: CreatePostCommand) => {
   return new Promise<PostResponse>((resolve, reject) => {

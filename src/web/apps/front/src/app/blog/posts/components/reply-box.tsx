@@ -1,7 +1,7 @@
 import Button from '@mui/joy/Button';
 import Stack from '@mui/joy/Stack';
 
-import { RichTextInput } from '@sisa/components';
+import { RichTextInput } from '@sisa/form';
 import { CheckCheckIcon, EyeIcon, XIcon } from 'lucide-react';
 
 const ReplyBox = () => {

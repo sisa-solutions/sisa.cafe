@@ -61,3 +61,30 @@ public sealed class PostSpecification<TResult>(Expression<Func<Post, TResult>> s
         Builder.Paginate(pagingParams);
     }
 }
+
+public sealed class PublishedPostSpecification<TResult>(Expression<Func<Post, TResult>> selector)
+    : Specification<Post, TResult>(selector) where TResult : class
+{
+    public PublishedPostSpecification(
+        string slug,
+        Expression<Func<Post, TResult>> selector) : this(selector)
+    {
+        Builder
+            .Where(x => x.Slug == slug && x.Status == PostStatus.PUBLISHED);
+    }
+
+    public PublishedPostSpecification(
+        IPagingParams pagingParams
+        , Expression<Func<Post, TResult>> selector) : this(selector)
+    {
+        Builder.Include(x => x.Category);
+        Builder.Include(x => x.Tags);
+
+        Builder.AsSplitQuery();
+        Builder.Where(x => x.Status == PostStatus.PUBLISHED);
+
+        Builder.OrderBy(x => x.Title);
+
+        Builder.Paginate(pagingParams);
+    }
+}

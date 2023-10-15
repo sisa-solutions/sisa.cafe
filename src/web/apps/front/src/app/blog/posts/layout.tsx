@@ -2,9 +2,8 @@ import { type ReactNode } from 'react';
 
 import Stack from '@mui/joy/Stack';
 
-import CategoriesWidget from './_components/categories-widget';
-import TagsWidget from './_components/tags-widget';
-import Box from '@mui/joy/Box';
+import CategoriesWidget from './components/categories-widget';
+import TagsWidget from './components/tags-widget';
 
 type Props = {
   children: ReactNode;
@@ -12,12 +11,18 @@ type Props = {
 
 const PostsLayout = ({ children }: Props) => {
   return (
-    <Stack direction="column">
-      <Stack direction="row" spacing={2}>
-        <Stack direction="column" spacing={2}>
+    <Stack direction="column" sx={{ flex: 1 }}>
+      <Stack direction="row" gap={2}>
+        <Stack
+          direction="column"
+          gap={2}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
           {children}
         </Stack>
-        <Stack direction="column">
+        <Stack direction="column" gap={2}>
           <CategoriesWidget />
           <TagsWidget />
         </Stack>

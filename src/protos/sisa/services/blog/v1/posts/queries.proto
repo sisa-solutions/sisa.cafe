@@ -22,3 +22,11 @@ message GetCommentsByPostIdQuery {
   string postId = 1;
   sisa.data.params.PagingParams paging = 3;
 }
+
+message FindPublishedPostBySlugQuery {
+  string slug = 1;
+}
+
+message GetPublishedPostsQuery {
+  sisa.data.params.PagingParams paging = 3;
+}

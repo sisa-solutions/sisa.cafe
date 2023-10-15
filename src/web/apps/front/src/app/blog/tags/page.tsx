@@ -6,7 +6,7 @@ import Typography from '@mui/joy/Typography';
 
 import { SearchIcon, TagsIcon } from 'lucide-react';
 
-import TagCard from './_components/tag-card';
+import TagCard from './components/tag-card';
 
 const TagsPage = () => {
   return (

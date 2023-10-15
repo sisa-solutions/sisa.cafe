@@ -35,6 +35,16 @@ public sealed class PostService(IMediator mediator) : PostGrpcService.PostGrpcSe
     public override async Task<Empty> DeletePost(DeletePostCommand command, ServerCallContext context)
         => await mediator.SendAsync(command, context.CancellationToken);
 
+    #region Published Posts
+
+    public override async Task<ListPostsResponse> GetPublishedPosts(GetPublishedPostsQuery query, ServerCallContext context)
+        => await mediator.SendAsync(query, context.CancellationToken);
+
+    public override async Task<SinglePostResponse> FindPublishedPostBySlug(FindPublishedPostBySlugQuery query, ServerCallContext context)
+        => await mediator.SendAsync(query, context.CancellationToken);
+
+    #endregion
+
     #region Comments
 
     public override async Task<ListCommentsResponse> GetCommentsByPostId(GetCommentsByPostIdQuery query, ServerCallContext context)

@@ -18,7 +18,13 @@ import {
   ReactToPostCommand,
   UpdatePostCommand,
 } from "./commands";
-import { FindPostByIdQuery, GetCommentsByPostIdQuery, GetPostsQuery } from "./queries";
+import {
+  FindPostByIdQuery,
+  FindPublishedPostBySlugQuery,
+  GetCommentsByPostIdQuery,
+  GetPostsQuery,
+  GetPublishedPostsQuery,
+} from "./queries";
 import { ListPostsResponse, SinglePostResponse } from "./responses";
 
 export const protobufPackage = "sisa.blog.api.v1.posts";
@@ -40,6 +46,25 @@ export const PostGrpcServiceService = {
     responseStream: false,
     requestSerialize: (value: FindPostByIdQuery) => Buffer.from(FindPostByIdQuery.encode(value).finish()),
     requestDeserialize: (value: Buffer) => FindPostByIdQuery.decode(value),
+    responseSerialize: (value: SinglePostResponse) => Buffer.from(SinglePostResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => SinglePostResponse.decode(value),
+  },
+  getPublishedPosts: {
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/GetPublishedPosts",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetPublishedPostsQuery) => Buffer.from(GetPublishedPostsQuery.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => GetPublishedPostsQuery.decode(value),
+    responseSerialize: (value: ListPostsResponse) => Buffer.from(ListPostsResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => ListPostsResponse.decode(value),
+  },
+  findPublishedPostBySlug: {
+    path: "/sisa.blog.api.v1.posts.PostGrpcService/FindPublishedPostBySlug",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: FindPublishedPostBySlugQuery) =>
+      Buffer.from(FindPublishedPostBySlugQuery.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => FindPublishedPostBySlugQuery.decode(value),
     responseSerialize: (value: SinglePostResponse) => Buffer.from(SinglePostResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer) => SinglePostResponse.decode(value),
   },
@@ -111,6 +136,8 @@ export const PostGrpcServiceService = {
 export interface PostGrpcServiceServer extends UntypedServiceImplementation {
   getPosts: handleUnaryCall<GetPostsQuery, ListPostsResponse>;
   findPostById: handleUnaryCall<FindPostByIdQuery, SinglePostResponse>;
+  getPublishedPosts: handleUnaryCall<GetPublishedPostsQuery, ListPostsResponse>;
+  findPublishedPostBySlug: handleUnaryCall<FindPublishedPostBySlugQuery, SinglePostResponse>;
   createPost: handleUnaryCall<CreatePostCommand, SinglePostResponse>;
   updatePost: handleUnaryCall<UpdatePostCommand, SinglePostResponse>;
   publishPost: handleUnaryCall<PublishPostCommand, Empty>;
@@ -147,6 +174,36 @@ export interface PostGrpcServiceClient extends Client {
   ): ClientUnaryCall;
   findPostById(
     request: FindPostByIdQuery,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: SinglePostResponse) => void,
+  ): ClientUnaryCall;
+  getPublishedPosts(
+    request: GetPublishedPostsQuery,
+    callback: (error: ServiceError | null, response: ListPostsResponse) => void,
+  ): ClientUnaryCall;
+  getPublishedPosts(
+    request: GetPublishedPostsQuery,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: ListPostsResponse) => void,
+  ): ClientUnaryCall;
+  getPublishedPosts(
+    request: GetPublishedPostsQuery,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: ListPostsResponse) => void,
+  ): ClientUnaryCall;
+  findPublishedPostBySlug(
+    request: FindPublishedPostBySlugQuery,
+    callback: (error: ServiceError | null, response: SinglePostResponse) => void,
+  ): ClientUnaryCall;
+  findPublishedPostBySlug(
+    request: FindPublishedPostBySlugQuery,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: SinglePostResponse) => void,
+  ): ClientUnaryCall;
+  findPublishedPostBySlug(
+    request: FindPublishedPostBySlugQuery,
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: SinglePostResponse) => void,

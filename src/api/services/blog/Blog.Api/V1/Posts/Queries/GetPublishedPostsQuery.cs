@@ -1,4 +1,4 @@
-using Sisa.Abstractions;
+﻿using Sisa.Abstractions;
 
 using Sisa.Blog.Api.V1.Tags.Responses;
 using Sisa.Blog.Api.V1.Posts.Responses;
@@ -7,22 +7,20 @@ using Sisa.Blog.Domain.Specifications;
 
 namespace Sisa.Blog.Api.V1.Posts.Queries;
 
-public sealed partial class GetPostsQuery : IQuery<ListPostsResponse>
+public sealed partial class GetPublishedPostsQuery : IQuery<ListPostsResponse>
 {
 }
 
-public class GetPostsQueryHandler(
+public class GetPublishedPostsQueryHandler(
     IPostRepository repository,
-    ILogger<GetPostsQueryHandler> logger
-) : IQueryHandler<GetPostsQuery, ListPostsResponse>
+    ILogger<GetPublishedPostsQueryHandler> logger
+) : IQueryHandler<GetPublishedPostsQuery, ListPostsResponse>
 {
-    public async ValueTask<ListPostsResponse> HandleAsync(GetPostsQuery query, CancellationToken cancellationToken = default)
+    public async ValueTask<ListPostsResponse> HandleAsync(GetPublishedPostsQuery query, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Getting Tags");
 
-        var spec = new PostSpecification<PostResponse>(
-            query.Filter,
-            query.SortBy,
+        var spec = new PublishedPostSpecification<PostResponse>(
             query.Paging,
             PostProjections.Projection);
 

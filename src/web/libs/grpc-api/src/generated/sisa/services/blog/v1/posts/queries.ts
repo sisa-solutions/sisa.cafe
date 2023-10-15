@@ -21,6 +21,14 @@ export interface GetCommentsByPostIdQuery {
   paging: PagingParams | undefined;
 }
 
+export interface FindPublishedPostBySlugQuery {
+  slug: string;
+}
+
+export interface GetPublishedPostsQuery {
+  paging: PagingParams | undefined;
+}
+
 function createBaseFindPostByIdQuery(): FindPostByIdQuery {
   return { id: "" };
 }
@@ -240,6 +248,122 @@ export const GetCommentsByPostIdQuery = {
   fromPartial<I extends Exact<DeepPartial<GetCommentsByPostIdQuery>, I>>(object: I): GetCommentsByPostIdQuery {
     const message = createBaseGetCommentsByPostIdQuery();
     message.postId = object.postId ?? "";
+    message.paging = (object.paging !== undefined && object.paging !== null)
+      ? PagingParams.fromPartial(object.paging)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseFindPublishedPostBySlugQuery(): FindPublishedPostBySlugQuery {
+  return { slug: "" };
+}
+
+export const FindPublishedPostBySlugQuery = {
+  encode(message: FindPublishedPostBySlugQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.slug !== "") {
+      writer.uint32(10).string(message.slug);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): FindPublishedPostBySlugQuery {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFindPublishedPostBySlugQuery();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.slug = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): FindPublishedPostBySlugQuery {
+    return { slug: isSet(object.slug) ? globalThis.String(object.slug) : "" };
+  },
+
+  toJSON(message: FindPublishedPostBySlugQuery): unknown {
+    const obj: any = {};
+    if (message.slug !== "") {
+      obj.slug = message.slug;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<FindPublishedPostBySlugQuery>, I>>(base?: I): FindPublishedPostBySlugQuery {
+    return FindPublishedPostBySlugQuery.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<FindPublishedPostBySlugQuery>, I>>(object: I): FindPublishedPostBySlugQuery {
+    const message = createBaseFindPublishedPostBySlugQuery();
+    message.slug = object.slug ?? "";
+    return message;
+  },
+};
+
+function createBaseGetPublishedPostsQuery(): GetPublishedPostsQuery {
+  return { paging: undefined };
+}
+
+export const GetPublishedPostsQuery = {
+  encode(message: GetPublishedPostsQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.paging !== undefined) {
+      PagingParams.encode(message.paging, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetPublishedPostsQuery {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPublishedPostsQuery();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.paging = PagingParams.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetPublishedPostsQuery {
+    return { paging: isSet(object.paging) ? PagingParams.fromJSON(object.paging) : undefined };
+  },
+
+  toJSON(message: GetPublishedPostsQuery): unknown {
+    const obj: any = {};
+    if (message.paging !== undefined) {
+      obj.paging = PagingParams.toJSON(message.paging);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetPublishedPostsQuery>, I>>(base?: I): GetPublishedPostsQuery {
+    return GetPublishedPostsQuery.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetPublishedPostsQuery>, I>>(object: I): GetPublishedPostsQuery {
+    const message = createBaseGetPublishedPostsQuery();
     message.paging = (object.paging !== undefined && object.paging !== null)
       ? PagingParams.fromPartial(object.paging)
       : undefined;
