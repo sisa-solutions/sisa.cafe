@@ -1,10 +1,11 @@
 import Stack from '@mui/joy/Stack';
 
-import { getPublishedPosts, DEFAULT_PAGING_PARAMS } from '@sisa/grpc-api';
+import { getPublishedPosts, DEFAULT_PAGING_PARAMS, Combinator } from '@sisa/grpc-api';
 
 import PostCard from './components/post-card';
 import TopToolBar from './components/top-toolbar';
-import BottomToolBar from './components/bottom-toolbar';
+import Pagination from './components/pagination';
+import Typography from '@mui/joy/Typography';
 
 interface PostPageProps {
   searchParams: {
@@ -13,19 +14,33 @@ interface PostPageProps {
 }
 
 const PostsPage = async ({ searchParams: { page = 1 } }: PostPageProps) => {
-  const { value } = await getPublishedPosts({
-    paging: {
-      ...DEFAULT_PAGING_PARAMS,
-      pageIndex: page - 1,
+  const {
+    value,
+    paging = {
+      itemCount: 0,
+      pageIndex: 0,
+      pageSize: 0,
+      pageCount: 0,
     },
-  });
+  } = await getPublishedPosts(page - 1);
+
+  const paginInfo = {
+    nextPage: paging.pageIndex + 2,
+    previousPage: paging.pageIndex - 2,
+
+    hasNextPage: paging.pageIndex + 1 < paging.pageCount,
+    hasPreviousPage: paging.pageIndex > 0,
+  };
 
   return (
-    <Stack direction="column" spacing={2}>
-      <TopToolBar />
+    <Stack direction="column" gap={2}>
+      <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
+        <span></span>
+        <Pagination {...paginInfo} />
+      </Stack>
       <Stack
         direction="column"
-        spacing={2}
+        gap={2}
         sx={{
           // format even/odd
           '& .post-card:nth-child(odd)': {
@@ -39,7 +54,10 @@ const PostsPage = async ({ searchParams: { page = 1 } }: PostPageProps) => {
           <PostCard key={post.id} {...post} />
         ))}
       </Stack>
-      <BottomToolBar />
+      <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
+        <Typography level="body-md">10/100 posts</Typography>
+        <Pagination {...paginInfo} />
+      </Stack>
     </Stack>
   );
 };

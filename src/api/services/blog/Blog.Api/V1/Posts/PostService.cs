@@ -8,8 +8,6 @@ using Sisa.Blog.Api.V1.Posts.Commands;
 using Sisa.Blog.Api.V1.Posts.Queries;
 using Sisa.Blog.Api.V1.Posts.Responses;
 
-using Sisa.Blog.Api.V1.Comments.Commands;
-using Sisa.Blog.Api.V1.Comments.Queries;
 using Sisa.Blog.Api.V1.Comments.Responses;
 
 namespace Sisa.Blog.Api.V1.Posts;

@@ -1,6 +1,7 @@
 import { forwardRef, useRef } from 'react';
 
-import { format, isSameMonth } from 'date-fns';
+import {dayUtils} from '@sisa/i18n';
+
 import {
   CaptionProps,
   DayPicker,
@@ -40,7 +41,9 @@ const Caption = ({ displayMonth }: CaptionProps) => {
   const { numberOfMonths } = useDayPicker();
   const { goToMonth, nextMonth, previousMonth, displayMonths } = useNavigation();
 
-  const displayIndex = displayMonths.findIndex((month) => isSameMonth(displayMonth, month));
+  const displayIndex = displayMonths.findIndex(
+    (month) => displayMonth.getMonth() == month.getMonth()
+  );
 
   const isFirst = displayIndex === 0;
   const isLast = displayIndex === displayMonths.length - 1;
@@ -65,7 +68,7 @@ const Caption = ({ displayMonth }: CaptionProps) => {
         </IconButton>
       )}
       <Typography level="title-lg" sx={{ flex: 1, textAlign: 'center' }}>
-        {format(displayMonth, 'MMM yyy')}
+        {dayUtils(displayMonth).format('MMM yyy')}
       </Typography>
       {!hideNext && (
         <IconButton disabled={!nextMonth} onClick={() => nextMonth && goToMonth(nextMonth)}>

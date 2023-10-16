@@ -75,7 +75,8 @@ public static partial class FilteringExtensions
     private static Expression BuildOperationExpression(Expression left, Expression right, Operator op)
     {
         Console.WriteLine($"left: {left}, right: {right}, op: {op}");
-        Console.WriteLine($"left type: {left.Type == typeof(Array)}, right type: {right.Type}");
+        Console.WriteLine($"left type: {left.Type}, right type: {left.Type.GetInterface("IEnumerable")}");
+        Console.WriteLine($"left type IsAssignableFrom type: {left.Type.BaseType == typeof(IEnumerable<>)}");
 
         return op switch
         {
@@ -98,10 +99,28 @@ public static partial class FilteringExtensions
             Operator.LessThanOrEqual => Expression.LessThanOrEqual(left, right),
 
             // 7 contains
-            Operator.Contains => Expression.Call(left, left.Type.GetMethod("Contains", [left.Type])!, right),
+            Operator.Contains => left.Type switch
+            {
+                var type when type.GetInterface("IEnumerable") != null => Expression.Call(
+                    typeof(Enumerable).GetMethods()
+                        .First(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
+                        .MakeGenericMethod(typeof(string))
+                    , left
+                    , right),
+                _ => Expression.Call(left, left.Type.GetMethod("Contains", [left.Type])!, right),
+            },
 
             // 8 not contains
-            Operator.NotContains => Expression.Not(Expression.Call(left, typeof(string).GetMethod("Contains", [typeof(string)])!, right)),
+            Operator.NotContains => left.Type switch
+            {
+                var type when type.GetInterface("IEnumerable") != null => Expression.Not(Expression.Call(
+                    typeof(Enumerable).GetMethods()
+                        .First(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
+                        .MakeGenericMethod(typeof(string))
+                    , left
+                    , right)),
+                _ => Expression.Not(Expression.Call(left, left.Type.GetMethod("Contains", [left.Type])!, right)),
+            },
 
             // 9 starts with
             Operator.StartsWith => Expression.Call(left, typeof(string).GetMethod("StartsWith", [typeof(string)])!, right),

@@ -1,14 +1,15 @@
+import { dayUtils } from '@sisa/i18n';
+
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Chip from '@mui/joy/Chip';
 import Link from '@mui/joy/Link';
-import IconButton from '@mui/joy/IconButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 
-import { BookmarkPlusIcon, CalendarIcon, LayersIcon, TagIcon } from 'lucide-react';
+import { CalendarIcon, ComponentIcon, TagIcon } from 'lucide-react';
 
 import { LinkChip, LinkTypography } from '@sisa/components';
 
@@ -21,8 +22,7 @@ interface PostDetailsProps {
 }
 
 const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
-  const { id, title, excerpt, content, category, tags, creator } =
-    await findPublishedPostBySlug(slug);
+  const { title, content, category, tags, creator } = await findPublishedPostBySlug(slug);
 
   return (
     <>
@@ -43,30 +43,30 @@ const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
           </Link>
         </AspectRatio>
         <CardContent sx={{ gap: 1 }}>
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" gap={2} alignItems="center">
             <LinkChip
               variant="soft"
               color="primary"
-              startDecorator={<LayersIcon />}
+              startDecorator={<ComponentIcon />}
               href={`/blog/categories/${category?.slug}`}
             >
               {category?.name}
             </LinkChip>
             <Chip variant="soft" startDecorator={<CalendarIcon />}>
-              {creator?.timestamp?.toLocaleString()}
+              {dayUtils(creator?.timestamp).fromNow()}
             </Chip>
             <Box
               sx={{
                 flexGrow: 1,
               }}
             />
-            <Typography
+            {/* <Typography
               endDecorator={
                 <IconButton variant="soft" color="warning" size="sm">
                   <BookmarkPlusIcon />
                 </IconButton>
               }
-            ></Typography>
+            ></Typography> */}
           </Stack>
           <LinkTypography
             level="h2"
@@ -78,14 +78,14 @@ const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
           </LinkTypography>
 
           <Typography level="body-sm" textAlign="justify" component="div">
-            <p
+            <div
               dangerouslySetInnerHTML={{
                 __html: content,
               }}
             />
           </Typography>
 
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" gap={1} alignItems="center">
             {tags.map((tag) => (
               <LinkChip
                 key={tag}
@@ -93,7 +93,7 @@ const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
                 variant="soft"
                 color="neutral"
                 startDecorator={<TagIcon />}
-                href={`/blog/tags/${tag}`}
+                href={`/blog/tags/${tag}/details`}
               >
                 {tag}
               </LinkChip>
@@ -101,14 +101,14 @@ const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
           </Stack>
           {/* <Stack
             direction="row"
-            spacing={2}
+            gap={2}
             sx={{
               alignItems: 'center',
             }}
           >
             <Stack
               direction="row"
-              spacing={1}
+              gap={1}
               sx={{
                 alignItems: 'center',
               }}

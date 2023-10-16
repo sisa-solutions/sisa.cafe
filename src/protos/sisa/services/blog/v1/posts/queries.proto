@@ -28,5 +28,6 @@ message FindPublishedPostBySlugQuery {
 }
 
 message GetPublishedPostsQuery {
+  sisa.data.params.FilteringParams filter = 1;
   sisa.data.params.PagingParams paging = 3;
 }

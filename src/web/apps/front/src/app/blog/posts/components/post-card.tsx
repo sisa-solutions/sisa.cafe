@@ -1,31 +1,21 @@
+import { dayUtils } from '@sisa/i18n';
+
 import AspectRatio from '@mui/joy/AspectRatio';
-import Avatar from '@mui/joy/Avatar';
-import AvatarGroup from '@mui/joy/AvatarGroup';
-import Badge from '@mui/joy/Badge';
 import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
+import Chip from '@mui/joy/Chip';
 import Link from '@mui/joy/Link';
-import IconButton from '@mui/joy/IconButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 
-import {
-  BookmarkPlusIcon,
-  CalendarIcon,
-  LayersIcon,
-  HeartIcon,
-  MessageSquareIcon,
-  RocketIcon,
-  SmileIcon,
-  TagIcon,
-} from 'lucide-react';
+import { CalendarIcon, ComponentIcon, TagIcon } from 'lucide-react';
 
-import { LinkChip, LinkIconButton, LinkTypography } from '@sisa/components';
+import { LinkChip, LinkTypography } from '@sisa/components';
 
 import { PostResponse } from '@sisa/grpc-api';
 
-const PostCard = ({ id, title, slug, excerpt, content, creator, category, tags }: PostResponse) => {
+const PostCard = ({ title, slug, excerpt, creator, category, tags }: PostResponse) => {
   return (
     <Card
       className="post-card"
@@ -47,31 +37,25 @@ const PostCard = ({ id, title, slug, excerpt, content, creator, category, tags }
         </Link>
       </AspectRatio>
       <CardContent sx={{ gap: 1 }}>
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" gap={2} alignItems="center">
           <LinkChip
             size="sm"
             variant="soft"
             color="primary"
-            startDecorator={<LayersIcon />}
+            startDecorator={<ComponentIcon />}
             href={`/blog/categories/${category?.slug}`}
           >
             {category?.name}
           </LinkChip>
-          <Typography
-            level="body-xs"
-            sx={{
-              '--Icon-fontSize': '1rem',
-            }}
-            startDecorator={<CalendarIcon />}
-          >
-            {creator?.timestamp?.toLocaleString()}
-          </Typography>
+          <Chip size="sm" startDecorator={<CalendarIcon />}>
+            {dayUtils(creator?.timestamp).fromNow()}
+          </Chip>
           <Box
             sx={{
               flexGrow: 1,
             }}
           />
-          <Typography
+          {/* <Typography
             endDecorator={
               <IconButton
                 variant="soft"
@@ -91,17 +75,17 @@ const PostCard = ({ id, title, slug, excerpt, content, creator, category, tags }
                 <BookmarkPlusIcon />
               </IconButton>
             }
-          ></Typography>
+          ></Typography> */}
         </Stack>
         <LinkTypography level="h3" color="primary" href={`/blog/posts/${slug}/details`}>
           {title}
         </LinkTypography>
 
         <Typography level="body-sm" textAlign="justify" component="div">
-          <p dangerouslySetInnerHTML={{ __html: excerpt }} />
+          <div dangerouslySetInnerHTML={{ __html: excerpt }} />
         </Typography>
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" gap={1} alignItems="center">
           {tags.map((tag) => (
             <LinkChip
               key={tag}
@@ -109,7 +93,7 @@ const PostCard = ({ id, title, slug, excerpt, content, creator, category, tags }
               variant="soft"
               color="neutral"
               startDecorator={<TagIcon />}
-              href={`/blog/tags/${tag}`}
+              href={`/blog/tags/${tag}/details`}
             >
               {tag}
             </LinkChip>
@@ -117,14 +101,14 @@ const PostCard = ({ id, title, slug, excerpt, content, creator, category, tags }
         </Stack>
         <Stack
           direction="row"
-          spacing={2}
+          gap={2}
           sx={{
             alignItems: 'center',
           }}
         >
-          <Stack
+          {/* <Stack
             direction="row"
-            spacing={1}
+            gap={1}
             sx={{
               alignItems: 'center',
             }}
@@ -148,19 +132,19 @@ const PostCard = ({ id, title, slug, excerpt, content, creator, category, tags }
               </Avatar>
             </AvatarGroup>
             <Typography level="body-sm">1.2k</Typography>
-          </Stack>
+          </Stack> */}
 
-          <LinkIconButton size="sm" href="/blog/posts/abc-xyz/comments">
+          {/* <LinkIconButton size="sm" href="/blog/posts/abc-xyz/comments">
             <Badge badgeContent="20" size="sm">
               <MessageSquareIcon />
             </Badge>
-          </LinkIconButton>
+          </LinkIconButton> */}
           <Box
             sx={{
               flexGrow: 1,
             }}
           />
-          <Typography level="body-sm">2 min read</Typography>
+          {/* <Typography level="body-sm">2 min read</Typography> */}
         </Stack>
       </CardContent>
     </Card>

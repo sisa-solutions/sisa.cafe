@@ -161,11 +161,9 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         options={data.value.map((x) => {
           return {
             id: x.id,
-            name: x.name,
+            label: x.name,
           };
         })}
-        // @ts-ignore
-        getOptionLabel={(option) => option.name}
         isOptionEqualToValue={(option, value) => option.id === value.id}
         inputValue={searchParentCategoryName}
         onInputChange={onInputChange}

@@ -34,7 +34,7 @@ service PostGrpcService {
 
   rpc FindPublishedPostBySlug(sisa.blog.api.v1.posts.queries.FindPublishedPostBySlugQuery) returns (sisa.blog.api.v1.posts.responses.SinglePostResponse) {
     option (google.api.http) = {
-      get: "/api/v1/posts/{id}/published"
+      get: "/api/v1/posts/{slug}/published"
     };
   }
 

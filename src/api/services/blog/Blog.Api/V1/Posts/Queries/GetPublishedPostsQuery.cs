@@ -21,6 +21,7 @@ public class GetPublishedPostsQueryHandler(
         logger.LogInformation("Getting Tags");
 
         var spec = new PublishedPostSpecification<PostResponse>(
+            query.Filter,
             query.Paging,
             PostProjections.Projection);
 

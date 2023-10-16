@@ -1,5 +1,6 @@
 'use server';
 
+import { Combinator, DEFAULT_PAGING_PARAMS, Operator } from '../common';
 import { PostGrpcClient as client } from '../clients';
 import { CommentResponse } from '../generated/sisa/services/blog/v1/comments/responses';
 
@@ -11,11 +12,7 @@ import {
   ReactToPostCommand,
 } from '../generated/sisa/services/blog/v1/posts/commands';
 
-import {
-  FindPostByIdQuery,
-  GetPostsQuery,
-  GetPublishedPostsQuery,
-} from '../generated/sisa/services/blog/v1/posts/queries';
+import { FindPostByIdQuery, GetPostsQuery } from '../generated/sisa/services/blog/v1/posts/queries';
 
 import {
   ListPostsResponse,
@@ -37,16 +34,66 @@ export const getPosts = (request: GetPostsQuery) => {
   return response;
 };
 
-export const getPublishedPosts = (request: GetPublishedPostsQuery) => {
+export const getPublishedPosts = (pageIndex: number) => {
   const response = new Promise<ListPostsResponse>((resolve, reject) => {
-    client.getPublishedPosts(request, (err, response) => {
-      if (err) {
-        reject(err);
+    client.getPublishedPosts(
+      {
+        filter: {
+          combinator: Combinator.COMBINATOR_AND,
+          not: false,
+          rules: [],
+        },
+        paging: {
+          ...DEFAULT_PAGING_PARAMS,
+          pageIndex,
+        },
+      },
+      (err, response) => {
+        if (err) {
+          reject(err);
+        }
+        if (response) {
+          resolve(response);
+        }
       }
-      if (response) {
-        resolve(response);
+    );
+  });
+
+  return response;
+};
+
+export const getPublishedPostsByTagSlug = (pageIndex: number, tagSlug: string) => {
+  const response = new Promise<ListPostsResponse>((resolve, reject) => {
+    client.getPublishedPosts(
+      {
+        filter: {
+          combinator: Combinator.COMBINATOR_AND,
+          not: false,
+          rules: [
+            {
+              combinator: Combinator.COMBINATOR_AND,
+              not: false,
+              rules: [],
+              field: 'TagSlugs',
+              operator: Operator.OPERATOR_CONTAINS,
+              value: tagSlug,
+            },
+          ],
+        },
+        paging: {
+          ...DEFAULT_PAGING_PARAMS,
+          pageIndex,
+        },
+      },
+      (err, response) => {
+        if (err) {
+          reject(err);
+        }
+        if (response) {
+          resolve(response);
+        }
       }
-    });
+    );
   });
 
   return response;

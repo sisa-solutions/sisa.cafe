@@ -1,12 +1,37 @@
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Stack from '@mui/joy/Stack';
+import { Tooltip } from '@mui/joy';
+
+import { Layers3Icon, Layers2Icon } from 'lucide-react';
 
 import { LinkChip, LinkTypography } from '@sisa/components';
 
-import { LayersIcon } from 'lucide-react';
+import { getCategories, Combinator, SortDirection } from '@sisa/grpc-api';
 
-const CategoriesWidget = () => {
+const CategoriesWidget = async () => {
+  const {
+    value,
+    paging = {
+      itemCount: 0,
+    },
+  } = await getCategories({
+    filter: {
+      combinator: Combinator.COMBINATOR_AND,
+      not: false,
+      rules: [],
+    },
+    sortBy: [
+      {
+        field: 'Name',
+        sort: SortDirection.SORT_DIRECTION_DESC,
+      },
+    ],
+    paging: {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  });
   return (
     <Card
       sx={{
@@ -21,20 +46,20 @@ const CategoriesWidget = () => {
           gap: 2,
         }}
       >
-        <LinkTypography level="body-lg" startDecorator={<LayersIcon />} href="/blog/categories">
-          Categories
+        <LinkTypography level="body-lg" startDecorator={<Layers3Icon />} href="/blog/categories">
+          Categories ({paging.itemCount})
         </LinkTypography>
         <Stack useFlexGap flexWrap="wrap" direction="row" spacing={1}>
-          {[11, 12, 13, 14, 15, 16, 17, 18].map((item) => (
-            <LinkChip
-              key={item}
-              variant="soft"
-              color="primary"
-              startDecorator={<LayersIcon />}
-              href="/blog/categories/tin-tuc"
-            >
-              tin-tuc
-            </LinkChip>
+          {value.map((tag) => (
+            <Tooltip key={tag.id} title={tag.name}>
+              <LinkChip
+                color="primary"
+                startDecorator={<Layers2Icon />}
+                href={`/blog/categories/${tag.slug}`}
+              >
+                {tag.slug}
+              </LinkChip>
+            </Tooltip>
           ))}
         </Stack>
       </CardContent>

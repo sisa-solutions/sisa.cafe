@@ -22,6 +22,8 @@ public class Post : FullAuditableAggregateRoot
     public int ReactionCount { get; private set; }
     public Dictionary<ReactionType, int> ReactionCounts { get; private set; } = [];
 
+    // public int Point { get; private set; }
+
     private readonly List<PostStatusHistory> _statusHistories = [];
     public IReadOnlyCollection<PostStatusHistory> StatusHistories => _statusHistories;
 
@@ -31,7 +33,7 @@ public class Post : FullAuditableAggregateRoot
     private readonly List<PostTag> _postTags = [];
     public IReadOnlyCollection<PostTag> PostTags => _postTags;
 
-    public readonly List<string> _tagSlugs = [];
+    private readonly List<string> _tagSlugs = [];
     public IReadOnlyCollection<string> TagSlugs => _tagSlugs;
 
     public Category Category { get; private set; } = null!;
@@ -153,24 +155,6 @@ public class Post : FullAuditableAggregateRoot
 
     #endregion
 
-    public void AddReaction(Guid userId, ReactionType reactionType)
-    {
-        var userReaction = _reactions.FirstOrDefault(x => x.UserId == userId);
-
-        if (userReaction is not null)
-        {
-            userReaction.AddReaction(reactionType);
-        }
-        else
-        {
-            var reaction = new PostReaction(userId);
-
-            reaction.AddReaction(reactionType);
-
-            _reactions.Add(reaction);
-        }
-    }
-
     public void RemoveReaction(Guid userId, ReactionType reactionType)
     {
         var userReaction = _reactions.FirstOrDefault(x => x.UserId == userId);
@@ -185,16 +169,22 @@ public class Post : FullAuditableAggregateRoot
     public void IncreaseViewCount()
     {
         ViewCount++;
+
+        UpdatePoint();
     }
 
     public void IncreaseCommentCount()
     {
         CommentCount++;
+
+        UpdatePoint();
     }
 
     public void DecreaseCommentCount()
     {
         CommentCount--;
+
+        UpdatePoint();
     }
 
     public void React(Guid userId, ReactionType reactionType)
@@ -230,6 +220,8 @@ public class Post : FullAuditableAggregateRoot
                 DecreaseReactionCount(reactionType);
             }
         }
+
+        UpdatePoint();
     }
 
     private void IncreaseReactionCount(ReactionType reactionType)
@@ -242,5 +234,18 @@ public class Post : FullAuditableAggregateRoot
     {
         ReactionCount--;
         ReactionCounts[reactionType]--;
+    }
+
+    /// <summary>
+    /// Increase point of post
+    /// </summary>
+    /// <param name="point"></param>
+    public void UpdatePoint()
+    {
+        var viewPoints = ViewCount * 1;
+        var reactionPoints = ReactionCount * 2;
+        var commentPoints = CommentCount * 3;
+
+        // Point = viewPoints + commentPoints + reactionPoints;
     }
 }

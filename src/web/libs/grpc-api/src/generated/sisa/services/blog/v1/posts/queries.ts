@@ -26,6 +26,7 @@ export interface FindPublishedPostBySlugQuery {
 }
 
 export interface GetPublishedPostsQuery {
+  filter: FilteringParams | undefined;
   paging: PagingParams | undefined;
 }
 
@@ -313,11 +314,14 @@ export const FindPublishedPostBySlugQuery = {
 };
 
 function createBaseGetPublishedPostsQuery(): GetPublishedPostsQuery {
-  return { paging: undefined };
+  return { filter: undefined, paging: undefined };
 }
 
 export const GetPublishedPostsQuery = {
   encode(message: GetPublishedPostsQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.filter !== undefined) {
+      FilteringParams.encode(message.filter, writer.uint32(10).fork()).ldelim();
+    }
     if (message.paging !== undefined) {
       PagingParams.encode(message.paging, writer.uint32(26).fork()).ldelim();
     }
@@ -331,6 +335,13 @@ export const GetPublishedPostsQuery = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.filter = FilteringParams.decode(reader, reader.uint32());
+          continue;
         case 3:
           if (tag !== 26) {
             break;
@@ -348,11 +359,17 @@ export const GetPublishedPostsQuery = {
   },
 
   fromJSON(object: any): GetPublishedPostsQuery {
-    return { paging: isSet(object.paging) ? PagingParams.fromJSON(object.paging) : undefined };
+    return {
+      filter: isSet(object.filter) ? FilteringParams.fromJSON(object.filter) : undefined,
+      paging: isSet(object.paging) ? PagingParams.fromJSON(object.paging) : undefined,
+    };
   },
 
   toJSON(message: GetPublishedPostsQuery): unknown {
     const obj: any = {};
+    if (message.filter !== undefined) {
+      obj.filter = FilteringParams.toJSON(message.filter);
+    }
     if (message.paging !== undefined) {
       obj.paging = PagingParams.toJSON(message.paging);
     }
@@ -364,6 +381,9 @@ export const GetPublishedPostsQuery = {
   },
   fromPartial<I extends Exact<DeepPartial<GetPublishedPostsQuery>, I>>(object: I): GetPublishedPostsQuery {
     const message = createBaseGetPublishedPostsQuery();
+    message.filter = (object.filter !== undefined && object.filter !== null)
+      ? FilteringParams.fromPartial(object.filter)
+      : undefined;
     message.paging = (object.paging !== undefined && object.paging !== null)
       ? PagingParams.fromPartial(object.paging)
       : undefined;

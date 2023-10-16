@@ -1,12 +1,38 @@
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Stack from '@mui/joy/Stack';
-
-import { LinkChip, LinkTypography } from '@sisa/components';
+import { Tooltip } from '@mui/joy';
 
 import { TagIcon, TagsIcon } from 'lucide-react';
 
-const TagsWidget = () => {
+import { LinkChip, LinkTypography } from '@sisa/components';
+
+import { getTags, Combinator, SortDirection } from '@sisa/grpc-api';
+
+const TagsWidget = async () => {
+  const {
+    value,
+    paging = {
+      itemCount: 0,
+    },
+  } = await getTags({
+    filter: {
+      combinator: Combinator.COMBINATOR_AND,
+      not: false,
+      rules: [],
+    },
+    sortBy: [
+      {
+        field: 'Name',
+        sort: SortDirection.SORT_DIRECTION_DESC,
+      },
+    ],
+    paging: {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  });
+
   return (
     <Card
       sx={{
@@ -22,18 +48,19 @@ const TagsWidget = () => {
         }}
       >
         <LinkTypography level="body-lg" startDecorator={<TagsIcon />} href="/blog/tags">
-          Tags
+          Tags ({paging.itemCount})
         </LinkTypography>
         <Stack useFlexGap flexWrap="wrap" direction="row" spacing={1}>
-          {[21, 22, 23, 24, 25, 26, 27, 28].map((item) => (
-            <LinkChip
-              key={item}
-              color="primary"
-              startDecorator={<TagIcon />}
-              href="/blog/tags/tin-tuc"
-            >
-              tin-tuc
-            </LinkChip>
+          {value.map((tag) => (
+            <Tooltip key={tag.id} title={tag.name}>
+              <LinkChip
+                color="primary"
+                startDecorator={<TagIcon />}
+                href={`/blog/tags/${tag.slug}/details`}
+              >
+                {tag.slug}
+              </LinkChip>
+            </Tooltip>
           ))}
         </Stack>
       </CardContent>

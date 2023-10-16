@@ -1,4 +1,5 @@
 import { createI18n } from '@sisa/i18n';
+
 // import { initValidationLocales } from '@sisa/form';
 
 import en from './locales/en.json';
@@ -19,5 +20,4 @@ export const resources = {
 const i18n = createI18n(resources, fallbackLng, supportedLngs, defaultNS);
 
 // initValidationLocales(i18n);
-
 export default i18n;

@@ -10,7 +10,6 @@ import {
 
 import {
   FindTagByIdQuery,
-  FindTagBySlugQuery,
   GetTagsQuery,
 } from '../generated/sisa/services/blog/v1/tags/queries';
 
@@ -42,9 +41,9 @@ export const findTagById = (request: FindTagByIdQuery) => {
   });
 };
 
-export const findTagBySlug = (request: FindTagBySlugQuery) => {
+export const findTagBySlug = (slug: string) => {
   return new Promise<TagResponse>((resolve, reject) => {
-    client.findTagBySlug(request, (err, { value }) => {
+    client.findTagBySlug({ slug }, (err, { value }) => {
       if (err) {
         reject(err);
       }

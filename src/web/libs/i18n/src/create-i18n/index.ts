@@ -1,3 +1,5 @@
+import dayUtils from '../day-utils';
+
 import i18next, { type Resource, type TFunction } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
@@ -35,6 +37,10 @@ const createI18n = (
       },
       callback
     );
+
+  i18next.on('languageChanged', (lng) => {
+    dayUtils.locale(lng);
+  });
 
   return i18next;
 };

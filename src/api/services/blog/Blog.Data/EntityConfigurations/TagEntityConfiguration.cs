@@ -14,10 +14,10 @@ public class TagEntityConfiguration : EntityConfiguration<Tag>
         base.Configure(builder);
 
         builder.MapId();
-        
+
         builder
-            .HasIndex(p => p.Slug);
-            // .IncludeProperties(p => p.Name);
+            .HasIndex(p => p.Slug)
+            .IncludeProperties(p => p.Name);
 
         builder
             .Property(p => p.Name)

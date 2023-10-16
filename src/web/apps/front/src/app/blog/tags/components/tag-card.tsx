@@ -1,13 +1,19 @@
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Divider from '@mui/joy/Divider';
-import IconButton from '@mui/joy/IconButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 
-import { BookmarkPlusIcon } from 'lucide-react';
+import { TagIcon } from 'lucide-react';
 
-const TagCard = () => {
+import { LinkTypography } from '@sisa/components';
+import { type TagResponse } from '@sisa/grpc-api';
+
+interface PageProps {
+  tag: TagResponse;
+}
+
+const TagCard = ({ tag }: PageProps) => {
   return (
     <Card
       variant="soft"
@@ -27,39 +33,39 @@ const TagCard = () => {
           gap: 1,
         }}
       >
-        <Typography
+        <LinkTypography
           level="title-lg"
-          sx={{
-            justifyContent: 'space-between',
-          }}
-          endDecorator={
-            <IconButton
-              size="sm"
-              variant="soft"
-              color="warning"
-              sx={{
-                mt: -1,
-                mr: -1,
-              }}
-            >
-              <BookmarkPlusIcon />
-            </IconButton>
-          }
+          // sx={{
+          //   justifyContent: 'space-between',
+          // }}
+          href={`/blog/tags/${tag.slug}/details`}
+          startDecorator={<TagIcon />}
+          // endDecorator={
+          //   <IconButton
+          //     size="sm"
+          //     variant="soft"
+          //     color="warning"
+          //     sx={{
+          //       mt: -1,
+          //       mr: -1,
+          //     }}
+          //   >
+          //     <BookmarkPlusIcon />
+          //   </IconButton>
+          // }
         >
-          JavaScript
-        </Typography>
+          {tag.name}
+        </LinkTypography>
         <Divider inset="context" />
-        <Typography level="body-md">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
-        </Typography>
+        <Typography level="body-md">{tag.description}</Typography>
         <Stack
           direction="row"
-          spacing={2}
+          gap={2}
           sx={{
             alignItems: 'center',
           }}
         >
-          <Typography level="body-sm">200 posts</Typography>
+          <Typography level="body-sm">{tag.postCount} posts</Typography>
         </Stack>
       </CardContent>
     </Card>

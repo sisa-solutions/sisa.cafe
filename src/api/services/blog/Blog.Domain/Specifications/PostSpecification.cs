@@ -74,6 +74,7 @@ public sealed class PublishedPostSpecification<TResult>(Expression<Func<Post, TR
     }
 
     public PublishedPostSpecification(
+        IFilteringParams filteringParams,
         IPagingParams pagingParams
         , Expression<Func<Post, TResult>> selector) : this(selector)
     {
@@ -81,6 +82,7 @@ public sealed class PublishedPostSpecification<TResult>(Expression<Func<Post, TR
         Builder.Include(x => x.Tags);
 
         Builder.AsSplitQuery();
+        Builder.Filter(filteringParams);
         Builder.Where(x => x.Status == PostStatus.PUBLISHED);
 
         Builder.OrderBy(x => x.Title);

@@ -26,6 +26,10 @@ module.exports = {
       transform: '@sisa/hooks/src/{{kebabCase member}}',
       preventFullImport: true,
     },
+    // '@sisa/i18n': {
+    //   transform: '@sisa/i18n/src/{{kebabCase member}}',
+    //   preventFullImport: true,
+    // },
   },
   cleanDistDir: true,
   poweredByHeader: false,
@@ -50,6 +54,6 @@ module.exports = {
     mdxRs: true,
     serverActions: true,
     typedRoutes: true,
-    optimizePackageImports: ['@sisa/form'],
+    optimizePackageImports: ['@sisa/form', '@sisa/i18n'],
   },
 };

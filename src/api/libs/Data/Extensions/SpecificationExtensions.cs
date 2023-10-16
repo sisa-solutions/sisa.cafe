@@ -18,18 +18,15 @@ public static partial class SpecificationExtensions
         query = specification.IncludeStrings
             .Aggregate(query, (current, include) => current.Include(include));
 
+        if (specification.Criteria != null)
+        {
+            query = query
+                .Where(specification.Criteria);
+        }
+
         if (specification.FilteringParams != null)
         {
             query = query.Where(specification.FilteringParams);
-        }
-        else
-        {
-            // Apply criteria
-            if (specification.Criteria != null)
-            {
-                query = query
-                    .Where(specification.Criteria);
-            }
         }
 
         // Apply ordering if expressions are set
@@ -96,19 +93,17 @@ public static partial class SpecificationExtensions
         query = specification.IncludeStrings
             .Aggregate(query, (current, include) => current.Include(include));
 
+        if (specification.Criteria != null)
+        {
+            query = query
+                .Where(specification.Criteria);
+        }
+
         if (specification.FilteringParams != null)
         {
             query = query.Where(specification.FilteringParams);
         }
-        else
-        {
-            // Apply criteria
-            if (specification.Criteria != null)
-            {
-                query = query
-                    .Where(specification.Criteria);
-            }
-        }
+
         // Apply ordering if expressions are set
         if (specification.SortingParams != null && specification.SortingParams.Any())
         {

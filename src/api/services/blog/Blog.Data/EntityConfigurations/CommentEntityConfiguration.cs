@@ -21,10 +21,10 @@ public class CommentEntityConfiguration : EntityConfiguration<Comment>
             .IsRequired()
             .HasDefaultValueSql("''");
 
-        builder
-            .Property(p => p.ReactionCounts)
-            .HasColumnType("jsonb")
-            .HasDefaultValueSql("'[]'");
+        // builder
+        //     .Property(p => p.ReactionCounts)
+        //     .HasColumnType("jsonb")
+        //     .HasDefaultValueSql("'[]'");
 
         builder
             .HasOne(p => p.Parent)

@@ -1,14 +1,39 @@
 import Box from '@mui/joy/Box';
-import IconButton from '@mui/joy/IconButton';
 import Input from '@mui/joy/Input';
+import IconButton from '@mui/joy/IconButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 
 import { SearchIcon, TagsIcon } from 'lucide-react';
 
+import { Combinator, SortDirection, getTags } from '@sisa/grpc-api';
+
 import TagCard from './components/tag-card';
 
-const TagsPage = () => {
+const TagsPage = async () => {
+  const {
+    value,
+    paging = {
+      itemCount: 0,
+    },
+  } = await getTags({
+    filter: {
+      combinator: Combinator.COMBINATOR_AND,
+      not: false,
+      rules: [],
+    },
+    sortBy: [
+      {
+        field: 'Name',
+        sort: SortDirection.SORT_DIRECTION_DESC,
+      },
+    ],
+    paging: {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  });
+
   return (
     <Stack direction="column" spacing={2}>
       <Stack direction="row" spacing={2}>
@@ -29,8 +54,8 @@ const TagsPage = () => {
         />
       </Stack>
       <Box display="grid" gap={2} gridTemplateColumns="repeat(12, 1fr)">
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-          <TagCard key={item} />
+        {value.map((tag) => (
+          <TagCard key={tag.id} tag={tag} />
         ))}
       </Box>
     </Stack>
