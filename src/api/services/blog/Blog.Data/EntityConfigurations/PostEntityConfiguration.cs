@@ -50,14 +50,14 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
             .IsRequired()
             .HasDefaultValueSql($"'{PostStatus.DRAFT}'");
 
-        // builder.Property(p => p.StatusHistories)
-        //     .HasColumnType("jsonb")
-        //     .HasDefaultValueSql("'[]'");
+        builder.Property(p => p.StatusHistories)
+            .HasColumnType("jsonb")
+            .HasDefaultValueSql("'[]'");
 
-        // builder
-        //     .Property(p => p.ReactionCounts)
-        //     .HasColumnType("jsonb")
-        //     .HasDefaultValueSql("'[]'");
+        builder
+            .Property(p => p.ReactionCounts)
+            .HasColumnType("jsonb")
+            .HasDefaultValueSql("'[]'");
 
         builder
             .HasOne(p => p.Category)
@@ -65,10 +65,10 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // builder
-        //     .Property(x => x.TagSlugs)
-        //     .HasColumnType("jsonb")
-        //     .HasDefaultValueSql("'[]'");
+        builder
+            .Property(x => x.TagSlugs)
+            .HasColumnType("jsonb")
+            .HasDefaultValueSql("'[]'");
 
         builder
             .HasMany(e => e.Tags)

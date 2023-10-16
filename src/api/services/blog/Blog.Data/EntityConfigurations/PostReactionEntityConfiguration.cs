@@ -15,9 +15,9 @@ public class PostReactionEntityConfiguration : EntityConfiguration<PostReaction>
 
         builder.MapId();
 
-        // builder.Property(p => p.Reactions)
-        //     .HasColumnType("jsonb")
-        //     .HasDefaultValueSql("'[]'");
+        builder.Property(p => p.Reactions)
+            .HasColumnType("jsonb")
+            .HasDefaultValueSql("'[]'");
 
         builder
             .HasOne(p => p.Post)
