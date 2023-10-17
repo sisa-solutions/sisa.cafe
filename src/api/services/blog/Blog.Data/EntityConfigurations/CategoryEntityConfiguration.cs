@@ -33,7 +33,7 @@ public class CategoryEntityConfiguration : EntityConfiguration<Category>
 
         builder
             .Property(p => p.Description)
-            .HasMaxLength(200)
+            .HasMaxLength(500)
             .IsRequired()
             .HasDefaultValueSql("''");
 

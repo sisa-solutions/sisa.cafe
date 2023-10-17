@@ -13,8 +13,14 @@ public class Comment : FullAuditableAggregateRoot
 
     public int Level { get; private set; }
 
+    public int ViewCount { get; private set; }
+    public int CommentCount { get; private set; }
     public int ReactionCount { get; private set; }
-    public Dictionary<ReactionType, int> ReactionCounts { get; private set; } = [];
+
+    private readonly List<ReactionCounter> _reactionCounts = [];
+    public IReadOnlyCollection<ReactionCounter> ReactionCounts => _reactionCounts;
+
+    public int Point { get; private set; }
 
     public Comment? Parent { get; private set; }
 
@@ -97,15 +103,72 @@ public class Comment : FullAuditableAggregateRoot
         userReaction?.RemoveReaction(reactionType);
     }
 
-    public void IncreaseReactionCount(ReactionType reactionType)
+    private void IncreaseReactionCount(ReactionType reactionType)
     {
         ReactionCount++;
-        ReactionCounts[reactionType]++;
+
+        var reactionCounter = _reactionCounts
+            .FirstOrDefault(x => x.Type == reactionType);
+
+        if (reactionCounter == null)
+        {
+            reactionCounter = new ReactionCounter(reactionType, 1);
+
+            _reactionCounts.Add(reactionCounter);
+        }
+        else
+        {
+            reactionCounter.Increment();
+        }
     }
 
-    public void DecreaseReactionCount(ReactionType reactionType)
+    private void DecreaseReactionCount(ReactionType reactionType)
     {
         ReactionCount--;
-        ReactionCounts[reactionType]--;
+
+        var reactionCounter = _reactionCounts
+            .FirstOrDefault(x => x.Type == reactionType);
+
+        if (reactionCounter == null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        reactionCounter.Increment();
+    }
+
+    public void IncreaseViewCount()
+    {
+        ViewCount++;
+
+        UpdatePoint();
+    }
+
+    public void IncreaseCommentCount()
+    {
+        CommentCount++;
+
+        UpdatePoint();
+    }
+
+    public void DecreaseCommentCount()
+    {
+        CommentCount--;
+
+        UpdatePoint();
+    }
+
+
+    /// <summary>
+    /// Increase point of post
+    /// </summary>
+    /// <param name="point"></param>
+    public void UpdatePoint()
+    {
+        var viewPoints = ViewCount * 1;
+        var reactionPoints = ReactionCount * 2;
+        var commentPoints = CommentCount * 3;
+
+        Point = viewPoints + commentPoints + reactionPoints;
     }
 }

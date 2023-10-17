@@ -99,6 +99,43 @@ export const getPublishedPostsByTagSlug = (pageIndex: number, tagSlug: string) =
   return response;
 };
 
+export const getPublishedPostsByCategorySlug = (pageIndex: number, categorySlug: string) => {
+  const response = new Promise<ListPostsResponse>((resolve, reject) => {
+    client.getPublishedPosts(
+      {
+        filter: {
+          combinator: Combinator.COMBINATOR_AND,
+          not: false,
+          rules: [
+            {
+              combinator: Combinator.COMBINATOR_AND,
+              not: false,
+              rules: [],
+              field: 'Category.Slug',
+              operator: Operator.OPERATOR_EQUAL,
+              value: categorySlug,
+            },
+          ],
+        },
+        paging: {
+          ...DEFAULT_PAGING_PARAMS,
+          pageIndex,
+        },
+      },
+      (err, response) => {
+        if (err) {
+          reject(err);
+        }
+        if (response) {
+          resolve(response);
+        }
+      }
+    );
+  });
+
+  return response;
+};
+
 export const findPostById = (request: FindPostByIdQuery) => {
   return new Promise<PostResponse>((resolve, reject) => {
     client.findPostById(request, (err, { value }) => {

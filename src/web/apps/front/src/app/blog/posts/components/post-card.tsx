@@ -43,7 +43,7 @@ const PostCard = ({ title, slug, excerpt, creator, category, tags }: PostRespons
             variant="soft"
             color="primary"
             startDecorator={<ComponentIcon />}
-            href={`/blog/categories/${category?.slug}`}
+            href={`/blog/categories/${category?.slug}/details`}
           >
             {category?.name}
           </LinkChip>

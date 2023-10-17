@@ -48,7 +48,7 @@ const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
               variant="soft"
               color="primary"
               startDecorator={<ComponentIcon />}
-              href={`/blog/categories/${category?.slug}`}
+              href={`/blog/categories/${category?.slug}/details`}
             >
               {category?.name}
             </LinkChip>

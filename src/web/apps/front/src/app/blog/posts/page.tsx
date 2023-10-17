@@ -1,11 +1,9 @@
 import Stack from '@mui/joy/Stack';
 
-import { getPublishedPosts, DEFAULT_PAGING_PARAMS, Combinator } from '@sisa/grpc-api';
+import { getPublishedPosts } from '@sisa/grpc-api';
 
 import PostCard from './components/post-card';
-import TopToolBar from './components/top-toolbar';
 import Pagination from './components/pagination';
-import Typography from '@mui/joy/Typography';
 
 interface PostPageProps {
   searchParams: {
@@ -55,7 +53,7 @@ const PostsPage = async ({ searchParams: { page = 1 } }: PostPageProps) => {
         ))}
       </Stack>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
-        <Typography level="body-md">10/100 posts</Typography>
+        <span />
         <Pagination {...paginInfo} />
       </Stack>
     </Stack>

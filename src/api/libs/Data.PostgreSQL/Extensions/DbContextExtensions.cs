@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
+using Npgsql;
+
 using Sisa.Abstractions;
 using Sisa.Constants;
 using Sisa.Data.Interceptors;
@@ -70,6 +72,42 @@ public static class DbContextExtensions
             {
                 sqlOptions.CommandTimeout((int)TimeSpan.FromMinutes(SchemaConstants.COMMAND_TIMEOUT).TotalSeconds);
                 sqlOptions.MigrationsHistoryTable(DatabaseSchemaConstants.MIGRATIONS_TABLE, schema);
+                sqlOptions.EnableRetryOnFailure(maxRetryCount: SchemaConstants.MAX_RETRY_COUNT, maxRetryDelay: TimeSpan.FromSeconds(SchemaConstants.COMMAND_TIMEOUT), errorCodesToAdd: null);
+            });
+
+        options.ConfigureCommonSettings();
+
+        options.AddInterceptors(new SaveChangesInterceptor(
+            serviceProvider.GetRequiredService<IIdentityService>(),
+            serviceProvider.GetRequiredService<IEventPublisher>())
+        );
+
+        return options;
+    }
+
+    public static DbContextOptionsBuilder UseMigrationDatabase<TMigrationsAssembly>(this DbContextOptionsBuilder options, NpgsqlDataSource dataSource)
+    {
+        options.UseNpgsql(
+            dataSource,
+            sqlOptions =>
+            {
+                sqlOptions.CommandTimeout((int)TimeSpan.FromMinutes(SchemaConstants.COMMAND_TIMEOUT).TotalSeconds);
+                sqlOptions.MigrationsHistoryTable(DatabaseSchemaConstants.MIGRATIONS_TABLE);
+                sqlOptions.MigrationsAssembly(typeof(TMigrationsAssembly).Assembly.GetName().Name);
+                sqlOptions.EnableRetryOnFailure(maxRetryCount: SchemaConstants.MAX_RETRY_COUNT, maxRetryDelay: TimeSpan.FromSeconds(SchemaConstants.COMMAND_TIMEOUT), errorCodesToAdd: null);
+            });
+
+        return options.ConfigureCommonSettings();
+    }
+
+    public static DbContextOptionsBuilder UseDatabase(this DbContextOptionsBuilder options, IServiceProvider serviceProvider, NpgsqlDataSource dataSource)
+    {
+        options.UseNpgsql(
+            dataSource,
+            sqlOptions =>
+            {
+                sqlOptions.CommandTimeout((int)TimeSpan.FromMinutes(SchemaConstants.COMMAND_TIMEOUT).TotalSeconds);
+                sqlOptions.MigrationsHistoryTable(DatabaseSchemaConstants.MIGRATIONS_TABLE);
                 sqlOptions.EnableRetryOnFailure(maxRetryCount: SchemaConstants.MAX_RETRY_COUNT, maxRetryDelay: TimeSpan.FromSeconds(SchemaConstants.COMMAND_TIMEOUT), errorCodesToAdd: null);
             });
 

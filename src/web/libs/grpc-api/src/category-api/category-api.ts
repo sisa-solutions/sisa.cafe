@@ -21,16 +21,14 @@ import type {
 
 export const getCategories = (request: GetCategoriesQuery) => {
   const response = new Promise<ListCategoriesResponse>((resolve, reject) => {
-    client.getCategories(request,
-      (err, response) => {
-        if (err) {
-          reject(err);
-        }
-        if (response) {
-          resolve(response);
-        }
+    client.getCategories(request, (err, response) => {
+      if (err) {
+        reject(err);
       }
-    );
+      if (response) {
+        resolve(response);
+      }
+    });
   });
 
   return response;
@@ -49,16 +47,21 @@ export const findCategoryById = (request: FindCategoryByIdQuery) => {
   });
 };
 
-export const findCategoryBySlug = (request: FindCategoryBySlugQuery) => {
+export const findCategoryBySlug = (slug: string) => {
   return new Promise<CategoryResponse>((resolve, reject) => {
-    client.findCategoryBySlug(request, (err, { value }) => {
-      if (err) {
-        reject(err);
+    client.findCategoryBySlug(
+      {
+        slug,
+      },
+      (err, { value }) => {
+        if (err) {
+          reject(err);
+        }
+        if (value) {
+          resolve(value);
+        }
       }
-      if (value) {
-        resolve(value);
-      }
-    });
+    );
   });
 };
 

@@ -1,13 +1,18 @@
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Divider from '@mui/joy/Divider';
-import IconButton from '@mui/joy/IconButton';
-import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 
-import { BookmarkPlusIcon } from 'lucide-react';
+import { Layers2Icon } from 'lucide-react';
 
-const CategoryCard = () => {
+import { LinkTypography } from '@sisa/components';
+import { type CategoryResponse } from '@sisa/grpc-api';
+
+interface PageProps {
+  category: CategoryResponse;
+}
+
+const CategoryCard = ({ category }: PageProps) => {
   return (
     <Card
       variant="soft"
@@ -27,40 +32,42 @@ const CategoryCard = () => {
           gap: 1,
         }}
       >
-        <Typography
+        <LinkTypography
           level="title-lg"
-          sx={{
-            justifyContent: 'space-between',
-          }}
-          endDecorator={
-            <IconButton
-              size="sm"
-              variant="soft"
-              color="warning"
-              sx={{
-                mt: -1,
-                mr: -1,
-              }}
-            >
-              <BookmarkPlusIcon />
-            </IconButton>
-          }
+          // sx={{
+          //   justifyContent: 'space-between',
+          // }}
+          href={`/blog/categories/${category.slug}/details`}
+          startDecorator={<Layers2Icon />}
+          // endDecorator={
+          //   <IconButton
+          //     size="sm"
+          //     variant="soft"
+          //     color="warning"
+          //     sx={{
+          //       mt: -1,
+          //       mr: -1,
+          //     }}
+          //   >
+          //     <BookmarkPlusIcon />
+          //   </IconButton>
+          // }
         >
-          JavaScript
-        </Typography>
+          {category.name}
+        </LinkTypography>
         <Divider inset="context" />
-        <Typography level="body-md">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+        <Typography level="body-md" component="div">
+          <div dangerouslySetInnerHTML={{ __html: category.description ?? '' }} />
         </Typography>
-        <Stack
+        {/* <Stack
           direction="row"
-          spacing={2}
+          gap={2}
           sx={{
             alignItems: 'center',
           }}
         >
-          <Typography level="body-sm">200 posts</Typography>
-        </Stack>
+          <Typography level="body-sm">{category.postCount} posts</Typography>
+        </Stack> */}
       </CardContent>
     </Card>
   );

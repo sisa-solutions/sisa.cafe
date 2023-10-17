@@ -20,9 +20,11 @@ public class Post : FullAuditableAggregateRoot
     public int ViewCount { get; private set; }
     public int CommentCount { get; private set; }
     public int ReactionCount { get; private set; }
-    public Dictionary<ReactionType, int> ReactionCounts { get; private set; } = [];
 
-    // public int Point { get; private set; }
+    private readonly List<ReactionCounter> _reactionCounts = [];
+    public IReadOnlyCollection<ReactionCounter> ReactionCounts => _reactionCounts;
+
+    public int Point { get; private set; }
 
     private readonly List<PostStatusHistory> _statusHistories = [];
     public IReadOnlyCollection<PostStatusHistory> StatusHistories => _statusHistories;
@@ -33,8 +35,7 @@ public class Post : FullAuditableAggregateRoot
     private readonly List<PostTag> _postTags = [];
     public IReadOnlyCollection<PostTag> PostTags => _postTags;
 
-    private readonly List<string> _tagSlugs = [];
-    public IReadOnlyCollection<string> TagSlugs => _tagSlugs;
+    public List<string> TagSlugs { get; } = [];
 
     public Category Category { get; private set; } = null!;
 
@@ -106,8 +107,8 @@ public class Post : FullAuditableAggregateRoot
 
     private void SyncTagSlugs()
     {
-        _tagSlugs.Clear();
-        _tagSlugs.AddRange(_tags.Select(x => x.Slug));
+        TagSlugs.Clear();
+        TagSlugs.AddRange(_tags.Select(x => x.Slug));
     }
 
     public PostStatus[] NextAllowedStatuses()
@@ -227,13 +228,35 @@ public class Post : FullAuditableAggregateRoot
     private void IncreaseReactionCount(ReactionType reactionType)
     {
         ReactionCount++;
-        ReactionCounts[reactionType]++;
+
+        var reactionCounter = _reactionCounts
+            .FirstOrDefault(x => x.Type == reactionType);
+
+        if (reactionCounter == null)
+        {
+            reactionCounter = new ReactionCounter(reactionType, 1);
+
+            _reactionCounts.Add(reactionCounter);
+        }
+        else
+        {
+            reactionCounter.Increment();
+        }
     }
 
     private void DecreaseReactionCount(ReactionType reactionType)
     {
         ReactionCount--;
-        ReactionCounts[reactionType]--;
+
+        var reactionCounter = _reactionCounts
+            .FirstOrDefault(x => x.Type == reactionType);
+
+        if (reactionCounter == null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        reactionCounter.Increment();
     }
 
     /// <summary>
@@ -246,6 +269,6 @@ public class Post : FullAuditableAggregateRoot
         var reactionPoints = ReactionCount * 2;
         var commentPoints = CommentCount * 3;
 
-        // Point = viewPoints + commentPoints + reactionPoints;
+        Point = viewPoints + commentPoints + reactionPoints;
     }
 }

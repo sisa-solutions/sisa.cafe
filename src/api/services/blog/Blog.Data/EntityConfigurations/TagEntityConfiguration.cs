@@ -33,7 +33,7 @@ public class TagEntityConfiguration : EntityConfiguration<Tag>
 
         builder
             .Property(p => p.Description)
-            .HasMaxLength(200)
+            .HasMaxLength(500)
             .IsRequired()
             .HasDefaultValueSql("''");
     }

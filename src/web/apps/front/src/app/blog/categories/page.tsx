@@ -1,18 +1,43 @@
 import Box from '@mui/joy/Box';
-import IconButton from '@mui/joy/IconButton';
 import Input from '@mui/joy/Input';
+import IconButton from '@mui/joy/IconButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 
-import { LayersIcon, SearchIcon } from 'lucide-react';
+import { Layers3Icon, SearchIcon } from 'lucide-react';
+
+import { Combinator, SortDirection, getCategories } from '@sisa/grpc-api';
 
 import CategoryCard from './components/category-card';
 
-const CategoriesPage = () => {
+const CategoriesPage = async () => {
+  const {
+    value,
+    paging = {
+      itemCount: 0,
+    },
+  } = await getCategories({
+    filter: {
+      combinator: Combinator.COMBINATOR_AND,
+      not: false,
+      rules: [],
+    },
+    sortBy: [
+      {
+        field: 'Name',
+        sort: SortDirection.SORT_DIRECTION_DESC,
+      },
+    ],
+    paging: {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  });
+
   return (
-    <Stack direction="column" spacing={2}>
-      <Stack direction="row" spacing={2}>
-        <Typography level="body-lg" startDecorator={<LayersIcon />}>
+    <Stack direction="column" gap={2} sx={{ flex: 1 }}>
+      <Stack direction="row" gap={2}>
+        <Typography level="body-lg" startDecorator={<Layers3Icon />}>
           Categories
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
@@ -29,8 +54,8 @@ const CategoriesPage = () => {
         />
       </Stack>
       <Box display="grid" gap={2} gridTemplateColumns="repeat(12, 1fr)">
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-          <CategoryCard key={item} />
+        {value.map((category) => (
+          <CategoryCard key={category.id} category={category} />
         ))}
       </Box>
     </Stack>

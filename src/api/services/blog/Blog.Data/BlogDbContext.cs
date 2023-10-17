@@ -4,7 +4,6 @@ using Sisa.Blog.Data.EntityConfigurations;
 using Sisa.Blog.Domain.AggregatesModel.CategoryAggregate;
 using Sisa.Blog.Domain.AggregatesModel.CommentAggregate;
 using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
-using Sisa.Blog.Domain.AggregatesModel.ReactionAggregate;
 using Sisa.Blog.Domain.AggregatesModel.TagAggregate;
 using Sisa.Data;
 using Sisa.Extensions;

@@ -35,8 +35,8 @@ const TagsPage = async () => {
   });
 
   return (
-    <Stack direction="column" spacing={2}>
-      <Stack direction="row" spacing={2}>
+    <Stack direction="column" gap={2} sx={{ flex: 1 }}>
+      <Stack direction="row" gap={2}>
         <Typography level="body-lg" startDecorator={<TagsIcon />}>
           Tags
         </Typography>

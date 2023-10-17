@@ -6,7 +6,7 @@ import Typography from '@mui/joy/Typography';
 
 import { TagIcon } from 'lucide-react';
 
-import { findTagBySlug, getPublishedPostsByTagSlug } from '@sisa/grpc-api';
+import { findCategoryBySlug, getPublishedPostsByCategorySlug } from '@sisa/grpc-api';
 import PostCard from '../../../posts/components/post-card';
 
 interface PageProps {
@@ -18,10 +18,10 @@ interface PageProps {
   };
 }
 
-const TagDetailsPage = async ({ params: { slug }, searchParams: { page = 1 } }: PageProps) => {
-  const [tag, { value }] = await Promise.all([
-    findTagBySlug(slug),
-    getPublishedPostsByTagSlug(page - 1, slug),
+const CategoryDetailsPage = async ({ params: { slug }, searchParams: { page = 1 } }: PageProps) => {
+  const [category, { value }] = await Promise.all([
+    findCategoryBySlug(slug),
+    getPublishedPostsByCategorySlug(page - 1, slug),
   ]);
 
   return (
@@ -53,11 +53,13 @@ const TagDetailsPage = async ({ params: { slug }, searchParams: { page = 1 } }: 
             //   </IconButton>
             // }
           >
-            {tag.name}
+            {category.name}
           </Typography>
           <Divider inset="context" />
-          <Typography level="body-md">{tag.description}</Typography>
-          <Stack
+          <Typography level="body-md" component="div">
+            <div dangerouslySetInnerHTML={{ __html: category.description ?? '' }} />
+          </Typography>
+          {/* <Stack
             direction="row"
             gap={2}
             sx={{
@@ -65,7 +67,7 @@ const TagDetailsPage = async ({ params: { slug }, searchParams: { page = 1 } }: 
             }}
           >
             <Typography level="body-sm">{tag.postCount} posts</Typography>
-          </Stack>
+          </Stack> */}
         </CardContent>
       </Card>
 
@@ -89,4 +91,4 @@ const TagDetailsPage = async ({ params: { slug }, searchParams: { page = 1 } }: 
   );
 };
 
-export default TagDetailsPage;
+export default CategoryDetailsPage;

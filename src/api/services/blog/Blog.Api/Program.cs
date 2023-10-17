@@ -1,3 +1,5 @@
+using Npgsql;
+
 using Sisa.Blog.Data;
 using Sisa.Constants;
 using Sisa.Extensions;
@@ -37,9 +39,16 @@ var distributedCachingConnectionString = builder.Configuration
 
 #region DbContext
 
+var dataSourceBuilder = new NpgsqlSlimDataSourceBuilder(connectionString);
+
+dataSourceBuilder.EnableDynamicJsonMappings(jsonbClrTypes: [typeof(IReadOnlyCollection<string>)]);
+dataSourceBuilder.EnableArrays();
+
+var dataSource = dataSourceBuilder.Build();
+
 builder.Services
     .AddDbContextFactory<BlogDbContext>((serviceProvider, options)
-        => options.UseDatabase(serviceProvider, connectionString));
+        => options.UseDatabase(serviceProvider, dataSource));
 
 #endregion
 

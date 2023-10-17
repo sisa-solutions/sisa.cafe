@@ -4,6 +4,7 @@ using Sisa.Data.EntityConfigurations;
 
 using Sisa.Blog.Domain.AggregatesModel.PostAggregate;
 using Sisa.Extensions;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Sisa.Blog.Data.EntityConfigurations;
 
@@ -33,13 +34,13 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
 
         builder
             .Property(p => p.Excerpt)
-            .HasMaxLength(200)
+            .HasMaxLength(500)
             .IsRequired()
             .HasDefaultValueSql("''");
 
         builder
             .Property(p => p.Content)
-            .HasMaxLength(5000)
+            .HasMaxLength(10000)
             .IsRequired()
             .HasDefaultValueSql("''");
 
@@ -66,9 +67,7 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .Property(x => x.TagSlugs)
-            .HasColumnType("jsonb")
-            .HasDefaultValueSql("'[]'");
+            .Property(x => x.TagSlugs);
 
         builder
             .HasMany(e => e.Tags)

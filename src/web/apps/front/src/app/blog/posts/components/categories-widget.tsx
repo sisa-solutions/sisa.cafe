@@ -55,7 +55,7 @@ const CategoriesWidget = async () => {
               <LinkChip
                 color="primary"
                 startDecorator={<Layers2Icon />}
-                href={`/blog/categories/${tag.slug}`}
+                href={`/blog/categories/${tag.slug}/details`}
               >
                 {tag.slug}
               </LinkChip>

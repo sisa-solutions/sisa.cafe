@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections;
+using System.Linq.Expressions;
 
 using Sisa.Abstractions;
 using Sisa.Enums;
@@ -60,9 +61,14 @@ public static partial class FilteringExtensions
 
     private static Expression BuildFilterExpression(ParameterExpression param, IFilterRule filterRule)
     {
-        Expression property = Expression.Property(param, filterRule.Field);
-        Expression value = Expression.Constant(filterRule.Value);
-        Expression operation = BuildOperationExpression(property, value, filterRule.Operator);
+        var property = filterRule.Field.Contains('.')
+            ? filterRule.Field
+                .Split('.')
+                .Aggregate((Expression)param, Expression.PropertyOrField)
+            : Expression.PropertyOrField(param, filterRule.Field);
+
+        var value = Expression.Constant(filterRule.Value);
+        var operation = BuildOperationExpression(property, value, filterRule.Operator);
 
         if (filterRule.Not)
         {
@@ -74,10 +80,6 @@ public static partial class FilteringExtensions
 
     private static Expression BuildOperationExpression(Expression left, Expression right, Operator op)
     {
-        Console.WriteLine($"left: {left}, right: {right}, op: {op}");
-        Console.WriteLine($"left type: {left.Type}, right type: {left.Type.GetInterface("IEnumerable")}");
-        Console.WriteLine($"left type IsAssignableFrom type: {left.Type.BaseType == typeof(IEnumerable<>)}");
-
         return op switch
         {
             // 1 equals
@@ -101,24 +103,26 @@ public static partial class FilteringExtensions
             // 7 contains
             Operator.Contains => left.Type switch
             {
-                var type when type.GetInterface("IEnumerable") != null => Expression.Call(
+                var type when type.GetInterface(nameof(IEnumerable)) != null => Expression.Call(
                     typeof(Enumerable).GetMethods()
                         .First(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
                         .MakeGenericMethod(typeof(string))
                     , left
-                    , right),
+                    , right
+                ),
                 _ => Expression.Call(left, left.Type.GetMethod("Contains", [left.Type])!, right),
             },
 
             // 8 not contains
             Operator.NotContains => left.Type switch
             {
-                var type when type.GetInterface("IEnumerable") != null => Expression.Not(Expression.Call(
+                var type when type.GetInterface(nameof(IEnumerable)) != null => Expression.Not(Expression.Call(
                     typeof(Enumerable).GetMethods()
                         .First(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
                         .MakeGenericMethod(typeof(string))
                     , left
-                    , right)),
+                    , right)
+                ),
                 _ => Expression.Not(Expression.Call(left, left.Type.GetMethod("Contains", [left.Type])!, right)),
             },
 
