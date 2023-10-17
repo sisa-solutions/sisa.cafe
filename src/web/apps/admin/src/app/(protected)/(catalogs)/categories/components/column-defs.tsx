@@ -15,7 +15,7 @@ const columnDefs: Array<ColumnDef<CategoryResponse>> = [
     id: 'Name',
     header: () => 'Name',
     cell: ({ row, getValue }) => (
-      <Link underline="always" href={`/categories/${row.original.id}/details`}>
+      <Link underline="always" disableCache={true} href={`/categories/${row.original.id}/details`}>
         {getValue()}
       </Link>
     ),
@@ -27,9 +27,9 @@ const columnDefs: Array<ColumnDef<CategoryResponse>> = [
     cell: ({ row }) => row.original.parent?.name ?? '',
     enableSorting: false,
   }),
-  columnHelper.accessor('slug', {
-    id: 'Slug',
-    header: () => 'Slug',
+  columnHelper.accessor('postCount', {
+    id: 'PostCount',
+    header: () => 'Post Count',
   }),
   columnHelper.dangerouslyHtml('description', {
     id: 'Description',

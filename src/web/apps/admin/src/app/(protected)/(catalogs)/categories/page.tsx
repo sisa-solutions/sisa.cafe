@@ -46,15 +46,15 @@ const CategoriesPage = async ({
     },
   } = await getCategories({
     filter: {
-      combinator: Combinator.COMBINATOR_UNSPECIFIED,
+      combinator: Combinator.UNSPECIFIED,
       not: false,
       rules: [
         {
-          combinator: Combinator.COMBINATOR_UNSPECIFIED,
+          combinator: Combinator.UNSPECIFIED,
           not: false,
           rules: [],
           field: 'Name',
-          operator: Operator.OPERATOR_CONTAINS,
+          operator: Operator.CONTAINS,
           value: name,
         },
       ],

@@ -1,4 +1,4 @@
-import { Control, Controller, type FieldPath, type FieldValues } from 'react-hook-form';
+import { type Control, Controller, type FieldPath, type FieldValues } from 'react-hook-form';
 
 import TextInput, { type TextInputProps } from '../text-input';
 

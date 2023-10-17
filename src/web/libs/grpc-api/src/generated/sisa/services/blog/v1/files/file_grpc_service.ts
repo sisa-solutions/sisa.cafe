@@ -20,8 +20,6 @@ import { DeleteFileCommand, UpdateFileInfoCommand, UploadFileCommand } from "./c
 import { FindFileByIdQuery, GetFilesQuery } from "./queries";
 import { ListFilesResponse, SingleFileResponse } from "./responses";
 
-export const protobufPackage = "sisa.blog.api.v1.files";
-
 export type FileGrpcServiceService = typeof FileGrpcServiceService;
 export const FileGrpcServiceService = {
   getFiles: {

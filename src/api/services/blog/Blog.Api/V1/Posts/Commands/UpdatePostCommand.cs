@@ -81,23 +81,23 @@ public class UpdatePostCommandHandler(
 
         if (Guid.TryParse(command.CategoryId, out Guid categoryId) && categoryId != post.CategoryId)
         {
-            var categoryExists = await categoryRepository
+            var category = await categoryRepository
                 .FindAsync(categoryId, cancellationToken);
 
-            if (categoryExists == null)
+            if (category == null)
             {
                 logger.LogWarning("Category with id {id} not found", categoryId);
 
                 throw new Exception($"Category with id {categoryId} not found");
             }
 
-            post.ChangeCategory(categoryId);
+            post.ChangeCategory(category);
         }
 
         IEnumerable<Tag> existingTags = await tagRepository
-            .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
+            .GetAsync(x => command.TagSlugs.Contains(x.Slug), cancellationToken);
 
-        var requestTags = command.Tags
+        var requestTags = command.TagSlugs
             .Select(tag => existingTags.FirstOrDefault(x => x.Slug == tag) ?? new Tag(tag, tag));
 
         post.UpdateTags(requestTags);

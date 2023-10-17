@@ -4,8 +4,6 @@ import { FilteringParams } from "./filtering_params";
 import { PagingParams } from "./paging_params";
 import { SortingParams } from "./sorting_params";
 
-export const protobufPackage = "sisa.data.params";
-
 export interface QueryParams {
   filter: FilteringParams | undefined;
   sortBy: SortingParams | undefined;
@@ -66,59 +64,4 @@ export const QueryParams = {
     }
     return message;
   },
-
-  fromJSON(object: any): QueryParams {
-    return {
-      filter: isSet(object.filter) ? FilteringParams.fromJSON(object.filter) : undefined,
-      sortBy: isSet(object.sortBy) ? SortingParams.fromJSON(object.sortBy) : undefined,
-      paging: isSet(object.paging) ? PagingParams.fromJSON(object.paging) : undefined,
-    };
-  },
-
-  toJSON(message: QueryParams): unknown {
-    const obj: any = {};
-    if (message.filter !== undefined) {
-      obj.filter = FilteringParams.toJSON(message.filter);
-    }
-    if (message.sortBy !== undefined) {
-      obj.sortBy = SortingParams.toJSON(message.sortBy);
-    }
-    if (message.paging !== undefined) {
-      obj.paging = PagingParams.toJSON(message.paging);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<QueryParams>, I>>(base?: I): QueryParams {
-    return QueryParams.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<QueryParams>, I>>(object: I): QueryParams {
-    const message = createBaseQueryParams();
-    message.filter = (object.filter !== undefined && object.filter !== null)
-      ? FilteringParams.fromPartial(object.filter)
-      : undefined;
-    message.sortBy = (object.sortBy !== undefined && object.sortBy !== null)
-      ? SortingParams.fromPartial(object.sortBy)
-      : undefined;
-    message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingParams.fromPartial(object.paging)
-      : undefined;
-    return message;
-  },
 };
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}

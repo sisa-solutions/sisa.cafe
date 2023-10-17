@@ -4,8 +4,6 @@ import { FilteringParams } from "../../../../libs/data/params/filtering_params";
 import { PagingParams } from "../../../../libs/data/params/paging_params";
 import { SortingParams } from "../../../../libs/data/params/sorting_params";
 
-export const protobufPackage = "sisa.blog.api.v1.tags.queries";
-
 export interface FindTagByIdQuery {
   id: string;
 }
@@ -54,27 +52,6 @@ export const FindTagByIdQuery = {
     }
     return message;
   },
-
-  fromJSON(object: any): FindTagByIdQuery {
-    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
-  },
-
-  toJSON(message: FindTagByIdQuery): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FindTagByIdQuery>, I>>(base?: I): FindTagByIdQuery {
-    return FindTagByIdQuery.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FindTagByIdQuery>, I>>(object: I): FindTagByIdQuery {
-    const message = createBaseFindTagByIdQuery();
-    message.id = object.id ?? "";
-    return message;
-  },
 };
 
 function createBaseFindTagBySlugQuery(): FindTagBySlugQuery {
@@ -109,27 +86,6 @@ export const FindTagBySlugQuery = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): FindTagBySlugQuery {
-    return { slug: isSet(object.slug) ? globalThis.String(object.slug) : "" };
-  },
-
-  toJSON(message: FindTagBySlugQuery): unknown {
-    const obj: any = {};
-    if (message.slug !== "") {
-      obj.slug = message.slug;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FindTagBySlugQuery>, I>>(base?: I): FindTagBySlugQuery {
-    return FindTagBySlugQuery.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FindTagBySlugQuery>, I>>(object: I): FindTagBySlugQuery {
-    const message = createBaseFindTagBySlugQuery();
-    message.slug = object.slug ?? "";
     return message;
   },
 };
@@ -188,57 +144,4 @@ export const GetTagsQuery = {
     }
     return message;
   },
-
-  fromJSON(object: any): GetTagsQuery {
-    return {
-      filter: isSet(object.filter) ? FilteringParams.fromJSON(object.filter) : undefined,
-      sortBy: globalThis.Array.isArray(object?.sortBy) ? object.sortBy.map((e: any) => SortingParams.fromJSON(e)) : [],
-      paging: isSet(object.paging) ? PagingParams.fromJSON(object.paging) : undefined,
-    };
-  },
-
-  toJSON(message: GetTagsQuery): unknown {
-    const obj: any = {};
-    if (message.filter !== undefined) {
-      obj.filter = FilteringParams.toJSON(message.filter);
-    }
-    if (message.sortBy?.length) {
-      obj.sortBy = message.sortBy.map((e) => SortingParams.toJSON(e));
-    }
-    if (message.paging !== undefined) {
-      obj.paging = PagingParams.toJSON(message.paging);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GetTagsQuery>, I>>(base?: I): GetTagsQuery {
-    return GetTagsQuery.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<GetTagsQuery>, I>>(object: I): GetTagsQuery {
-    const message = createBaseGetTagsQuery();
-    message.filter = (object.filter !== undefined && object.filter !== null)
-      ? FilteringParams.fromPartial(object.filter)
-      : undefined;
-    message.sortBy = object.sortBy?.map((e) => SortingParams.fromPartial(e)) || [];
-    message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingParams.fromPartial(object.paging)
-      : undefined;
-    return message;
-  },
 };
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}

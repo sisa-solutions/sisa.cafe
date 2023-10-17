@@ -43,6 +43,7 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
         <PageTitle
           endDecorator={
             <Link
+              disableCache={true}
               href={`/categories/${id}/edit`}
               variant="outlined"
               fontSize="md"

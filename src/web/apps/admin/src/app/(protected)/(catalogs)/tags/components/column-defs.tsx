@@ -15,7 +15,7 @@ const columnDefs: Array<ColumnDef<TagResponse>> = [
     id: 'Name',
     header: () => 'Name',
     cell: ({ row, getValue }) => (
-      <Link underline="always" href={`/tags/${row.original.id}/details`}>
+      <Link underline="always" disableCache={true} href={`/tags/${row.original.id}/details`}>
         {getValue()}
       </Link>
     ),

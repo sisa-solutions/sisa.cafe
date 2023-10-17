@@ -4,8 +4,6 @@ import { FilteringParams } from "../../../../libs/data/params/filtering_params";
 import { PagingParams } from "../../../../libs/data/params/paging_params";
 import { SortingParams } from "../../../../libs/data/params/sorting_params";
 
-export const protobufPackage = "sisa.blog.api.v1.files.queries";
-
 export interface FindFileByIdQuery {
   id: string;
 }
@@ -48,27 +46,6 @@ export const FindFileByIdQuery = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): FindFileByIdQuery {
-    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
-  },
-
-  toJSON(message: FindFileByIdQuery): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FindFileByIdQuery>, I>>(base?: I): FindFileByIdQuery {
-    return FindFileByIdQuery.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FindFileByIdQuery>, I>>(object: I): FindFileByIdQuery {
-    const message = createBaseFindFileByIdQuery();
-    message.id = object.id ?? "";
     return message;
   },
 };
@@ -127,57 +104,4 @@ export const GetFilesQuery = {
     }
     return message;
   },
-
-  fromJSON(object: any): GetFilesQuery {
-    return {
-      filter: isSet(object.filter) ? FilteringParams.fromJSON(object.filter) : undefined,
-      sortBy: globalThis.Array.isArray(object?.sortBy) ? object.sortBy.map((e: any) => SortingParams.fromJSON(e)) : [],
-      paging: isSet(object.paging) ? PagingParams.fromJSON(object.paging) : undefined,
-    };
-  },
-
-  toJSON(message: GetFilesQuery): unknown {
-    const obj: any = {};
-    if (message.filter !== undefined) {
-      obj.filter = FilteringParams.toJSON(message.filter);
-    }
-    if (message.sortBy?.length) {
-      obj.sortBy = message.sortBy.map((e) => SortingParams.toJSON(e));
-    }
-    if (message.paging !== undefined) {
-      obj.paging = PagingParams.toJSON(message.paging);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GetFilesQuery>, I>>(base?: I): GetFilesQuery {
-    return GetFilesQuery.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<GetFilesQuery>, I>>(object: I): GetFilesQuery {
-    const message = createBaseGetFilesQuery();
-    message.filter = (object.filter !== undefined && object.filter !== null)
-      ? FilteringParams.fromPartial(object.filter)
-      : undefined;
-    message.sortBy = object.sortBy?.map((e) => SortingParams.fromPartial(e)) || [];
-    message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingParams.fromPartial(object.paging)
-      : undefined;
-    return message;
-  },
 };
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}

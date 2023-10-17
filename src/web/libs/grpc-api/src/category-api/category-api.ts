@@ -11,7 +11,6 @@ import {
 import {
   GetCategoriesQuery,
   FindCategoryByIdQuery,
-  FindCategoryBySlugQuery,
 } from '../generated/sisa/services/blog/v1/categories/queries';
 
 import type {

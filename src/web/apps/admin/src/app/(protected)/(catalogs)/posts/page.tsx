@@ -14,7 +14,7 @@ import {
   DataGrid,
 } from '@sisa/components';
 
-import { Combinator, Operator, getPosts, sortStringToParams } from '@sisa/grpc-api';
+import { Combinator, Operator, PostStatus, getPosts, sortStringToParams } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 
@@ -25,6 +25,7 @@ import columnDefs from './components/column-defs';
 type PostsPageProps = {
   searchParams: {
     name?: string;
+    status?: string;
     pageNumber?: number;
     pageSize?: number;
     sortBy?: string;
@@ -32,7 +33,7 @@ type PostsPageProps = {
 };
 
 const CategoriesPage = async ({
-  searchParams: { name = '', pageNumber = 1, pageSize = 10, sortBy = '' },
+  searchParams: { name = '', status = '', pageNumber = 1, pageSize = 10, sortBy = '' },
 }: PostsPageProps) => {
   const sortingParams = sortStringToParams(sortBy);
 
@@ -46,16 +47,24 @@ const CategoriesPage = async ({
     },
   } = await getPosts({
     filter: {
-      combinator: Combinator.COMBINATOR_UNSPECIFIED,
+      combinator: Combinator.AND,
       not: false,
       rules: [
         {
-          combinator: Combinator.COMBINATOR_UNSPECIFIED,
+          combinator: Combinator.UNSPECIFIED,
           not: false,
           rules: [],
           field: 'Title',
-          operator: Operator.OPERATOR_CONTAINS,
+          operator: Operator.CONTAINS,
           value: name,
+        },
+        {
+          combinator: Combinator.UNSPECIFIED,
+          not: false,
+          rules: [],
+          field: 'Status',
+          operator: Operator.EQUAL,
+          value: status,
         },
       ].filter((rule) => rule.value),
     },

@@ -8,4 +8,5 @@ export { FindPostByIdQuery, GetPostsQuery } from '../generated/sisa/services/blo
 
 export { ListPostsResponse, PostResponse } from '../generated/sisa/services/blog/v1/posts/responses';
 
+export * from '../generated/sisa/services/blog/v1/posts/enums';
 export * from './post-api';

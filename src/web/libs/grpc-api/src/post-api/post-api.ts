@@ -39,7 +39,7 @@ export const getPublishedPosts = (pageIndex: number) => {
     client.getPublishedPosts(
       {
         filter: {
-          combinator: Combinator.COMBINATOR_AND,
+          combinator: Combinator.AND,
           not: false,
           rules: [],
         },
@@ -67,15 +67,15 @@ export const getPublishedPostsByTagSlug = (pageIndex: number, tagSlug: string) =
     client.getPublishedPosts(
       {
         filter: {
-          combinator: Combinator.COMBINATOR_AND,
+          combinator: Combinator.AND,
           not: false,
           rules: [
             {
-              combinator: Combinator.COMBINATOR_AND,
+              combinator: Combinator.AND,
               not: false,
               rules: [],
               field: 'TagSlugs',
-              operator: Operator.OPERATOR_CONTAINS,
+              operator: Operator.CONTAINS,
               value: tagSlug,
             },
           ],
@@ -104,15 +104,15 @@ export const getPublishedPostsByCategorySlug = (pageIndex: number, categorySlug:
     client.getPublishedPosts(
       {
         filter: {
-          combinator: Combinator.COMBINATOR_AND,
+          combinator: Combinator.AND,
           not: false,
           rules: [
             {
-              combinator: Combinator.COMBINATOR_AND,
+              combinator: Combinator.AND,
               not: false,
               rules: [],
               field: 'Category.Slug',
-              operator: Operator.OPERATOR_EQUAL,
+              operator: Operator.EQUAL,
               value: categorySlug,
             },
           ],

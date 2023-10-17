@@ -49,7 +49,7 @@ const RowActions: ColumnDefTemplate<CellContext<PostResponse, string>> = ({ row 
   return (
     <>
       <ButtonGroup spacing={1} size="sm" variant="solid">
-        <LinkIconButton href={`/posts/${row.original.id}/edit`} color="primary">
+        <LinkIconButton disableCache={true} href={`/posts/${row.original.id}/edit`} color="primary">
           <PencilLineIcon />
         </LinkIconButton>
         <IconButton color="danger" onClick={onClickDelete}>

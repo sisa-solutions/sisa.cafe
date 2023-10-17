@@ -48,7 +48,7 @@ const RowActions: ColumnDefTemplate<CellContext<TagResponse, string>> = ({ row }
   return (
     <>
       <ButtonGroup spacing={1} size="sm" variant="solid">
-        <LinkIconButton href={`/tags/${row.original.id}/edit`} color="primary">
+        <LinkIconButton disableCache={true} href={`/tags/${row.original.id}/edit`} color="primary">
           <PencilLineIcon />
         </LinkIconButton>
         <IconButton color="danger" onClick={onClickDelete}>

@@ -13,8 +13,6 @@ import { CreateCategoryCommand, DeleteCategoryCommand, UpdateCategoryCommand } f
 import { FindCategoryByIdQuery, FindCategoryBySlugQuery, GetCategoriesQuery } from "./queries";
 import { ListCategoriesResponse, SingleCategoryResponse } from "./responses";
 
-export const protobufPackage = "sisa.blog.api.v1.categories";
-
 export type CategoryGrpcServiceService = typeof CategoryGrpcServiceService;
 export const CategoryGrpcServiceService = {
   getCategories: {

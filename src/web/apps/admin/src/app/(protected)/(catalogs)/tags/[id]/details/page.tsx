@@ -42,7 +42,13 @@ const NewTagPage = async ({ params: { id } }: Props) => {
       <PageHeader>
         <PageTitle
           endDecorator={
-            <Link href={`/tags/${id}/edit`} variant="outlined" fontSize="md" borderRadius="sm">
+            <Link
+              disableCache={true}
+              href={`/tags/${id}/edit`}
+              variant="outlined"
+              fontSize="md"
+              borderRadius="sm"
+            >
               <PencilLine />
             </Link>
           }
@@ -66,8 +72,7 @@ const NewTagPage = async ({ params: { id } }: Props) => {
               dangerouslySetInnerHTML={{
                 __html: data.description ?? '',
               }}
-            >
-            </Box>
+            ></Box>
           </Box>
         </DescriptionList>
       </PageContent>

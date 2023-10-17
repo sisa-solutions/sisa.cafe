@@ -27,8 +27,6 @@ import {
 } from "./queries";
 import { ListPostsResponse, SinglePostResponse } from "./responses";
 
-export const protobufPackage = "sisa.blog.api.v1.posts";
-
 export type PostGrpcServiceService = typeof PostGrpcServiceService;
 export const PostGrpcServiceService = {
   getPosts: {

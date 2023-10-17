@@ -1,9 +1,7 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
-import { Combinator, combinatorFromJSON, combinatorToJSON } from "../../common/enums/combinator";
-import { Operator, operatorFromJSON, operatorToJSON } from "../../common/enums/operator";
-
-export const protobufPackage = "sisa.data.params";
+import { Combinator } from "../../common/enums/combinator";
+import { Operator } from "../../common/enums/operator";
 
 export interface FilterRule {
   not: boolean;
@@ -104,54 +102,6 @@ export const FilterRule = {
     }
     return message;
   },
-
-  fromJSON(object: any): FilterRule {
-    return {
-      not: isSet(object.not) ? globalThis.Boolean(object.not) : false,
-      combinator: isSet(object.combinator) ? combinatorFromJSON(object.combinator) : 0,
-      rules: globalThis.Array.isArray(object?.rules) ? object.rules.map((e: any) => FilterRule.fromJSON(e)) : [],
-      field: isSet(object.field) ? globalThis.String(object.field) : "",
-      value: isSet(object.value) ? globalThis.String(object.value) : "",
-      operator: isSet(object.operator) ? operatorFromJSON(object.operator) : 0,
-    };
-  },
-
-  toJSON(message: FilterRule): unknown {
-    const obj: any = {};
-    if (message.not === true) {
-      obj.not = message.not;
-    }
-    if (message.combinator !== 0) {
-      obj.combinator = combinatorToJSON(message.combinator);
-    }
-    if (message.rules?.length) {
-      obj.rules = message.rules.map((e) => FilterRule.toJSON(e));
-    }
-    if (message.field !== "") {
-      obj.field = message.field;
-    }
-    if (message.value !== "") {
-      obj.value = message.value;
-    }
-    if (message.operator !== 0) {
-      obj.operator = operatorToJSON(message.operator);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FilterRule>, I>>(base?: I): FilterRule {
-    return FilterRule.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FilterRule>, I>>(object: I): FilterRule {
-    const message = createBaseFilterRule();
-    message.not = object.not ?? false;
-    message.combinator = object.combinator ?? 0;
-    message.rules = object.rules?.map((e) => FilterRule.fromPartial(e)) || [];
-    message.field = object.field ?? "";
-    message.value = object.value ?? "";
-    message.operator = object.operator ?? 0;
-    return message;
-  },
 };
 
 function createBaseFilteringParams(): FilteringParams {
@@ -208,53 +158,4 @@ export const FilteringParams = {
     }
     return message;
   },
-
-  fromJSON(object: any): FilteringParams {
-    return {
-      not: isSet(object.not) ? globalThis.Boolean(object.not) : false,
-      combinator: isSet(object.combinator) ? combinatorFromJSON(object.combinator) : 0,
-      rules: globalThis.Array.isArray(object?.rules) ? object.rules.map((e: any) => FilterRule.fromJSON(e)) : [],
-    };
-  },
-
-  toJSON(message: FilteringParams): unknown {
-    const obj: any = {};
-    if (message.not === true) {
-      obj.not = message.not;
-    }
-    if (message.combinator !== 0) {
-      obj.combinator = combinatorToJSON(message.combinator);
-    }
-    if (message.rules?.length) {
-      obj.rules = message.rules.map((e) => FilterRule.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FilteringParams>, I>>(base?: I): FilteringParams {
-    return FilteringParams.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FilteringParams>, I>>(object: I): FilteringParams {
-    const message = createBaseFilteringParams();
-    message.not = object.not ?? false;
-    message.combinator = object.combinator ?? 0;
-    message.rules = object.rules?.map((e) => FilterRule.fromPartial(e)) || [];
-    return message;
-  },
 };
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}

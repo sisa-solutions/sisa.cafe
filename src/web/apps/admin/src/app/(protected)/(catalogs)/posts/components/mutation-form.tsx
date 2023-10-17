@@ -24,18 +24,20 @@ import {
   type PostResponse,
   type CreatePostCommand,
   type UpdatePostCommand,
+  type TagResponse,
   getCategories,
   Combinator,
   SortDirection,
   Operator,
   DEFAULT_PAGING_PARAMS,
   uploadFile,
+  getTags,
 } from '@sisa/grpc-api';
 
 import { randomId } from '@sisa/utils';
 
 type AdditionFormValues = {
-  category: {
+  category?: {
     id: string;
     name: string;
   };
@@ -50,7 +52,6 @@ const creationSchema = yup.object<FormValues>({
 
   excerpt: yup.string().required().min(4).max(500).label('Excerpt'),
   content: yup.string().required().min(4).max(5000).label('Content'),
-  categoryId: yup.string().uuid().required(),
   category: yup
     .object({
       id: yup.string().uuid(),
@@ -72,12 +73,13 @@ const validationSchema = yup.lazy((values: FormValues) => {
 
 type MutationFormProps = {
   trigger: (data: CreatePostCommand | UpdatePostCommand) => Promise<PostResponse>;
-  defaultValues?: FormValues;
+  defaultValues?: Omit<FormValues, 'categoryId'>;
 };
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const router = useRouter();
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
+  const [searchTagValue, setSearchTagValue] = useState('');
 
   const {
     data = {
@@ -87,15 +89,15 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   } = useQuery(['/api/v1/categories', searchParentCategoryName], ([_, name]) =>
     getCategories({
       filter: {
-        combinator: Combinator.COMBINATOR_AND,
+        combinator: Combinator.AND,
         not: false,
         rules: [
           {
-            combinator: Combinator.COMBINATOR_UNSPECIFIED,
+            combinator: Combinator.UNSPECIFIED,
             not: false,
             rules: [],
             field: 'Name',
-            operator: Operator.OPERATOR_CONTAINS,
+            operator: Operator.CONTAINS,
             value: name,
           },
         ],
@@ -103,14 +105,45 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       sortBy: [
         {
           field: 'Name',
-          sort: SortDirection.SORT_DIRECTION_ASC,
+          sort: SortDirection.ASC,
         },
       ],
       paging: DEFAULT_PAGING_PARAMS,
     })
   );
 
-  const { control, handleSubmit } = useForm<FormValues>({
+  const {
+    data: tags = {
+      value: new Array<TagResponse>(),
+    },
+    isLoading: isLoadingTags,
+  } = useQuery(['/api/v1/tags', searchTagValue], ([_, slug]) =>
+    getTags({
+      filter: {
+        combinator: Combinator.AND,
+        not: false,
+        rules: [
+          {
+            combinator: Combinator.UNSPECIFIED,
+            not: false,
+            rules: [],
+            field: 'Slug',
+            operator: Operator.CONTAINS,
+            value: slug,
+          },
+        ],
+      },
+      sortBy: [
+        {
+          field: 'Name',
+          sort: SortDirection.ASC,
+        },
+      ],
+      paging: DEFAULT_PAGING_PARAMS,
+    })
+  );
+
+  const { control, handleSubmit, formState } = useForm<FormValues>({
     defaultValues,
     // @ts-ignore
     resolver: yupResolver(validationSchema),
@@ -135,7 +168,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
 
       await trigger({
         ...rest,
-        categoryId: category.id,
+        categoryId: category?.id,
       });
 
       goBack();
@@ -146,11 +179,18 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   });
 
   const goBack = () => {
-    router.push(`/categories?_s=${randomId()}`);
+    router.push(`/posts?_s=${randomId()}`);
   };
 
-  const onInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
+  const onSearchCategoryInputChange = (
+    _: React.ChangeEvent<HTMLInputElement>,
+    newValue: string
+  ) => {
     setSearchParentCategoryName(newValue);
+  };
+
+  const onSearchTagInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
+    setSearchTagValue(newValue);
   };
 
   return (
@@ -171,11 +211,23 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         getOptionLabel={(option) => option.name}
         isOptionEqualToValue={(option, value) => option.id === value.id}
         inputValue={searchParentCategoryName}
-        onInputChange={onInputChange}
+        onInputChange={onSearchCategoryInputChange}
       />
       <TextField control={control} required name="title" label="Title" />
       <TextField control={control} required name="slug" label="Slug" />
       <RichTextField control={control} required name="excerpt" label="Excerpt" />
+      <AutocompleteField
+        control={control}
+        name="tagSlugs"
+        label="Tags"
+        required
+        multiple
+        freeSolo
+        loading={isLoadingTags}
+        options={tags.value.map((x) => x.slug)}
+        inputValue={searchTagValue}
+        onInputChange={onSearchTagInputChange}
+      />
       <FileUploadField
         control={control}
         name="pictures"

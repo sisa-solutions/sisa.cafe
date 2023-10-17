@@ -2,8 +2,6 @@
 import _m0 from "protobufjs/minimal";
 import { StringValue } from "../../../../../google/protobuf/wrappers";
 
-export const protobufPackage = "sisa.blog.api.v1.tags.commands";
-
 export interface CreateTagCommand {
   /** data fields: from 1 to 50 */
   name: string;
@@ -91,44 +89,6 @@ export const CreateTagCommand = {
     }
     return message;
   },
-
-  fromJSON(object: any): CreateTagCommand {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
-      description: isSet(object.description) ? String(object.description) : undefined,
-      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
-    };
-  },
-
-  toJSON(message: CreateTagCommand): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.slug !== "") {
-      obj.slug = message.slug;
-    }
-    if (message.description !== undefined) {
-      obj.description = message.description;
-    }
-    if (message.parentId !== undefined) {
-      obj.parentId = message.parentId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CreateTagCommand>, I>>(base?: I): CreateTagCommand {
-    return CreateTagCommand.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CreateTagCommand>, I>>(object: I): CreateTagCommand {
-    const message = createBaseCreateTagCommand();
-    message.name = object.name ?? "";
-    message.slug = object.slug ?? "";
-    message.description = object.description ?? undefined;
-    message.parentId = object.parentId ?? undefined;
-    return message;
-  },
 };
 
 function createBaseUpdateTagCommand(): UpdateTagCommand {
@@ -195,44 +155,6 @@ export const UpdateTagCommand = {
     }
     return message;
   },
-
-  fromJSON(object: any): UpdateTagCommand {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
-      description: isSet(object.description) ? String(object.description) : undefined,
-    };
-  },
-
-  toJSON(message: UpdateTagCommand): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.slug !== "") {
-      obj.slug = message.slug;
-    }
-    if (message.description !== undefined) {
-      obj.description = message.description;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UpdateTagCommand>, I>>(base?: I): UpdateTagCommand {
-    return UpdateTagCommand.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UpdateTagCommand>, I>>(object: I): UpdateTagCommand {
-    const message = createBaseUpdateTagCommand();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.slug = object.slug ?? "";
-    message.description = object.description ?? undefined;
-    return message;
-  },
 };
 
 function createBaseDeleteTagCommand(): DeleteTagCommand {
@@ -269,41 +191,4 @@ export const DeleteTagCommand = {
     }
     return message;
   },
-
-  fromJSON(object: any): DeleteTagCommand {
-    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
-  },
-
-  toJSON(message: DeleteTagCommand): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<DeleteTagCommand>, I>>(base?: I): DeleteTagCommand {
-    return DeleteTagCommand.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<DeleteTagCommand>, I>>(object: I): DeleteTagCommand {
-    const message = createBaseDeleteTagCommand();
-    message.id = object.id ?? "";
-    return message;
-  },
 };
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}

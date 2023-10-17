@@ -48,7 +48,6 @@ const creationSchema = yup.object<FormValues>({
   slug: yup.string().required().min(4).max(100).lowercase().label('Slug'),
 
   description: yup.string().max(500).optional().label('Description'),
-  parentId: yup.string().optional(),
   parent: yup
     .object({
       id: yup.string().uuid().required(),
@@ -70,38 +69,47 @@ const validationSchema = yup.lazy((values: FormValues) => {
 
 type MutationFormProps = {
   trigger: (data: CreateCategoryCommand | UpdateCategoryCommand) => Promise<CategoryResponse>;
-  defaultValues?: FormValues;
+  defaultValues?: Omit<FormValues, 'parentId'>;
 };
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const router = useRouter();
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
+  const id= defaultValues && defaultValues['id'];
 
   const {
     data = {
       value: new Array<CategoryResponse>(),
     },
     isLoading,
-  } = useQuery(['/api/v1/categories', searchParentCategoryName], ([_, name]) =>
+  } = useQuery(['/api/v1/categories', searchParentCategoryName, id], ([_, name, id]) =>
     getCategories({
       filter: {
-        combinator: Combinator.COMBINATOR_AND,
+        combinator: Combinator.AND,
         not: false,
         rules: [
           {
-            combinator: Combinator.COMBINATOR_UNSPECIFIED,
+            combinator: Combinator.UNSPECIFIED,
             not: false,
             rules: [],
             field: 'Name',
-            operator: Operator.OPERATOR_CONTAINS,
+            operator: Operator.CONTAINS,
             value: name,
           },
-        ],
+          {
+            combinator: Combinator.UNSPECIFIED,
+            not: false,
+            rules: [],
+            field: 'Id',
+            operator: Operator.NOT_EQUAL,
+            value: id,
+          },
+        ].filter((x) => x.value),
       },
       sortBy: [
         {
           field: 'Name',
-          sort: SortDirection.SORT_DIRECTION_ASC,
+          sort: SortDirection.ASC,
         },
       ],
       paging: DEFAULT_PAGING_PARAMS,
@@ -161,9 +169,11 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         options={data.value.map((x) => {
           return {
             id: x.id,
-            label: x.name,
+            name: x.name,
           };
         })}
+        // @ts-ignore
+        getOptionLabel={(option) => option.name}
         isOptionEqualToValue={(option, value) => option.id === value.id}
         inputValue={searchParentCategoryName}
         onInputChange={onInputChange}

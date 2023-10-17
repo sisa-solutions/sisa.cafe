@@ -33,7 +33,13 @@ const EditCategoryPage = async ({ params: { id } }: Props) => {
       </PageHeader>
       <PageContent>
         <MutationForm
-          defaultValues={data}
+          defaultValues={{
+            ...data,
+            parent: data.parent && {
+              id: data.parent.id,
+              name: data.parent.name,
+            },
+          }}
           trigger={updateCategory}
         />
       </PageContent>

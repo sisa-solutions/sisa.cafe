@@ -2,7 +2,7 @@
 
 import { createColumnHelper, type ColumnDef, Link } from '@sisa/components';
 
-import { type PostResponse } from '@sisa/grpc-api';
+import { PostStatus, type PostResponse } from '@sisa/grpc-api';
 
 import RowActions from './row-actions';
 
@@ -14,7 +14,7 @@ const columnDefs: Array<ColumnDef<PostResponse>> = [
     id: 'Title',
     header: () => 'Title',
     cell: ({ row, getValue }) => (
-      <Link underline="always" href={`/posts/${row.original.id}/details`}>
+      <Link underline="always" disableCache={true} href={`/posts/${row.original.id}/details`}>
         {getValue()}
       </Link>
     ),
@@ -26,14 +26,11 @@ const columnDefs: Array<ColumnDef<PostResponse>> = [
     cell: ({ row }) => row.original.category?.name ?? '',
     enableSorting: false,
   }),
-  columnHelper.accessor('slug', {
-    id: 'Slug',
-    header: () => 'Slug',
-  }),
-  columnHelper.dangerouslyHtml('excerpt', {
-    id: 'Excerpt',
-    header: () => 'Excerpt',
+  columnHelper.accessor('status', {
+    id: 'Status',
+    header: () => 'Status',
     enableSorting: true,
+    cell: ({ getValue }) => PostStatus[getValue()],
   }),
   columnHelper.accessor('creator.displayName', {
     id: 'CreatedBy',

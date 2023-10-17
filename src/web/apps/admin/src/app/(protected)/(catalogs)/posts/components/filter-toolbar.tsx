@@ -7,11 +7,13 @@ import Button from '@mui/joy/Button';
 
 import { EraserIcon, SearchIcon } from 'lucide-react';
 
-import { TextField } from '@sisa/form';
+import { type SelectOption, SelectionField, TextField } from '@sisa/form';
 import { useQueryString } from '@sisa/hooks';
+import { PostStatus } from '@sisa/grpc-api';
 
 type FilterFormValues = {
   name?: string;
+  status?: PostStatus;
 };
 
 type FilterToolbarProps = {
@@ -21,8 +23,30 @@ type FilterToolbarProps = {
 const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
   const setQueryString = useQueryString();
 
+  const options: Array<SelectOption<number>> = [
+    {
+      value: PostStatus.UNSPECIFIED,
+      label: 'All',
+    },
+    {
+      value: PostStatus.DRAFT,
+      label: 'Draft',
+    },
+    {
+      value: PostStatus.PUBLISHED,
+      label: 'Published',
+    },
+    {
+      value: PostStatus.ARCHIVED,
+      label: 'Archived',
+    },
+  ];
+
   const { control, handleSubmit, reset } = useForm<FilterFormValues>({
-    defaultValues: defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      status: PostStatus.UNSPECIFIED,
+    },
   });
 
   const onSubmit = handleSubmit((data) => {
@@ -30,7 +54,8 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
       // @ts-ignore
       setQueryString({
         name: data.name,
-      })
+        status: data.status,
+      });
     } catch (error) {
       console.log(error);
       alert(error);
@@ -40,18 +65,20 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
   const onReset = () => {
     reset({
       name: '',
+      status: PostStatus.UNSPECIFIED,
     });
 
     setQueryString({
       name: '',
-    })
+      status: PostStatus.UNSPECIFIED,
+    });
   };
 
   const onEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       onSubmit();
     }
-  }
+  };
 
   const renderActions = () => (
     <Box
@@ -85,7 +112,22 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
         gap: 1.5,
       }}
     >
-      <TextField sx={{ flexGrow: 1 }} control={control} name="name" label="Name" onKeyDown={onEnter} />
+      <TextField
+        control={control}
+        name="name"
+        label="Name"
+        onKeyDown={onEnter}
+        sx={{ flexGrow: 1 }}
+      />
+      <SelectionField
+        control={control}
+        name="status"
+        label="Status"
+        options={options}
+        sx={{
+          minWidth: 150,
+        }}
+      />
       <Box
         sx={{
           gap: 1.5,

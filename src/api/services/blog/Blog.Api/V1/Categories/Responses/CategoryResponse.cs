@@ -58,6 +58,8 @@ public static partial class CategoryProjections
                 Slug = x.Slug,
                 Name = x.Name,
                 Description = x.Description,
+                PostCount = x.PostCount,
+
                 Creator = new ActorInfoResponse()
                 {
                     Id = x.CreatedBy.ToString(),

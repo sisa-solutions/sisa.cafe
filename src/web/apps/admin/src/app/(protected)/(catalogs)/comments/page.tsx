@@ -2,15 +2,11 @@ import { Suspense } from 'react';
 
 import Box from '@mui/joy/Box';
 
-import { PlusIcon } from 'lucide-react';
-
 import {
   PageContent,
   PageHeader,
   PageTitle,
   PageToolbar,
-  PageActions,
-  LinkButton,
   DataGrid,
 } from '@sisa/components';
 
@@ -22,7 +18,7 @@ import Loading from 'components/common/loading';
 import FilterToolbar from './components/filter-toolbar';
 import columnDefs from './components/column-defs';
 
-type TagsPageProps = {
+type CommentsPageProps = {
   searchParams: {
     keyword?: string;
     pageNumber?: number;
@@ -31,9 +27,9 @@ type TagsPageProps = {
   };
 };
 
-const TagsPage = async ({
+const CommentsPage = async ({
   searchParams: { keyword = '', pageNumber = 1, pageSize = 10, sortBy = '' },
-}: TagsPageProps) => {
+}: CommentsPageProps) => {
   const sortingParams = sortStringToParams(sortBy);
 
   const {
@@ -46,15 +42,15 @@ const TagsPage = async ({
     },
   } = await getComments({
     filter: {
-      combinator: Combinator.COMBINATOR_UNSPECIFIED,
+      combinator: Combinator.UNSPECIFIED,
       not: false,
       rules: [
         {
-          combinator: Combinator.COMBINATOR_UNSPECIFIED,
+          combinator: Combinator.UNSPECIFIED,
           not: false,
           rules: [],
           field: 'Content',
-          operator: Operator.OPERATOR_CONTAINS,
+          operator: Operator.CONTAINS,
           value: keyword,
         },
       ],
@@ -108,4 +104,4 @@ const TagsPage = async ({
   );
 };
 
-export default TagsPage;
+export default CommentsPage;

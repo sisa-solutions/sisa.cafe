@@ -42,7 +42,7 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
       <PageHeader>
         <PageTitle
           endDecorator={
-            <Link href={`/posts/${id}/edit`} variant="outlined" fontSize="md" borderRadius="sm">
+            <Link disableCache={true} href={`/posts/${id}/edit`} variant="outlined" fontSize="md" borderRadius="sm">
               <PencilLine />
             </Link>
           }

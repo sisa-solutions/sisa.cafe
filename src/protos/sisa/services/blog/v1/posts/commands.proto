@@ -6,8 +6,6 @@ package sisa.blog.api.v1.posts.commands;
 
 import "google/protobuf/wrappers.proto";
 
-// import "sisa/services/blog/v1/posts/enums.proto";
-
 message CreatePostCommand {
   // reversed field must be reflect to the database
   reserved 1, 7 to 50; // other data fields
@@ -17,7 +15,7 @@ message CreatePostCommand {
   string slug = 3;
   string excerpt = 4;
   string content = 5;
-  repeated string tags = 6; // this is dedicated field in post, not a relationship, so it's not reversed
+  repeated string tagSlugs = 6; // this is dedicated field in post, not a relationship, so it's not reversed
 
   google.protobuf.StringValue categoryId = 51;
 }
@@ -32,7 +30,7 @@ message UpdatePostCommand {
   string slug = 3;
   string excerpt = 4;
   string content = 5;
-  repeated string tags = 6;
+  repeated string tagSlugs = 6;
 
   google.protobuf.StringValue categoryId = 51;
 }

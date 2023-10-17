@@ -22,7 +22,7 @@ const PostsPage = async ({ searchParams: { page = 1 } }: PostPageProps) => {
     },
   } = await getPublishedPosts(page - 1);
 
-  const paginInfo = {
+  const pagingInfo = {
     nextPage: paging.pageIndex + 2,
     previousPage: paging.pageIndex - 2,
 
@@ -34,7 +34,7 @@ const PostsPage = async ({ searchParams: { page = 1 } }: PostPageProps) => {
     <Stack direction="column" gap={2}>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
         <span></span>
-        <Pagination {...paginInfo} />
+        <Pagination {...pagingInfo} />
       </Stack>
       <Stack
         direction="column"
@@ -54,7 +54,7 @@ const PostsPage = async ({ searchParams: { page = 1 } }: PostPageProps) => {
       </Stack>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
         <span />
-        <Pagination {...paginInfo} />
+        <Pagination {...pagingInfo} />
       </Stack>
     </Stack>
   );

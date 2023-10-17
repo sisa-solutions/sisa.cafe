@@ -15,7 +15,7 @@ import { LinkChip, LinkTypography } from '@sisa/components';
 
 import { PostResponse } from '@sisa/grpc-api';
 
-const PostCard = ({ title, slug, excerpt, creator, category, tags }: PostResponse) => {
+const PostCard = ({ title, slug, excerpt, creator, category, tagSlugs }: PostResponse) => {
   return (
     <Card
       className="post-card"
@@ -86,16 +86,16 @@ const PostCard = ({ title, slug, excerpt, creator, category, tags }: PostRespons
         </Typography>
 
         <Stack direction="row" gap={1} alignItems="center">
-          {tags.map((tag) => (
+          {tagSlugs.map((tagSlug) => (
             <LinkChip
-              key={tag}
+              key={tagSlug}
               size="sm"
               variant="soft"
               color="neutral"
               startDecorator={<TagIcon />}
-              href={`/blog/tags/${tag}/details`}
+              href={`/blog/tags/${tagSlug}/details`}
             >
-              {tag}
+              {tagSlug}
             </LinkChip>
           ))}
         </Stack>

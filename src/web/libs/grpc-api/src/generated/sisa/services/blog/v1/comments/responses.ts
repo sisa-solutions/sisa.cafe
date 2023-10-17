@@ -4,8 +4,6 @@ import { StringValue } from "../../../../../google/protobuf/wrappers";
 import { ActorInfoResponse } from "../../../../libs/common/responses/actor_info_response";
 import { PagingInfoResponse } from "../../../../libs/common/responses/paging_info_response";
 
-export const protobufPackage = "sisa.blog.api.v1.comments.responses";
-
 export interface CommentResponse {
   /** data fields: from 1 to 50 */
   id: string;
@@ -162,92 +160,6 @@ export const CommentResponse = {
     }
     return message;
   },
-
-  fromJSON(object: any): CommentResponse {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      content: isSet(object.content) ? globalThis.String(object.content) : "",
-      level: isSet(object.level) ? globalThis.Number(object.level) : 0,
-      reactionCount: isSet(object.reactionCount) ? globalThis.Number(object.reactionCount) : 0,
-      reactionCounts: isObject(object.reactionCounts)
-        ? Object.entries(object.reactionCounts).reduce<{ [key: string]: number }>((acc, [key, value]) => {
-          acc[key] = Number(value);
-          return acc;
-        }, {})
-        : {},
-      parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
-      postId: isSet(object.postId) ? globalThis.String(object.postId) : "",
-      creator: isSet(object.creator) ? ActorInfoResponse.fromJSON(object.creator) : undefined,
-      updater: isSet(object.updater) ? ActorInfoResponse.fromJSON(object.updater) : undefined,
-    };
-  },
-
-  toJSON(message: CommentResponse): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.content !== "") {
-      obj.content = message.content;
-    }
-    if (message.level !== 0) {
-      obj.level = Math.round(message.level);
-    }
-    if (message.reactionCount !== 0) {
-      obj.reactionCount = Math.round(message.reactionCount);
-    }
-    if (message.reactionCounts) {
-      const entries = Object.entries(message.reactionCounts);
-      if (entries.length > 0) {
-        obj.reactionCounts = {};
-        entries.forEach(([k, v]) => {
-          obj.reactionCounts[k] = Math.round(v);
-        });
-      }
-    }
-    if (message.parentId !== undefined) {
-      obj.parentId = message.parentId;
-    }
-    if (message.postId !== "") {
-      obj.postId = message.postId;
-    }
-    if (message.creator !== undefined) {
-      obj.creator = ActorInfoResponse.toJSON(message.creator);
-    }
-    if (message.updater !== undefined) {
-      obj.updater = ActorInfoResponse.toJSON(message.updater);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CommentResponse>, I>>(base?: I): CommentResponse {
-    return CommentResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CommentResponse>, I>>(object: I): CommentResponse {
-    const message = createBaseCommentResponse();
-    message.id = object.id ?? "";
-    message.content = object.content ?? "";
-    message.level = object.level ?? 0;
-    message.reactionCount = object.reactionCount ?? 0;
-    message.reactionCounts = Object.entries(object.reactionCounts ?? {}).reduce<{ [key: string]: number }>(
-      (acc, [key, value]) => {
-        if (value !== undefined) {
-          acc[key] = globalThis.Number(value);
-        }
-        return acc;
-      },
-      {},
-    );
-    message.parentId = object.parentId ?? undefined;
-    message.postId = object.postId ?? "";
-    message.creator = (object.creator !== undefined && object.creator !== null)
-      ? ActorInfoResponse.fromPartial(object.creator)
-      : undefined;
-    message.updater = (object.updater !== undefined && object.updater !== null)
-      ? ActorInfoResponse.fromPartial(object.updater)
-      : undefined;
-    return message;
-  },
 };
 
 function createBaseCommentResponse_ReactionCountsEntry(): CommentResponse_ReactionCountsEntry {
@@ -294,38 +206,6 @@ export const CommentResponse_ReactionCountsEntry = {
     }
     return message;
   },
-
-  fromJSON(object: any): CommentResponse_ReactionCountsEntry {
-    return {
-      key: isSet(object.key) ? globalThis.String(object.key) : "",
-      value: isSet(object.value) ? globalThis.Number(object.value) : 0,
-    };
-  },
-
-  toJSON(message: CommentResponse_ReactionCountsEntry): unknown {
-    const obj: any = {};
-    if (message.key !== "") {
-      obj.key = message.key;
-    }
-    if (message.value !== 0) {
-      obj.value = Math.round(message.value);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CommentResponse_ReactionCountsEntry>, I>>(
-    base?: I,
-  ): CommentResponse_ReactionCountsEntry {
-    return CommentResponse_ReactionCountsEntry.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CommentResponse_ReactionCountsEntry>, I>>(
-    object: I,
-  ): CommentResponse_ReactionCountsEntry {
-    const message = createBaseCommentResponse_ReactionCountsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? 0;
-    return message;
-  },
 };
 
 function createBaseSingleCommentResponse(): SingleCommentResponse {
@@ -360,29 +240,6 @@ export const SingleCommentResponse = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): SingleCommentResponse {
-    return { value: isSet(object.value) ? CommentResponse.fromJSON(object.value) : undefined };
-  },
-
-  toJSON(message: SingleCommentResponse): unknown {
-    const obj: any = {};
-    if (message.value !== undefined) {
-      obj.value = CommentResponse.toJSON(message.value);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SingleCommentResponse>, I>>(base?: I): SingleCommentResponse {
-    return SingleCommentResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SingleCommentResponse>, I>>(object: I): SingleCommentResponse {
-    const message = createBaseSingleCommentResponse();
-    message.value = (object.value !== undefined && object.value !== null)
-      ? CommentResponse.fromPartial(object.value)
-      : undefined;
     return message;
   },
 };
@@ -431,54 +288,4 @@ export const ListCommentsResponse = {
     }
     return message;
   },
-
-  fromJSON(object: any): ListCommentsResponse {
-    return {
-      value: globalThis.Array.isArray(object?.value) ? object.value.map((e: any) => CommentResponse.fromJSON(e)) : [],
-      paging: isSet(object.paging) ? PagingInfoResponse.fromJSON(object.paging) : undefined,
-    };
-  },
-
-  toJSON(message: ListCommentsResponse): unknown {
-    const obj: any = {};
-    if (message.value?.length) {
-      obj.value = message.value.map((e) => CommentResponse.toJSON(e));
-    }
-    if (message.paging !== undefined) {
-      obj.paging = PagingInfoResponse.toJSON(message.paging);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ListCommentsResponse>, I>>(base?: I): ListCommentsResponse {
-    return ListCommentsResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ListCommentsResponse>, I>>(object: I): ListCommentsResponse {
-    const message = createBaseListCommentsResponse();
-    message.value = object.value?.map((e) => CommentResponse.fromPartial(e)) || [];
-    message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingInfoResponse.fromPartial(object.paging)
-      : undefined;
-    return message;
-  },
 };
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isObject(value: any): boolean {
-  return typeof value === "object" && value !== null;
-}
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}

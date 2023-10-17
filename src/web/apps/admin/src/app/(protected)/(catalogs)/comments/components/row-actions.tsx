@@ -11,12 +11,12 @@ import { AlertCircleIcon, XIcon } from 'lucide-react';
 
 import { ConfirmDialog } from '@sisa/components';
 
-import { deleteTag, type TagResponse } from '@sisa/grpc-api';
+import { type CommentResponse, deleteTag } from '@sisa/grpc-api';
 
 import { useQueryString, useToggle } from '@sisa/hooks';
 import { randomId } from '@sisa/utils';
 
-const RowActions: ColumnDefTemplate<CellContext<TagResponse, string>> = ({ row }) => {
+const RowActions: ColumnDefTemplate<CellContext<CommentResponse, string>> = ({ row }) => {
   const setQueryString = useQueryString();
 
   const { trigger, isMutating } = useMutation(['/api/v1/comments/delete', row.original.id], ([_, id]) =>

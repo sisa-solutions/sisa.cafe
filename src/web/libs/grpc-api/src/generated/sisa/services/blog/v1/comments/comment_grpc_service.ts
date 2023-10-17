@@ -13,8 +13,6 @@ import { DeleteCommentCommand, ReactToCommentCommand, ReplyCommentCommand, Updat
 import { FindCommentByIdQuery, GetCommentsQuery } from "./queries";
 import { ListCommentsResponse, SingleCommentResponse } from "./responses";
 
-export const protobufPackage = "sisa.blog.api.v1.comments";
-
 export type CommentGrpcServiceService = typeof CommentGrpcServiceService;
 export const CommentGrpcServiceService = {
   getComments: {

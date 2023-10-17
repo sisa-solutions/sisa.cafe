@@ -18,7 +18,7 @@ message CategoryInfoResponse {
 
 message CategoryResponse {
   // reversed field must be reflect to the database
-  reserved 5 to 50; // other data fields
+  reserved 6 to 50; // other data fields
   reserved 52 to 60; // relationship fields
   reserved 63 to 70; // audit fields
 
@@ -27,6 +27,7 @@ message CategoryResponse {
   string name = 2;
   string slug = 3;
   google.protobuf.StringValue description = 4;
+  int32 post_count = 5;
 
   // relationship fields: from 51 to 60
   CategoryInfoResponse parent = 51;

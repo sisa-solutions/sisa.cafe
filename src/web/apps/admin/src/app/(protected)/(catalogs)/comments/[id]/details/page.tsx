@@ -18,7 +18,7 @@ type Props = {
   };
 };
 
-const NewTagPage = async ({ params: { id } }: Props) => {
+const CommentDetails = async ({ params: { id } }: Props) => {
   const data = await findTagById({
     id,
   });
@@ -63,4 +63,4 @@ const NewTagPage = async ({ params: { id } }: Props) => {
   );
 };
 
-export default NewTagPage;
+export default CommentDetails;

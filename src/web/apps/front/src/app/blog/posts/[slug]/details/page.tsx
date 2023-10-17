@@ -22,7 +22,7 @@ interface PostDetailsProps {
 }
 
 const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
-  const { title, content, category, tags, creator } = await findPublishedPostBySlug(slug);
+  const { title, content, category, tagSlugs, creator } = await findPublishedPostBySlug(slug);
 
   return (
     <>
@@ -86,16 +86,16 @@ const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
           </Typography>
 
           <Stack direction="row" gap={1} alignItems="center">
-            {tags.map((tag) => (
+            {tagSlugs.map((tagSlug) => (
               <LinkChip
-                key={tag}
+                key={tagSlug}
                 size="sm"
                 variant="soft"
                 color="neutral"
                 startDecorator={<TagIcon />}
-                href={`/blog/tags/${tag}/details`}
+                href={`/blog/tags/${tagSlug}/details`}
               >
-                {tag}
+                {tagSlug}
               </LinkChip>
             ))}
           </Stack>

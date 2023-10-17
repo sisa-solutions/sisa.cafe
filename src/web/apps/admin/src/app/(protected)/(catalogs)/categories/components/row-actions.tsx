@@ -50,7 +50,7 @@ const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ 
   return (
     <>
       <ButtonGroup spacing={1} size="sm" variant="solid">
-        <LinkIconButton href={`/categories/${row.original.id}/edit`} color="primary">
+        <LinkIconButton disableCache={true} href={`/categories/${row.original.id}/edit`} color="primary">
           <PencilLineIcon />
         </LinkIconButton>
         <IconButton color="danger" onClick={onClickDelete}>

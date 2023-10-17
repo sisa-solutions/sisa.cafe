@@ -4,8 +4,6 @@ import { StringValue } from "../../../../../google/protobuf/wrappers";
 import { ActorInfoResponse } from "../../../../libs/common/responses/actor_info_response";
 import { PagingInfoResponse } from "../../../../libs/common/responses/paging_info_response";
 
-export const protobufPackage = "sisa.blog.api.v1.categories.responses";
-
 export interface CategoryInfoResponse {
   id: string;
   name: string;
@@ -18,9 +16,8 @@ export interface CategoryResponse {
   id: string;
   name: string;
   slug: string;
-  description:
-    | string
-    | undefined;
+  description: string | undefined;
+  postCount: number;
   /** relationship fields: from 51 to 60 */
   parent:
     | CategoryInfoResponse
@@ -103,44 +100,6 @@ export const CategoryInfoResponse = {
     }
     return message;
   },
-
-  fromJSON(object: any): CategoryInfoResponse {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
-      description: isSet(object.description) ? String(object.description) : undefined,
-    };
-  },
-
-  toJSON(message: CategoryInfoResponse): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.slug !== "") {
-      obj.slug = message.slug;
-    }
-    if (message.description !== undefined) {
-      obj.description = message.description;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CategoryInfoResponse>, I>>(base?: I): CategoryInfoResponse {
-    return CategoryInfoResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CategoryInfoResponse>, I>>(object: I): CategoryInfoResponse {
-    const message = createBaseCategoryInfoResponse();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.slug = object.slug ?? "";
-    message.description = object.description ?? undefined;
-    return message;
-  },
 };
 
 function createBaseCategoryResponse(): CategoryResponse {
@@ -149,6 +108,7 @@ function createBaseCategoryResponse(): CategoryResponse {
     name: "",
     slug: "",
     description: undefined,
+    postCount: 0,
     parent: undefined,
     creator: undefined,
     updater: undefined,
@@ -168,6 +128,9 @@ export const CategoryResponse = {
     }
     if (message.description !== undefined) {
       StringValue.encode({ value: message.description! }, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.postCount !== 0) {
+      writer.uint32(40).int32(message.postCount);
     }
     if (message.parent !== undefined) {
       CategoryInfoResponse.encode(message.parent, writer.uint32(410).fork()).ldelim();
@@ -216,6 +179,13 @@ export const CategoryResponse = {
 
           message.description = StringValue.decode(reader, reader.uint32()).value;
           continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.postCount = reader.int32();
+          continue;
         case 51:
           if (tag !== 410) {
             break;
@@ -243,65 +213,6 @@ export const CategoryResponse = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): CategoryResponse {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      slug: isSet(object.slug) ? globalThis.String(object.slug) : "",
-      description: isSet(object.description) ? String(object.description) : undefined,
-      parent: isSet(object.parent) ? CategoryInfoResponse.fromJSON(object.parent) : undefined,
-      creator: isSet(object.creator) ? ActorInfoResponse.fromJSON(object.creator) : undefined,
-      updater: isSet(object.updater) ? ActorInfoResponse.fromJSON(object.updater) : undefined,
-    };
-  },
-
-  toJSON(message: CategoryResponse): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.slug !== "") {
-      obj.slug = message.slug;
-    }
-    if (message.description !== undefined) {
-      obj.description = message.description;
-    }
-    if (message.parent !== undefined) {
-      obj.parent = CategoryInfoResponse.toJSON(message.parent);
-    }
-    if (message.creator !== undefined) {
-      obj.creator = ActorInfoResponse.toJSON(message.creator);
-    }
-    if (message.updater !== undefined) {
-      obj.updater = ActorInfoResponse.toJSON(message.updater);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CategoryResponse>, I>>(base?: I): CategoryResponse {
-    return CategoryResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CategoryResponse>, I>>(object: I): CategoryResponse {
-    const message = createBaseCategoryResponse();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.slug = object.slug ?? "";
-    message.description = object.description ?? undefined;
-    message.parent = (object.parent !== undefined && object.parent !== null)
-      ? CategoryInfoResponse.fromPartial(object.parent)
-      : undefined;
-    message.creator = (object.creator !== undefined && object.creator !== null)
-      ? ActorInfoResponse.fromPartial(object.creator)
-      : undefined;
-    message.updater = (object.updater !== undefined && object.updater !== null)
-      ? ActorInfoResponse.fromPartial(object.updater)
-      : undefined;
     return message;
   },
 };
@@ -338,29 +249,6 @@ export const SingleCategoryResponse = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): SingleCategoryResponse {
-    return { value: isSet(object.value) ? CategoryResponse.fromJSON(object.value) : undefined };
-  },
-
-  toJSON(message: SingleCategoryResponse): unknown {
-    const obj: any = {};
-    if (message.value !== undefined) {
-      obj.value = CategoryResponse.toJSON(message.value);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SingleCategoryResponse>, I>>(base?: I): SingleCategoryResponse {
-    return SingleCategoryResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SingleCategoryResponse>, I>>(object: I): SingleCategoryResponse {
-    const message = createBaseSingleCategoryResponse();
-    message.value = (object.value !== undefined && object.value !== null)
-      ? CategoryResponse.fromPartial(object.value)
-      : undefined;
     return message;
   },
 };
@@ -409,50 +297,4 @@ export const ListCategoriesResponse = {
     }
     return message;
   },
-
-  fromJSON(object: any): ListCategoriesResponse {
-    return {
-      value: globalThis.Array.isArray(object?.value) ? object.value.map((e: any) => CategoryResponse.fromJSON(e)) : [],
-      paging: isSet(object.paging) ? PagingInfoResponse.fromJSON(object.paging) : undefined,
-    };
-  },
-
-  toJSON(message: ListCategoriesResponse): unknown {
-    const obj: any = {};
-    if (message.value?.length) {
-      obj.value = message.value.map((e) => CategoryResponse.toJSON(e));
-    }
-    if (message.paging !== undefined) {
-      obj.paging = PagingInfoResponse.toJSON(message.paging);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ListCategoriesResponse>, I>>(base?: I): ListCategoriesResponse {
-    return ListCategoriesResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ListCategoriesResponse>, I>>(object: I): ListCategoriesResponse {
-    const message = createBaseListCategoriesResponse();
-    message.value = object.value?.map((e) => CategoryResponse.fromPartial(e)) || [];
-    message.paging = (object.paging !== undefined && object.paging !== null)
-      ? PagingInfoResponse.fromPartial(object.paging)
-      : undefined;
-    return message;
-  },
 };
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}

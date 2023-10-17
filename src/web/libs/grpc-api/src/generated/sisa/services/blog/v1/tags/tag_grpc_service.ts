@@ -13,8 +13,6 @@ import { CreateTagCommand, DeleteTagCommand, UpdateTagCommand } from "./commands
 import { FindTagByIdQuery, FindTagBySlugQuery, GetTagsQuery } from "./queries";
 import { ListTagsResponse, SingleTagResponse } from "./responses";
 
-export const protobufPackage = "sisa.blog.api.v1.tags";
-
 export type TagGrpcServiceService = typeof TagGrpcServiceService;
 export const TagGrpcServiceService = {
   getTags: {

@@ -15,7 +15,7 @@ public class Post : FullAuditableAggregateRoot
     public string Excerpt { get; private set; }
     public string Content { get; private set; }
 
-    public PostStatus Status { get; private set; } = PostStatus.DRAFT;
+    public PostStatus Status { get; private set; } = PostStatus.Draft;
 
     public int ViewCount { get; private set; }
     public int CommentCount { get; private set; }
@@ -73,9 +73,12 @@ public class Post : FullAuditableAggregateRoot
         _comments.Remove(comment);
     }
 
-    public void ChangeCategory(Guid categoryId)
+    public void ChangeCategory(Category newCategory)
     {
-        CategoryId = categoryId;
+        Category.DecreasePostCount();
+        newCategory.IncreasePostCount();
+
+        Category = newCategory;
     }
 
     #region Status
@@ -94,13 +97,26 @@ public class Post : FullAuditableAggregateRoot
 
     public void UpdateTags(IEnumerable<Tag> requestTags)
     {
-        foreach (var tag in requestTags)
+        var addTags = requestTags
+            .Where(x => !_tags.Any(y => y.Slug == x.Slug))
+            .ToList();
+
+        foreach (var tag in addTags)
         {
             tag.IncreasePostCount();
         }
 
-        _tags.Clear();
-        _tags.AddRange(requestTags);
+        var removeTags = _tags
+            .Where(x => !requestTags.Any(y => y.Slug == x.Slug))
+            .ToList();
+
+        foreach (var tag in removeTags)
+        {
+            tag.DecreasePostCount();
+        }
+
+        _tags.RemoveAll(x => removeTags.Contains(x));
+        _tags.AddRange(addTags);
 
         SyncTagSlugs();
     }
@@ -115,9 +131,9 @@ public class Post : FullAuditableAggregateRoot
     {
         return Status switch
         {
-            PostStatus.DRAFT => [PostStatus.PUBLISHED],
-            PostStatus.PUBLISHED => [PostStatus.ARCHIVED, PostStatus.DRAFT],
-            PostStatus.ARCHIVED => [PostStatus.PUBLISHED],
+            PostStatus.Draft => [PostStatus.Published],
+            PostStatus.Published => [PostStatus.Archived, PostStatus.Draft],
+            PostStatus.Archived => [PostStatus.Published],
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -137,22 +153,22 @@ public class Post : FullAuditableAggregateRoot
     }
 
     public bool IsCommentAble()
-        => Status == PostStatus.PUBLISHED;
+        => Status == PostStatus.Published;
 
     public bool IsReactAble()
-        => Status == PostStatus.PUBLISHED;
+        => Status == PostStatus.Published;
 
     public bool TryPublish(string? remarks)
-        => TryChangeStatus(PostStatus.PUBLISHED, remarks);
+        => TryChangeStatus(PostStatus.Published, remarks);
 
     public void TryArchive(string? remarks)
-        => TryChangeStatus(PostStatus.ARCHIVED, remarks);
+        => TryChangeStatus(PostStatus.Archived, remarks);
 
     public void TryUnarchive(string? remarks)
-        => TryChangeStatus(PostStatus.PUBLISHED, remarks);
+        => TryChangeStatus(PostStatus.Published, remarks);
 
     public void TryDraft(string? remarks)
-        => TryChangeStatus(PostStatus.DRAFT, remarks);
+        => TryChangeStatus(PostStatus.Draft, remarks);
 
     #endregion
 
@@ -164,6 +180,8 @@ public class Post : FullAuditableAggregateRoot
     }
     public void AssociateCategory(Category category)
     {
+        category.IncreasePostCount();
+
         Category = category;
     }
 

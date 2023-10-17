@@ -2,8 +2,6 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "google.protobuf";
-
 /**
  * A Timestamp represents a point in time independent of any time zone or local
  * calendar, encoded as a count of seconds and fractions of seconds at
@@ -155,47 +153,7 @@ export const Timestamp = {
     }
     return message;
   },
-
-  fromJSON(object: any): Timestamp {
-    return {
-      seconds: isSet(object.seconds) ? globalThis.Number(object.seconds) : 0,
-      nanos: isSet(object.nanos) ? globalThis.Number(object.nanos) : 0,
-    };
-  },
-
-  toJSON(message: Timestamp): unknown {
-    const obj: any = {};
-    if (message.seconds !== 0) {
-      obj.seconds = Math.round(message.seconds);
-    }
-    if (message.nanos !== 0) {
-      obj.nanos = Math.round(message.nanos);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Timestamp>, I>>(base?: I): Timestamp {
-    return Timestamp.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<Timestamp>, I>>(object: I): Timestamp {
-    const message = createBaseTimestamp();
-    message.seconds = object.seconds ?? 0;
-    message.nanos = object.nanos ?? 0;
-    return message;
-  },
 };
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToNumber(long: Long): number {
   if (long.gt(globalThis.Number.MAX_SAFE_INTEGER)) {
@@ -207,8 +165,4 @@ function longToNumber(long: Long): number {
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
-}
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
 }

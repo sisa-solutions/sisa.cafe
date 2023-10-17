@@ -11,9 +11,9 @@ namespace Sisa.Blog.Api.V1.Posts.Responses;
 
 public sealed partial class PostResponse
 {
-    public PostResponse(IEnumerable<string> tags) : base()
+    public PostResponse(IEnumerable<string> tagSlugs) : base()
     {
-        Tags.AddRange(tags);
+        TagSlugs.AddRange(tagSlugs);
     }
 }
 
@@ -68,6 +68,7 @@ public static class PostProjections
                 Slug = x.Slug,
                 Excerpt = x.Excerpt,
                 Content = x.Content,
+                Status = System.Enum.Parse<PostStatus>(x.Status.ToString()),
 
                 Category = new CategoryInfoResponse
                 {

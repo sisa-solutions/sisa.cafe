@@ -88,9 +88,9 @@ public class CreatePostCommandHandler(
         post.AssociateCategory(category);
 
         IEnumerable<Tag> existingTags = await tagRepository
-            .GetAsync(x => command.Tags.Contains(x.Slug), cancellationToken);
+            .GetAsync(x => command.TagSlugs.Contains(x.Slug), cancellationToken);
 
-        var requestTags = command.Tags
+        var requestTags = command.TagSlugs
             .Select(tag => existingTags.FirstOrDefault(x => x.Slug == tag) ?? new Tag(tag, tag));
 
         post.AddTags(requestTags);

@@ -3,8 +3,6 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { StringValue } from "../../../../../google/protobuf/wrappers";
 
-export const protobufPackage = "sisa.blog.api.v1.files.commands";
-
 export interface FileMetadata {
   /** original file name */
   name: string;
@@ -142,75 +140,6 @@ export const FileMetadata = {
     }
     return message;
   },
-
-  fromJSON(object: any): FileMetadata {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      path: isSet(object.path) ? globalThis.String(object.path) : "",
-      contentType: isSet(object.contentType) ? globalThis.String(object.contentType) : "",
-      size: isSet(object.size) ? globalThis.Number(object.size) : 0,
-      title: isSet(object.title) ? String(object.title) : undefined,
-      description: isSet(object.description) ? String(object.description) : undefined,
-      tags: isObject(object.tags)
-        ? Object.entries(object.tags).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-          acc[key] = String(value);
-          return acc;
-        }, {})
-        : {},
-    };
-  },
-
-  toJSON(message: FileMetadata): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.path !== "") {
-      obj.path = message.path;
-    }
-    if (message.contentType !== "") {
-      obj.contentType = message.contentType;
-    }
-    if (message.size !== 0) {
-      obj.size = Math.round(message.size);
-    }
-    if (message.title !== undefined) {
-      obj.title = message.title;
-    }
-    if (message.description !== undefined) {
-      obj.description = message.description;
-    }
-    if (message.tags) {
-      const entries = Object.entries(message.tags);
-      if (entries.length > 0) {
-        obj.tags = {};
-        entries.forEach(([k, v]) => {
-          obj.tags[k] = v;
-        });
-      }
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FileMetadata>, I>>(base?: I): FileMetadata {
-    return FileMetadata.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FileMetadata>, I>>(object: I): FileMetadata {
-    const message = createBaseFileMetadata();
-    message.name = object.name ?? "";
-    message.path = object.path ?? "";
-    message.contentType = object.contentType ?? "";
-    message.size = object.size ?? 0;
-    message.title = object.title ?? undefined;
-    message.description = object.description ?? undefined;
-    message.tags = Object.entries(object.tags ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = globalThis.String(value);
-      }
-      return acc;
-    }, {});
-    return message;
-  },
 };
 
 function createBaseFileMetadata_TagsEntry(): FileMetadata_TagsEntry {
@@ -257,34 +186,6 @@ export const FileMetadata_TagsEntry = {
     }
     return message;
   },
-
-  fromJSON(object: any): FileMetadata_TagsEntry {
-    return {
-      key: isSet(object.key) ? globalThis.String(object.key) : "",
-      value: isSet(object.value) ? globalThis.String(object.value) : "",
-    };
-  },
-
-  toJSON(message: FileMetadata_TagsEntry): unknown {
-    const obj: any = {};
-    if (message.key !== "") {
-      obj.key = message.key;
-    }
-    if (message.value !== "") {
-      obj.value = message.value;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FileMetadata_TagsEntry>, I>>(base?: I): FileMetadata_TagsEntry {
-    return FileMetadata_TagsEntry.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FileMetadata_TagsEntry>, I>>(object: I): FileMetadata_TagsEntry {
-    const message = createBaseFileMetadata_TagsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
-    return message;
-  },
 };
 
 function createBaseUploadFileCommand(): UploadFileCommand {
@@ -329,36 +230,6 @@ export const UploadFileCommand = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): UploadFileCommand {
-    return {
-      metadata: isSet(object.metadata) ? FileMetadata.fromJSON(object.metadata) : undefined,
-      content: isSet(object.content) ? Buffer.from(bytesFromBase64(object.content)) : undefined,
-    };
-  },
-
-  toJSON(message: UploadFileCommand): unknown {
-    const obj: any = {};
-    if (message.metadata !== undefined) {
-      obj.metadata = FileMetadata.toJSON(message.metadata);
-    }
-    if (message.content !== undefined) {
-      obj.content = base64FromBytes(message.content);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UploadFileCommand>, I>>(base?: I): UploadFileCommand {
-    return UploadFileCommand.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UploadFileCommand>, I>>(object: I): UploadFileCommand {
-    const message = createBaseUploadFileCommand();
-    message.metadata = (object.metadata !== undefined && object.metadata !== null)
-      ? FileMetadata.fromPartial(object.metadata)
-      : undefined;
-    message.content = object.content ?? undefined;
     return message;
   },
 };
@@ -430,60 +301,6 @@ export const UpdateFileInfoCommand = {
     }
     return message;
   },
-
-  fromJSON(object: any): UpdateFileInfoCommand {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      title: isSet(object.title) ? String(object.title) : undefined,
-      description: isSet(object.description) ? String(object.description) : undefined,
-      tags: isObject(object.tags)
-        ? Object.entries(object.tags).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-          acc[key] = String(value);
-          return acc;
-        }, {})
-        : {},
-    };
-  },
-
-  toJSON(message: UpdateFileInfoCommand): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.title !== undefined) {
-      obj.title = message.title;
-    }
-    if (message.description !== undefined) {
-      obj.description = message.description;
-    }
-    if (message.tags) {
-      const entries = Object.entries(message.tags);
-      if (entries.length > 0) {
-        obj.tags = {};
-        entries.forEach(([k, v]) => {
-          obj.tags[k] = v;
-        });
-      }
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UpdateFileInfoCommand>, I>>(base?: I): UpdateFileInfoCommand {
-    return UpdateFileInfoCommand.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UpdateFileInfoCommand>, I>>(object: I): UpdateFileInfoCommand {
-    const message = createBaseUpdateFileInfoCommand();
-    message.id = object.id ?? "";
-    message.title = object.title ?? undefined;
-    message.description = object.description ?? undefined;
-    message.tags = Object.entries(object.tags ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = globalThis.String(value);
-      }
-      return acc;
-    }, {});
-    return message;
-  },
 };
 
 function createBaseUpdateFileInfoCommand_TagsEntry(): UpdateFileInfoCommand_TagsEntry {
@@ -530,36 +347,6 @@ export const UpdateFileInfoCommand_TagsEntry = {
     }
     return message;
   },
-
-  fromJSON(object: any): UpdateFileInfoCommand_TagsEntry {
-    return {
-      key: isSet(object.key) ? globalThis.String(object.key) : "",
-      value: isSet(object.value) ? globalThis.String(object.value) : "",
-    };
-  },
-
-  toJSON(message: UpdateFileInfoCommand_TagsEntry): unknown {
-    const obj: any = {};
-    if (message.key !== "") {
-      obj.key = message.key;
-    }
-    if (message.value !== "") {
-      obj.value = message.value;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UpdateFileInfoCommand_TagsEntry>, I>>(base?: I): UpdateFileInfoCommand_TagsEntry {
-    return UpdateFileInfoCommand_TagsEntry.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UpdateFileInfoCommand_TagsEntry>, I>>(
-    object: I,
-  ): UpdateFileInfoCommand_TagsEntry {
-    const message = createBaseUpdateFileInfoCommand_TagsEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
-    return message;
-  },
 };
 
 function createBaseDeleteFileCommand(): DeleteFileCommand {
@@ -596,65 +383,7 @@ export const DeleteFileCommand = {
     }
     return message;
   },
-
-  fromJSON(object: any): DeleteFileCommand {
-    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
-  },
-
-  toJSON(message: DeleteFileCommand): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<DeleteFileCommand>, I>>(base?: I): DeleteFileCommand {
-    return DeleteFileCommand.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<DeleteFileCommand>, I>>(object: I): DeleteFileCommand {
-    const message = createBaseDeleteFileCommand();
-    message.id = object.id ?? "";
-    return message;
-  },
 };
-
-function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
-  }
-}
-
-function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(globalThis.String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
-}
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToNumber(long: Long): number {
   if (long.gt(globalThis.Number.MAX_SAFE_INTEGER)) {
@@ -666,12 +395,4 @@ function longToNumber(long: Long): number {
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
-}
-
-function isObject(value: any): boolean {
-  return typeof value === "object" && value !== null;
-}
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
 }

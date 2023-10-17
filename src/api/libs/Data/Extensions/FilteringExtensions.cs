@@ -67,7 +67,39 @@ public static partial class FilteringExtensions
                 .Aggregate((Expression)param, Expression.PropertyOrField)
             : Expression.PropertyOrField(param, filterRule.Field);
 
-        var value = Expression.Constant(filterRule.Value);
+        Expression value;
+
+        if (property.Type != typeof(string))
+        {
+            if (property.Type == typeof(Guid))
+            {
+                if (!Guid.TryParse(filterRule.Value, out Guid guidValue))
+                {
+                    throw new ArgumentException($"Invalid Guid value: {filterRule.Value}");
+                }
+
+                value = Expression.Constant(guidValue);
+            }
+            else if(property.Type.BaseType == typeof(Enum))
+            {
+                if (!Enum.TryParse(property.Type, filterRule.Value, out var enumValue))
+                {
+                    throw new ArgumentException($"Invalid Enum value: {filterRule.Value}");
+                }
+
+                value = Expression.Constant(enumValue);
+            }
+            else
+            {
+                // TODO: Correct Type conversion
+                value = Expression.Constant(filterRule.Value);
+            }
+        }
+        else
+        {
+            value = Expression.Constant(filterRule.Value);
+        }
+
         var operation = BuildOperationExpression(property, value, filterRule.Operator);
 
         if (filterRule.Not)
@@ -78,87 +110,89 @@ public static partial class FilteringExtensions
         return operation;
     }
 
-    private static Expression BuildOperationExpression(Expression left, Expression right, Operator op)
+    private static Expression BuildOperationExpression(Expression property, Expression value, Operator op)
     {
         return op switch
         {
             // 1 equals
-            Operator.Equal => Expression.Equal(left, right),
+            Operator.Equal => Expression.Equal(property, value),
 
             // 2 not equals
-            Operator.NotEqual => Expression.NotEqual(left, right),
+            Operator.NotEqual => Expression.NotEqual(property, value),
 
             // 3 greater than
-            Operator.GreaterThan => Expression.GreaterThan(left, right),
+            Operator.GreaterThan => Expression.GreaterThan(property, value),
 
             // 4 greater than or equal
-            Operator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(left, right),
+            Operator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(property, value),
 
             // 5 less than
-            Operator.LessThan => Expression.LessThan(left, right),
+            Operator.LessThan => Expression.LessThan(property, value),
 
             // 6 less than or equal
-            Operator.LessThanOrEqual => Expression.LessThanOrEqual(left, right),
+            Operator.LessThanOrEqual => Expression.LessThanOrEqual(property, value),
 
             // 7 contains
-            Operator.Contains => left.Type switch
+            Operator.Contains => property.Type switch
             {
-                var type when type.GetInterface(nameof(IEnumerable)) != null => Expression.Call(
-                    typeof(Enumerable).GetMethods()
-                        .First(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
-                        .MakeGenericMethod(typeof(string))
-                    , left
-                    , right
-                ),
-                _ => Expression.Call(left, left.Type.GetMethod("Contains", [left.Type])!, right),
+                var type when type.Name != nameof(String) && type.GetInterface(nameof(IEnumerable)) != null
+                    => Expression.Call(
+                        typeof(Enumerable).GetMethods()
+                            .First(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
+                            .MakeGenericMethod(typeof(string))
+                        , property
+                        , value
+                    ),
+                _ => Expression.Call(property, property.Type.GetMethod(nameof(Enumerable.Contains), [property.Type])!, value),
             },
 
             // 8 not contains
-            Operator.NotContains => left.Type switch
+            Operator.NotContains => property.Type switch
             {
-                var type when type.GetInterface(nameof(IEnumerable)) != null => Expression.Not(Expression.Call(
-                    typeof(Enumerable).GetMethods()
-                        .First(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
-                        .MakeGenericMethod(typeof(string))
-                    , left
-                    , right)
-                ),
-                _ => Expression.Not(Expression.Call(left, left.Type.GetMethod("Contains", [left.Type])!, right)),
+                var type when type.Name != nameof(String) && type.GetInterface(nameof(IEnumerable)) != null
+                    => Expression.Not(Expression.Call(
+                        typeof(Enumerable).GetMethods()
+                            .First(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
+                            .MakeGenericMethod(typeof(string))
+                        , property
+                        , value)
+                    ),
+                _ => Expression.Not(Expression.Call(property, property.Type.GetMethod(nameof(Enumerable.Contains), [property.Type])!, value)),
             },
 
             // 9 starts with
-            Operator.StartsWith => Expression.Call(left, typeof(string).GetMethod("StartsWith", [typeof(string)])!, right),
+            Operator.StartsWith => Expression.Call(property, typeof(string).GetMethod(nameof(string.StartsWith), [typeof(string)])!, value),
 
             // 10 not starts with
-            Operator.NotStartsWith => Expression.Not(Expression.Call(left, typeof(string).GetMethod("StartsWith", [typeof(string)])!, right)),
+            Operator.NotStartsWith => Expression.Not(Expression.Call(property, typeof(string).GetMethod(nameof(string.StartsWith), [typeof(string)])!, value)),
 
             // 11 ends with
-            Operator.EndsWith => Expression.Call(left, typeof(string).GetMethod("EndsWith", [typeof(string)])!, right),
+            Operator.EndsWith => Expression.Call(property, typeof(string).GetMethod(nameof(string.EndsWith), [typeof(string)])!, value),
 
             // 12 not ends with
-            Operator.NotEndsWith => Expression.Not(Expression.Call(left, typeof(string).GetMethod("EndsWith", [typeof(string)])!, right)),
+            Operator.NotEndsWith => Expression.Not(Expression.Call(property, typeof(string).GetMethod(nameof(string.EndsWith), [typeof(string)])!, value)),
 
             // 13 in
-            Operator.In => Expression.Call(typeof(Enumerable), "Contains", [typeof(string)], right, left),
+            Operator.In => Expression.Call(typeof(Enumerable), nameof(Enumerable.Contains), [typeof(string)], value, property),
 
             // 14 not in
-            Operator.NotIn => Expression.Not(Expression.Call(typeof(Enumerable), "Contains", [typeof(string)], right, left)),
+            Operator.NotIn => Expression.Not(Expression.Call(typeof(Enumerable), nameof(Enumerable.Contains), [typeof(string)], value, property)),
 
             // 15 between
             Operator.Between => Expression.AndAlso(
-                Expression.GreaterThanOrEqual(left, Expression.Property(right, "Start")),
-                Expression.LessThanOrEqual(left, Expression.Property(right, "End"))),
+                Expression.GreaterThanOrEqual(property, Expression.Property(value, "Start")),
+                Expression.LessThanOrEqual(property, Expression.Property(value, "End"))),
 
             // 16 not between
             Operator.NotBetween => Expression.OrElse(
-                Expression.LessThan(left, Expression.Property(right, "Start")),
-                Expression.GreaterThan(left, Expression.Property(right, "End"))),
+                Expression.LessThan(property, Expression.Property(value, "Start")),
+                Expression.GreaterThan(property, Expression.Property(value, "End"))),
 
             // 17 is null
-            Operator.IsNull => Expression.Equal(left, Expression.Constant(null)),
+            Operator.IsNull => Expression.Equal(property, Expression.Constant(null)),
 
             // 18 is not null
-            Operator.IsNotNull => Expression.NotEqual(left, Expression.Constant(null)),
+            Operator.IsNotNull => Expression.NotEqual(property, Expression.Constant(null)),
 
             // Handle other operators as needed
             _ => throw new ArgumentException($"Unsupported operator: {op}"),

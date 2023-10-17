@@ -64,7 +64,7 @@ export * from './file-upload-field';
 export { default as RichTextField } from './rich-text-field';
 export * from './rich-text-field';
 
-// export { default as SelectField } from './select-field';
+export { default as SelectionField } from './selection-field';
 // export * from './select-field';
 
 // export { default as TextAreaField } from './text-area-field';
@@ -112,8 +112,7 @@ export * from './file-upload-input';
 export { default as RichTextInput } from './rich-text-input';
 export * from './rich-text-input';
 
-// export { default as SelectInput } from './select-input';
-// export * from './select-input';
+export { default as SelectionInput, type SelectionInputProps, type SelectOption } from './selection-input';
 
 export { default as TextareaInput } from './textarea-input';
 export * from './textarea-input';

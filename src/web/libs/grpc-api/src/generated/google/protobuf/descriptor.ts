@@ -2,8 +2,6 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "google.protobuf";
-
 /**
  * The protocol compiler can output a FileDescriptorSet containing the .proto
  * files it parses.
@@ -167,193 +165,52 @@ export interface FieldDescriptorProto {
 
 export enum FieldDescriptorProto_Type {
   /**
-   * TYPE_DOUBLE - 0 is reserved for errors.
+   * DOUBLE - 0 is reserved for errors.
    * Order is weird for historical reasons.
    */
-  TYPE_DOUBLE = 1,
-  TYPE_FLOAT = 2,
+  DOUBLE = 1,
+  FLOAT = 2,
   /**
-   * TYPE_INT64 - Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT64 if
+   * INT64 - Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT64 if
    * negative values are likely.
    */
-  TYPE_INT64 = 3,
-  TYPE_UINT64 = 4,
+  INT64 = 3,
+  UINT64 = 4,
   /**
-   * TYPE_INT32 - Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT32 if
+   * INT32 - Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT32 if
    * negative values are likely.
    */
-  TYPE_INT32 = 5,
-  TYPE_FIXED64 = 6,
-  TYPE_FIXED32 = 7,
-  TYPE_BOOL = 8,
-  TYPE_STRING = 9,
+  INT32 = 5,
+  FIXED64 = 6,
+  FIXED32 = 7,
+  BOOL = 8,
+  STRING = 9,
   /**
-   * TYPE_GROUP - Tag-delimited aggregate.
+   * GROUP - Tag-delimited aggregate.
    * Group type is deprecated and not supported in proto3. However, Proto3
    * implementations should still be able to parse the group wire format and
    * treat group fields as unknown fields.
    */
-  TYPE_GROUP = 10,
-  /** TYPE_MESSAGE - Length-delimited aggregate. */
-  TYPE_MESSAGE = 11,
-  /** TYPE_BYTES - New in version 2. */
-  TYPE_BYTES = 12,
-  TYPE_UINT32 = 13,
-  TYPE_ENUM = 14,
-  TYPE_SFIXED32 = 15,
-  TYPE_SFIXED64 = 16,
-  /** TYPE_SINT32 - Uses ZigZag encoding. */
-  TYPE_SINT32 = 17,
-  /** TYPE_SINT64 - Uses ZigZag encoding. */
-  TYPE_SINT64 = 18,
-  UNRECOGNIZED = -1,
-}
-
-export function fieldDescriptorProto_TypeFromJSON(object: any): FieldDescriptorProto_Type {
-  switch (object) {
-    case 1:
-    case "TYPE_DOUBLE":
-      return FieldDescriptorProto_Type.TYPE_DOUBLE;
-    case 2:
-    case "TYPE_FLOAT":
-      return FieldDescriptorProto_Type.TYPE_FLOAT;
-    case 3:
-    case "TYPE_INT64":
-      return FieldDescriptorProto_Type.TYPE_INT64;
-    case 4:
-    case "TYPE_UINT64":
-      return FieldDescriptorProto_Type.TYPE_UINT64;
-    case 5:
-    case "TYPE_INT32":
-      return FieldDescriptorProto_Type.TYPE_INT32;
-    case 6:
-    case "TYPE_FIXED64":
-      return FieldDescriptorProto_Type.TYPE_FIXED64;
-    case 7:
-    case "TYPE_FIXED32":
-      return FieldDescriptorProto_Type.TYPE_FIXED32;
-    case 8:
-    case "TYPE_BOOL":
-      return FieldDescriptorProto_Type.TYPE_BOOL;
-    case 9:
-    case "TYPE_STRING":
-      return FieldDescriptorProto_Type.TYPE_STRING;
-    case 10:
-    case "TYPE_GROUP":
-      return FieldDescriptorProto_Type.TYPE_GROUP;
-    case 11:
-    case "TYPE_MESSAGE":
-      return FieldDescriptorProto_Type.TYPE_MESSAGE;
-    case 12:
-    case "TYPE_BYTES":
-      return FieldDescriptorProto_Type.TYPE_BYTES;
-    case 13:
-    case "TYPE_UINT32":
-      return FieldDescriptorProto_Type.TYPE_UINT32;
-    case 14:
-    case "TYPE_ENUM":
-      return FieldDescriptorProto_Type.TYPE_ENUM;
-    case 15:
-    case "TYPE_SFIXED32":
-      return FieldDescriptorProto_Type.TYPE_SFIXED32;
-    case 16:
-    case "TYPE_SFIXED64":
-      return FieldDescriptorProto_Type.TYPE_SFIXED64;
-    case 17:
-    case "TYPE_SINT32":
-      return FieldDescriptorProto_Type.TYPE_SINT32;
-    case 18:
-    case "TYPE_SINT64":
-      return FieldDescriptorProto_Type.TYPE_SINT64;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return FieldDescriptorProto_Type.UNRECOGNIZED;
-  }
-}
-
-export function fieldDescriptorProto_TypeToJSON(object: FieldDescriptorProto_Type): string {
-  switch (object) {
-    case FieldDescriptorProto_Type.TYPE_DOUBLE:
-      return "TYPE_DOUBLE";
-    case FieldDescriptorProto_Type.TYPE_FLOAT:
-      return "TYPE_FLOAT";
-    case FieldDescriptorProto_Type.TYPE_INT64:
-      return "TYPE_INT64";
-    case FieldDescriptorProto_Type.TYPE_UINT64:
-      return "TYPE_UINT64";
-    case FieldDescriptorProto_Type.TYPE_INT32:
-      return "TYPE_INT32";
-    case FieldDescriptorProto_Type.TYPE_FIXED64:
-      return "TYPE_FIXED64";
-    case FieldDescriptorProto_Type.TYPE_FIXED32:
-      return "TYPE_FIXED32";
-    case FieldDescriptorProto_Type.TYPE_BOOL:
-      return "TYPE_BOOL";
-    case FieldDescriptorProto_Type.TYPE_STRING:
-      return "TYPE_STRING";
-    case FieldDescriptorProto_Type.TYPE_GROUP:
-      return "TYPE_GROUP";
-    case FieldDescriptorProto_Type.TYPE_MESSAGE:
-      return "TYPE_MESSAGE";
-    case FieldDescriptorProto_Type.TYPE_BYTES:
-      return "TYPE_BYTES";
-    case FieldDescriptorProto_Type.TYPE_UINT32:
-      return "TYPE_UINT32";
-    case FieldDescriptorProto_Type.TYPE_ENUM:
-      return "TYPE_ENUM";
-    case FieldDescriptorProto_Type.TYPE_SFIXED32:
-      return "TYPE_SFIXED32";
-    case FieldDescriptorProto_Type.TYPE_SFIXED64:
-      return "TYPE_SFIXED64";
-    case FieldDescriptorProto_Type.TYPE_SINT32:
-      return "TYPE_SINT32";
-    case FieldDescriptorProto_Type.TYPE_SINT64:
-      return "TYPE_SINT64";
-    case FieldDescriptorProto_Type.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
+  GROUP = 10,
+  /** MESSAGE - Length-delimited aggregate. */
+  MESSAGE = 11,
+  /** BYTES - New in version 2. */
+  BYTES = 12,
+  UINT32 = 13,
+  ENUM = 14,
+  SFIXED32 = 15,
+  SFIXED64 = 16,
+  /** SINT32 - Uses ZigZag encoding. */
+  SINT32 = 17,
+  /** SINT64 - Uses ZigZag encoding. */
+  SINT64 = 18,
 }
 
 export enum FieldDescriptorProto_Label {
-  /** LABEL_OPTIONAL - 0 is reserved for errors */
-  LABEL_OPTIONAL = 1,
-  LABEL_REQUIRED = 2,
-  LABEL_REPEATED = 3,
-  UNRECOGNIZED = -1,
-}
-
-export function fieldDescriptorProto_LabelFromJSON(object: any): FieldDescriptorProto_Label {
-  switch (object) {
-    case 1:
-    case "LABEL_OPTIONAL":
-      return FieldDescriptorProto_Label.LABEL_OPTIONAL;
-    case 2:
-    case "LABEL_REQUIRED":
-      return FieldDescriptorProto_Label.LABEL_REQUIRED;
-    case 3:
-    case "LABEL_REPEATED":
-      return FieldDescriptorProto_Label.LABEL_REPEATED;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return FieldDescriptorProto_Label.UNRECOGNIZED;
-  }
-}
-
-export function fieldDescriptorProto_LabelToJSON(object: FieldDescriptorProto_Label): string {
-  switch (object) {
-    case FieldDescriptorProto_Label.LABEL_OPTIONAL:
-      return "LABEL_OPTIONAL";
-    case FieldDescriptorProto_Label.LABEL_REQUIRED:
-      return "LABEL_REQUIRED";
-    case FieldDescriptorProto_Label.LABEL_REPEATED:
-      return "LABEL_REPEATED";
-    case FieldDescriptorProto_Label.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
+  /** OPTIONAL - 0 is reserved for errors */
+  OPTIONAL = 1,
+  REQUIRED = 2,
+  REPEATED = 3,
 }
 
 /** Describes a oneof. */
@@ -558,39 +415,6 @@ export enum FileOptions_OptimizeMode {
   CODE_SIZE = 2,
   /** LITE_RUNTIME - Generate code using MessageLite and the lite runtime. */
   LITE_RUNTIME = 3,
-  UNRECOGNIZED = -1,
-}
-
-export function fileOptions_OptimizeModeFromJSON(object: any): FileOptions_OptimizeMode {
-  switch (object) {
-    case 1:
-    case "SPEED":
-      return FileOptions_OptimizeMode.SPEED;
-    case 2:
-    case "CODE_SIZE":
-      return FileOptions_OptimizeMode.CODE_SIZE;
-    case 3:
-    case "LITE_RUNTIME":
-      return FileOptions_OptimizeMode.LITE_RUNTIME;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return FileOptions_OptimizeMode.UNRECOGNIZED;
-  }
-}
-
-export function fileOptions_OptimizeModeToJSON(object: FileOptions_OptimizeMode): string {
-  switch (object) {
-    case FileOptions_OptimizeMode.SPEED:
-      return "SPEED";
-    case FileOptions_OptimizeMode.CODE_SIZE:
-      return "CODE_SIZE";
-    case FileOptions_OptimizeMode.LITE_RUNTIME:
-      return "LITE_RUNTIME";
-    case FileOptions_OptimizeMode.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
 }
 
 export interface MessageOptions {
@@ -746,39 +570,6 @@ export enum FieldOptions_CType {
   STRING = 0,
   CORD = 1,
   STRING_PIECE = 2,
-  UNRECOGNIZED = -1,
-}
-
-export function fieldOptions_CTypeFromJSON(object: any): FieldOptions_CType {
-  switch (object) {
-    case 0:
-    case "STRING":
-      return FieldOptions_CType.STRING;
-    case 1:
-    case "CORD":
-      return FieldOptions_CType.CORD;
-    case 2:
-    case "STRING_PIECE":
-      return FieldOptions_CType.STRING_PIECE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return FieldOptions_CType.UNRECOGNIZED;
-  }
-}
-
-export function fieldOptions_CTypeToJSON(object: FieldOptions_CType): string {
-  switch (object) {
-    case FieldOptions_CType.STRING:
-      return "STRING";
-    case FieldOptions_CType.CORD:
-      return "CORD";
-    case FieldOptions_CType.STRING_PIECE:
-      return "STRING_PIECE";
-    case FieldOptions_CType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
 }
 
 export enum FieldOptions_JSType {
@@ -788,39 +579,6 @@ export enum FieldOptions_JSType {
   JS_STRING = 1,
   /** JS_NUMBER - Use JavaScript numbers. */
   JS_NUMBER = 2,
-  UNRECOGNIZED = -1,
-}
-
-export function fieldOptions_JSTypeFromJSON(object: any): FieldOptions_JSType {
-  switch (object) {
-    case 0:
-    case "JS_NORMAL":
-      return FieldOptions_JSType.JS_NORMAL;
-    case 1:
-    case "JS_STRING":
-      return FieldOptions_JSType.JS_STRING;
-    case 2:
-    case "JS_NUMBER":
-      return FieldOptions_JSType.JS_NUMBER;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return FieldOptions_JSType.UNRECOGNIZED;
-  }
-}
-
-export function fieldOptions_JSTypeToJSON(object: FieldOptions_JSType): string {
-  switch (object) {
-    case FieldOptions_JSType.JS_NORMAL:
-      return "JS_NORMAL";
-    case FieldOptions_JSType.JS_STRING:
-      return "JS_STRING";
-    case FieldOptions_JSType.JS_NUMBER:
-      return "JS_NUMBER";
-    case FieldOptions_JSType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
 }
 
 export interface OneofOptions {
@@ -893,39 +651,6 @@ export enum MethodOptions_IdempotencyLevel {
   NO_SIDE_EFFECTS = 1,
   /** IDEMPOTENT - idempotent, but may have side effects */
   IDEMPOTENT = 2,
-  UNRECOGNIZED = -1,
-}
-
-export function methodOptions_IdempotencyLevelFromJSON(object: any): MethodOptions_IdempotencyLevel {
-  switch (object) {
-    case 0:
-    case "IDEMPOTENCY_UNKNOWN":
-      return MethodOptions_IdempotencyLevel.IDEMPOTENCY_UNKNOWN;
-    case 1:
-    case "NO_SIDE_EFFECTS":
-      return MethodOptions_IdempotencyLevel.NO_SIDE_EFFECTS;
-    case 2:
-    case "IDEMPOTENT":
-      return MethodOptions_IdempotencyLevel.IDEMPOTENT;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return MethodOptions_IdempotencyLevel.UNRECOGNIZED;
-  }
-}
-
-export function methodOptions_IdempotencyLevelToJSON(object: MethodOptions_IdempotencyLevel): string {
-  switch (object) {
-    case MethodOptions_IdempotencyLevel.IDEMPOTENCY_UNKNOWN:
-      return "IDEMPOTENCY_UNKNOWN";
-    case MethodOptions_IdempotencyLevel.NO_SIDE_EFFECTS:
-      return "NO_SIDE_EFFECTS";
-    case MethodOptions_IdempotencyLevel.IDEMPOTENT:
-      return "IDEMPOTENT";
-    case MethodOptions_IdempotencyLevel.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
 }
 
 /**
@@ -1172,29 +897,6 @@ export const FileDescriptorSet = {
     }
     return message;
   },
-
-  fromJSON(object: any): FileDescriptorSet {
-    return {
-      file: globalThis.Array.isArray(object?.file) ? object.file.map((e: any) => FileDescriptorProto.fromJSON(e)) : [],
-    };
-  },
-
-  toJSON(message: FileDescriptorSet): unknown {
-    const obj: any = {};
-    if (message.file?.length) {
-      obj.file = message.file.map((e) => FileDescriptorProto.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FileDescriptorSet>, I>>(base?: I): FileDescriptorSet {
-    return FileDescriptorSet.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FileDescriptorSet>, I>>(object: I): FileDescriptorSet {
-    const message = createBaseFileDescriptorSet();
-    message.file = object.file?.map((e) => FileDescriptorProto.fromPartial(e)) || [];
-    return message;
-  },
 };
 
 function createBaseFileDescriptorProto(): FileDescriptorProto {
@@ -1378,102 +1080,6 @@ export const FileDescriptorProto = {
     }
     return message;
   },
-
-  fromJSON(object: any): FileDescriptorProto {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      package: isSet(object.package) ? globalThis.String(object.package) : "",
-      dependency: globalThis.Array.isArray(object?.dependency)
-        ? object.dependency.map((e: any) => globalThis.String(e))
-        : [],
-      publicDependency: globalThis.Array.isArray(object?.publicDependency)
-        ? object.publicDependency.map((e: any) => globalThis.Number(e))
-        : [],
-      weakDependency: globalThis.Array.isArray(object?.weakDependency)
-        ? object.weakDependency.map((e: any) => globalThis.Number(e))
-        : [],
-      messageType: globalThis.Array.isArray(object?.messageType)
-        ? object.messageType.map((e: any) => DescriptorProto.fromJSON(e))
-        : [],
-      enumType: globalThis.Array.isArray(object?.enumType)
-        ? object.enumType.map((e: any) => EnumDescriptorProto.fromJSON(e))
-        : [],
-      service: globalThis.Array.isArray(object?.service)
-        ? object.service.map((e: any) => ServiceDescriptorProto.fromJSON(e))
-        : [],
-      extension: globalThis.Array.isArray(object?.extension)
-        ? object.extension.map((e: any) => FieldDescriptorProto.fromJSON(e))
-        : [],
-      options: isSet(object.options) ? FileOptions.fromJSON(object.options) : undefined,
-      sourceCodeInfo: isSet(object.sourceCodeInfo) ? SourceCodeInfo.fromJSON(object.sourceCodeInfo) : undefined,
-      syntax: isSet(object.syntax) ? globalThis.String(object.syntax) : "",
-    };
-  },
-
-  toJSON(message: FileDescriptorProto): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.package !== "") {
-      obj.package = message.package;
-    }
-    if (message.dependency?.length) {
-      obj.dependency = message.dependency;
-    }
-    if (message.publicDependency?.length) {
-      obj.publicDependency = message.publicDependency.map((e) => Math.round(e));
-    }
-    if (message.weakDependency?.length) {
-      obj.weakDependency = message.weakDependency.map((e) => Math.round(e));
-    }
-    if (message.messageType?.length) {
-      obj.messageType = message.messageType.map((e) => DescriptorProto.toJSON(e));
-    }
-    if (message.enumType?.length) {
-      obj.enumType = message.enumType.map((e) => EnumDescriptorProto.toJSON(e));
-    }
-    if (message.service?.length) {
-      obj.service = message.service.map((e) => ServiceDescriptorProto.toJSON(e));
-    }
-    if (message.extension?.length) {
-      obj.extension = message.extension.map((e) => FieldDescriptorProto.toJSON(e));
-    }
-    if (message.options !== undefined) {
-      obj.options = FileOptions.toJSON(message.options);
-    }
-    if (message.sourceCodeInfo !== undefined) {
-      obj.sourceCodeInfo = SourceCodeInfo.toJSON(message.sourceCodeInfo);
-    }
-    if (message.syntax !== "") {
-      obj.syntax = message.syntax;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FileDescriptorProto>, I>>(base?: I): FileDescriptorProto {
-    return FileDescriptorProto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FileDescriptorProto>, I>>(object: I): FileDescriptorProto {
-    const message = createBaseFileDescriptorProto();
-    message.name = object.name ?? "";
-    message.package = object.package ?? "";
-    message.dependency = object.dependency?.map((e) => e) || [];
-    message.publicDependency = object.publicDependency?.map((e) => e) || [];
-    message.weakDependency = object.weakDependency?.map((e) => e) || [];
-    message.messageType = object.messageType?.map((e) => DescriptorProto.fromPartial(e)) || [];
-    message.enumType = object.enumType?.map((e) => EnumDescriptorProto.fromPartial(e)) || [];
-    message.service = object.service?.map((e) => ServiceDescriptorProto.fromPartial(e)) || [];
-    message.extension = object.extension?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
-    message.options = (object.options !== undefined && object.options !== null)
-      ? FileOptions.fromPartial(object.options)
-      : undefined;
-    message.sourceCodeInfo = (object.sourceCodeInfo !== undefined && object.sourceCodeInfo !== null)
-      ? SourceCodeInfo.fromPartial(object.sourceCodeInfo)
-      : undefined;
-    message.syntax = object.syntax ?? "";
-    return message;
-  },
 };
 
 function createBaseDescriptorProto(): DescriptorProto {
@@ -1611,92 +1217,6 @@ export const DescriptorProto = {
     }
     return message;
   },
-
-  fromJSON(object: any): DescriptorProto {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      field: globalThis.Array.isArray(object?.field)
-        ? object.field.map((e: any) => FieldDescriptorProto.fromJSON(e))
-        : [],
-      extension: globalThis.Array.isArray(object?.extension)
-        ? object.extension.map((e: any) => FieldDescriptorProto.fromJSON(e))
-        : [],
-      nestedType: globalThis.Array.isArray(object?.nestedType)
-        ? object.nestedType.map((e: any) => DescriptorProto.fromJSON(e))
-        : [],
-      enumType: globalThis.Array.isArray(object?.enumType)
-        ? object.enumType.map((e: any) => EnumDescriptorProto.fromJSON(e))
-        : [],
-      extensionRange: globalThis.Array.isArray(object?.extensionRange)
-        ? object.extensionRange.map((e: any) => DescriptorProto_ExtensionRange.fromJSON(e))
-        : [],
-      oneofDecl: globalThis.Array.isArray(object?.oneofDecl)
-        ? object.oneofDecl.map((e: any) => OneofDescriptorProto.fromJSON(e))
-        : [],
-      options: isSet(object.options) ? MessageOptions.fromJSON(object.options) : undefined,
-      reservedRange: globalThis.Array.isArray(object?.reservedRange)
-        ? object.reservedRange.map((e: any) => DescriptorProto_ReservedRange.fromJSON(e))
-        : [],
-      reservedName: globalThis.Array.isArray(object?.reservedName)
-        ? object.reservedName.map((e: any) => globalThis.String(e))
-        : [],
-    };
-  },
-
-  toJSON(message: DescriptorProto): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.field?.length) {
-      obj.field = message.field.map((e) => FieldDescriptorProto.toJSON(e));
-    }
-    if (message.extension?.length) {
-      obj.extension = message.extension.map((e) => FieldDescriptorProto.toJSON(e));
-    }
-    if (message.nestedType?.length) {
-      obj.nestedType = message.nestedType.map((e) => DescriptorProto.toJSON(e));
-    }
-    if (message.enumType?.length) {
-      obj.enumType = message.enumType.map((e) => EnumDescriptorProto.toJSON(e));
-    }
-    if (message.extensionRange?.length) {
-      obj.extensionRange = message.extensionRange.map((e) => DescriptorProto_ExtensionRange.toJSON(e));
-    }
-    if (message.oneofDecl?.length) {
-      obj.oneofDecl = message.oneofDecl.map((e) => OneofDescriptorProto.toJSON(e));
-    }
-    if (message.options !== undefined) {
-      obj.options = MessageOptions.toJSON(message.options);
-    }
-    if (message.reservedRange?.length) {
-      obj.reservedRange = message.reservedRange.map((e) => DescriptorProto_ReservedRange.toJSON(e));
-    }
-    if (message.reservedName?.length) {
-      obj.reservedName = message.reservedName;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<DescriptorProto>, I>>(base?: I): DescriptorProto {
-    return DescriptorProto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<DescriptorProto>, I>>(object: I): DescriptorProto {
-    const message = createBaseDescriptorProto();
-    message.name = object.name ?? "";
-    message.field = object.field?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
-    message.extension = object.extension?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
-    message.nestedType = object.nestedType?.map((e) => DescriptorProto.fromPartial(e)) || [];
-    message.enumType = object.enumType?.map((e) => EnumDescriptorProto.fromPartial(e)) || [];
-    message.extensionRange = object.extensionRange?.map((e) => DescriptorProto_ExtensionRange.fromPartial(e)) || [];
-    message.oneofDecl = object.oneofDecl?.map((e) => OneofDescriptorProto.fromPartial(e)) || [];
-    message.options = (object.options !== undefined && object.options !== null)
-      ? MessageOptions.fromPartial(object.options)
-      : undefined;
-    message.reservedRange = object.reservedRange?.map((e) => DescriptorProto_ReservedRange.fromPartial(e)) || [];
-    message.reservedName = object.reservedName?.map((e) => e) || [];
-    return message;
-  },
 };
 
 function createBaseDescriptorProto_ExtensionRange(): DescriptorProto_ExtensionRange {
@@ -1753,43 +1273,6 @@ export const DescriptorProto_ExtensionRange = {
     }
     return message;
   },
-
-  fromJSON(object: any): DescriptorProto_ExtensionRange {
-    return {
-      start: isSet(object.start) ? globalThis.Number(object.start) : 0,
-      end: isSet(object.end) ? globalThis.Number(object.end) : 0,
-      options: isSet(object.options) ? ExtensionRangeOptions.fromJSON(object.options) : undefined,
-    };
-  },
-
-  toJSON(message: DescriptorProto_ExtensionRange): unknown {
-    const obj: any = {};
-    if (message.start !== 0) {
-      obj.start = Math.round(message.start);
-    }
-    if (message.end !== 0) {
-      obj.end = Math.round(message.end);
-    }
-    if (message.options !== undefined) {
-      obj.options = ExtensionRangeOptions.toJSON(message.options);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<DescriptorProto_ExtensionRange>, I>>(base?: I): DescriptorProto_ExtensionRange {
-    return DescriptorProto_ExtensionRange.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<DescriptorProto_ExtensionRange>, I>>(
-    object: I,
-  ): DescriptorProto_ExtensionRange {
-    const message = createBaseDescriptorProto_ExtensionRange();
-    message.start = object.start ?? 0;
-    message.end = object.end ?? 0;
-    message.options = (object.options !== undefined && object.options !== null)
-      ? ExtensionRangeOptions.fromPartial(object.options)
-      : undefined;
-    return message;
-  },
 };
 
 function createBaseDescriptorProto_ReservedRange(): DescriptorProto_ReservedRange {
@@ -1836,36 +1319,6 @@ export const DescriptorProto_ReservedRange = {
     }
     return message;
   },
-
-  fromJSON(object: any): DescriptorProto_ReservedRange {
-    return {
-      start: isSet(object.start) ? globalThis.Number(object.start) : 0,
-      end: isSet(object.end) ? globalThis.Number(object.end) : 0,
-    };
-  },
-
-  toJSON(message: DescriptorProto_ReservedRange): unknown {
-    const obj: any = {};
-    if (message.start !== 0) {
-      obj.start = Math.round(message.start);
-    }
-    if (message.end !== 0) {
-      obj.end = Math.round(message.end);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<DescriptorProto_ReservedRange>, I>>(base?: I): DescriptorProto_ReservedRange {
-    return DescriptorProto_ReservedRange.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<DescriptorProto_ReservedRange>, I>>(
-    object: I,
-  ): DescriptorProto_ReservedRange {
-    const message = createBaseDescriptorProto_ReservedRange();
-    message.start = object.start ?? 0;
-    message.end = object.end ?? 0;
-    return message;
-  },
 };
 
 function createBaseExtensionRangeOptions(): ExtensionRangeOptions {
@@ -1900,31 +1353,6 @@ export const ExtensionRangeOptions = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): ExtensionRangeOptions {
-    return {
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: ExtensionRangeOptions): unknown {
-    const obj: any = {};
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ExtensionRangeOptions>, I>>(base?: I): ExtensionRangeOptions {
-    return ExtensionRangeOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ExtensionRangeOptions>, I>>(object: I): ExtensionRangeOptions {
-    const message = createBaseExtensionRangeOptions();
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -2075,81 +1503,6 @@ export const FieldDescriptorProto = {
     }
     return message;
   },
-
-  fromJSON(object: any): FieldDescriptorProto {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      number: isSet(object.number) ? globalThis.Number(object.number) : 0,
-      label: isSet(object.label) ? fieldDescriptorProto_LabelFromJSON(object.label) : 1,
-      type: isSet(object.type) ? fieldDescriptorProto_TypeFromJSON(object.type) : 1,
-      typeName: isSet(object.typeName) ? globalThis.String(object.typeName) : "",
-      extendee: isSet(object.extendee) ? globalThis.String(object.extendee) : "",
-      defaultValue: isSet(object.defaultValue) ? globalThis.String(object.defaultValue) : "",
-      oneofIndex: isSet(object.oneofIndex) ? globalThis.Number(object.oneofIndex) : 0,
-      jsonName: isSet(object.jsonName) ? globalThis.String(object.jsonName) : "",
-      options: isSet(object.options) ? FieldOptions.fromJSON(object.options) : undefined,
-      proto3Optional: isSet(object.proto3Optional) ? globalThis.Boolean(object.proto3Optional) : false,
-    };
-  },
-
-  toJSON(message: FieldDescriptorProto): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.number !== 0) {
-      obj.number = Math.round(message.number);
-    }
-    if (message.label !== 1) {
-      obj.label = fieldDescriptorProto_LabelToJSON(message.label);
-    }
-    if (message.type !== 1) {
-      obj.type = fieldDescriptorProto_TypeToJSON(message.type);
-    }
-    if (message.typeName !== "") {
-      obj.typeName = message.typeName;
-    }
-    if (message.extendee !== "") {
-      obj.extendee = message.extendee;
-    }
-    if (message.defaultValue !== "") {
-      obj.defaultValue = message.defaultValue;
-    }
-    if (message.oneofIndex !== 0) {
-      obj.oneofIndex = Math.round(message.oneofIndex);
-    }
-    if (message.jsonName !== "") {
-      obj.jsonName = message.jsonName;
-    }
-    if (message.options !== undefined) {
-      obj.options = FieldOptions.toJSON(message.options);
-    }
-    if (message.proto3Optional === true) {
-      obj.proto3Optional = message.proto3Optional;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FieldDescriptorProto>, I>>(base?: I): FieldDescriptorProto {
-    return FieldDescriptorProto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FieldDescriptorProto>, I>>(object: I): FieldDescriptorProto {
-    const message = createBaseFieldDescriptorProto();
-    message.name = object.name ?? "";
-    message.number = object.number ?? 0;
-    message.label = object.label ?? 1;
-    message.type = object.type ?? 1;
-    message.typeName = object.typeName ?? "";
-    message.extendee = object.extendee ?? "";
-    message.defaultValue = object.defaultValue ?? "";
-    message.oneofIndex = object.oneofIndex ?? 0;
-    message.jsonName = object.jsonName ?? "";
-    message.options = (object.options !== undefined && object.options !== null)
-      ? FieldOptions.fromPartial(object.options)
-      : undefined;
-    message.proto3Optional = object.proto3Optional ?? false;
-    return message;
-  },
 };
 
 function createBaseOneofDescriptorProto(): OneofDescriptorProto {
@@ -2194,36 +1547,6 @@ export const OneofDescriptorProto = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): OneofDescriptorProto {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      options: isSet(object.options) ? OneofOptions.fromJSON(object.options) : undefined,
-    };
-  },
-
-  toJSON(message: OneofDescriptorProto): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.options !== undefined) {
-      obj.options = OneofOptions.toJSON(message.options);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<OneofDescriptorProto>, I>>(base?: I): OneofDescriptorProto {
-    return OneofDescriptorProto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<OneofDescriptorProto>, I>>(object: I): OneofDescriptorProto {
-    const message = createBaseOneofDescriptorProto();
-    message.name = object.name ?? "";
-    message.options = (object.options !== undefined && object.options !== null)
-      ? OneofOptions.fromPartial(object.options)
-      : undefined;
     return message;
   },
 };
@@ -2302,58 +1625,6 @@ export const EnumDescriptorProto = {
     }
     return message;
   },
-
-  fromJSON(object: any): EnumDescriptorProto {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      value: globalThis.Array.isArray(object?.value)
-        ? object.value.map((e: any) => EnumValueDescriptorProto.fromJSON(e))
-        : [],
-      options: isSet(object.options) ? EnumOptions.fromJSON(object.options) : undefined,
-      reservedRange: globalThis.Array.isArray(object?.reservedRange)
-        ? object.reservedRange.map((e: any) => EnumDescriptorProto_EnumReservedRange.fromJSON(e))
-        : [],
-      reservedName: globalThis.Array.isArray(object?.reservedName)
-        ? object.reservedName.map((e: any) => globalThis.String(e))
-        : [],
-    };
-  },
-
-  toJSON(message: EnumDescriptorProto): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.value?.length) {
-      obj.value = message.value.map((e) => EnumValueDescriptorProto.toJSON(e));
-    }
-    if (message.options !== undefined) {
-      obj.options = EnumOptions.toJSON(message.options);
-    }
-    if (message.reservedRange?.length) {
-      obj.reservedRange = message.reservedRange.map((e) => EnumDescriptorProto_EnumReservedRange.toJSON(e));
-    }
-    if (message.reservedName?.length) {
-      obj.reservedName = message.reservedName;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<EnumDescriptorProto>, I>>(base?: I): EnumDescriptorProto {
-    return EnumDescriptorProto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<EnumDescriptorProto>, I>>(object: I): EnumDescriptorProto {
-    const message = createBaseEnumDescriptorProto();
-    message.name = object.name ?? "";
-    message.value = object.value?.map((e) => EnumValueDescriptorProto.fromPartial(e)) || [];
-    message.options = (object.options !== undefined && object.options !== null)
-      ? EnumOptions.fromPartial(object.options)
-      : undefined;
-    message.reservedRange = object.reservedRange?.map((e) => EnumDescriptorProto_EnumReservedRange.fromPartial(e)) ||
-      [];
-    message.reservedName = object.reservedName?.map((e) => e) || [];
-    return message;
-  },
 };
 
 function createBaseEnumDescriptorProto_EnumReservedRange(): EnumDescriptorProto_EnumReservedRange {
@@ -2398,38 +1669,6 @@ export const EnumDescriptorProto_EnumReservedRange = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): EnumDescriptorProto_EnumReservedRange {
-    return {
-      start: isSet(object.start) ? globalThis.Number(object.start) : 0,
-      end: isSet(object.end) ? globalThis.Number(object.end) : 0,
-    };
-  },
-
-  toJSON(message: EnumDescriptorProto_EnumReservedRange): unknown {
-    const obj: any = {};
-    if (message.start !== 0) {
-      obj.start = Math.round(message.start);
-    }
-    if (message.end !== 0) {
-      obj.end = Math.round(message.end);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<EnumDescriptorProto_EnumReservedRange>, I>>(
-    base?: I,
-  ): EnumDescriptorProto_EnumReservedRange {
-    return EnumDescriptorProto_EnumReservedRange.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<EnumDescriptorProto_EnumReservedRange>, I>>(
-    object: I,
-  ): EnumDescriptorProto_EnumReservedRange {
-    const message = createBaseEnumDescriptorProto_EnumReservedRange();
-    message.start = object.start ?? 0;
-    message.end = object.end ?? 0;
     return message;
   },
 };
@@ -2488,41 +1727,6 @@ export const EnumValueDescriptorProto = {
     }
     return message;
   },
-
-  fromJSON(object: any): EnumValueDescriptorProto {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      number: isSet(object.number) ? globalThis.Number(object.number) : 0,
-      options: isSet(object.options) ? EnumValueOptions.fromJSON(object.options) : undefined,
-    };
-  },
-
-  toJSON(message: EnumValueDescriptorProto): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.number !== 0) {
-      obj.number = Math.round(message.number);
-    }
-    if (message.options !== undefined) {
-      obj.options = EnumValueOptions.toJSON(message.options);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<EnumValueDescriptorProto>, I>>(base?: I): EnumValueDescriptorProto {
-    return EnumValueDescriptorProto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<EnumValueDescriptorProto>, I>>(object: I): EnumValueDescriptorProto {
-    const message = createBaseEnumValueDescriptorProto();
-    message.name = object.name ?? "";
-    message.number = object.number ?? 0;
-    message.options = (object.options !== undefined && object.options !== null)
-      ? EnumValueOptions.fromPartial(object.options)
-      : undefined;
-    return message;
-  },
 };
 
 function createBaseServiceDescriptorProto(): ServiceDescriptorProto {
@@ -2577,43 +1781,6 @@ export const ServiceDescriptorProto = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): ServiceDescriptorProto {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      method: globalThis.Array.isArray(object?.method)
-        ? object.method.map((e: any) => MethodDescriptorProto.fromJSON(e))
-        : [],
-      options: isSet(object.options) ? ServiceOptions.fromJSON(object.options) : undefined,
-    };
-  },
-
-  toJSON(message: ServiceDescriptorProto): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.method?.length) {
-      obj.method = message.method.map((e) => MethodDescriptorProto.toJSON(e));
-    }
-    if (message.options !== undefined) {
-      obj.options = ServiceOptions.toJSON(message.options);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ServiceDescriptorProto>, I>>(base?: I): ServiceDescriptorProto {
-    return ServiceDescriptorProto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ServiceDescriptorProto>, I>>(object: I): ServiceDescriptorProto {
-    const message = createBaseServiceDescriptorProto();
-    message.name = object.name ?? "";
-    message.method = object.method?.map((e) => MethodDescriptorProto.fromPartial(e)) || [];
-    message.options = (object.options !== undefined && object.options !== null)
-      ? ServiceOptions.fromPartial(object.options)
-      : undefined;
     return message;
   },
 };
@@ -2707,56 +1874,6 @@ export const MethodDescriptorProto = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): MethodDescriptorProto {
-    return {
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      inputType: isSet(object.inputType) ? globalThis.String(object.inputType) : "",
-      outputType: isSet(object.outputType) ? globalThis.String(object.outputType) : "",
-      options: isSet(object.options) ? MethodOptions.fromJSON(object.options) : undefined,
-      clientStreaming: isSet(object.clientStreaming) ? globalThis.Boolean(object.clientStreaming) : false,
-      serverStreaming: isSet(object.serverStreaming) ? globalThis.Boolean(object.serverStreaming) : false,
-    };
-  },
-
-  toJSON(message: MethodDescriptorProto): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.inputType !== "") {
-      obj.inputType = message.inputType;
-    }
-    if (message.outputType !== "") {
-      obj.outputType = message.outputType;
-    }
-    if (message.options !== undefined) {
-      obj.options = MethodOptions.toJSON(message.options);
-    }
-    if (message.clientStreaming === true) {
-      obj.clientStreaming = message.clientStreaming;
-    }
-    if (message.serverStreaming === true) {
-      obj.serverStreaming = message.serverStreaming;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<MethodDescriptorProto>, I>>(base?: I): MethodDescriptorProto {
-    return MethodDescriptorProto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<MethodDescriptorProto>, I>>(object: I): MethodDescriptorProto {
-    const message = createBaseMethodDescriptorProto();
-    message.name = object.name ?? "";
-    message.inputType = object.inputType ?? "";
-    message.outputType = object.outputType ?? "";
-    message.options = (object.options !== undefined && object.options !== null)
-      ? MethodOptions.fromPartial(object.options)
-      : undefined;
-    message.clientStreaming = object.clientStreaming ?? false;
-    message.serverStreaming = object.serverStreaming ?? false;
     return message;
   },
 };
@@ -3017,133 +2134,6 @@ export const FileOptions = {
     }
     return message;
   },
-
-  fromJSON(object: any): FileOptions {
-    return {
-      javaPackage: isSet(object.javaPackage) ? globalThis.String(object.javaPackage) : "",
-      javaOuterClassname: isSet(object.javaOuterClassname) ? globalThis.String(object.javaOuterClassname) : "",
-      javaMultipleFiles: isSet(object.javaMultipleFiles) ? globalThis.Boolean(object.javaMultipleFiles) : false,
-      javaGenerateEqualsAndHash: isSet(object.javaGenerateEqualsAndHash)
-        ? globalThis.Boolean(object.javaGenerateEqualsAndHash)
-        : false,
-      javaStringCheckUtf8: isSet(object.javaStringCheckUtf8) ? globalThis.Boolean(object.javaStringCheckUtf8) : false,
-      optimizeFor: isSet(object.optimizeFor) ? fileOptions_OptimizeModeFromJSON(object.optimizeFor) : 1,
-      goPackage: isSet(object.goPackage) ? globalThis.String(object.goPackage) : "",
-      ccGenericServices: isSet(object.ccGenericServices) ? globalThis.Boolean(object.ccGenericServices) : false,
-      javaGenericServices: isSet(object.javaGenericServices) ? globalThis.Boolean(object.javaGenericServices) : false,
-      pyGenericServices: isSet(object.pyGenericServices) ? globalThis.Boolean(object.pyGenericServices) : false,
-      phpGenericServices: isSet(object.phpGenericServices) ? globalThis.Boolean(object.phpGenericServices) : false,
-      deprecated: isSet(object.deprecated) ? globalThis.Boolean(object.deprecated) : false,
-      ccEnableArenas: isSet(object.ccEnableArenas) ? globalThis.Boolean(object.ccEnableArenas) : false,
-      objcClassPrefix: isSet(object.objcClassPrefix) ? globalThis.String(object.objcClassPrefix) : "",
-      csharpNamespace: isSet(object.csharpNamespace) ? globalThis.String(object.csharpNamespace) : "",
-      swiftPrefix: isSet(object.swiftPrefix) ? globalThis.String(object.swiftPrefix) : "",
-      phpClassPrefix: isSet(object.phpClassPrefix) ? globalThis.String(object.phpClassPrefix) : "",
-      phpNamespace: isSet(object.phpNamespace) ? globalThis.String(object.phpNamespace) : "",
-      phpMetadataNamespace: isSet(object.phpMetadataNamespace) ? globalThis.String(object.phpMetadataNamespace) : "",
-      rubyPackage: isSet(object.rubyPackage) ? globalThis.String(object.rubyPackage) : "",
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: FileOptions): unknown {
-    const obj: any = {};
-    if (message.javaPackage !== "") {
-      obj.javaPackage = message.javaPackage;
-    }
-    if (message.javaOuterClassname !== "") {
-      obj.javaOuterClassname = message.javaOuterClassname;
-    }
-    if (message.javaMultipleFiles === true) {
-      obj.javaMultipleFiles = message.javaMultipleFiles;
-    }
-    if (message.javaGenerateEqualsAndHash === true) {
-      obj.javaGenerateEqualsAndHash = message.javaGenerateEqualsAndHash;
-    }
-    if (message.javaStringCheckUtf8 === true) {
-      obj.javaStringCheckUtf8 = message.javaStringCheckUtf8;
-    }
-    if (message.optimizeFor !== 1) {
-      obj.optimizeFor = fileOptions_OptimizeModeToJSON(message.optimizeFor);
-    }
-    if (message.goPackage !== "") {
-      obj.goPackage = message.goPackage;
-    }
-    if (message.ccGenericServices === true) {
-      obj.ccGenericServices = message.ccGenericServices;
-    }
-    if (message.javaGenericServices === true) {
-      obj.javaGenericServices = message.javaGenericServices;
-    }
-    if (message.pyGenericServices === true) {
-      obj.pyGenericServices = message.pyGenericServices;
-    }
-    if (message.phpGenericServices === true) {
-      obj.phpGenericServices = message.phpGenericServices;
-    }
-    if (message.deprecated === true) {
-      obj.deprecated = message.deprecated;
-    }
-    if (message.ccEnableArenas === true) {
-      obj.ccEnableArenas = message.ccEnableArenas;
-    }
-    if (message.objcClassPrefix !== "") {
-      obj.objcClassPrefix = message.objcClassPrefix;
-    }
-    if (message.csharpNamespace !== "") {
-      obj.csharpNamespace = message.csharpNamespace;
-    }
-    if (message.swiftPrefix !== "") {
-      obj.swiftPrefix = message.swiftPrefix;
-    }
-    if (message.phpClassPrefix !== "") {
-      obj.phpClassPrefix = message.phpClassPrefix;
-    }
-    if (message.phpNamespace !== "") {
-      obj.phpNamespace = message.phpNamespace;
-    }
-    if (message.phpMetadataNamespace !== "") {
-      obj.phpMetadataNamespace = message.phpMetadataNamespace;
-    }
-    if (message.rubyPackage !== "") {
-      obj.rubyPackage = message.rubyPackage;
-    }
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FileOptions>, I>>(base?: I): FileOptions {
-    return FileOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FileOptions>, I>>(object: I): FileOptions {
-    const message = createBaseFileOptions();
-    message.javaPackage = object.javaPackage ?? "";
-    message.javaOuterClassname = object.javaOuterClassname ?? "";
-    message.javaMultipleFiles = object.javaMultipleFiles ?? false;
-    message.javaGenerateEqualsAndHash = object.javaGenerateEqualsAndHash ?? false;
-    message.javaStringCheckUtf8 = object.javaStringCheckUtf8 ?? false;
-    message.optimizeFor = object.optimizeFor ?? 1;
-    message.goPackage = object.goPackage ?? "";
-    message.ccGenericServices = object.ccGenericServices ?? false;
-    message.javaGenericServices = object.javaGenericServices ?? false;
-    message.pyGenericServices = object.pyGenericServices ?? false;
-    message.phpGenericServices = object.phpGenericServices ?? false;
-    message.deprecated = object.deprecated ?? false;
-    message.ccEnableArenas = object.ccEnableArenas ?? false;
-    message.objcClassPrefix = object.objcClassPrefix ?? "";
-    message.csharpNamespace = object.csharpNamespace ?? "";
-    message.swiftPrefix = object.swiftPrefix ?? "";
-    message.phpClassPrefix = object.phpClassPrefix ?? "";
-    message.phpNamespace = object.phpNamespace ?? "";
-    message.phpMetadataNamespace = object.phpMetadataNamespace ?? "";
-    message.rubyPackage = object.rubyPackage ?? "";
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
-    return message;
-  },
 };
 
 function createBaseMessageOptions(): MessageOptions {
@@ -3224,55 +2214,6 @@ export const MessageOptions = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): MessageOptions {
-    return {
-      messageSetWireFormat: isSet(object.messageSetWireFormat)
-        ? globalThis.Boolean(object.messageSetWireFormat)
-        : false,
-      noStandardDescriptorAccessor: isSet(object.noStandardDescriptorAccessor)
-        ? globalThis.Boolean(object.noStandardDescriptorAccessor)
-        : false,
-      deprecated: isSet(object.deprecated) ? globalThis.Boolean(object.deprecated) : false,
-      mapEntry: isSet(object.mapEntry) ? globalThis.Boolean(object.mapEntry) : false,
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: MessageOptions): unknown {
-    const obj: any = {};
-    if (message.messageSetWireFormat === true) {
-      obj.messageSetWireFormat = message.messageSetWireFormat;
-    }
-    if (message.noStandardDescriptorAccessor === true) {
-      obj.noStandardDescriptorAccessor = message.noStandardDescriptorAccessor;
-    }
-    if (message.deprecated === true) {
-      obj.deprecated = message.deprecated;
-    }
-    if (message.mapEntry === true) {
-      obj.mapEntry = message.mapEntry;
-    }
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<MessageOptions>, I>>(base?: I): MessageOptions {
-    return MessageOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<MessageOptions>, I>>(object: I): MessageOptions {
-    const message = createBaseMessageOptions();
-    message.messageSetWireFormat = object.messageSetWireFormat ?? false;
-    message.noStandardDescriptorAccessor = object.noStandardDescriptorAccessor ?? false;
-    message.deprecated = object.deprecated ?? false;
-    message.mapEntry = object.mapEntry ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3390,66 +2331,6 @@ export const FieldOptions = {
     }
     return message;
   },
-
-  fromJSON(object: any): FieldOptions {
-    return {
-      ctype: isSet(object.ctype) ? fieldOptions_CTypeFromJSON(object.ctype) : 0,
-      packed: isSet(object.packed) ? globalThis.Boolean(object.packed) : false,
-      jstype: isSet(object.jstype) ? fieldOptions_JSTypeFromJSON(object.jstype) : 0,
-      lazy: isSet(object.lazy) ? globalThis.Boolean(object.lazy) : false,
-      unverifiedLazy: isSet(object.unverifiedLazy) ? globalThis.Boolean(object.unverifiedLazy) : false,
-      deprecated: isSet(object.deprecated) ? globalThis.Boolean(object.deprecated) : false,
-      weak: isSet(object.weak) ? globalThis.Boolean(object.weak) : false,
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: FieldOptions): unknown {
-    const obj: any = {};
-    if (message.ctype !== 0) {
-      obj.ctype = fieldOptions_CTypeToJSON(message.ctype);
-    }
-    if (message.packed === true) {
-      obj.packed = message.packed;
-    }
-    if (message.jstype !== 0) {
-      obj.jstype = fieldOptions_JSTypeToJSON(message.jstype);
-    }
-    if (message.lazy === true) {
-      obj.lazy = message.lazy;
-    }
-    if (message.unverifiedLazy === true) {
-      obj.unverifiedLazy = message.unverifiedLazy;
-    }
-    if (message.deprecated === true) {
-      obj.deprecated = message.deprecated;
-    }
-    if (message.weak === true) {
-      obj.weak = message.weak;
-    }
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FieldOptions>, I>>(base?: I): FieldOptions {
-    return FieldOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FieldOptions>, I>>(object: I): FieldOptions {
-    const message = createBaseFieldOptions();
-    message.ctype = object.ctype ?? 0;
-    message.packed = object.packed ?? false;
-    message.jstype = object.jstype ?? 0;
-    message.lazy = object.lazy ?? false;
-    message.unverifiedLazy = object.unverifiedLazy ?? false;
-    message.deprecated = object.deprecated ?? false;
-    message.weak = object.weak ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
-    return message;
-  },
 };
 
 function createBaseOneofOptions(): OneofOptions {
@@ -3484,31 +2365,6 @@ export const OneofOptions = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): OneofOptions {
-    return {
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: OneofOptions): unknown {
-    const obj: any = {};
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<OneofOptions>, I>>(base?: I): OneofOptions {
-    return OneofOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<OneofOptions>, I>>(object: I): OneofOptions {
-    const message = createBaseOneofOptions();
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3567,41 +2423,6 @@ export const EnumOptions = {
     }
     return message;
   },
-
-  fromJSON(object: any): EnumOptions {
-    return {
-      allowAlias: isSet(object.allowAlias) ? globalThis.Boolean(object.allowAlias) : false,
-      deprecated: isSet(object.deprecated) ? globalThis.Boolean(object.deprecated) : false,
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: EnumOptions): unknown {
-    const obj: any = {};
-    if (message.allowAlias === true) {
-      obj.allowAlias = message.allowAlias;
-    }
-    if (message.deprecated === true) {
-      obj.deprecated = message.deprecated;
-    }
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<EnumOptions>, I>>(base?: I): EnumOptions {
-    return EnumOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<EnumOptions>, I>>(object: I): EnumOptions {
-    const message = createBaseEnumOptions();
-    message.allowAlias = object.allowAlias ?? false;
-    message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
-    return message;
-  },
 };
 
 function createBaseEnumValueOptions(): EnumValueOptions {
@@ -3648,36 +2469,6 @@ export const EnumValueOptions = {
     }
     return message;
   },
-
-  fromJSON(object: any): EnumValueOptions {
-    return {
-      deprecated: isSet(object.deprecated) ? globalThis.Boolean(object.deprecated) : false,
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: EnumValueOptions): unknown {
-    const obj: any = {};
-    if (message.deprecated === true) {
-      obj.deprecated = message.deprecated;
-    }
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<EnumValueOptions>, I>>(base?: I): EnumValueOptions {
-    return EnumValueOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<EnumValueOptions>, I>>(object: I): EnumValueOptions {
-    const message = createBaseEnumValueOptions();
-    message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
-    return message;
-  },
 };
 
 function createBaseServiceOptions(): ServiceOptions {
@@ -3722,36 +2513,6 @@ export const ServiceOptions = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): ServiceOptions {
-    return {
-      deprecated: isSet(object.deprecated) ? globalThis.Boolean(object.deprecated) : false,
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: ServiceOptions): unknown {
-    const obj: any = {};
-    if (message.deprecated === true) {
-      obj.deprecated = message.deprecated;
-    }
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ServiceOptions>, I>>(base?: I): ServiceOptions {
-    return ServiceOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ServiceOptions>, I>>(object: I): ServiceOptions {
-    const message = createBaseServiceOptions();
-    message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3808,43 +2569,6 @@ export const MethodOptions = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): MethodOptions {
-    return {
-      deprecated: isSet(object.deprecated) ? globalThis.Boolean(object.deprecated) : false,
-      idempotencyLevel: isSet(object.idempotencyLevel)
-        ? methodOptions_IdempotencyLevelFromJSON(object.idempotencyLevel)
-        : 0,
-      uninterpretedOption: globalThis.Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: MethodOptions): unknown {
-    const obj: any = {};
-    if (message.deprecated === true) {
-      obj.deprecated = message.deprecated;
-    }
-    if (message.idempotencyLevel !== 0) {
-      obj.idempotencyLevel = methodOptions_IdempotencyLevelToJSON(message.idempotencyLevel);
-    }
-    if (message.uninterpretedOption?.length) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) => UninterpretedOption.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<MethodOptions>, I>>(base?: I): MethodOptions {
-    return MethodOptions.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<MethodOptions>, I>>(object: I): MethodOptions {
-    const message = createBaseMethodOptions();
-    message.deprecated = object.deprecated ?? false;
-    message.idempotencyLevel = object.idempotencyLevel ?? 0;
-    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3951,61 +2675,6 @@ export const UninterpretedOption = {
     }
     return message;
   },
-
-  fromJSON(object: any): UninterpretedOption {
-    return {
-      name: globalThis.Array.isArray(object?.name)
-        ? object.name.map((e: any) => UninterpretedOption_NamePart.fromJSON(e))
-        : [],
-      identifierValue: isSet(object.identifierValue) ? globalThis.String(object.identifierValue) : "",
-      positiveIntValue: isSet(object.positiveIntValue) ? globalThis.Number(object.positiveIntValue) : 0,
-      negativeIntValue: isSet(object.negativeIntValue) ? globalThis.Number(object.negativeIntValue) : 0,
-      doubleValue: isSet(object.doubleValue) ? globalThis.Number(object.doubleValue) : 0,
-      stringValue: isSet(object.stringValue) ? Buffer.from(bytesFromBase64(object.stringValue)) : Buffer.alloc(0),
-      aggregateValue: isSet(object.aggregateValue) ? globalThis.String(object.aggregateValue) : "",
-    };
-  },
-
-  toJSON(message: UninterpretedOption): unknown {
-    const obj: any = {};
-    if (message.name?.length) {
-      obj.name = message.name.map((e) => UninterpretedOption_NamePart.toJSON(e));
-    }
-    if (message.identifierValue !== "") {
-      obj.identifierValue = message.identifierValue;
-    }
-    if (message.positiveIntValue !== 0) {
-      obj.positiveIntValue = Math.round(message.positiveIntValue);
-    }
-    if (message.negativeIntValue !== 0) {
-      obj.negativeIntValue = Math.round(message.negativeIntValue);
-    }
-    if (message.doubleValue !== 0) {
-      obj.doubleValue = message.doubleValue;
-    }
-    if (message.stringValue.length !== 0) {
-      obj.stringValue = base64FromBytes(message.stringValue);
-    }
-    if (message.aggregateValue !== "") {
-      obj.aggregateValue = message.aggregateValue;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UninterpretedOption>, I>>(base?: I): UninterpretedOption {
-    return UninterpretedOption.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UninterpretedOption>, I>>(object: I): UninterpretedOption {
-    const message = createBaseUninterpretedOption();
-    message.name = object.name?.map((e) => UninterpretedOption_NamePart.fromPartial(e)) || [];
-    message.identifierValue = object.identifierValue ?? "";
-    message.positiveIntValue = object.positiveIntValue ?? 0;
-    message.negativeIntValue = object.negativeIntValue ?? 0;
-    message.doubleValue = object.doubleValue ?? 0;
-    message.stringValue = object.stringValue ?? Buffer.alloc(0);
-    message.aggregateValue = object.aggregateValue ?? "";
-    return message;
-  },
 };
 
 function createBaseUninterpretedOption_NamePart(): UninterpretedOption_NamePart {
@@ -4052,34 +2721,6 @@ export const UninterpretedOption_NamePart = {
     }
     return message;
   },
-
-  fromJSON(object: any): UninterpretedOption_NamePart {
-    return {
-      namePart: isSet(object.namePart) ? globalThis.String(object.namePart) : "",
-      isExtension: isSet(object.isExtension) ? globalThis.Boolean(object.isExtension) : false,
-    };
-  },
-
-  toJSON(message: UninterpretedOption_NamePart): unknown {
-    const obj: any = {};
-    if (message.namePart !== "") {
-      obj.namePart = message.namePart;
-    }
-    if (message.isExtension === true) {
-      obj.isExtension = message.isExtension;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UninterpretedOption_NamePart>, I>>(base?: I): UninterpretedOption_NamePart {
-    return UninterpretedOption_NamePart.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UninterpretedOption_NamePart>, I>>(object: I): UninterpretedOption_NamePart {
-    const message = createBaseUninterpretedOption_NamePart();
-    message.namePart = object.namePart ?? "";
-    message.isExtension = object.isExtension ?? false;
-    return message;
-  },
 };
 
 function createBaseSourceCodeInfo(): SourceCodeInfo {
@@ -4114,31 +2755,6 @@ export const SourceCodeInfo = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): SourceCodeInfo {
-    return {
-      location: globalThis.Array.isArray(object?.location)
-        ? object.location.map((e: any) => SourceCodeInfo_Location.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: SourceCodeInfo): unknown {
-    const obj: any = {};
-    if (message.location?.length) {
-      obj.location = message.location.map((e) => SourceCodeInfo_Location.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SourceCodeInfo>, I>>(base?: I): SourceCodeInfo {
-    return SourceCodeInfo.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SourceCodeInfo>, I>>(object: I): SourceCodeInfo {
-    const message = createBaseSourceCodeInfo();
-    message.location = object.location?.map((e) => SourceCodeInfo_Location.fromPartial(e)) || [];
     return message;
   },
 };
@@ -4241,51 +2857,6 @@ export const SourceCodeInfo_Location = {
     }
     return message;
   },
-
-  fromJSON(object: any): SourceCodeInfo_Location {
-    return {
-      path: globalThis.Array.isArray(object?.path) ? object.path.map((e: any) => globalThis.Number(e)) : [],
-      span: globalThis.Array.isArray(object?.span) ? object.span.map((e: any) => globalThis.Number(e)) : [],
-      leadingComments: isSet(object.leadingComments) ? globalThis.String(object.leadingComments) : "",
-      trailingComments: isSet(object.trailingComments) ? globalThis.String(object.trailingComments) : "",
-      leadingDetachedComments: globalThis.Array.isArray(object?.leadingDetachedComments)
-        ? object.leadingDetachedComments.map((e: any) => globalThis.String(e))
-        : [],
-    };
-  },
-
-  toJSON(message: SourceCodeInfo_Location): unknown {
-    const obj: any = {};
-    if (message.path?.length) {
-      obj.path = message.path.map((e) => Math.round(e));
-    }
-    if (message.span?.length) {
-      obj.span = message.span.map((e) => Math.round(e));
-    }
-    if (message.leadingComments !== "") {
-      obj.leadingComments = message.leadingComments;
-    }
-    if (message.trailingComments !== "") {
-      obj.trailingComments = message.trailingComments;
-    }
-    if (message.leadingDetachedComments?.length) {
-      obj.leadingDetachedComments = message.leadingDetachedComments;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SourceCodeInfo_Location>, I>>(base?: I): SourceCodeInfo_Location {
-    return SourceCodeInfo_Location.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SourceCodeInfo_Location>, I>>(object: I): SourceCodeInfo_Location {
-    const message = createBaseSourceCodeInfo_Location();
-    message.path = object.path?.map((e) => e) || [];
-    message.span = object.span?.map((e) => e) || [];
-    message.leadingComments = object.leadingComments ?? "";
-    message.trailingComments = object.trailingComments ?? "";
-    message.leadingDetachedComments = object.leadingDetachedComments?.map((e) => e) || [];
-    return message;
-  },
 };
 
 function createBaseGeneratedCodeInfo(): GeneratedCodeInfo {
@@ -4320,31 +2891,6 @@ export const GeneratedCodeInfo = {
       }
       reader.skipType(tag & 7);
     }
-    return message;
-  },
-
-  fromJSON(object: any): GeneratedCodeInfo {
-    return {
-      annotation: globalThis.Array.isArray(object?.annotation)
-        ? object.annotation.map((e: any) => GeneratedCodeInfo_Annotation.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: GeneratedCodeInfo): unknown {
-    const obj: any = {};
-    if (message.annotation?.length) {
-      obj.annotation = message.annotation.map((e) => GeneratedCodeInfo_Annotation.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GeneratedCodeInfo>, I>>(base?: I): GeneratedCodeInfo {
-    return GeneratedCodeInfo.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<GeneratedCodeInfo>, I>>(object: I): GeneratedCodeInfo {
-    const message = createBaseGeneratedCodeInfo();
-    message.annotation = object.annotation?.map((e) => GeneratedCodeInfo_Annotation.fromPartial(e)) || [];
     return message;
   },
 };
@@ -4425,82 +2971,7 @@ export const GeneratedCodeInfo_Annotation = {
     }
     return message;
   },
-
-  fromJSON(object: any): GeneratedCodeInfo_Annotation {
-    return {
-      path: globalThis.Array.isArray(object?.path) ? object.path.map((e: any) => globalThis.Number(e)) : [],
-      sourceFile: isSet(object.sourceFile) ? globalThis.String(object.sourceFile) : "",
-      begin: isSet(object.begin) ? globalThis.Number(object.begin) : 0,
-      end: isSet(object.end) ? globalThis.Number(object.end) : 0,
-    };
-  },
-
-  toJSON(message: GeneratedCodeInfo_Annotation): unknown {
-    const obj: any = {};
-    if (message.path?.length) {
-      obj.path = message.path.map((e) => Math.round(e));
-    }
-    if (message.sourceFile !== "") {
-      obj.sourceFile = message.sourceFile;
-    }
-    if (message.begin !== 0) {
-      obj.begin = Math.round(message.begin);
-    }
-    if (message.end !== 0) {
-      obj.end = Math.round(message.end);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GeneratedCodeInfo_Annotation>, I>>(base?: I): GeneratedCodeInfo_Annotation {
-    return GeneratedCodeInfo_Annotation.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<GeneratedCodeInfo_Annotation>, I>>(object: I): GeneratedCodeInfo_Annotation {
-    const message = createBaseGeneratedCodeInfo_Annotation();
-    message.path = object.path?.map((e) => e) || [];
-    message.sourceFile = object.sourceFile ?? "";
-    message.begin = object.begin ?? 0;
-    message.end = object.end ?? 0;
-    return message;
-  },
 };
-
-function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
-  }
-}
-
-function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(globalThis.String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
-}
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToNumber(long: Long): number {
   if (long.gt(globalThis.Number.MAX_SAFE_INTEGER)) {
@@ -4512,8 +2983,4 @@ function longToNumber(long: Long): number {
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
-}
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
 }
