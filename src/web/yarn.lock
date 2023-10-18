@@ -557,13 +557,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grpc/grpc-js@npm:^1.9.5":
-  version: 1.9.5
-  resolution: "@grpc/grpc-js@npm:1.9.5"
+"@grpc/grpc-js@npm:^1.9.6":
+  version: 1.9.6
+  resolution: "@grpc/grpc-js@npm:1.9.6"
   dependencies:
     "@grpc/proto-loader": "npm:^0.7.8"
     "@types/node": "npm:>=12.12.47"
-  checksum: 639a29d4da49b04efb460b15cb7cb7485bf29901c149199dd3cd9f17226361b5d91d382300dd0742d163acf5f98dc65604bdb8fd52a665bca5e2e385a5bb13d5
+  checksum: 798396ba84f324efec9b9efbae681aa735766fccc1b4cf2d5fd502a590c02789fe7aa3f0be31b73ac703da4105763c88e7b5c534159ff33ea8b620f531aa3e13
   languageName: node
   linkType: hard
 
@@ -1033,7 +1033,7 @@ __metadata:
     "@types/react": "npm:^18.2.28"
     "@types/react-dom": "npm:^18.2.13"
     eslint: "npm:^8.51.0"
-    lucide-react: "npm:^0.287.0"
+    lucide-react: "npm:^0.288.0"
     mobx: "npm:^6.10.2"
     mobx-react-lite: "npm:^4.0.5"
     next: "npm:^13.5.5"
@@ -1072,7 +1072,7 @@ __metadata:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
     "@mui/joy": ^5.0.0-beta.10
-    lucide-react: ^0.287.0
+    lucide-react: ^0.288.0
     next: ~13.5.4
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -1126,7 +1126,7 @@ __metadata:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
     "@mui/joy": ^5.0.0-beta.10
-    lucide-react: ^0.287.0
+    lucide-react: ^0.288.0
     react: ^18.2.0
     react-dom: ^18.2.0
   languageName: unknown
@@ -1154,7 +1154,7 @@ __metadata:
     "@types/react": "npm:^18.2.28"
     "@types/react-dom": "npm:^18.2.13"
     eslint: "npm:^8.51.0"
-    lucide-react: "npm:^0.287.0"
+    lucide-react: "npm:^0.288.0"
     mobx: "npm:^6.10.2"
     mobx-react-lite: "npm:^4.0.5"
     next: "npm:^13.5.5"
@@ -1171,7 +1171,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sisa/grpc-api@workspace:libs/grpc-api"
   dependencies:
-    "@grpc/grpc-js": "npm:^1.9.5"
+    "@grpc/grpc-js": "npm:^1.9.6"
     "@sisa/eslint-config": "workspace:*"
     "@sisa/tsconfig": "workspace:*"
     eslint: "npm:^8.51.0"
@@ -4946,12 +4946,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.287.0":
-  version: 0.287.0
-  resolution: "lucide-react@npm:0.287.0"
+"lucide-react@npm:^0.288.0":
+  version: 0.288.0
+  resolution: "lucide-react@npm:0.288.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: d53e7afa2eb0a401d6a880ed619c7802f0c247f5557dc733e7495786e7379341eed9570c00c4aca58f25b956ecdebe431a92738e376658c1a490be0df985a4cf
+  checksum: 22a557b57a966051441895a37d10295d8eb0518c6bf467eb2689b3d155f95480197845dd1aa127f6d886034b6281177923ef19ce516c992d67e9d13ec0b67820
   languageName: node
   linkType: hard
 

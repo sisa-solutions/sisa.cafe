@@ -19,7 +19,7 @@
     "@sisa/hooks": "workspace:*",
     "@sisa/i18n": "workspace:*",
     "@sisa/utils": "workspace:*",
-    "lucide-react": "^0.287.0",
+    "lucide-react": "^0.288.0",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",
     "next": "^13.5.5",
