@@ -62,7 +62,6 @@ const columnDefs: Array<ColumnDef<TagResponse>> = [
   }),
   columnHelper.flex(),
   columnHelper.actions('id', {
-    header: () => 'Actions',
     cell: RowActions,
   }),
 ];

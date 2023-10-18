@@ -1,15 +1,21 @@
 'use client';
+import { useCallback, useState } from 'react';
 
 import useMutation from 'swr/mutation';
 
 import type { CellContext, ColumnDefTemplate } from '@tanstack/react-table';
 
-import ButtonGroup from '@mui/joy/ButtonGroup';
+import Box from '@mui/joy/Box';
+import Dropdown from '@mui/joy/Dropdown';
+import MenuButton from '@mui/joy/MenuButton';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import IconButton from '@mui/joy/IconButton';
 
-import { AlertCircleIcon, PencilLineIcon, XIcon } from 'lucide-react';
+import { AlertCircleIcon, MoreHorizontalIcon, PencilLineIcon, XIcon } from 'lucide-react';
 
-import { ConfirmDialog, LinkIconButton } from '@sisa/components';
+import { ConfirmDialog, Link } from '@sisa/components';
 
 import { type PostResponse, deletePost } from '@sisa/grpc-api';
 import { useToggle, useQueryString } from '@sisa/hooks';
@@ -18,10 +24,16 @@ import { randomId } from '@sisa/utils';
 const RowActions: ColumnDefTemplate<CellContext<PostResponse, string>> = ({ row }) => {
   const setQueryString = useQueryString();
 
+  const [open, setOpen] = useState(false);
+
+  const handleOpenChange = useCallback((_: React.SyntheticEvent | null, isOpen: boolean) => {
+    setOpen(isOpen);
+  }, []);
+
   const { trigger, isMutating } = useMutation(
     ['/api/v1/posts/delete', row.original.id],
     ([_, id]) =>
-    deletePost({
+      deletePost({
         id,
       })
   );
@@ -47,15 +59,40 @@ const RowActions: ColumnDefTemplate<CellContext<PostResponse, string>> = ({ row 
   };
 
   return (
-    <>
-      <ButtonGroup spacing={1} size="sm" variant="solid">
-        <LinkIconButton disableCache={true} href={`/posts/${row.original.id}/edit`} color="primary">
-          <PencilLineIcon />
-        </LinkIconButton>
-        <IconButton color="danger" onClick={onClickDelete}>
-          <XIcon />
-        </IconButton>
-      </ButtonGroup>
+    <Box>
+      <Dropdown open={open} onOpenChange={handleOpenChange}>
+        <MenuButton
+          size="sm"
+          variant="solid"
+          slots={{
+            root: IconButton,
+          }}
+        >
+          <MoreHorizontalIcon />
+        </MenuButton>
+        <Menu
+          keepMounted
+          size="sm"
+          sx={{
+            minWidth: '180px',
+          }}
+        >
+          <MenuItem>
+            <ListItemDecorator>
+              <PencilLineIcon />
+            </ListItemDecorator>
+            <Link disableCache={true} href={`/posts/${row.original.id}/edit`} overlay>
+              Edit
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={onClickDelete}>
+            <ListItemDecorator>
+              <XIcon />
+            </ListItemDecorator>
+            Delete
+          </MenuItem>
+        </Menu>
+      </Dropdown>
 
       <ConfirmDialog
         open={isConfirmDialogOpen}
@@ -74,7 +111,7 @@ const RowActions: ColumnDefTemplate<CellContext<PostResponse, string>> = ({ row 
           onClick: closeConfirmDialog,
         }}
       />
-    </>
+    </Box>
   );
 };
 

@@ -19,7 +19,6 @@ const columnDefs: Array<ColumnDef<CommentResponse>> = [
 
   columnHelper.flex(),
   columnHelper.actions('id', {
-    header: () => 'Actions',
     cell: RowActions,
   }),
 ];

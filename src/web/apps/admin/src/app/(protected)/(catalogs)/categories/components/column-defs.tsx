@@ -61,7 +61,6 @@ const columnDefs: Array<ColumnDef<CategoryResponse>> = [
   }),
   columnHelper.flex(),
   columnHelper.actions('id', {
-    header: () => 'Actions',
     cell: RowActions,
   }),
 ];

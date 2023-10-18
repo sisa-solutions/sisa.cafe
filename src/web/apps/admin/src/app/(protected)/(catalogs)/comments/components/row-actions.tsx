@@ -1,13 +1,20 @@
 'use client';
 
+import { useCallback, useState } from 'react';
+
 import useMutation from 'swr/mutation';
 
 import type { CellContext, ColumnDefTemplate } from '@tanstack/react-table';
 
-import ButtonGroup from '@mui/joy/ButtonGroup';
+import Box from '@mui/joy/Box';
+import Dropdown from '@mui/joy/Dropdown';
+import MenuButton from '@mui/joy/MenuButton';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import IconButton from '@mui/joy/IconButton';
 
-import { AlertCircleIcon, XIcon } from 'lucide-react';
+import { AlertCircleIcon, MoreHorizontalIcon, XIcon } from 'lucide-react';
 
 import { ConfirmDialog } from '@sisa/components';
 
@@ -19,10 +26,17 @@ import { randomId } from '@sisa/utils';
 const RowActions: ColumnDefTemplate<CellContext<CommentResponse, string>> = ({ row }) => {
   const setQueryString = useQueryString();
 
-  const { trigger, isMutating } = useMutation(['/api/v1/comments/delete', row.original.id], ([_, id]) =>
-    deleteTag({
-      id,
-    })
+  const [open, setOpen] = useState(false);
+  const handleOpenChange = useCallback((_: React.SyntheticEvent | null, isOpen: boolean) => {
+    setOpen(isOpen);
+  }, []);
+
+  const { trigger, isMutating } = useMutation(
+    ['/api/v1/comments/delete', row.original.id],
+    ([_, id]) =>
+      deleteTag({
+        id,
+      })
   );
 
   const {
@@ -46,12 +60,32 @@ const RowActions: ColumnDefTemplate<CellContext<CommentResponse, string>> = ({ r
   };
 
   return (
-    <>
-      <ButtonGroup spacing={1} size="sm" variant="solid">
-        <IconButton color="danger" onClick={onClickDelete}>
-          <XIcon />
-        </IconButton>
-      </ButtonGroup>
+    <Box>
+      <Dropdown open={open} onOpenChange={handleOpenChange}>
+        <MenuButton
+          size="sm"
+          variant="solid"
+          slots={{
+            root: IconButton,
+          }}
+        >
+          <MoreHorizontalIcon />
+        </MenuButton>
+        <Menu
+          keepMounted
+          size="sm"
+          sx={{
+            minWidth: '180px',
+          }}
+        >
+          <MenuItem onClick={onClickDelete}>
+            <ListItemDecorator>
+              <XIcon />
+            </ListItemDecorator>
+            Delete
+          </MenuItem>
+        </Menu>
+      </Dropdown>
 
       <ConfirmDialog
         open={isConfirmDialogOpen}
@@ -70,7 +104,7 @@ const RowActions: ColumnDefTemplate<CellContext<CommentResponse, string>> = ({ r
           onClick: closeConfirmDialog,
         }}
       />
-    </>
+    </Box>
   );
 };
 

@@ -1,54 +1,55 @@
-import { useState, type MouseEvent, useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
-import { Table, flexRender } from '@tanstack/react-table';
+import { RowData, Table, flexRender } from '@tanstack/react-table';
 
 import Box from '@mui/joy/Box';
+import Checkbox from '@mui/joy/Checkbox';
 import IconButton from '@mui/joy/IconButton';
 
-import Menu from '@mui/joy/Menu';
-
+import Dropdown from '@mui/joy/Dropdown';
 import ListItem from '@mui/joy/ListItem';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import ListItemContent from '@mui/joy/ListItemContent';
+import Menu from '@mui/joy/Menu';
+import MenuButton from '@mui/joy/MenuButton';
 
-import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon, SettingsIcon } from 'lucide-react';
+import Stack from '@mui/joy/Stack';
+
+import {
+  ArrowDownIcon,
+  ArrowUpDownIcon,
+  ArrowUpIcon,
+  EyeIcon,
+  EyeOffIcon,
+  SettingsIcon,
+} from 'lucide-react';
 
 import { PREDEFINED_COLUMN_IDS } from './constants';
-import { Checkbox } from '../inputs';
 
 type Props<TData> = {
   table: Table<TData>;
 };
 
-const SettingsAction = <TData extends {}>(props: Props<TData>) => {
+const SettingsAction = <TData extends RowData>(props: Props<TData>) => {
   const { table } = props;
 
   const headers = useMemo(() => table.getLeafHeaders(), [table]);
 
-  const [settingsMenuAnchorEl, setSettingsMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const isSettingsMenuOpen = Boolean(settingsMenuAnchorEl);
+  const [open, setOpen] = useState(false);
 
-  const handleOpenSettingsMenu = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
-    setSettingsMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseSettingsMenu = () => {
-    setSettingsMenuAnchorEl(null);
-  };
+  const handleOpenChange = useCallback((_: React.SyntheticEvent | null, isOpen: boolean) => {
+    setOpen(isOpen);
+  }, []);
 
   return (
-    <Box sx={{ alignItems: 'flex-end' }}>
-      <IconButton variant="outlined" color="neutral" onClick={handleOpenSettingsMenu}>
-        <SettingsIcon />
-      </IconButton>
-      <Menu
-        anchorEl={settingsMenuAnchorEl}
-        open={isSettingsMenuOpen}
-        onClose={handleCloseSettingsMenu}
-        placement="bottom-end"
+    <Dropdown open={open} onOpenChange={handleOpenChange}>
+      <MenuButton
+        slots={{
+          root: IconButton,
+        }}
       >
+        <SettingsIcon />
+      </MenuButton>
+      <Menu keepMounted>
         {table
           .getState()
           .columnOrder.filter((columnId) => PREDEFINED_COLUMN_IDS.indexOf(columnId) === -1)
@@ -64,49 +65,69 @@ const SettingsAction = <TData extends {}>(props: Props<TData>) => {
               <ListItem
                 key={columnId}
                 sx={{
-                  gap: 1,
+                  gap: 2,
                 }}
               >
-                <ListItemDecorator
+                <Stack
+                  direction="row"
+                  gap={1}
                   sx={{
-                    gap: 1,
+                    '& > *': {
+                      minWidth: 20,
+                    },
                   }}
                 >
-                  {column.getCanHide() && (
-                    <Checkbox
-                      checked={column.getIsVisible()}
-                      onClick={column.getToggleVisibilityHandler()}
-                    />
-                  )}
-                  {column.getCanSort() && (
-                    <IconButton
-                      onClick={column.getToggleSortingHandler()}
-                      size="sm"
-                      variant="solid"
-                      disabled={!column.getIsVisible()}
-                      sx={{
-                        ...(column.getIsSorted() === false && {
-                          '&': {
-                            opacity: 0.5,
-                          },
-                        }),
-                      }}
-                    >
-                      {{
-                        asc: <ArrowUpIcon />,
-                        desc: <ArrowDownIcon />,
-                      }[column.getIsSorted() as string] ?? <ArrowUpDownIcon />}
-                    </IconButton>
-                  )}
-                </ListItemDecorator>
-                <ListItemContent>
+                  <Box>
+                    {column.getCanHide() && (
+                      <Checkbox
+                        variant="soft"
+                        checkedIcon={<EyeIcon />}
+                        uncheckedIcon={<EyeOffIcon />}
+                        checked={column.getIsVisible()}
+                        onClick={column.getToggleVisibilityHandler()}
+                        sx={{
+                          '--Icon-fontSize': '16px',
+                        }}
+                      />
+                    )}
+                  </Box>
+                  <Box>
+                    {column.getCanSort() && (
+                      <IconButton
+                        onClick={column.getToggleSortingHandler()}
+                        size="sm"
+                        variant="soft"
+                        color="primary"
+                        disabled={!column.getIsVisible()}
+                        sx={{
+                          '--IconButton-size': '22px',
+                          ...(column.getIsSorted() === false && {
+                            '&': {
+                              opacity: 0.5,
+                            },
+                          }),
+                        }}
+                      >
+                        {{
+                          asc: <ArrowUpIcon />,
+                          desc: <ArrowDownIcon />,
+                        }[column.getIsSorted() as string] ?? <ArrowUpDownIcon />}
+                      </IconButton>
+                    )}
+                  </Box>
+                </Stack>
+                <ListItemContent
+                  sx={{
+                    display: 'flex',
+                  }}
+                >
                   {flexRender(column.columnDef.header, header.getContext())}
                 </ListItemContent>
               </ListItem>
             );
           })}
       </Menu>
-    </Box>
+    </Dropdown>
   );
 };
 

@@ -1,9 +1,11 @@
 import { createColumnHelper as createColumnHelperBase, type RowData } from '@tanstack/react-table';
 
 import Checkbox from '@mui/joy/Checkbox';
+
 import { CheckIcon, MinusIcon } from 'lucide-react';
 
 import { ACTIONS_COLUMN_ID, FLEX_COLUMN_ID, SELECTION_COLUMN_ID } from '../data-table/constants';
+import SettingsAction from '../data-table/settings-action';
 
 const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
   const baseHelperFuncs = createColumnHelperBase<TData>();
@@ -53,9 +55,9 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
       enableGrouping: false,
       enableHiding: false,
       enablePinning: false,
-      size: 48,
-      minSize: 48,
-      maxSize: 48,
+      size: 52,
+      minSize: 52,
+      maxSize: 52,
       ...column,
     });
 
@@ -80,6 +82,10 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
       enableGrouping: false,
       enableHiding: false,
       enablePinning: false,
+      size: 52,
+      minSize: 52,
+      maxSize: 52,
+      header: ({ table }) => <SettingsAction table={table} />,
       ...column,
     });
 
