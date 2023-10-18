@@ -9,11 +9,16 @@ import Link from '@mui/joy/Link';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 
-import { CalendarIcon, ComponentIcon, TagIcon } from 'lucide-react';
+import {
+  CalendarIcon,
+  ComponentIcon,
+  TagIcon,
+} from 'lucide-react';
 
 import { LinkChip, LinkTypography } from '@sisa/components';
 
 import { findPublishedPostBySlug } from '@sisa/grpc-api';
+import PostReaction from '../../components/post-reaction';
 
 interface PostDetailsProps {
   params: {
@@ -99,7 +104,8 @@ const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
               </LinkChip>
             ))}
           </Stack>
-          {/* <Stack
+
+          <Stack
             direction="row"
             gap={2}
             sx={{
@@ -109,43 +115,25 @@ const PostDetails = async ({ params: { slug } }: PostDetailsProps) => {
             <Stack
               direction="row"
               gap={1}
-              sx={{
-                alignItems: 'center',
-              }}
             >
-              <AvatarGroup
-                variant="soft"
-                sx={{
-                  '--AvatarGroup-gap': '-4px',
-                  '--Avatar-size': '1.5rem',
-                  '--Avatar-ringSize': '0px',
-                }}
-              >
-                <Avatar alt="heart">
-                  <HeartIcon stroke="red" />
-                </Avatar>
-                <Avatar alt="rocket">
-                  <RocketIcon stroke="orange" />
-                </Avatar>
-                <Avatar alt="smile">
-                  <SmileIcon stroke="cyan" />
-                </Avatar>
-              </AvatarGroup>
-              <Typography level="body-sm">1.2k</Typography>
+              <PostReaction type="HEART" count={200} />
+              <PostReaction type="ROCKET" count={200} />
+              <PostReaction type="SMILE" count={200} />
+              <PostReaction type="LIKE" count={200} />
             </Stack>
 
-            <LinkIconButton size="sm" href="/blog/posts/abc-xyz/comments">
+            {/* <LinkIconButton size="sm" href="/blog/posts/abc-xyz/comments">
               <Badge badgeContent="20" size="sm">
                 <MessageSquareIcon />
               </Badge>
-            </LinkIconButton>
+            </LinkIconButton> */}
             <Box
               sx={{
                 flexGrow: 1,
               }}
             />
-            <Typography level="body-sm">2 min read</Typography>
-          </Stack> */}
+            {/* <Typography level="body-sm">2 min read</Typography> */}
+          </Stack>
         </CardContent>
       </Card>
       {/* <CommentList /> */}
