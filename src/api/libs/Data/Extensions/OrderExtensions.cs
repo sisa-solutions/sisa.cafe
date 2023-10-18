@@ -19,7 +19,7 @@ public static partial class OrderExtensions
 
         foreach (var sortingParam in sortingParams)
         {
-            var orderByMethod = sortingParam.Sort == SortDirection.Desc ?
+            var orderByMethod = sortingParam.Sort == SortDirection.DESC ?
                 (first ? OrderByMethods.OrderByDescending : OrderByMethods.ThenByDescending) :
                 (first ? OrderByMethods.OrderBy : OrderByMethods.ThenBy);
 

@@ -2,7 +2,7 @@ namespace Sisa.Enums;
 
 public enum Gender
 {
-    Unspecified,
-    Male,
-    Female
+    UNSPECIFIED,
+    MALE,
+    FEMALE
 }

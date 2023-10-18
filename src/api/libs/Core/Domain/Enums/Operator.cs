@@ -2,23 +2,23 @@ namespace Sisa.Enums;
 
 public enum Operator
 {
-    Unspecified = 0, // unknown
-    Equal = 1, // ==
-    NotEqual = 2, // !=
-    GreaterThan = 3, // >
-    GreaterThanOrEqual = 4, // >=
-    LessThan = 5, // <
-    LessThanOrEqual = 6, // <=
-    Contains = 7, // contains
-    NotContains = 8, // not contains
-    StartsWith = 9, // starts with
-    NotStartsWith = 10, // not starts with
-    EndsWith = 11, // ends with
-    NotEndsWith = 12, // not ends with
-    In = 13, // in
-    NotIn = 14, // not in
-    Between = 15, // between
-    NotBetween = 16, // not between
-    IsNull = 17, // is null
-    IsNotNull = 18, // is not null
+    UNSPECIFIED = 0, // UNKNOWN
+    EQUAL = 1, // ==
+    NOT_EQUAL = 2, // !=
+    GREATER_THAN = 3, // >
+    GREATER_THAN_OR_EQUAL = 4, // >=
+    LESS_THAN = 5, // <
+    LESS_THAN_OR_EQUAL = 6, // <=
+    CONTAINS = 7, // CONTAINS
+    NOT_CONTAINS = 8, // NOT CONTAINS
+    STARTS_WITH = 9, // STARTS WITH
+    NOT_STARTS_WITH = 10, // NOT STARTS WITH
+    ENDS_WITH = 11, // ENDS WITH
+    NOT_ENDS_WITH = 12, // NOT ENDS WITH
+    IN = 13, // IN
+    NOT_IN = 14, // NOT IN
+    BET_WEEN = 15, // BETWEEN
+    NOT_BETWEEN = 16, // NOT BETWEEN
+    IS_NULL = 17, // IS NULL
+    IS_NOT_NULL = 18, // IS NOT NULL
 }
