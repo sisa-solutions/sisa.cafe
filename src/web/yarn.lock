@@ -1033,6 +1033,7 @@ __metadata:
     "@types/react": "npm:^18.2.28"
     "@types/react-dom": "npm:^18.2.13"
     eslint: "npm:^8.51.0"
+    lodash: "npm:^4.17.21"
     lucide-react: "npm:^0.288.0"
     mobx: "npm:^6.10.2"
     mobx-react-lite: "npm:^4.0.5"

@@ -86,12 +86,14 @@ const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ 
               Edit
             </Link>
           </MenuItem>
-          <MenuItem onClick={onClickDelete}>
-            <ListItemDecorator>
-              <XIcon />
-            </ListItemDecorator>
-            Delete
-          </MenuItem>
+          {row.original.postCount === 0 && (
+            <MenuItem onClick={onClickDelete}>
+              <ListItemDecorator>
+                <XIcon />
+              </ListItemDecorator>
+              Delete
+            </MenuItem>
+          )}
         </Menu>
       </Dropdown>
 

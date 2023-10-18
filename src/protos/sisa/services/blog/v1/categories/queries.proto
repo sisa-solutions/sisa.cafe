@@ -16,6 +16,10 @@ message FindCategoryBySlugQuery {
   string slug = 1;
 }
 
+message CheckSlugExistingQuery {
+  string slug = 1;
+}
+
 message GetCategoriesQuery {
   sisa.data.params.FilteringParams filter = 1;
   repeated sisa.data.params.SortingParams sortBy = 2;

@@ -6,6 +6,7 @@ import { dayUtils } from '@sisa/i18n';
 import { type CategoryResponse } from '@sisa/grpc-api';
 
 import RowActions from './row-actions';
+import { Box, Chip } from '@mui/joy';
 
 const columnHelper = createColumnHelper<CategoryResponse>();
 
@@ -31,6 +32,18 @@ const columnDefs: Array<ColumnDef<CategoryResponse>> = [
   columnHelper.accessor('postCount', {
     id: 'PostCount',
     header: () => 'Post Count',
+    cell: ({ getValue }) => (
+      <Box display="flex" alignItems="center">
+        <Chip
+          color="success"
+          sx={{
+            mx: 'auto',
+          }}
+        >
+          {getValue()}
+        </Chip>
+      </Box>
+    ),
   }),
   columnHelper.accessor('creator.displayName', {
     id: 'CreatedBy',
