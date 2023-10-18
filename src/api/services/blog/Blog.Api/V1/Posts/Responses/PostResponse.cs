@@ -68,7 +68,7 @@ public static class PostProjections
                 Slug = x.Slug,
                 Excerpt = x.Excerpt,
                 Content = x.Content,
-                Status = System.Enum.Parse<PostStatus>(x.Status.ToString()),
+                Status = System.Enum.Parse<PostStatus>(x.Status.ToString(), true),
 
                 Category = new CategoryInfoResponse
                 {
