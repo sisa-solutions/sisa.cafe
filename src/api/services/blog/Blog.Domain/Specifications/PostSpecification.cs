@@ -70,7 +70,7 @@ public sealed class PublishedPostSpecification<TResult>(Expression<Func<Post, TR
         Expression<Func<Post, TResult>> selector) : this(selector)
     {
         Builder
-            .Where(x => x.Slug == slug && x.Status == PostStatus.Published);
+            .Where(x => x.Slug == slug && x.Status == PostStatus.PUBLISHED);
     }
 
     public PublishedPostSpecification(
@@ -83,7 +83,7 @@ public sealed class PublishedPostSpecification<TResult>(Expression<Func<Post, TR
 
         Builder.AsSplitQuery();
         Builder.Filter(filteringParams);
-        Builder.Where(x => x.Status == PostStatus.Published);
+        Builder.Where(x => x.Status == PostStatus.PUBLISHED);
 
         Builder.OrderBy(x => x.Title);
 

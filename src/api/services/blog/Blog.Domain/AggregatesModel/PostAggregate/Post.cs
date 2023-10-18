@@ -15,7 +15,7 @@ public class Post : FullAuditableAggregateRoot
     public string Excerpt { get; private set; }
     public string Content { get; private set; }
 
-    public PostStatus Status { get; private set; } = PostStatus.Draft;
+    public PostStatus Status { get; private set; } = PostStatus.DRAFT;
 
     public int ViewCount { get; private set; }
     public int CommentCount { get; private set; }
@@ -131,9 +131,9 @@ public class Post : FullAuditableAggregateRoot
     {
         return Status switch
         {
-            PostStatus.Draft => [PostStatus.Published],
-            PostStatus.Published => [PostStatus.Archived, PostStatus.Draft],
-            PostStatus.Archived => [PostStatus.Published],
+            PostStatus.DRAFT => [PostStatus.PUBLISHED],
+            PostStatus.PUBLISHED => [PostStatus.ARCHIVED, PostStatus.DRAFT],
+            PostStatus.ARCHIVED => [PostStatus.PUBLISHED],
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -153,22 +153,22 @@ public class Post : FullAuditableAggregateRoot
     }
 
     public bool IsCommentAble()
-        => Status == PostStatus.Published;
+        => Status == PostStatus.PUBLISHED;
 
     public bool IsReactAble()
-        => Status == PostStatus.Published;
+        => Status == PostStatus.PUBLISHED;
 
     public bool TryPublish(string? remarks)
-        => TryChangeStatus(PostStatus.Published, remarks);
+        => TryChangeStatus(PostStatus.PUBLISHED, remarks);
 
     public void TryArchive(string? remarks)
-        => TryChangeStatus(PostStatus.Archived, remarks);
+        => TryChangeStatus(PostStatus.ARCHIVED, remarks);
 
     public void TryUnarchive(string? remarks)
-        => TryChangeStatus(PostStatus.Published, remarks);
+        => TryChangeStatus(PostStatus.PUBLISHED, remarks);
 
     public void TryDraft(string? remarks)
-        => TryChangeStatus(PostStatus.Draft, remarks);
+        => TryChangeStatus(PostStatus.DRAFT, remarks);
 
     #endregion
 

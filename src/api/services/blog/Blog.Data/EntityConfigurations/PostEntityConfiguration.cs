@@ -48,7 +48,7 @@ public class PostEntityConfiguration : EntityConfiguration<Post>
             .HasConversion<string>()
             .HasMaxLength(50)
             .IsRequired()
-            .HasDefaultValueSql($"'{PostStatus.Draft}'");
+            .HasDefaultValueSql($"'{PostStatus.DRAFT}'");
 
         builder.Property(p => p.StatusHistories)
             .HasColumnType("jsonb")
