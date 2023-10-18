@@ -25,13 +25,34 @@ public static partial class OrderExtensions
 
             first = false;
 
-            var property = entityType.GetProperty(sortingParam.Field);
+            // there are 2 case
+            // property of this entity - no . in the name
+            // property of navigation entity - have . in the name, can be multiple
+
+            var fields = sortingParam.Field.Split('.');
+            var property = entityType.GetProperty(fields[0]);
 
             if (property == null)
                 throw new ArgumentException($"Property {sortingParam.Field} not found in type {entityType.Name}");
 
-            var propertyAccess = Expression.MakeMemberAccess(parameter, property);
-            var orderByExpression = Expression.Lambda(propertyAccess, parameter);
+            Expression propertyAccess = Expression.MakeMemberAccess(parameter, property);
+            Expression orderByExpression = Expression.Lambda(propertyAccess, parameter);
+
+            if (fields.Length > 1)
+            {
+                var navigationProperties = fields.Skip(1);
+
+                foreach (var navigationProperty in navigationProperties)
+                {
+                    property = property.PropertyType.GetProperty(navigationProperty);
+
+                    if (property == null)
+                        throw new ArgumentException($"Property {navigationProperty} not found in type {entityType.Name}");
+
+                    propertyAccess = Expression.MakeMemberAccess(propertyAccess, property);
+                    orderByExpression = Expression.Lambda(propertyAccess, parameter);
+                }
+            }
 
             expression = Expression.Call(
                 typeof(Queryable),

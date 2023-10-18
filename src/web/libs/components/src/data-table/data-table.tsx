@@ -36,23 +36,21 @@ export type DataTableProps<T> = Pick<
   };
 };
 
-const DataTable = <T extends {}>(props: DataTableProps<T>) => {
-  const {
-    isLoading,
-    columns,
-    data,
-    state,
-    pageCount,
-    manualPagination,
-    enableMultiSort,
-    onPaginationChange,
-    onRowSelectionChange,
-    onSortingChange,
-    onColumnFiltersChange,
-    onColumnPinningChange,
-    onColumnOrderChange,
-  } = props;
-
+const DataTable = <T extends {}>({
+  isLoading,
+  columns,
+  data,
+  state,
+  pageCount,
+  manualPagination,
+  enableMultiSort,
+  onPaginationChange,
+  onRowSelectionChange,
+  onSortingChange,
+  onColumnFiltersChange,
+  onColumnPinningChange,
+  onColumnOrderChange,
+}: DataTableProps<T>) => {
   const table = useReactTable({
     data,
     columns,

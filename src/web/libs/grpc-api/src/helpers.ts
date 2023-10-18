@@ -9,11 +9,11 @@ export const sortStringToParams = (sortBy: string) => {
       return [
         {
           // TODO: This is a hack to make the first letter uppercase
-          field: field.charAt(0).toUpperCase() + field.slice(1),
+          field,
           sort:
             sortDirection == 'desc'
-              ? SortDirection.SORT_DIRECTION_DESC
-              : SortDirection.SORT_DIRECTION_ASC,
+              ? SortDirection.DESC
+              : SortDirection.ASC,
         },
       ];
     })

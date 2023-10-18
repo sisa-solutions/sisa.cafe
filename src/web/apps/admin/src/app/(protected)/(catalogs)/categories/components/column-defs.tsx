@@ -2,6 +2,7 @@
 
 import { createColumnHelper, type ColumnDef, Link } from '@sisa/components';
 
+import { dayUtils } from '@sisa/i18n';
 import { type CategoryResponse } from '@sisa/grpc-api';
 
 import RowActions from './row-actions';
@@ -25,16 +26,11 @@ const columnDefs: Array<ColumnDef<CategoryResponse>> = [
     id: 'Parent.Name',
     header: () => 'Parent',
     cell: ({ row }) => row.original.parent?.name ?? '',
-    enableSorting: false,
+    enableSorting: true,
   }),
   columnHelper.accessor('postCount', {
     id: 'PostCount',
     header: () => 'Post Count',
-  }),
-  columnHelper.dangerouslyHtml('description', {
-    id: 'Description',
-    header: () => 'Description',
-    enableSorting: true,
   }),
   columnHelper.accessor('creator.displayName', {
     id: 'CreatedBy',
@@ -44,7 +40,7 @@ const columnDefs: Array<ColumnDef<CategoryResponse>> = [
   columnHelper.accessor('creator.timestamp', {
     id: 'CreatedAt',
     header: () => 'Created At',
-    cell: ({ getValue }) => getValue()?.toLocaleString(),
+    cell: ({ getValue }) => dayUtils(getValue()).fromNow(),
     enableSorting: true,
   }),
   columnHelper.accessor('updater.displayName', {
@@ -56,7 +52,11 @@ const columnDefs: Array<ColumnDef<CategoryResponse>> = [
   columnHelper.accessor('updater.timestamp', {
     id: 'UpdatedAt',
     header: () => 'Updated At',
-    cell: ({ row }) => row.original.updater?.timestamp?.toLocaleString() ?? '',
+    cell: ({ getValue }) => {
+      const value = getValue();
+
+      return value && dayUtils(value).fromNow();
+    },
     enableSorting: true,
   }),
   columnHelper.flex(),

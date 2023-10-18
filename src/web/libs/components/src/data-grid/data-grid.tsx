@@ -118,7 +118,6 @@ const DataGrid = <T extends {}>({
           itemCount={itemCount}
           pageCount={pageCount}
           enableRowSelection
-          enableMultiSort
           state={{
             pagination,
             rowSelection,
