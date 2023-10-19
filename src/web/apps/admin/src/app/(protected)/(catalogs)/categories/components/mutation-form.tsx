@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useQuery from 'swr';
 import useMutation from 'swr/mutation';
-import debounce from 'lodash/debounce';
 
 import {
   useForm,
@@ -36,7 +35,6 @@ import {
 import { randomId, slugify } from '@sisa/utils';
 import { IconButton } from '@mui/joy';
 import { EditIcon } from 'lucide-react';
-import { set } from 'mobx';
 
 type AdditionFormValues = {
   parent?: {
@@ -54,11 +52,15 @@ type MutationFormProps = {
 };
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
+  const id = defaultValues && 'id' in defaultValues ? (defaultValues['id'] as string) : '';
+  const isEditing = !!id;
+
   const router = useRouter();
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
-  const id = defaultValues && defaultValues['id'];
+  const [autoSync, setAutoSync] = useState(!isEditing);
+  const [manualEditing, setManualEditing] = useState(false);
 
-  const { trigger: findExistingCategory } = useMutation(
+  const { trigger: findExisting } = useMutation(
     '/api/v1/categories/{slug}/check-existing',
     async (
       _,
@@ -104,24 +106,20 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   );
 
   const creationSchema = yup.object<FormValues>({
-    name: yup.string().required().min(4).max(100).label('Name'),
+    name: yup.string().required().min(4).max(50).label('Name'),
     slug: yup
       .string()
       .required()
       .min(4)
-      .max(100)
+      .max(50)
       .lowercase()
-      .test('check-unique-category-slug', 'Slug is already taken', (slug: string) => {
-        return new Promise((resolve) => {
-          debounce(
-            async () => {
-              const { value } = await findExistingCategory({ id: id, slug });
-              resolve(value.length === 0);
-            },
-            1000,
-            { leading: true }
-          )(slug);
-        });
+      .test('valid-format', 'Slug must be formatted as kebab-case', (slug: string) => {
+        return slug === slugify(slug);
+      })
+      .test('unique-slug', 'Slug is already taken', async (slug: string) => {
+        const { value } = await findExisting({ id: id, slug });
+
+        return value.length === 0;
       })
       .label('Slug'),
 
@@ -188,6 +186,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     defaultValues,
     // @ts-ignore
     resolver: yupResolver(validationSchema),
+    reValidateMode: 'onBlur',
   });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -222,10 +221,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const name = watch('name');
 
   useEffect(() => {
-    if (name) {
+    if (!!name && autoSync) {
       setValue('slug', slugify(name));
     }
-  }, [name]);
+  }, [name, autoSync]);
 
   const goBack = () => {
     router.push(`/categories?_s=${randomId()}`);
@@ -233,6 +232,12 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
 
   const onInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
     setSearchParentCategoryName(newValue);
+  };
+
+  const makeSlugAsEditable = () => {
+    setManualEditing(true);
+
+    if (!isEditing) setAutoSync(false);
   };
 
   return (
@@ -255,7 +260,24 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         onInputChange={onInputChange}
       />
       <TextField control={control} required name="name" label="Name" />
-      <TextField control={control} required name="slug" label="Slug" readOnly />
+      <TextField
+        control={control}
+        required
+        name="slug"
+        label="Slug"
+        {...(!manualEditing && {
+          readOnly: true,
+          variant: 'soft',
+          sx: {
+            '--joy-focus-thickness': '0',
+          },
+          endDecorator: (
+            <IconButton onClick={makeSlugAsEditable}>
+              <EditIcon />
+            </IconButton>
+          ),
+        })}
+      />
       <FileUploadField
         control={control}
         name="pictures"

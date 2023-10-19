@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 import useQuery from 'swr';
+import useMutation from 'swr/mutation';
 
 import {
   useForm,
@@ -26,6 +27,7 @@ import {
   type UpdatePostCommand,
   type TagResponse,
   getCategories,
+  getPosts,
   Combinator,
   SortDirection,
   Operator,
@@ -34,7 +36,9 @@ import {
   getTags,
 } from '@sisa/grpc-api';
 
-import { randomId } from '@sisa/utils';
+import { randomId, slugify } from '@sisa/utils';
+import IconButton from '@mui/joy/IconButton';
+import { EditIcon } from 'lucide-react';
 
 type AdditionFormValues = {
   category?: {
@@ -46,40 +50,66 @@ type AdditionFormValues = {
 
 type FormValues = (CreatePostCommand | UpdatePostCommand) & AdditionFormValues;
 
-const creationSchema = yup.object<FormValues>({
-  title: yup.string().required().min(4).max(100).label('Title'),
-  slug: yup.string().lowercase().required().min(4).max(100).label('Slug'),
-
-  excerpt: yup.string().required().min(4).max(500).label('Excerpt'),
-  content: yup.string().required().min(4).max(5000).label('Content'),
-  category: yup
-    .object({
-      id: yup.string().uuid(),
-      name: yup.string().min(4).max(100),
-    })
-    .default(null)
-    .required()
-    .label('Category'),
-  pictures: yup.array<File>().optional().label('Pictures'),
-});
-
-const updateSchema = creationSchema.shape({
-  id: yup.string().uuid().required(),
-});
-
-const validationSchema = yup.lazy((values: FormValues) => {
-  return 'id' in values ? updateSchema : creationSchema;
-});
-
 type MutationFormProps = {
   trigger: (data: CreatePostCommand | UpdatePostCommand) => Promise<PostResponse>;
   defaultValues?: Omit<FormValues, 'categoryId'>;
 };
 
 const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
+  const id = defaultValues && 'id' in defaultValues ? (defaultValues['id'] as string) : '';
+  const isEditing = !!id;
+
   const router = useRouter();
+  const [autoSync, setAutoSync] = useState(!isEditing);
+  const [manualEditing, setManualEditing] = useState(false);
+
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
   const [searchTagValue, setSearchTagValue] = useState('');
+
+  const { trigger: findExisting } = useMutation(
+    '/api/v1/posts/{slug}/check-existing',
+    async (
+      _,
+      {
+        arg,
+      }: {
+        arg: {
+          id: string;
+          slug: string;
+        };
+      }
+    ) => {
+      return await getPosts({
+        filter: {
+          combinator: Combinator.AND,
+          not: false,
+          rules: [
+            {
+              combinator: Combinator.UNSPECIFIED,
+              not: false,
+              rules: [],
+              field: 'Id',
+              operator: Operator.NOT_EQUAL,
+              value: arg.id ?? '',
+            },
+            {
+              combinator: Combinator.UNSPECIFIED,
+              not: false,
+              rules: [],
+              field: 'Slug',
+              operator: Operator.EQUAL,
+              value: arg.slug,
+            },
+          ].filter((x) => x.value),
+        },
+        sortBy: [],
+        paging: {
+          pageIndex: 0,
+          pageSize: 1,
+        },
+      });
+    }
+  );
 
   const {
     data = {
@@ -143,10 +173,61 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     })
   );
 
-  const { control, handleSubmit, formState } = useForm<FormValues>({
+  const creationSchema = yup.object<FormValues>({
+    title: yup.string().required().min(4).max(100).label('Title'),
+    slug: yup
+      .string()
+      .lowercase()
+      .required()
+      .min(4)
+      .max(100)
+      .lowercase()
+      .test('valid-format', 'Slug must be formatted as kebab-case', (slug: string) => {
+        return slug === slugify(slug);
+      })
+      .test('unique-slug', 'Slug is already taken', async (slug: string) => {
+        const { value } = await findExisting({ id: id, slug });
+
+        return value.length === 0;
+      })
+      .label('Slug'),
+
+    excerpt: yup.string().required().min(4).max(500).label('Excerpt'),
+    content: yup.string().required().min(4).max(5000).label('Content'),
+    tagSlugs: yup
+      .array()
+      .of(yup.string().required().max(50).lowercase())
+      .required()
+      .min(1)
+      .max(3)
+      .test('valid-slugs', 'One ore more tags are invalid format', (slugs: string[]) => {
+        return !slugs.some((slug) => slug !== slugify(slug));
+      })
+      .label('Tags'),
+    category: yup
+      .object({
+        id: yup.string().uuid(),
+        name: yup.string().min(4).max(100),
+      })
+      .default(null)
+      .required()
+      .label('Category'),
+    pictures: yup.array<File>().optional().label('Pictures'),
+  });
+
+  const updateSchema = creationSchema.shape({
+    id: yup.string().uuid().required(),
+  });
+
+  const validationSchema = yup.lazy((values: FormValues) => {
+    return 'id' in values ? updateSchema : creationSchema;
+  });
+
+  const { control, handleSubmit, watch, setValue } = useForm<FormValues>({
     defaultValues,
     // @ts-ignore
     resolver: yupResolver(validationSchema),
+    reValidateMode: 'onBlur',
   });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -178,6 +259,14 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
     }
   });
 
+  const name = watch('title');
+
+  useEffect(() => {
+    if (!!name && autoSync) {
+      setValue('slug', slugify(name));
+    }
+  }, [name, autoSync]);
+
   const goBack = () => {
     router.push(`/posts?_s=${randomId()}`);
   };
@@ -191,6 +280,12 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
 
   const onSearchTagInputChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
     setSearchTagValue(newValue);
+  };
+
+  const makeSlugAsEditable = () => {
+    setManualEditing(true);
+
+    if (!isEditing) setAutoSync(false);
   };
 
   return (
@@ -214,7 +309,24 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         onInputChange={onSearchCategoryInputChange}
       />
       <TextField control={control} required name="title" label="Title" />
-      <TextField control={control} required name="slug" label="Slug" />
+      <TextField
+        control={control}
+        required
+        name="slug"
+        label="Slug"
+        {...(!manualEditing && {
+          readOnly: true,
+          variant: 'soft',
+          sx: {
+            '--joy-focus-thickness': '0',
+          },
+          endDecorator: (
+            <IconButton onClick={makeSlugAsEditable}>
+              <EditIcon />
+            </IconButton>
+          ),
+        })}
+      />
       <RichTextField control={control} required name="excerpt" label="Excerpt" />
       <AutocompleteField
         control={control}
