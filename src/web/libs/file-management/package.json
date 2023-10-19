@@ -1,0 +1,36 @@
+{
+  "name": "@sisa/file-management",
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts*\""
+  },
+  "dependencies": {
+    "@sisa/components": "workspace:*",
+    "@sisa/form": "workspace:*",
+    "@sisa/hooks": "workspace:*",
+    "@sisa/i18n": "workspace:*",
+    "@sisa/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@sisa/eslint-config": "workspace:*",
+    "@sisa/tsconfig": "workspace:*",
+    "@types/react": "^18.2.29",
+    "@types/react-dom": "^18.2.14",
+    "eslint": "^8.51.0",
+    "react": "^18.2.0",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/joy": "^5.0.0-beta.10",
+    "lucide-react": "^0.288.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

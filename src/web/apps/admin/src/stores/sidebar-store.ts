@@ -120,6 +120,15 @@ class SidebarStore {
         parentCode: null,
       },
       {
+        code: 'FILES',
+        name: 'Files',
+        icon: 'folder-tree',
+        path: '/files',
+        order: 3,
+        type: 'ITEM',
+        parentCode: null,
+      },
+      {
         code: 'CATEGORIES',
         name: 'Categories',
         icon: 'group',
