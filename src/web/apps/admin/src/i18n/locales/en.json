@@ -35,6 +35,27 @@
       "narrow": "{{value, list(type: 'full')}}"
     }
   },
+  "label": {
+    "create": "Create",
+    "slug": "Slug",
+    "name": "Name",
+    "description": "Description",
+    "parentCategory": "Parent category",
+    "category": "Category",
+    "categories": "Categories",
+    "tags": "Tags",
+    "pictures": "Pictures",
+    "postCount": "Post count",
+    "createdBy": "Created by",
+    "createdAt": "Created at",
+    "updatedBy": "Updated by",
+    "updatedAt": "Updated at",
+
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "agreeTermsAndPolicy": "Agree the <1>terms and policy</1>"
+  },
   "title": {
     "createNewAccount": "Create new account",
     "signInToYourAccount": "Login to your account",
@@ -50,20 +71,20 @@
     "weWillSendYouALink": "We will email you a link to reset your password",
     "ihaveAccount": "I have account! <1>Login</1>"
   },
-  "label": {
-    "email": "Email",
-    "password": "Password",
-    "rememberMe": "Remember me",
-    "agreeTermsAndPolicy": "Agree the <1>terms and policy</1>"
-  },
   "placeholder": {
     "email": "Your email address",
     "password": "Your password"
   },
   "validation": {
-    "agreeTermsAndPolicy": "You must agree to terms and policy"
+    "agreeTermsAndPolicy": "You must agree to terms and policy",
+    "slug": {
+      "alreadyTaken": "Slug is already taken",
+      "format": "Slug must be formatted as kebab-case"
+    }
   },
   "button": {
+    "save": "Save",
+    "cancel": "Cancel",
     "createAccount": "Create account",
     "signIn": "Login",
     "register": "Register",

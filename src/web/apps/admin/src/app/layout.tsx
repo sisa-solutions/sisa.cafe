@@ -1,8 +1,10 @@
+export const runtime = 'nodejs'; // 'nodejs' (default) | 'edge'
+
 import { type ReactNode } from 'react';
 
 import { Metadata } from 'next';
 
-export const runtime = 'nodejs'; // 'nodejs' (default) | 'edge'
+import { supportedLngs } from 'i18n/configs';
 
 import App from 'components/shared/app';
 
@@ -12,13 +14,20 @@ export const metadata: Metadata = {
 
 type Props = {
   children: ReactNode;
+  params: {
+    lng: string;
+  };
 };
 
-const Layout = (props: Props) => {
+export async function generateStaticParams() {
+  return supportedLngs.map((lng) => ({ lng }));
+}
+
+const Layout = ({ children, params: { lng } }: Props) => {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={lng} suppressHydrationWarning>
       <body>
-        <App>{props.children}</App>
+        <App>{children}</App>
       </body>
     </html>
   );

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react';
 
-import { ListItemButton, type ListItemButtonProps } from '@mui/joy';
+import ListItem from '@mui/joy/ListItem';
+import ListItemButton, { type ListItemButtonProps } from '@mui/joy/ListItemButton';
+
 import { useColorScheme } from '@mui/joy/styles';
 
 import { MoonIcon, SunIcon, SunMoonIcon } from 'lucide-react';
@@ -19,9 +21,11 @@ const ToggleColorSchemeListItemIcon = (props: ListItemButtonProps) => {
 
   if (!mounted) {
     return (
-      <ListItemButton {...props} onClick={(evt) => evt.preventDefault()}>
-        <SunMoonIcon />
-      </ListItemButton>
+      <ListItem>
+        <ListItemButton {...props} onClick={(evt) => evt.preventDefault()}>
+          <SunMoonIcon />
+        </ListItemButton>
+      </ListItem>
     );
   }
 
@@ -30,10 +34,12 @@ const ToggleColorSchemeListItemIcon = (props: ListItemButtonProps) => {
   };
 
   return (
-    <ListItemButton onClick={toggleModeHandler} {...props}>
-      <SunIcon display={mode === 'light' ? 'block' : 'none'} />
-      <MoonIcon display={mode === 'dark' ? 'block' : 'none'} />
-    </ListItemButton>
+    <ListItem>
+      <ListItemButton onClick={toggleModeHandler} {...props}>
+        <SunIcon display={mode === 'light' ? 'block' : 'none'} />
+        <MoonIcon display={mode === 'dark' ? 'block' : 'none'} />
+      </ListItemButton>
+    </ListItem>
   );
 };
 

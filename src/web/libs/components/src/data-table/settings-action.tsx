@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState, useCallback } from 'react';
 
 import { RowData, Table, flexRender } from '@tanstack/react-table';

@@ -1,7 +1,7 @@
 import dayUtils from '../day-utils';
 
 import i18next, { type Resource, type TFunction } from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import { initReactI18next } from 'react-i18next/initReactI18next';
 
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -26,6 +26,10 @@ const createI18n = (
         fallbackLng,
         supportedLngs: languages,
         defaultNS,
+
+        // detection: {
+        //   order: ['path', 'htmlTag', 'cookie', 'navigator'],
+        // },
 
         cleanCode: false,
 

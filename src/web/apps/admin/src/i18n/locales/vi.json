@@ -35,6 +35,28 @@
       "narrow": "{{value, list(type: 'full')}}"
     }
   },
+  "label": {
+    "create": "Thêm mới",
+    "slug": "Slug",
+    "name": "Tên",
+    "description": "Chú thích",
+    "parentCategory": "Danh mục cha",
+    "category": "Danh mục",
+    "categories": "Danh mục",
+    "tags": "Thẻ",
+    "pictures": "Hình ảnh",
+    "postCount": "Số bài viết",
+    "createdBy": "Người tạo",
+    "createdAt": "Ngày tạo",
+    "updatedBy": "Người sửa",
+    "updatedAt": "Ngày sửa",
+
+
+    "email": "Email",
+    "password": "Mật khẩu",
+    "rememberMe": "Ghi nhớ đăng nhập",
+    "agreeTermsAndPolicy": "Đồng ý với các <1>điều khoản và chính sách</1>"
+  },
   "title": {
     "createAnAccount": "Tạo tài khoản mới",
     "signInToYourAccount": "Đăng nhập vào tài khoản của bạn",
@@ -50,20 +72,20 @@
     "weWillSendYouALink": "Chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu của bạn",
     "ihaveAccount": "Tôi đã có tài khoản, <1>Đăng nhập</1>"
   },
-  "label": {
-    "email": "Email",
-    "password": "Mật khẩu",
-    "rememberMe": "Ghi nhớ đăng nhập",
-    "agreeTermsAndPolicy": "Đồng ý với các <1>điều khoản và chính sách</1>"
-  },
   "placeholder": {
     "email": "Nhập email",
     "password": "Nhập mật khẩu"
   },
   "validation": {
-    "agreeTermsAndPolicy": "Bạn phải đồng ý với các điều khoản và chính sách"
+    "agreeTermsAndPolicy": "Bạn phải đồng ý với các điều khoản và chính sách",
+    "slug": {
+      "alreadyTaken": "Slug đã tồn tại",
+      "format": "Slug phải được định dạng theo kiểu kebab-case"
+    }
   },
   "button": {
+    "save": "Lưu",
+    "cancel": "Hủy",
     "createAccount": "Tạo tài khoản",
     "signIn": "Đăng nhập",
     "register": "Đăng ký",

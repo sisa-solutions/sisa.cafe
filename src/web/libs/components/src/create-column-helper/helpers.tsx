@@ -1,6 +1,7 @@
 import { createColumnHelper as createColumnHelperBase, type RowData } from '@tanstack/react-table';
 
 import Checkbox from '@mui/joy/Checkbox';
+import Chip, { ChipProps } from '@mui/joy/Chip';
 
 import { CheckIcon, MinusIcon } from 'lucide-react';
 
@@ -71,6 +72,33 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
       ...column,
     });
 
+  const colorCode = (
+    accessor: accessorArgs[0],
+    column?: accessorArgs[1] & {
+      defaultValue?: string | number;
+      colorMap: Record<string | number, ChipProps['color']>;
+      sx: ChipProps['sx'];
+    }
+  ) => {
+    const { defaultValue, colorMap = {}, sx, ...rest } = column ?? { defaultValue: '' };
+
+    return baseHelperFuncs.accessor(accessor, {
+      // @ts-ignore
+      id: column?.id,
+      cell: ({ getValue }) => {
+        const value = getValue<string | number>() ?? defaultValue;
+        const color = colorMap[value] ?? 'primary';
+
+        return (
+          <Chip color={color} sx={sx}>
+            {value}
+          </Chip>
+        );
+      },
+      ...rest,
+    });
+  };
+
   const actions = (accessor: accessorArgs[0], column?: accessorArgs[1]) =>
     baseHelperFuncs.accessor(accessor, {
       id: ACTIONS_COLUMN_ID,
@@ -110,6 +138,7 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
     actions,
     flex,
     dangerouslyHtml,
+    colorCode,
   };
 };
 

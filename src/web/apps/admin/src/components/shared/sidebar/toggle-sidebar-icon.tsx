@@ -2,6 +2,7 @@
 
 import { observer } from 'mobx-react-lite';
 
+import ListItem from '@mui/joy/ListItem';
 import ListItemButton, { type ListItemButtonProps } from '@mui/joy/ListItemButton';
 
 import { MenuIcon } from 'lucide-react';
@@ -14,9 +15,11 @@ const ToggleSidebarIcon = (props: Props) => {
   const sidebarStore = useStore('sidebarStore');
 
   return (
-    <ListItemButton onClick={sidebarStore.openSidebar} {...props}>
-      <MenuIcon />
-    </ListItemButton>
+    <ListItem>
+      <ListItemButton onClick={sidebarStore.openSidebar} {...props}>
+        <MenuIcon />
+      </ListItemButton>
+    </ListItem>
   );
 };
 

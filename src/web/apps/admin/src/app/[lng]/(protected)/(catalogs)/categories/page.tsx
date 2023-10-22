@@ -11,7 +11,6 @@ import {
   PageToolbar,
   PageActions,
   LinkButton,
-  DataGrid,
 } from '@sisa/components';
 
 import { Combinator, Operator, getCategories, sortStringToParams } from '@sisa/grpc-api';
@@ -19,8 +18,8 @@ import { Combinator, Operator, getCategories, sortStringToParams } from '@sisa/g
 import Breadcrumbs from 'components/common/breadcrumbs';
 
 import Loading from 'components/common/loading';
-import FilterToolbar from './components/filter-toolbar';
-import columnDefs from './components/column-defs';
+import getServerI18n from 'i18n/get-server-i18n';
+import DataTable from './components/data-table';
 
 type CategoriesPageProps = {
   searchParams: {
@@ -35,6 +34,8 @@ const CategoriesPage = async ({
   searchParams: { name = '', pageNumber = 1, pageSize = 10, sortBy = '' },
 }: CategoriesPageProps) => {
   const sortingParams = sortStringToParams(sortBy);
+
+  const { t } = await getServerI18n();
 
   const {
     value,
@@ -71,13 +72,13 @@ const CategoriesPage = async ({
       <Breadcrumbs
         items={[
           {
-            title: 'Categories',
+            title: t('label.categories'),
           },
         ]}
       />
       <PageHeader>
         <PageToolbar>
-          <PageTitle>Categories</PageTitle>
+          <PageTitle>{t('label.categories')}</PageTitle>
           <Box sx={{ flexGrow: 1 }} />
           <PageActions>
             <LinkButton
@@ -86,32 +87,14 @@ const CategoriesPage = async ({
               startDecorator={<PlusIcon />}
               href="/categories/new"
             >
-              Create
+              {t('label.create')}
             </LinkButton>
           </PageActions>
         </PageToolbar>
       </PageHeader>
       <PageContent>
         <Suspense fallback={<Loading />}>
-          <DataGrid
-            columns={columnDefs}
-            data={value}
-            pageIndex={paging.pageIndex}
-            pageSize={paging.pageSize}
-            itemCount={paging.itemCount}
-            pageCount={paging.pageCount}
-            enableRowSelection
-            enableMultiSort
-            slots={{
-              toolbar: (
-                <FilterToolbar
-                  defaultValues={{
-                    name,
-                  }}
-                />
-              ),
-            }}
-          />
+          <DataTable data={value} {...paging} />
         </Suspense>
       </PageContent>
     </>

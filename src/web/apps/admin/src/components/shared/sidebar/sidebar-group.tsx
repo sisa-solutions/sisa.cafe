@@ -33,9 +33,6 @@ const SidebarGroup = () => {
 
   return (
     <Sheet
-      variant="soft"
-      color="primary"
-      invertedColors
       sx={{
         position: {
           xs: 'fixed',
@@ -87,9 +84,7 @@ const SidebarGroup = () => {
         ))}
 
         <Box sx={{ flex: 1 }} />
-        <ListItem>
-          <ToggleColorSchemeListItemIcon />
-        </ListItem>
+        <ToggleColorSchemeListItemIcon />
         {sidebarStore.systemGroups.map((group) => (
           <ListItem key={group.code}>
             <LinkListItemButton

@@ -6,6 +6,9 @@ import { useRouter } from 'next/navigation';
 import useQuery from 'swr';
 import useMutation from 'swr/mutation';
 
+import IconButton from '@mui/joy/IconButton';
+import { EditIcon } from 'lucide-react';
+
 import {
   useForm,
   yupResolver,
@@ -33,8 +36,7 @@ import {
 } from '@sisa/grpc-api';
 
 import { randomId, slugify } from '@sisa/utils';
-import { IconButton } from '@mui/joy';
-import { EditIcon } from 'lucide-react';
+import useClientI18n from 'i18n/use-client-i18n';
 
 type AdditionFormValues = {
   parent?: {
@@ -55,6 +57,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const id = defaultValues && 'id' in defaultValues ? (defaultValues['id'] as string) : '';
   const isEditing = !!id;
 
+  const [t] = useClientI18n();
   const router = useRouter();
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
   const [autoSync, setAutoSync] = useState(!isEditing);
@@ -106,24 +109,24 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   );
 
   const creationSchema = yup.object<FormValues>({
-    name: yup.string().required().min(4).max(50).label('Name'),
+    name: yup.string().required().min(4).max(50).label(t('label.name')),
     slug: yup
       .string()
       .required()
       .min(4)
       .max(50)
       .lowercase()
-      .test('valid-format', 'Slug must be formatted as kebab-case', (slug: string) => {
+      .test('valid-format', t('validation.slug.format'), (slug: string) => {
         return slug === slugify(slug);
       })
-      .test('unique-slug', 'Slug is already taken', async (slug: string) => {
+      .test('unique-slug', t('validation.slug.alreadyTaken'), async (slug: string) => {
         const { value } = await findExisting({ id: id, slug });
 
         return value.length === 0;
       })
-      .label('Slug'),
+      .label(t('label.slug')),
 
-    description: yup.string().max(500).optional().label('Description'),
+    description: yup.string().max(500).optional().label(t('label.description')),
     parent: yup
       .object({
         id: yup.string().uuid().required(),
@@ -131,8 +134,8 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       })
       .optional()
       .partial()
-      .label('Parent Category'),
-    pictures: yup.array<File>().optional().label('Pictures'),
+      .label(t('label.parentCategory')),
+    pictures: yup.array<File>().optional().label(t('label.pictures')),
   });
 
   const updateSchema = creationSchema.shape({
@@ -245,7 +248,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       <AutocompleteField
         control={control}
         name="parent"
-        label="Parent Category"
+        label={t('label.parentCategory')}
         loading={isLoading}
         options={data.value.map((x) => {
           return {
@@ -259,12 +262,12 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         inputValue={searchParentCategoryName}
         onInputChange={onInputChange}
       />
-      <TextField control={control} required name="name" label="Name" />
+      <TextField control={control} required name="name" label={t('label.name')} />
       <TextField
         control={control}
         required
         name="slug"
-        label="Slug"
+        label={t('label.slug')}
         {...(!manualEditing && {
           readOnly: true,
           variant: 'soft',
@@ -281,7 +284,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       <FileUploadField
         control={control}
         name="pictures"
-        label="Pictures"
+        label={t('label.pictures')}
         options={{
           accept: {
             'image/*': [],
@@ -290,10 +293,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
           maxFiles: 1,
         }}
       />
-      <RichTextField control={control} name="description" label="Description" />
+      <RichTextField control={control} name="description" label={t('label.description')} />
       <FormActions>
-        <SubmitButton submit={onSubmit}>Save</SubmitButton>
-        <CancelButton cancel={goBack}>Cancel</CancelButton>
+        <SubmitButton submit={onSubmit}>{t('button.save')}</SubmitButton>
+        <CancelButton cancel={goBack}>{t('button.cancel')}</CancelButton>
       </FormActions>
     </FormContainer>
   );

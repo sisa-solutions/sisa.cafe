@@ -38,13 +38,9 @@ const Header = () => {
           },
         }}
       >
-        <ListItem>
-          <ToggleSidebarIcon />
-        </ListItem>
+        <ToggleSidebarIcon />
         <Box sx={{ flex: 1 }}></Box>
-        <ListItem>
-          <ToggleColorSchemeListItemIcon />
-        </ListItem>
+        <ToggleColorSchemeListItemIcon />
       </List>
     </Sheet>
   );

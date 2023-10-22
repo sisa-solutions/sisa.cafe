@@ -13,7 +13,7 @@ import { I18nProvider } from '@sisa/i18n';
 
 import { StoreProvider, createRootStore } from 'stores';
 
-import i18n from 'i18n';
+import { i18n } from 'i18n';
 
 import ThemeProvider from 'themes/theme-provider';
 
