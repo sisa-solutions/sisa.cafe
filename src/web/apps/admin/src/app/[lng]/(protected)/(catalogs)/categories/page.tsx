@@ -4,14 +4,8 @@ import Box from '@mui/joy/Box';
 
 import { PlusIcon } from 'lucide-react';
 
-import {
-  PageContent,
-  PageHeader,
-  PageTitle,
-  PageToolbar,
-  PageActions,
-  LinkButton,
-} from '@sisa/components';
+import { PageContent, PageHeader, PageTitle, PageToolbar, PageActions } from '@sisa/components';
+import { LinkButton } from '@sisa/next';
 
 import { Combinator, Operator, getCategories, sortStringToParams } from '@sisa/grpc-api';
 

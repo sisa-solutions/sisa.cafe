@@ -1,16 +1,16 @@
-import Box from '@mui/joy/Box';
-
 import {
-  DescriptionList,
+  DetailItem,
+  DetailList,
   PageContent,
   PageHeader,
   PageLayout,
   PageTitle,
 } from '@sisa/components';
 
-import { findTagById } from '@sisa/grpc-api';
+import { findCommentById } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
+import getServerI18n from 'i18n/get-server-i18n';
 
 type Props = {
   params: {
@@ -19,7 +19,8 @@ type Props = {
 };
 
 const CommentDetails = async ({ params: { id } }: Props) => {
-  const data = await findTagById({
+  const { t } = await getServerI18n();
+  const data = await findCommentById({
     id,
   });
 
@@ -28,36 +29,30 @@ const CommentDetails = async ({ params: { id } }: Props) => {
       <Breadcrumbs
         items={[
           {
-            title: 'Comments',
+            title: t('label.comments'),
             url: '/comments',
           },
           {
-            title: 'Details',
+            title: t('label.details'),
           },
         ]}
       />
       <PageHeader>
-        <PageTitle>Details</PageTitle>
+        <PageTitle>{t('label.details')}</PageTitle>
       </PageHeader>
       <PageContent>
-        <DescriptionList orientation="horizontal">
-          <Box>
-            <Box>Name</Box>
-            <Box>{data.name}</Box>
-          </Box>
-          <Box>
-            <Box>Slug</Box>
-            <Box>{data.slug}</Box>
-          </Box>
-          <Box>
-            <Box>Description</Box>
-            <Box
-              dangerouslySetInnerHTML={{
-                __html: data.description ?? '',
-              }}
-            ></Box>
-          </Box>
-        </DescriptionList>
+        <DetailList orientation="horizontal">
+          <DetailItem
+            label={t('label.content')}
+            value={
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: data.content ?? '',
+                }}
+              />
+            }
+          />
+        </DetailList>
       </PageContent>
     </PageLayout>
   );

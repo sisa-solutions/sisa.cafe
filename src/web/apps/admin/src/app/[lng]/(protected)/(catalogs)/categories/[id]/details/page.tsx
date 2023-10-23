@@ -1,19 +1,21 @@
-import Box from '@mui/joy/Box';
-
 import { PencilLine } from 'lucide-react';
 
+import { dayUtils } from '@sisa/i18n';
+
 import {
-  DescriptionList,
-  Link,
+  DetailItem,
+  DetailList,
   PageContent,
   PageHeader,
   PageLayout,
   PageTitle,
 } from '@sisa/components';
+import { Link } from '@sisa/next';
 
 import { findCategoryById } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
+import getServerI18n from 'i18n/get-server-i18n';
 
 type Props = {
   params: {
@@ -22,6 +24,8 @@ type Props = {
 };
 
 const NewCategoryPage = async ({ params: { id } }: Props) => {
+  const { t } = await getServerI18n();
+
   const data = await findCategoryById({
     id,
   });
@@ -31,11 +35,11 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
       <Breadcrumbs
         items={[
           {
-            title: 'Categories',
+            title: t('label.categories'),
             url: '/categories',
           },
           {
-            title: 'Details',
+            title: t('label.details'),
           },
         ]}
       />
@@ -53,48 +57,35 @@ const NewCategoryPage = async ({ params: { id } }: Props) => {
             </Link>
           }
         >
-          Details
+          {t('label.categories')}
         </PageTitle>
       </PageHeader>
       <PageContent>
-        <DescriptionList orientation="horizontal">
-          <Box>
-            <Box>Name</Box>
-            <Box>{data.name}</Box>
-          </Box>
-          <Box>
-            <Box>Parent</Box>
-            <Box>{data.parent?.name}</Box>
-          </Box>
-          <Box>
-            <Box>Slug</Box>
-            <Box>{data.slug}</Box>
-          </Box>
-          <Box>
-            <Box>Description</Box>
-            <Box
-              dangerouslySetInnerHTML={{
-                __html: data.description ?? '',
-              }}
-            ></Box>
-          </Box>
-          <Box>
-            <Box>Created By</Box>
-            <Box>{data.creator?.displayName}</Box>
-          </Box>
-          <Box>
-            <Box>Created at</Box>
-            <Box>{data.creator?.timestamp?.toLocaleString()}</Box>
-          </Box>
-          <Box>
-            <Box>Updated By</Box>
-            <Box>{data.updater?.displayName}</Box>
-          </Box>
-          <Box>
-            <Box>Updated at</Box>
-            <Box>{data.updater?.timestamp?.toLocaleString()}</Box>
-          </Box>
-        </DescriptionList>
+        <DetailList orientation="horizontal">
+          <DetailItem label={t('label.name')} value={data.name} />
+          <DetailItem label={t('label.parentCategory')} value={data.parent?.name} />
+          <DetailItem label={t('label.slug')} value={data.slug} />
+          <DetailItem
+            label={t('label.description')}
+            value={
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: data.description ?? '',
+                }}
+              />
+            }
+          />
+          <DetailItem label={t('label.createdBy')} value={data.creator?.displayName} />
+          <DetailItem
+            label={t('label.createdAt')}
+            value={dayUtils(data.creator?.timestamp).fromNow()}
+          />
+          <DetailItem label={t('label.updatedBy')} value={data.updater?.displayName} />
+          <DetailItem
+            label={t('label.updatedAt')}
+            value={dayUtils(data.updater?.timestamp).fromNow()}
+          />
+        </DetailList>
       </PageContent>
     </PageLayout>
   );

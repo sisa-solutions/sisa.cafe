@@ -1,26 +1,30 @@
 import { PageContent, PageHeader, PageTitle } from '@sisa/components';
 
-import Breadcrumbs from 'components/common/breadcrumbs';
-import MutationForm from '../components/mutation-form';
-
 import { createPost } from '@sisa/grpc-api';
 
-const AddCategoryPage = () => {
+import Breadcrumbs from 'components/common/breadcrumbs';
+import getServerI18n from 'i18n/get-server-i18n';
+
+import MutationForm from '../components/mutation-form';
+
+const AddCategoryPage = async () => {
+  const { t } = await getServerI18n();
+
   return (
     <>
       <Breadcrumbs
         items={[
           {
-            title: 'Posts',
+            title: t('label.posts'),
             url: '/posts',
           },
           {
-            title: 'Add Post',
+            title: t('label.addPost'),
           },
         ]}
       />
       <PageHeader>
-        <PageTitle>Add Post</PageTitle>
+        <PageTitle>{t('label.addPost')}</PageTitle>
       </PageHeader>
       <PageContent>
         <MutationForm trigger={createPost} />

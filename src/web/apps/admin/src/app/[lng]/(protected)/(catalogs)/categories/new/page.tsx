@@ -4,23 +4,26 @@ import Breadcrumbs from 'components/common/breadcrumbs';
 import MutationForm from '../components/mutation-form';
 
 import { createCategory } from '@sisa/grpc-api';
+import getServerI18n from 'i18n/get-server-i18n';
 
-const AddCategoryPage = () => {
+const AddCategoryPage = async () => {
+  const { t } = await getServerI18n();
+
   return (
     <>
       <Breadcrumbs
         items={[
           {
-            title: 'Categories',
+            title: t('label.categories'),
             url: '/categories',
           },
           {
-            title: 'Add Category',
+            title: t('label.addCategory'),
           },
         ]}
       />
       <PageHeader>
-        <PageTitle>Add Category</PageTitle>
+        <PageTitle>{t('label.addCategory')}</PageTitle>
       </PageHeader>
       <PageContent>
         <MutationForm trigger={createCategory} />

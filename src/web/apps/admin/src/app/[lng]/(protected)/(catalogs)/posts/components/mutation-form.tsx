@@ -39,6 +39,7 @@ import {
 import { randomId, slugify } from '@sisa/utils';
 import IconButton from '@mui/joy/IconButton';
 import { EditIcon } from 'lucide-react';
+import useClientI18n from 'i18n/use-client-i18n';
 
 type AdditionFormValues = {
   category?: {
@@ -59,6 +60,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const id = defaultValues && 'id' in defaultValues ? (defaultValues['id'] as string) : '';
   const isEditing = !!id;
 
+  const { t } = useClientI18n();
   const router = useRouter();
   const [autoSync, setAutoSync] = useState(!isEditing);
   const [manualEditing, setManualEditing] = useState(false);
@@ -174,7 +176,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   );
 
   const creationSchema = yup.object<FormValues>({
-    title: yup.string().required().min(4).max(100).label('Title'),
+    title: yup.string().required().min(4).max(100).label(t('label.title')),
     slug: yup
       .string()
       .lowercase()
@@ -182,18 +184,18 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       .min(4)
       .max(100)
       .lowercase()
-      .test('valid-format', 'Slug must be formatted as kebab-case', (slug: string) => {
+      .test('valid-format', t('validation.slug.format'), (slug: string) => {
         return slug === slugify(slug);
       })
-      .test('unique-slug', 'Slug is already taken', async (slug: string) => {
+      .test('unique-slug', t('validation.slug.alreadyTaken'), async (slug: string) => {
         const { value } = await findExisting({ id: id, slug });
 
         return value.length === 0;
       })
-      .label('Slug'),
+      .label(t('label.slug')),
 
-    excerpt: yup.string().required().min(4).max(500).label('Excerpt'),
-    content: yup.string().required().min(4).max(5000).label('Content'),
+    excerpt: yup.string().required().min(4).max(500).label(t('label.excerpt')),
+    content: yup.string().required().min(4).max(5000).label(t('label.content')),
     tagSlugs: yup
       .array()
       .of(yup.string().required().max(50).lowercase())
@@ -203,7 +205,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       .test('valid-slugs', 'One ore more tags are invalid format', (slugs: string[]) => {
         return !slugs.some((slug) => slug !== slugify(slug));
       })
-      .label('Tags'),
+      .label(t('label.tags')),
     category: yup
       .object({
         id: yup.string().uuid(),
@@ -211,8 +213,8 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       })
       .default(null)
       .required()
-      .label('Category'),
-    pictures: yup.array<File>().optional().label('Pictures'),
+      .label(t('label.category')),
+    pictures: yup.array<File>().optional().label(t('label.pictures')),
   });
 
   const updateSchema = creationSchema.shape({
@@ -293,7 +295,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       <AutocompleteField
         control={control}
         name="category"
-        label="Category"
+        label={t('label.category')}
         required
         loading={isLoading}
         options={data.value.map((x) => {
@@ -308,12 +310,12 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         inputValue={searchParentCategoryName}
         onInputChange={onSearchCategoryInputChange}
       />
-      <TextField control={control} required name="title" label="Title" />
+      <TextField control={control} required name="title" label={t('label.title')} />
       <TextField
         control={control}
         required
         name="slug"
-        label="Slug"
+        label={t('label.slug')}
         {...(!manualEditing && {
           readOnly: true,
           variant: 'soft',
@@ -327,11 +329,11 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
           ),
         })}
       />
-      <RichTextField control={control} required name="excerpt" label="Excerpt" />
+      <RichTextField control={control} required name="excerpt" label={t('label.excerpt')} />
       <AutocompleteField
         control={control}
         name="tagSlugs"
-        label="Tags"
+        label={t('label.tags')}
         required
         multiple
         freeSolo
@@ -343,7 +345,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       <FileUploadField
         control={control}
         name="pictures"
-        label="Pictures"
+        label={t('label.pictures')}
         options={{
           accept: {
             'image/*': [],
@@ -352,10 +354,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
           maxFiles: 1,
         }}
       />
-      <RichTextField control={control} required name="content" label="Content" />
+      <RichTextField control={control} required name="content" label={t('label.content')} />
       <FormActions>
-        <SubmitButton submit={onSubmit}>Save</SubmitButton>
-        <CancelButton cancel={goBack}>Cancel</CancelButton>
+        <SubmitButton submit={onSubmit}>{t('label.save')}</SubmitButton>
+        <CancelButton cancel={goBack}>{t('label.cancel')}</CancelButton>
       </FormActions>
     </FormContainer>
   );

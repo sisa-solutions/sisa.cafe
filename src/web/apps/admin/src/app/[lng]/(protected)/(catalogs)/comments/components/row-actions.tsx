@@ -22,8 +22,11 @@ import { type CommentResponse, deleteTag } from '@sisa/grpc-api';
 
 import { useQueryString, useToggle } from '@sisa/hooks';
 import { randomId } from '@sisa/utils';
+import useClientI18n from 'i18n/use-client-i18n';
 
 const RowActions: ColumnDefTemplate<CellContext<CommentResponse, string>> = ({ row }) => {
+  const { t } = useClientI18n();
+
   const setQueryString = useQueryString();
 
   const [open, setOpen] = useState(false);
@@ -82,7 +85,7 @@ const RowActions: ColumnDefTemplate<CellContext<CommentResponse, string>> = ({ r
             <ListItemDecorator>
               <XIcon />
             </ListItemDecorator>
-            Delete
+            {t('label.delete')}
           </MenuItem>
         </Menu>
       </Dropdown>
@@ -92,15 +95,15 @@ const RowActions: ColumnDefTemplate<CellContext<CommentResponse, string>> = ({ r
         color="danger"
         isLoading={isMutating}
         icon={<AlertCircleIcon />}
-        title="Delete comment"
+        title={t('label.deleteComment')}
         content={`Are you sure you want to delete this comments?`}
         onClose={closeConfirmDialog}
         confirmProps={{
-          label: 'Delete',
+          label: t('label.delete'),
           onClick: onConfirm,
         }}
         cancelProps={{
-          label: 'Cancel',
+          label: t('label.cancel'),
           onClick: closeConfirmDialog,
         }}
       />

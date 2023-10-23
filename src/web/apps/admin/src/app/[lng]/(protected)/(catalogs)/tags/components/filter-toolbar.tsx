@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
+import ButtonGroup from '@mui/joy/ButtonGroup';
 
 import { EraserIcon, SearchIcon } from 'lucide-react';
 
@@ -54,26 +55,14 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
   };
 
   const renderActions = () => (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        gap: 1.5,
-        flex: 1,
-
-        '& > button': {
-          flex: 1,
-        },
-      }}
-    >
-      <Button variant="soft" color="primary" startDecorator={<EraserIcon />} onClick={onReset}>
+    <ButtonGroup spacing={1}>
+      <Button startDecorator={<EraserIcon />} onClick={onReset}>
         Clear
       </Button>
       <Button variant="solid" color="primary" startDecorator={<SearchIcon />} onClick={onSubmit}>
         Search
       </Button>
-    </Box>
+    </ButtonGroup>
   );
 
   return (

@@ -36,6 +36,8 @@
     }
   },
   "label": {
+    "save": "Save",
+    "cancel": "Cancel",
     "create": "Create",
     "slug": "Slug",
     "name": "Name",
@@ -43,18 +45,39 @@
     "parentCategory": "Parent category",
     "category": "Category",
     "categories": "Categories",
-    "tags": "Tags",
     "pictures": "Pictures",
     "postCount": "Post count",
     "createdBy": "Created by",
     "createdAt": "Created at",
     "updatedBy": "Updated by",
     "updatedAt": "Updated at",
-
     "email": "Email",
     "password": "Password",
     "rememberMe": "Remember me",
-    "agreeTermsAndPolicy": "Agree the <1>terms and policy</1>"
+    "agreeTermsAndPolicy": "Agree the <1>terms and policy</1>",
+    "details": "Details",
+    "addCategory": "Add category",
+    "editCategory": "Edit category",
+    "deleteCategory": "Delete category",
+    "clear": "Clear",
+    "search": "Search",
+    "edit": "Edit",
+    "delete": "Delete",
+    "comments": "Comments",
+    "keyword": "Keyword",
+    "post": "Post",
+    "posts": "Posts",
+    "addPost": "Add post",
+    "editPost": "Edit post",
+    "deletePost": "Delete post",
+    "title": "Title",
+    "excerpt": "Excerpt",
+    "content": "Content",
+    "tag": "Tag",
+    "tags": "Tags",
+    "addTag": "Add tag",
+    "editTag": "Edit tag",
+    "deleteTag": "Delete tag"
   },
   "title": {
     "createNewAccount": "Create new account",
@@ -81,15 +104,5 @@
       "alreadyTaken": "Slug is already taken",
       "format": "Slug must be formatted as kebab-case"
     }
-  },
-  "button": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "createAccount": "Create account",
-    "signIn": "Login",
-    "register": "Register",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "backToLogin": "Back to login"
   }
 }

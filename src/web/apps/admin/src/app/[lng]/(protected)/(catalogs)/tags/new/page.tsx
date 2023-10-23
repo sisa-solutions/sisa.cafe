@@ -4,23 +4,26 @@ import { createTag } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 import MutationForm from '../components/mutation-form';
+import getServerI18n from 'i18n/get-server-i18n';
 
-const AddTagPage = () => {
+const AddTagPage = async () => {
+  const { t } = await getServerI18n();
+
   return (
     <>
       <Breadcrumbs
         items={[
           {
-            title: 'Tags',
+            title: t('label.tags'),
             url: '/tags',
           },
           {
-            title: 'Add Tag',
+            title: t('label.addTag'),
           },
         ]}
       />
       <PageHeader>
-        <PageTitle>Add Tag</PageTitle>
+        <PageTitle>{t('label.addTag')}</PageTitle>
       </PageHeader>
       <PageContent>
         <MutationForm trigger={createTag} />

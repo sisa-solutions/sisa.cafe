@@ -36,6 +36,8 @@
     }
   },
   "label": {
+    "save": "Lưu",
+    "cancel": "Hủy",
     "create": "Thêm mới",
     "slug": "Slug",
     "name": "Tên",
@@ -43,19 +45,39 @@
     "parentCategory": "Danh mục cha",
     "category": "Danh mục",
     "categories": "Danh mục",
-    "tags": "Thẻ",
     "pictures": "Hình ảnh",
     "postCount": "Số bài viết",
     "createdBy": "Người tạo",
     "createdAt": "Ngày tạo",
     "updatedBy": "Người sửa",
     "updatedAt": "Ngày sửa",
-
-
     "email": "Email",
     "password": "Mật khẩu",
     "rememberMe": "Ghi nhớ đăng nhập",
-    "agreeTermsAndPolicy": "Đồng ý với các <1>điều khoản và chính sách</1>"
+    "agreeTermsAndPolicy": "Đồng ý với các <1>điều khoản và chính sách</1>",
+    "details": "Chi tiết",
+    "addCategory": "Thêm danh mục",
+    "editCategory": "Sửa danh mục",
+    "deleteCategory": "Xóa danh mục",
+    "clear": "Xóa",
+    "search": "Tìm kiếm",
+    "edit": "Sửa",
+    "delete": "Xóa",
+    "comments": "Bình luận",
+    "keyword": "Từ khóa",
+    "post": "Bài viết",
+    "posts": "Bài viết",
+    "addPost": "Thêm bài viết",
+    "editPost": "Sửa bài viết",
+    "deletePost": "Xóa bài viết",
+    "title": "Tiêu đề",
+    "excerpt": "Trích dẫn",
+    "content": "Nội dung",
+    "tag": "Thẻ",
+    "tags": "Thẻ",
+    "addTag": "Thêm thẻ",
+    "editTag": "Sửa thẻ",
+    "deleteTag": "Xóa thẻ"
   },
   "title": {
     "createAnAccount": "Tạo tài khoản mới",
@@ -82,18 +104,5 @@
       "alreadyTaken": "Slug đã tồn tại",
       "format": "Slug phải được định dạng theo kiểu kebab-case"
     }
-  },
-  "button": {
-    "save": "Lưu",
-    "cancel": "Hủy",
-    "createAccount": "Tạo tài khoản",
-    "signIn": "Đăng nhập",
-    "register": "Đăng ký",
-    "forgotPassword": "Quên mật khẩu",
-    "resetPassword": "Đặt lại mật khẩu",
-    "backToLogin": "Quay lại đăng nhập"
-  },
-  "currency": {
-    "default": "{{value, currency}}"
   }
 }

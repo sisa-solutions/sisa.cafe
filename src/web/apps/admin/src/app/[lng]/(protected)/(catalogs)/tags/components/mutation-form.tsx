@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
@@ -6,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import useMutation from 'swr/mutation';
 
 import IconButton from '@mui/joy/IconButton';
+
 import { EditIcon } from 'lucide-react';
 
 import {
@@ -31,6 +33,7 @@ import {
   Operator,
 } from '@sisa/grpc-api';
 import { randomId, slugify } from '@sisa/utils';
+import useClientI18n from 'i18n/use-client-i18n';
 
 type AdditionFormValues = {
   pictures?: File[];
@@ -47,6 +50,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const id = defaultValues && 'id' in defaultValues ? (defaultValues['id'] as string) : '';
   const isEditing = !!id;
 
+  const { t } = useClientI18n();
   const router = useRouter();
   const [autoSync, setAutoSync] = useState(!isEditing);
   const [manualEditing, setManualEditing] = useState(false);
@@ -97,26 +101,26 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   );
 
   const creationSchema = yup.object<FormValues>({
-    name: yup.string().required().min(4).max(50).label('Name'),
+    name: yup.string().required().min(4).max(50).label(t('label.name')),
     slug: yup
       .string()
       .required()
       .min(4)
       .max(50)
       .lowercase()
-      .test('valid-format', 'Slug must be formatted as kebab-case', (slug: string) => {
+      .test('valid-format', t('validation.slug.format'), (slug: string) => {
         return slug === slugify(slug);
       })
-      .test('unique-slug', 'Slug is already taken', async (slug: string) => {
+      .test('unique-slug', t('validation.slug.alreadyTaken'), async (slug: string) => {
         const { value } = await findExisting({ id: id, slug });
 
         return value.length === 0;
       })
-      .label('Slug'),
+      .label(t('label.slug')),
 
-    description: yup.string().max(500).optional().label('Description'),
+    description: yup.string().max(500).optional().label(t('label.description')),
     parentId: yup.string().optional(),
-    pictures: yup.array<File>().optional().label('Pictures'),
+    pictures: yup.array<File>().optional().label(t('label.pictures')),
   });
 
   const updateSchema = creationSchema.shape({
@@ -180,12 +184,12 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
 
   return (
     <FormContainer orientation="horizontal">
-      <TextField control={control} required name="name" label="Name" />
+      <TextField control={control} required name="name" label={t('label.name')} />
       <TextField
         control={control}
         required
         name="slug"
-        label="Slug"
+        label={t('label.slug')}
         {...(!manualEditing && {
           readOnly: true,
           variant: 'soft',
@@ -202,7 +206,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       <FileUploadField
         control={control}
         name="pictures"
-        label="Pictures"
+        label={t('label.pictures')}
         options={{
           accept: {
             'image/*': [],
@@ -211,10 +215,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
           maxFiles: 1,
         }}
       />
-      <RichTextField control={control} error name="description" label="Description" />
+      <RichTextField control={control} error name="description" label={t('label.description')} />
       <FormActions>
-        <SubmitButton submit={submit}>Save</SubmitButton>
-        <CancelButton cancel={() => reset(defaultValues)}>Cancel</CancelButton>
+        <SubmitButton submit={submit}>{t('label.save')}</SubmitButton>
+        <CancelButton cancel={() => reset(defaultValues)}>{t('label.cancel')}</CancelButton>
       </FormActions>
     </FormContainer>
   );

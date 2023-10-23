@@ -10,7 +10,12 @@ const initI18next = async (lng: string, ns?: string | readonly string[]) => {
   const i18nInstance = createInstance();
   await i18nInstance
     .use(initReactI18next)
-    .use(resourcesToBackend((language, namespace) => import(`./locales/${language}.json`)))
+    .use(
+      resourcesToBackend((language, namespace) => {
+        if (namespace) return import(`./locales/${language}/${namespace}.json`);
+        else return import(`./locales/${language}.json`);
+      })
+    )
     .init({
       resources,
       fallbackLng,

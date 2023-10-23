@@ -21,8 +21,10 @@ import { deleteTag, type TagResponse } from '@sisa/grpc-api';
 import { useQueryString, useToggle } from '@sisa/hooks';
 import { randomId } from '@sisa/utils';
 import { ConfirmDialog, Link } from '@sisa/components';
+import useClientI18n from 'i18n/use-client-i18n';
 
 const RowActions: ColumnDefTemplate<CellContext<TagResponse, string>> = ({ row }) => {
+  const { t } = useClientI18n();
   const setQueryString = useQueryString();
   const [open, setOpen] = useState(false);
 
@@ -80,14 +82,14 @@ const RowActions: ColumnDefTemplate<CellContext<TagResponse, string>> = ({ row }
               <PencilLineIcon />
             </ListItemDecorator>
             <Link disableCache={true} href={`/tags/${row.original.id}/edit`} overlay>
-              Edit
+              {t('label.edit')}
             </Link>
           </MenuItem>
           <MenuItem onClick={onClickDelete}>
             <ListItemDecorator>
               <XIcon />
             </ListItemDecorator>
-            Delete
+            {t('label.delete')}
           </MenuItem>
         </Menu>
       </Dropdown>
@@ -97,15 +99,15 @@ const RowActions: ColumnDefTemplate<CellContext<TagResponse, string>> = ({ row }
         color="danger"
         isLoading={isMutating}
         icon={<AlertCircleIcon />}
-        title="Delete tag"
+        title={t('label.deleteTag')}
         content={`Are you sure you want to delete "${row.original.name}" tag?`}
         onClose={closeConfirmDialog}
         confirmProps={{
-          label: 'Delete',
+          label: t('label.delete'),
           onClick: onConfirm,
         }}
         cancelProps={{
-          label: 'Cancel',
+          label: t('label.cancel'),
           onClick: closeConfirmDialog,
         }}
       />

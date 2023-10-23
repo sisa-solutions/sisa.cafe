@@ -2,21 +2,15 @@ import { Suspense } from 'react';
 
 import Box from '@mui/joy/Box';
 
-import {
-  PageContent,
-  PageHeader,
-  PageTitle,
-  PageToolbar,
-  DataGrid,
-} from '@sisa/components';
+import { PageContent, PageHeader, PageTitle, PageToolbar } from '@sisa/components';
 
 import { Combinator, Operator, getComments, sortStringToParams } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 
 import Loading from 'components/common/loading';
-import FilterToolbar from './components/filter-toolbar';
-import columnDefs from './components/column-defs';
+import getServerI18n from 'i18n/get-server-i18n';
+import DataTable from './components/data-table';
 
 type CommentsPageProps = {
   searchParams: {
@@ -30,6 +24,8 @@ type CommentsPageProps = {
 const CommentsPage = async ({
   searchParams: { keyword = '', pageNumber = 1, pageSize = 10, sortBy = '' },
 }: CommentsPageProps) => {
+  const { t } = await getServerI18n();
+
   const sortingParams = sortStringToParams(sortBy);
 
   const {
@@ -67,37 +63,19 @@ const CommentsPage = async ({
       <Breadcrumbs
         items={[
           {
-            title: 'Comments',
+            title: t('label.comments'),
           },
         ]}
       />
       <PageHeader>
         <PageToolbar>
-          <PageTitle>Comments</PageTitle>
+          <PageTitle>{t('label.comments')}</PageTitle>
           <Box sx={{ flexGrow: 1 }} />
         </PageToolbar>
       </PageHeader>
       <PageContent>
         <Suspense fallback={<Loading />}>
-          <DataGrid
-            columns={columnDefs}
-            data={value}
-            pageIndex={paging.pageIndex}
-            pageSize={paging.pageSize}
-            itemCount={paging.itemCount}
-            pageCount={paging.pageCount}
-            enableRowSelection
-            enableMultiSort
-            slots={{
-              toolbar: (
-                <FilterToolbar
-                  defaultValues={{
-                    keyword,
-                  }}
-                />
-              ),
-            }}
-          />
+          <DataTable data={value} {...paging} />
         </Suspense>
       </PageContent>
     </>

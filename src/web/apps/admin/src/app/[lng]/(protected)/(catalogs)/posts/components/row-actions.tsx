@@ -15,7 +15,8 @@ import IconButton from '@mui/joy/IconButton';
 
 import { AlertCircleIcon, MoreHorizontalIcon, PencilLineIcon, XIcon } from 'lucide-react';
 
-import { ConfirmDialog, Link } from '@sisa/components';
+import { ConfirmDialog } from '@sisa/components';
+import { Link } from '@sisa/next';
 
 import { type PostResponse, deletePost } from '@sisa/grpc-api';
 import { useToggle, useQueryString } from '@sisa/hooks';

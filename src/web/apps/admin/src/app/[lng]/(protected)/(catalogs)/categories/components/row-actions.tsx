@@ -16,13 +16,16 @@ import IconButton from '@mui/joy/IconButton';
 
 import { AlertCircleIcon, MoreHorizontalIcon, PencilLineIcon, XIcon } from 'lucide-react';
 
-import { ConfirmDialog, Link } from '@sisa/components';
+import { ConfirmDialog } from '@sisa/components';
+import { Link } from '@sisa/next';
 import { randomId } from '@sisa/utils';
 import { useQueryString, useToggle } from '@sisa/hooks';
-
 import { type CategoryResponse, deleteCategory } from '@sisa/grpc-api';
 
+import useClientI18n from 'i18n/use-client-i18n';
+
 const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ row }) => {
+  const { t } = useClientI18n();
   const setQueryString = useQueryString();
 
   const [open, setOpen] = useState(false);
@@ -83,7 +86,7 @@ const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ 
               <PencilLineIcon />
             </ListItemDecorator>
             <Link disableCache={true} href={`/categories/${row.original.id}/edit`} overlay>
-              Edit
+              {t('label.edit')}
             </Link>
           </MenuItem>
           {row.original.postCount === 0 && (
@@ -91,7 +94,7 @@ const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ 
               <ListItemDecorator>
                 <XIcon />
               </ListItemDecorator>
-              Delete
+              {t('label.delete')}
             </MenuItem>
           )}
         </Menu>
@@ -102,15 +105,15 @@ const RowActions: ColumnDefTemplate<CellContext<CategoryResponse, string>> = ({ 
         color="danger"
         isLoading={isMutating}
         icon={<AlertCircleIcon />}
-        title="Delete Category"
+        title={t('label.deleteCategory')}
         content={`Are you sure you want to delete "${row.original.name}" category?`}
         onClose={closeConfirmDialog}
         confirmProps={{
-          label: 'Delete',
+          label: t('label.delete'),
           onClick: onConfirm,
         }}
         cancelProps={{
-          label: 'Cancel',
+          label: t('label.cancel'),
           onClick: closeConfirmDialog,
         }}
       />

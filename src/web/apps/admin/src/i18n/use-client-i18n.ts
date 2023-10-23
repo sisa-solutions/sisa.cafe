@@ -23,7 +23,7 @@ const useClientI18n = <
   }>();
   const ret = useTranslation(ns, options);
 
-  const [translation, setTranslation] = useState(ret);
+  const [translation] = useState(ret);
   const [, i18n] = translation;
 
   if (runsOnServerSide && i18n.resolvedLanguage !== lng) {

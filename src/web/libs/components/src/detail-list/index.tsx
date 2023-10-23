@@ -1,15 +1,15 @@
 import Box, { type BoxProps } from '@mui/joy/Box';
 
-export type DescriptionListProps = BoxProps & {
+export type DetailListProps = BoxProps & {
   orientation?: 'vertical' | 'horizontal';
 };
 
-const DescriptionList = ({
+const DetailList = ({
   orientation = 'vertical',
   children,
   sx,
   ...rest
-}: DescriptionListProps) => {
+}: DetailListProps) => {
   return (
     <Box
       sx={[
@@ -57,4 +57,4 @@ const DescriptionList = ({
   );
 };
 
-export default DescriptionList;
+export default DetailList;

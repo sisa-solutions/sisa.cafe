@@ -4,23 +4,16 @@ import Box from '@mui/joy/Box';
 
 import { PlusIcon } from 'lucide-react';
 
-import {
-  PageContent,
-  PageHeader,
-  PageTitle,
-  PageToolbar,
-  PageActions,
-  LinkButton,
-  DataGrid,
-} from '@sisa/components';
+import { PageContent, PageHeader, PageTitle, PageToolbar, PageActions } from '@sisa/components';
+import { LinkButton } from '@sisa/next';
 
-import { Combinator, Operator, PostStatus, getPosts, sortStringToParams } from '@sisa/grpc-api';
+import { Combinator, Operator, getPosts, sortStringToParams } from '@sisa/grpc-api';
 
 import Breadcrumbs from 'components/common/breadcrumbs';
 
 import Loading from 'components/common/loading';
-import FilterToolbar from './components/filter-toolbar';
-import columnDefs from './components/column-defs';
+import getServerI18n from 'i18n/get-server-i18n';
+import DataTable from './components/data-table';
 
 type PostsPageProps = {
   searchParams: {
@@ -35,6 +28,7 @@ type PostsPageProps = {
 const CategoriesPage = async ({
   searchParams: { name = '', status = '', pageNumber = 1, pageSize = 10, sortBy = '' },
 }: PostsPageProps) => {
+  const { t } = await getServerI18n();
   const sortingParams = sortStringToParams(sortBy);
 
   const {
@@ -80,7 +74,7 @@ const CategoriesPage = async ({
       <Breadcrumbs
         items={[
           {
-            title: 'Posts',
+            title: t('label.posts'),
           },
         ]}
       />
@@ -95,32 +89,14 @@ const CategoriesPage = async ({
               startDecorator={<PlusIcon />}
               href="/posts/new"
             >
-              Create
+              {t('label.create')}
             </LinkButton>
           </PageActions>
         </PageToolbar>
       </PageHeader>
       <PageContent>
         <Suspense fallback={<Loading />}>
-          <DataGrid
-            columns={columnDefs}
-            data={value}
-            pageIndex={paging.pageIndex}
-            pageSize={paging.pageSize}
-            itemCount={paging.itemCount}
-            pageCount={paging.pageCount}
-            enableRowSelection
-            enableMultiSort
-            slots={{
-              toolbar: (
-                <FilterToolbar
-                  defaultValues={{
-                    name,
-                  }}
-                />
-              ),
-            }}
-          />
+          <DataTable data={value} {...paging} />
         </Suspense>
       </PageContent>
     </>

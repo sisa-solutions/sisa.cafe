@@ -38,9 +38,9 @@ export * from './page-title';
 export { default as PageToolbar } from './page-toolbar';
 export * from './page-toolbar';
 
-// description list
-export { default as DescriptionList } from './description-list';
-export * from './description-list';
+// detail list
+export { default as DetailList } from './detail-list';
+export { default as DetailItem } from './detail-item';
 
 // modal
 export { default as ModalContent } from './modal-content';
