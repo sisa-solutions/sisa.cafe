@@ -29,6 +29,13 @@ class SidebarStore {
   }
 
   @computed
+  get allItems() {
+    return this.menuItems
+      .filter((item) => !!item.parentCode)
+      .sort((a, b) => a.order - b.order);
+  }
+
+  @computed
   get items() {
     return this.menuItems
       .filter((item) => !!item.parentCode && item.parentCode == this.selectingGroupCode)

@@ -295,8 +295,8 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       />
       <RichTextField control={control} name="description" label={t('label.description')} />
       <FormActions>
-        <SubmitButton submit={onSubmit}>{t('button.save')}</SubmitButton>
-        <CancelButton cancel={goBack}>{t('button.cancel')}</CancelButton>
+        <SubmitButton submit={onSubmit}>{t('label.save')}</SubmitButton>
+        <CancelButton cancel={goBack}>{t('label.cancel')}</CancelButton>
       </FormActions>
     </FormContainer>
   );

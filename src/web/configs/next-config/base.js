@@ -3,6 +3,7 @@ module.exports = {
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'mdx'],
   transpilePackages: [
+    'lucide-react',
     '@sisa/grpc-api',
     '@sisa/components',
     '@sisa/form',

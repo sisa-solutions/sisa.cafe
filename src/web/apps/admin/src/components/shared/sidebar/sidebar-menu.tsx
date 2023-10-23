@@ -73,8 +73,13 @@ const SidebarMenu = () => {
           Dashboard
         </ListSubheader>
 
-        {sidebarStore.items.map((item) => (
-          <ListItem key={item.code}>
+        {sidebarStore.allItems.map((item) => (
+          <ListItem
+            key={item.code}
+            sx={{
+              display: item.parentCode === sidebarStore.selectingGroupCode ? 'block' : 'none',
+            }}
+          >
             <LinkListItemButton
               href={item.path}
               data-sidebar-menu-item={item.code}
