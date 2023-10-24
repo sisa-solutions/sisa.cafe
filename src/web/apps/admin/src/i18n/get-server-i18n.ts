@@ -11,7 +11,7 @@ const initI18next = async (lng: string, ns?: string | readonly string[]) => {
   await i18nInstance
     .use(initReactI18next)
     .use(
-      resourcesToBackend((language, namespace) => {
+      resourcesToBackend((language: string, namespace?: string) => {
         if (namespace) return import(`./locales/${language}/${namespace}.json`);
         else return import(`./locales/${language}.json`);
       })
