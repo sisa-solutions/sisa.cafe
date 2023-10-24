@@ -1,6 +1,6 @@
 'use client';
 
-import { type ColumnDef, createColumnHelper, DataGrid } from '@sisa/components';
+import { createColumnHelper, DataGrid } from '@sisa/components';
 import { type CommentResponse } from '@sisa/grpc-api';
 
 import FilterToolbar from './filter-toolbar';
@@ -22,7 +22,7 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, keyword }:
 
   const columnHelper = createColumnHelper<CommentResponse>();
 
-  const columnDefs: Array<ColumnDef<CommentResponse>> = [
+  const columnDefs = [
     columnHelper.selection('id'),
 
     columnHelper.accessor('content', {

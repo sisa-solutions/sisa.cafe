@@ -1,6 +1,6 @@
 'use client';
 
-import { type ColumnDef, createColumnHelper, DataGrid } from '@sisa/components';
+import { createColumnHelper, DataGrid } from '@sisa/components';
 import { PostStatus, type PostResponse } from '@sisa/grpc-api';
 import { Link } from '@sisa/next';
 
@@ -22,8 +22,7 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, name }: Pr
   const [t] = useClientI18n();
 
   const columnHelper = createColumnHelper<PostResponse>();
-
-  const columnDefs: Array<ColumnDef<PostResponse>> = [
+  const columnDefs = [
     columnHelper.selection('id'),
 
     columnHelper.accessor('title', {
@@ -46,7 +45,7 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, name }: Pr
       id: 'Status',
       header: () => 'Status',
       enableSorting: true,
-      cell: ({ getValue }) => PostStatus[getValue()],
+      cell: ({ getValue }) => PostStatus[getValue<number>()],
     }),
     columnHelper.accessor('creator.displayName', {
       id: 'CreatedBy',

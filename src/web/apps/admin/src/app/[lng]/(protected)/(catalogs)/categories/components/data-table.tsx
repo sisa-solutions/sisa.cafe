@@ -5,7 +5,7 @@ import Chip from '@mui/joy/Chip';
 
 import { dayUtils } from '@sisa/i18n';
 
-import { type ColumnDef, createColumnHelper, Link, DataGrid } from '@sisa/components';
+import { createColumnHelper, Link, DataGrid } from '@sisa/components';
 import { type CategoryResponse } from '@sisa/grpc-api';
 
 import FilterToolbar from './filter-toolbar';
@@ -27,12 +27,12 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, name }: Pr
 
   const columnHelper = createColumnHelper<CategoryResponse>();
 
-  const columnDefs: Array<ColumnDef<CategoryResponse>> = [
+  const columnDefs = [
     columnHelper.selection('id'),
 
     columnHelper.accessor('name', {
       id: 'Name',
-      header: t('label.name'),
+      header: () => t('label.name'),
       cell: ({ row, getValue }) => (
         <Link
           underline="always"
@@ -46,13 +46,13 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, name }: Pr
     }),
     columnHelper.accessor('parent.name', {
       id: 'Parent.Name',
-      header: t('label.parentCategory'),
+      header: () => t('label.parentCategory'),
       cell: ({ row }) => row.original.parent?.name ?? '',
       enableSorting: true,
     }),
     columnHelper.accessor('postCount', {
       id: 'PostCount',
-      header: t('label.postCount'),
+      header: () => t('label.postCount'),
       cell: ({ getValue }) => (
         <Box display="flex" alignItems="center">
           <Chip color="success">{getValue()}</Chip>
@@ -61,24 +61,24 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, name }: Pr
     }),
     columnHelper.accessor('creator.displayName', {
       id: 'CreatedBy',
-      header: t('label.createdBy'),
+      header: () => t('label.createdBy'),
       enableSorting: false,
     }),
     columnHelper.accessor('creator.timestamp', {
       id: 'CreatedAt',
-      header: t('label.createdAt'),
+      header: () => t('label.createdAt'),
       cell: ({ getValue }) => dayUtils(getValue()).fromNow(),
       enableSorting: true,
     }),
     columnHelper.accessor('updater.displayName', {
       id: 'UpdatedBy',
-      header: t('label.updatedBy'),
+      header: () => t('label.updatedBy'),
       cell: ({ row }) => row.original.updater?.displayName ?? '',
       enableSorting: false,
     }),
     columnHelper.accessor('updater.timestamp', {
       id: 'UpdatedAt',
-      header: t('label.updatedAt'),
+      header: () => t('label.updatedAt'),
       cell: ({ getValue }) => {
         const value = getValue();
 

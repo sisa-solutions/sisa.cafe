@@ -1,6 +1,6 @@
 'use client';
 
-import { type ColumnDef, createColumnHelper, DataGrid } from '@sisa/components';
+import { createColumnHelper, DataGrid } from '@sisa/components';
 import { Link } from '@sisa/next';
 import { type TagResponse } from '@sisa/grpc-api';
 
@@ -23,12 +23,12 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, name }: Pr
 
   const columnHelper = createColumnHelper<TagResponse>();
 
-  const columnDefs: Array<ColumnDef<TagResponse>> = [
+  const columnDefs = [
     columnHelper.selection('id'),
 
     columnHelper.accessor('name', {
       id: 'Name',
-      header: t('label.name'),
+      header: () => t('label.name'),
       cell: ({ row, getValue }) => (
         <Link underline="always" disableCache={true} href={`/tags/${row.original.id}/details`}>
           {getValue()}
@@ -38,7 +38,7 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, name }: Pr
     }),
     columnHelper.accessor('slug', {
       id: 'Slug',
-      header: t('label.slug'),
+      header: () => t('label.slug'),
       enableSorting: true,
     }),
     columnHelper.dangerouslyHtml('description', {
@@ -48,30 +48,30 @@ const DataTable = ({ data, pageIndex, pageSize, itemCount, pageCount, name }: Pr
     }),
     columnHelper.accessor('postCount', {
       id: 'PostCount',
-      header: t('label.postCount'),
+      header: () => t('label.postCount'),
       enableSorting: true,
     }),
     columnHelper.accessor('creator.id', {
       id: 'CreatedBy',
-      header: t('label.createdBy'),
+      header: () => t('label.createdBy'),
       cell: ({ row }) => row.original.creator?.displayName ?? '',
       enableSorting: false,
     }),
     columnHelper.accessor('creator.timestamp', {
       id: 'CreatedAt',
-      header: t('label.createdAt'),
+      header: () => t('label.createdAt'),
       cell: ({ getValue }) => getValue()?.toLocaleString(),
       enableSorting: true,
     }),
     columnHelper.accessor('updater.id', {
       id: 'UpdatedBy',
-      header: t('label.updatedBy'),
+      header: () => t('label.updatedBy'),
       cell: ({ row }) => row.original.updater?.displayName ?? '',
       enableSorting: false,
     }),
     columnHelper.accessor('updater.timestamp', {
       id: 'UpdatedAt',
-      header: t('label.updatedAt'),
+      header: () => t('label.updatedAt'),
       cell: ({ row }) => row.original.updater?.timestamp?.toLocaleString() ?? '',
       enableSorting: true,
     }),

@@ -1,4 +1,8 @@
-import { createColumnHelper as createColumnHelperBase, type RowData } from '@tanstack/react-table';
+import {
+  type ColumnHelper as ColumnHelperBase,
+  type RowData,
+  createColumnHelper as createColumnHelperBase,
+} from '@tanstack/react-table';
 
 import Checkbox from '@mui/joy/Checkbox';
 import Chip, { ChipProps } from '@mui/joy/Chip';
@@ -8,13 +12,40 @@ import { CheckIcon, MinusIcon } from 'lucide-react';
 import { ACTIONS_COLUMN_ID, FLEX_COLUMN_ID, SELECTION_COLUMN_ID } from '../data-table/constants';
 import SettingsAction from '../data-table/settings-action';
 
-const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
-  const baseHelperFuncs = createColumnHelperBase<TData>();
+type ColumnHelper<TData extends RowData> = ColumnHelperBase<TData> & {
+  selection: (
+    accessor: Parameters<ColumnHelperBase<TData>['accessor']>[0],
+    column?: Parameters<ColumnHelperBase<TData>['accessor']>[1]
+  ) => ReturnType<ColumnHelperBase<TData>['accessor']>;
+  dangerouslyHtml: (
+    accessor: Parameters<ColumnHelperBase<TData>['accessor']>[0],
+    column?: Parameters<ColumnHelperBase<TData>['accessor']>[1]
+  ) => ReturnType<ColumnHelperBase<TData>['accessor']>;
+  actions: (
+    accessor: Parameters<ColumnHelperBase<TData>['accessor']>[0],
+    column?: Parameters<ColumnHelperBase<TData>['accessor']>[1]
+  ) => ReturnType<ColumnHelperBase<TData>['accessor']>;
+  colorCode: (
+    accessor: Parameters<ColumnHelperBase<TData>['accessor']>[0],
+    column?: Parameters<ColumnHelperBase<TData>['accessor']>[1] & {
+      defaultValue?: string | number;
+      colorMap: Record<string | number, ChipProps['color']>;
+      sx: ChipProps['sx'];
+    }
+  ) => ReturnType<ColumnHelperBase<TData>['accessor']>;
+  flex: () => ReturnType<ColumnHelperBase<TData>['accessor']>;
+};
 
-  type accessorArgs = Parameters<typeof baseHelperFuncs.accessor>;
+const createColumnHelper: <TData extends RowData>() => ColumnHelper<TData> = <
+  TData extends RowData,
+>() => {
+  const helper = createColumnHelperBase<TData>();
+  type accessorArgs = Parameters<(typeof helper)['accessor']>;
+  type accessorArg = accessorArgs[0];
+  type columnArg = accessorArgs[1];
 
-  const selection = (accessor: accessorArgs[0], column?: accessorArgs[1]) =>
-    baseHelperFuncs.accessor(accessor, {
+  const selection = (accessor: accessorArg, column?: columnArg) =>
+    helper.accessor(accessor, {
       id: SELECTION_COLUMN_ID,
       header: ({ table }) => (
         <Checkbox
@@ -62,8 +93,8 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
       ...column,
     });
 
-  const dangerouslyHtml = (accessor: accessorArgs[0], column?: accessorArgs[1]) =>
-    baseHelperFuncs.accessor(accessor, {
+  const dangerouslyHtml = (accessor: accessorArg, column?: columnArg) =>
+    helper.accessor(accessor, {
       // @ts-ignore
       id: column?.id,
       cell: ({ getValue }) => (
@@ -73,8 +104,8 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
     });
 
   const colorCode = (
-    accessor: accessorArgs[0],
-    column?: accessorArgs[1] & {
+    accessor: accessorArg,
+    column?: columnArg & {
       defaultValue?: string | number;
       colorMap: Record<string | number, ChipProps['color']>;
       sx: ChipProps['sx'];
@@ -82,7 +113,7 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
   ) => {
     const { defaultValue, colorMap = {}, sx, ...rest } = column ?? { defaultValue: '' };
 
-    return baseHelperFuncs.accessor(accessor, {
+    return helper.accessor(accessor, {
       // @ts-ignore
       id: column?.id,
       cell: ({ getValue }) => {
@@ -99,8 +130,8 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
     });
   };
 
-  const actions = (accessor: accessorArgs[0], column?: accessorArgs[1]) =>
-    baseHelperFuncs.accessor(accessor, {
+  const actions = (accessor: accessorArg, column?: columnArg) =>
+    helper.accessor(accessor, {
       id: ACTIONS_COLUMN_ID,
       enableColumnFilter: false,
       enableResizing: false,
@@ -133,12 +164,12 @@ const createColumnHelper = <TData extends RowData, TValue = unknown>() => {
   });
 
   return {
-    ...baseHelperFuncs,
+    ...helper,
     selection,
-    actions,
-    flex,
-    dangerouslyHtml,
     colorCode,
+    actions,
+    dangerouslyHtml,
+    flex,
   };
 };
 
