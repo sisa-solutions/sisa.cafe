@@ -11,7 +11,7 @@ import { PagingParams } from './generated/sisa/libs/data/params/paging_params';
 
 export { PagingParams };
 
-export type { PagingResponse } from './generated/sisa/libs/common/responses/paging_response';
+export type { PagingInfoResponse } from './generated/sisa/libs/common/responses/paging_info_response';
 
 export const DEFAULT_PAGING_PARAMS: PagingParams = {
   pageIndex: 0,

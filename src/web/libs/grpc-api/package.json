@@ -3,7 +3,14 @@
   "description": "React Starter Kit",
   "version": "0.0.1",
   "main": "src/index.ts",
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external react",
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint": "eslint \"**/*.ts*\"",
     "gen:protos": "npx protoc -I=../../../protos ../../../protos/sisa/**/*.proto --ts_proto_out src/generated --ts_proto_opt=env=node --ts_proto_opt=outputServices=grpc-js --ts_proto_opt=esModuleInterop=true --ts_proto_opt=exportCommonSymbols=false --ts_proto_opt=removeEnumPrefix=true --ts_proto_opt=unrecognizedEnum=false --ts_proto_opt=outputJsonMethods=false --ts_proto_opt=outputPartialMethods=false --ts_proto_opt=useAbortSignal=true"
   },
@@ -19,6 +26,7 @@
     "eslint": "^8.52.0",
     "react": "^18.2.0",
     "ts-proto": "^1.162.1",
+    "tsup": "^7.2.0",
     "typescript": "^5.2.2"
   }
 }
