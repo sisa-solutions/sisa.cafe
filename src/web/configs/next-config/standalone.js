@@ -9,7 +9,6 @@ module.exports = {
   experimental: {
     ...config.experimental,
     mdxRs: true,
-    serverActions: true,
     typedRoutes: true,
     outputFileTracingRoot: path.join(__dirname, '../../'),
   },
