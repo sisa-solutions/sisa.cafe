@@ -2,7 +2,7 @@
   "name": "@sisa/web",
   "license": "MIT",
   "private": true,
-  "packageManager": "yarn@4.0.0-rc.53",
+  "packageManager": "yarn@4.0.0",
   "preferUnplugged": true,
   "workspaces": [
     "apps/*",
@@ -29,7 +29,7 @@
     "@changesets/cli": "^2.26.2",
     "@sisa/eslint-config": "workspace:*",
     "@turbo/gen": "^1.10.16",
-    "eslint": "^8.52.0",
+    "eslint": "^8.53.0",
     "prettier": "^3.0.3",
     "turbo": "^1.10.16",
     "typescript": "^5.2.2"

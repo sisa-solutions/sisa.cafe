@@ -1,5 +1,5 @@
 {
-  "name": "@sisa/file-management",
+  "name": "@sisa/icons",
   "version": "0.0.0",
   "main": "./src/index.ts",
   "license": "MIT",
@@ -10,14 +10,8 @@
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external react",
     "build": "tsup src/index.ts --format esm,cjs --dts --external react",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "lint": "eslint \"**/*.ts*\""
-  },
-  "dependencies": {
-    "@sisa/components": "workspace:*",
-    "@sisa/form": "workspace:*",
-    "@sisa/hooks": "workspace:*",
-    "@sisa/i18n": "workspace:*",
-    "@sisa/utils": "workspace:*"
+    "lint": "eslint \"**/*.ts*\"",
+    "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
     "@sisa/eslint-config": "workspace:*",
@@ -30,12 +24,9 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/joy": "^5.0.0-beta.10",
-    "lucide-react": "^0.288.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "lucide-react": "*",
+    "react": "*",
+    "react-dom": "*"
   },
   "publishConfig": {
     "access": "public"
