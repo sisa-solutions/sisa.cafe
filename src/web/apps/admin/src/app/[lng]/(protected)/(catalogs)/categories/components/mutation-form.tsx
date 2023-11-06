@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
-import useQuery from 'swr';
-import useMutation from 'swr/mutation';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 import IconButton from '@mui/joy/IconButton';
 import { EditIcon } from 'lucide-react';
@@ -63,20 +62,10 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const [autoSync, setAutoSync] = useState(!isEditing);
   const [manualEditing, setManualEditing] = useState(false);
 
-  const { trigger: findExisting } = useMutation(
-    '/api/v1/categories/{slug}/check-existing',
-    async (
-      _,
-      {
-        arg,
-      }: {
-        arg: {
-          id: string;
-          slug: string;
-        };
-      }
-    ) => {
-      return await getCategories({
+  const { mutateAsync: findExistingAsync } = useMutation({
+    mutationKey: ['/api/v1/categories/{slug}/check-existing'],
+    mutationFn: async ({ id, slug }: { id: string; slug: string }) =>
+      await getCategories({
         filter: {
           combinator: Combinator.AND,
           not: false,
@@ -87,7 +76,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
               rules: [],
               field: 'Id',
               operator: Operator.NOT_EQUAL,
-              value: arg.id ?? '',
+              value: id ?? '',
             },
             {
               combinator: Combinator.UNSPECIFIED,
@@ -95,7 +84,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
               rules: [],
               field: 'Slug',
               operator: Operator.EQUAL,
-              value: arg.slug,
+              value: slug,
             },
           ].filter((x) => x.value),
         },
@@ -104,9 +93,8 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
           pageIndex: 0,
           pageSize: 1,
         },
-      });
-    }
-  );
+      }),
+  });
 
   const creationSchema = yup.object<FormValues>({
     name: yup.string().required().min(4).max(50).label(t('label.name')),
@@ -120,7 +108,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         return slug === slugify(slug);
       })
       .test('unique-slug', t('validation.slug.alreadyTaken'), async (slug: string) => {
-        const { value } = await findExisting({ id: id, slug });
+        const { value } = await findExistingAsync({ id, slug });
 
         return value.length === 0;
       })
@@ -151,39 +139,41 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
       value: new Array<CategoryResponse>(),
     },
     isLoading,
-  } = useQuery(['/api/v1/categories', searchParentCategoryName, id], ([_, name, id]) =>
-    getCategories({
-      filter: {
-        combinator: Combinator.AND,
-        not: false,
-        rules: [
-          {
-            combinator: Combinator.UNSPECIFIED,
-            not: false,
-            rules: [],
-            field: 'Name',
-            operator: Operator.CONTAINS,
-            value: name,
-          },
-          {
-            combinator: Combinator.UNSPECIFIED,
-            not: false,
-            rules: [],
-            field: 'Id',
-            operator: Operator.NOT_EQUAL,
-            value: id,
-          },
-        ].filter((x) => x.value),
-      },
-      sortBy: [
-        {
-          field: 'Name',
-          sort: SortDirection.ASC,
+  } = useQuery({
+    queryKey: ['/api/v1/categories', searchParentCategoryName, id],
+    queryFn: ({ queryKey: [_, queryName, queryId] }) =>
+      getCategories({
+        filter: {
+          combinator: Combinator.AND,
+          not: false,
+          rules: [
+            {
+              combinator: Combinator.UNSPECIFIED,
+              not: false,
+              rules: [],
+              field: 'Name',
+              operator: Operator.CONTAINS,
+              value: queryName,
+            },
+            {
+              combinator: Combinator.UNSPECIFIED,
+              not: false,
+              rules: [],
+              field: 'Id',
+              operator: Operator.NOT_EQUAL,
+              value: queryId,
+            },
+          ].filter((x) => x.value),
         },
-      ],
-      paging: DEFAULT_PAGING_PARAMS,
-    })
-  );
+        sortBy: [
+          {
+            field: 'Name',
+            sort: SortDirection.ASC,
+          },
+        ],
+        paging: DEFAULT_PAGING_PARAMS,
+      }),
+  });
 
   const { control, handleSubmit, watch, setValue } = useForm<FormValues>({
     defaultValues,
@@ -260,6 +250,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         getOptionLabel={(option) => option.name}
         isOptionEqualToValue={(option, value) => option.id === value.id}
         inputValue={searchParentCategoryName}
+        // @ts-ignore
         onInputChange={onInputChange}
       />
       <TextField control={control} required name="name" label={t('label.name')} />

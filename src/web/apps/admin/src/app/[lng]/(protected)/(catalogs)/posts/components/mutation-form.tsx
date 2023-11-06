@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
-import useQuery from 'swr';
-import useMutation from 'swr/mutation';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 import {
   useForm,
@@ -68,19 +67,9 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const [searchParentCategoryName, setSearchParentCategoryName] = useState('');
   const [searchTagValue, setSearchTagValue] = useState('');
 
-  const { trigger: findExisting } = useMutation(
-    '/api/v1/posts/{slug}/check-existing',
-    async (
-      _,
-      {
-        arg,
-      }: {
-        arg: {
-          id: string;
-          slug: string;
-        };
-      }
-    ) => {
+  const { mutateAsync: findExistingAsync } = useMutation({
+    mutationKey: ['/api/v1/posts/{slug}/check-existing'],
+    mutationFn: async ({ id, slug }: { id: string; slug: string }) => {
       return await getPosts({
         filter: {
           combinator: Combinator.AND,
@@ -92,7 +81,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
               rules: [],
               field: 'Id',
               operator: Operator.NOT_EQUAL,
-              value: arg.id ?? '',
+              value: id ?? '',
             },
             {
               combinator: Combinator.UNSPECIFIED,
@@ -100,7 +89,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
               rules: [],
               field: 'Slug',
               operator: Operator.EQUAL,
-              value: arg.slug,
+              value: slug,
             },
           ].filter((x) => x.value),
         },
@@ -110,70 +99,74 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
           pageSize: 1,
         },
       });
-    }
-  );
+    },
+  });
 
   const {
     data = {
       value: new Array<CategoryResponse>(),
     },
     isLoading,
-  } = useQuery(['/api/v1/categories', searchParentCategoryName], ([_, name]) =>
-    getCategories({
-      filter: {
-        combinator: Combinator.AND,
-        not: false,
-        rules: [
+  } = useQuery({
+    queryKey: ['/api/v1/categories', searchParentCategoryName],
+    queryFn: ({ queryKey: [_, queryName] }) =>
+      getCategories({
+        filter: {
+          combinator: Combinator.AND,
+          not: false,
+          rules: [
+            {
+              combinator: Combinator.UNSPECIFIED,
+              not: false,
+              rules: [],
+              field: 'Name',
+              operator: Operator.CONTAINS,
+              value: queryName,
+            },
+          ],
+        },
+        sortBy: [
           {
-            combinator: Combinator.UNSPECIFIED,
-            not: false,
-            rules: [],
             field: 'Name',
-            operator: Operator.CONTAINS,
-            value: name,
+            sort: SortDirection.ASC,
           },
         ],
-      },
-      sortBy: [
-        {
-          field: 'Name',
-          sort: SortDirection.ASC,
-        },
-      ],
-      paging: DEFAULT_PAGING_PARAMS,
-    })
-  );
+        paging: DEFAULT_PAGING_PARAMS,
+      }),
+  });
 
   const {
     data: tags = {
       value: new Array<TagResponse>(),
     },
     isLoading: isLoadingTags,
-  } = useQuery(['/api/v1/tags', searchTagValue], ([_, slug]) =>
-    getTags({
-      filter: {
-        combinator: Combinator.AND,
-        not: false,
-        rules: [
+  } = useQuery({
+    queryKey: ['/api/v1/tags', searchTagValue],
+    queryFn: ({ queryKey: [_, querySlug] }) =>
+      getTags({
+        filter: {
+          combinator: Combinator.AND,
+          not: false,
+          rules: [
+            {
+              combinator: Combinator.UNSPECIFIED,
+              not: false,
+              rules: [],
+              field: 'Slug',
+              operator: Operator.CONTAINS,
+              value: querySlug,
+            },
+          ],
+        },
+        sortBy: [
           {
-            combinator: Combinator.UNSPECIFIED,
-            not: false,
-            rules: [],
-            field: 'Slug',
-            operator: Operator.CONTAINS,
-            value: slug,
+            field: 'Name',
+            sort: SortDirection.ASC,
           },
         ],
-      },
-      sortBy: [
-        {
-          field: 'Name',
-          sort: SortDirection.ASC,
-        },
-      ],
-      paging: DEFAULT_PAGING_PARAMS,
-    })
-  );
+        paging: DEFAULT_PAGING_PARAMS,
+      }),
+  });
 
   const creationSchema = yup.object<FormValues>({
     title: yup.string().required().min(4).max(100).label(t('label.title')),
@@ -188,7 +181,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         return slug === slugify(slug);
       })
       .test('unique-slug', t('validation.slug.alreadyTaken'), async (slug: string) => {
-        const { value } = await findExisting({ id: id, slug });
+        const { value } = await findExistingAsync({ id: id, slug });
 
         return value.length === 0;
       })
@@ -308,6 +301,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         getOptionLabel={(option) => option.name}
         isOptionEqualToValue={(option, value) => option.id === value.id}
         inputValue={searchParentCategoryName}
+        // @ts-ignore
         onInputChange={onSearchCategoryInputChange}
       />
       <TextField control={control} required name="title" label={t('label.title')} />
@@ -340,6 +334,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         loading={isLoadingTags}
         options={tags.value.map((x) => x.slug)}
         inputValue={searchTagValue}
+        // @ts-ignore
         onInputChange={onSearchTagInputChange}
       />
       <FileUploadField

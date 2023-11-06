@@ -8,7 +8,7 @@ import ButtonGroup from '@mui/joy/ButtonGroup';
 
 import { EraserIcon, SearchIcon } from 'lucide-react';
 
-import { type SelectOption, SelectionField, TextField } from '@sisa/form';
+import { type SelectOption, SelectField, TextField } from '@sisa/form';
 import { useQueryString } from '@sisa/hooks';
 import { PostStatus } from '@sisa/grpc-api';
 
@@ -108,7 +108,7 @@ const FilterToolbar = ({ defaultValues }: FilterToolbarProps) => {
         onKeyDown={onEnter}
         sx={{ flexGrow: 1 }}
       />
-      <SelectionField
+      <SelectField
         control={control}
         name="status"
         label="Status"

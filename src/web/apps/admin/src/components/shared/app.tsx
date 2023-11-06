@@ -3,7 +3,8 @@
 import { type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 
-import { SWRConfig } from 'swr';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { useReportWebVitals } from 'next/web-vitals';
 
@@ -16,6 +17,8 @@ import { StoreProvider, createRootStore } from 'stores';
 import { i18n } from 'i18n';
 
 import ThemeProvider from 'themes/theme-provider';
+
+const queryClient = new QueryClient();
 
 type Props = {
   children: ReactNode;
@@ -40,13 +43,10 @@ const App = (props: Props) => {
       <StoreProvider value={rootStore}>
         <I18nProvider i18n={i18n}>
           <ThemeProvider>
-            <SWRConfig
-              value={{
-                errorRetryCount: 3,
-              }}
-            >
+            <QueryClientProvider client={queryClient}>
               {props.children}
-            </SWRConfig>
+              <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
           </ThemeProvider>
         </I18nProvider>
       </StoreProvider>

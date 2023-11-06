@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import useMutation from 'swr/mutation';
+import { useMutation } from '@tanstack/react-query';
 
 import IconButton from '@mui/joy/IconButton';
 
@@ -55,19 +55,9 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
   const [autoSync, setAutoSync] = useState(!isEditing);
   const [manualEditing, setManualEditing] = useState(false);
 
-  const { trigger: findExisting } = useMutation(
-    '/api/v1/tags/{slug}/check-existing',
-    async (
-      _,
-      {
-        arg,
-      }: {
-        arg: {
-          id: string;
-          slug: string;
-        };
-      }
-    ) => {
+  const { mutateAsync: findExistingAsync } = useMutation({
+    mutationKey: ['/api/v1/tags/{slug}/check-existing'],
+    mutationFn: async ({ id, slug }: { id: string; slug: string }) => {
       return await getTags({
         filter: {
           combinator: Combinator.AND,
@@ -79,7 +69,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
               rules: [],
               field: 'Id',
               operator: Operator.NOT_EQUAL,
-              value: arg.id ?? '',
+              value: id ?? '',
             },
             {
               combinator: Combinator.UNSPECIFIED,
@@ -87,7 +77,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
               rules: [],
               field: 'Slug',
               operator: Operator.EQUAL,
-              value: arg.slug,
+              value: slug,
             },
           ].filter((x) => x.value),
         },
@@ -97,8 +87,8 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
           pageSize: 1,
         },
       });
-    }
-  );
+    },
+  });
 
   const creationSchema = yup.object<FormValues>({
     name: yup.string().required().min(4).max(50).label(t('label.name')),
@@ -112,7 +102,7 @@ const MutationForm = ({ trigger, defaultValues }: MutationFormProps) => {
         return slug === slugify(slug);
       })
       .test('unique-slug', t('validation.slug.alreadyTaken'), async (slug: string) => {
-        const { value } = await findExisting({ id: id, slug });
+        const { value } = await findExistingAsync({ id: id, slug });
 
         return value.length === 0;
       })

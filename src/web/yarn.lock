@@ -1243,6 +1243,8 @@ __metadata:
     "@sisa/next-config": "workspace:*"
     "@sisa/tsconfig": "workspace:*"
     "@sisa/utils": "workspace:*"
+    "@tanstack/react-query": "npm:^5.7.2"
+    "@tanstack/react-query-devtools": "npm:^5.7.2"
     "@types/node": "npm:^20.8.10"
     "@types/react": "npm:^18.2.35"
     "@types/react-dom": "npm:^18.2.14"
@@ -1255,7 +1257,6 @@ __metadata:
     next: "npm:^14.0.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
-    swr: "npm:^2.2.4"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
@@ -1560,6 +1561,51 @@ __metadata:
   dependencies:
     tslib: "npm:^2.4.0"
   checksum: b6fa49bcf6c00571d0eb7837b163f8609960d4d77538160585e27ed167361e9776bd6e5eb9646ffac2fb4d43c58df9ca50dab9d96ab097e6591bc82a75fd1164
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-core@npm:5.7.2":
+  version: 5.7.2
+  resolution: "@tanstack/query-core@npm:5.7.2"
+  checksum: e5067c7f5fb2607db0b9c4e51c14ec56a1714d30223380ddd03095126714e635aa2e41447445a92732e4bb02245492f74b4743918469fd9a77cba58fa5331da2
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-devtools@npm:5.4.2":
+  version: 5.4.2
+  resolution: "@tanstack/query-devtools@npm:5.4.2"
+  checksum: e92774b9c0621f59ce0679894d7793955c1faa6bf6750122820f661de46520d69d09d2630852c5472e6711495e53277f052fa1f1e9f5eb0db4b3ca783e917b63
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-devtools@npm:^5.7.2":
+  version: 5.7.2
+  resolution: "@tanstack/react-query-devtools@npm:5.7.2"
+  dependencies:
+    "@tanstack/query-devtools": "npm:5.4.2"
+  peerDependencies:
+    "@tanstack/react-query": ^5.7.2
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: bfd00ada659e538492fccd808ef435e7fbdfd834fa7ce2d73fdb88ed0aaefbd166016b29f02ba453c8d2d9b3b1985a180570782d6b92364aed73f2018ecbe414
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.7.2":
+  version: 5.7.2
+  resolution: "@tanstack/react-query@npm:5.7.2"
+  dependencies:
+    "@tanstack/query-core": "npm:5.7.2"
+  peerDependencies:
+    react: ^18.0.0
+    react-dom: ^18.0.0
+    react-native: "*"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 88f3745c94695731dcf3f9301c5fb23e174fada31af807755eecd08924dbb984088fd779f55fbd4434dba16f7dbd74358dee44eafe523d589b2bae7676683d20
   languageName: node
   linkType: hard
 
